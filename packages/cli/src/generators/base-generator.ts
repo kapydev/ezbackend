@@ -14,7 +14,7 @@ export function copyBoilerPlate() {
   const boilerPlatePath = () => {
     //TODO: Update to suport different frameworks, etc
     //TODO: Make this not have to do some ridiculous relative pathing because of the compiled location
-    const defaultPath = path.resolve(__dirname,'../..', `frameworks/common`);
+    const defaultPath = path.resolve(__dirname,'..', `frameworks/common`);
     return defaultPath;
   };
 
