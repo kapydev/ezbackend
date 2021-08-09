@@ -11,5 +11,8 @@
   "license": "ISC",
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.13"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "core",
+  "version": "0.0.3",
+  "description": "> TODO: description",
+  "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
+  "homepage": "https://github.com/Collaboroo/ezbackend2#readme",
+  "license": "ISC",
+  "main": "lib/core.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Collaboroo/ezbackend2.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/Collaboroo/ezbackend2/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.13"
+  }
+}
