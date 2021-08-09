@@ -1,6 +1,4 @@
 import chalk from "chalk";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 
 const logger = console;
 
