@@ -3,13 +3,28 @@ import {Sequelize} from "sequelize"
 import {fastify, FastifyInstance} from "fastify"
 import path from 'path'
 
+export interface IOptions {
+    server?: {
+        port?: number
+    }
+    orm?: {}
+    
+}
+
 //TODO: Think about programatically adding types
 export class EzBackend extends EzBackendBase {
     sequelize: Sequelize
     server: FastifyInstance
+    options: IOptions
 }
 
 const ezb = EzBackend.app() as EzBackend
+
+ezb.options = {
+    server: {
+        port: process.env.PORT ? Number(process.env.PORT) : 8888
+    }
+}
 
 //Configure defaults
 ezb.plugins.init = () => {
@@ -32,8 +47,7 @@ ezb.plugins.handler = () => {
 
 
 ezb.plugins.run = async () => {
-    const port = process.env.PORT ? Number(process.env.PORT) : 8888
-    await ezb.server.listen(port, function(err,address) {
+    await ezb.server.listen(ezb.options.server.port, function(err,address) {
         if (err) {
             console.log(err)
             process.exit(1)

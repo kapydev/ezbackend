@@ -1,0 +1,24 @@
+{
+  "name": "@ezbackend/openapi",
+  "version": "0.0.20",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Testing server with version: $npm_package_version",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.13"
+  },
+  "dependencies": {
+    "fastify-swagger": "^4.8.4",
+    "open": "^8.2.1"
+  }
+}
