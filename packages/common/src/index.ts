@@ -1,79 +1,42 @@
-type IEzbPlugin = () => void;
+import {EzBackend as EzBackendBase} from '@ezbackend/core'
+import {Sequelize} from "sequelize"
+import {fastify, FastifyInstance} from "fastify"
+import path from 'path'
 
-export type IEzbPlugins = {
-  preInit: Array<IEzbPlugin>;
-  init: IEzbPlugin | null;
-  postInit: Array<IEzbPlugin>;
-  preHandler: Array<IEzbPlugin>;
-  handler: IEzbPlugin | null;
-  postHandler: Array<IEzbPlugin>;
-  preRun: Array<IEzbPlugin>;
-  run: IEzbPlugin | null;
-  postRun: Array<IEzbPlugin>;
-};
+//TODO: Think about programatically adding types
+export class EzBackend extends EzBackendBase {
+    sequelize: Sequelize
+    server: FastifyInstance
+}
 
-export class EzBackend {
-  plugins: IEzbPlugins;
+const ezb = EzBackend.app() as EzBackend
 
-  private static instance: EzBackend;
+//Configure defaults
+ezb.plugins.init = () => {
+    ezb.sequelize = new Sequelize("sqlite::memory")
+    ezb.server = fastify({ logger: {
+        prettyPrint:{
+            translateTime: 'SYS:HH:MM:ss',
+            ignore:'pid,hostname,reqId,responseTime,req,res',
+            messageFormat: '[{req.method} {req.url}] {msg}'
 
-  constructor() {
-    this.plugins = {
-      preInit: [],
-      init: () => {},
-      postInit: [],
-      preHandler: [],
-      handler: () => {},
-      postHandler: [],
-      preRun: [],
-      run: () => {},
-      postRun: [],
-    };
-  }
+        }
+    }})
+}
 
-  public static initializeApp() {
-    if (!EzBackend.instance) {
-      EzBackend.instance = new EzBackend();
-    }
-  }
+ezb.plugins.handler = () => {
+    //TODO: Allow user to specify the ezb path he wants
+    const customEzbPath = path.join(process.cwd(), '.ezb/index.ts')
+    require(customEzbPath)
+}
 
-  public static app(): EzBackend {
-    EzBackend.initializeApp();
-    return EzBackend.instance;
-  }
 
-  public static start(): void {
-    const ezb = EzBackend.app();
-    const plugins = ezb.plugins;
-
-    plugins.preInit.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.init();
-
-    plugins.postInit.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.preHandler.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.handler();
-
-    plugins.postHandler.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.preRun.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.run();
-
-    plugins.postRun.forEach((plugin) => {
-      plugin();
-    });
-  }
+ezb.plugins.run = async () => {
+    const port = process.env.PORT ? Number(process.env.PORT) : 8888
+    await ezb.server.listen(port, function(err,address) {
+        if (err) {
+            console.log(err)
+            process.exit(1)
+        }
+    })
 }
