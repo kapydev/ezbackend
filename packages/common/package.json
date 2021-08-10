@@ -1,11 +1,12 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Testing server with version: $npm_package_version",
-    "tsc": "tsc"
+    "build": "tsc",
+    "watch": "tsc -w"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,10 @@
   },
   "devDependencies": {
     "@types/node": "^16.4.13"
+  },
+  "dependencies": {
+    "@ezbackend/core": "^0.0.19",
+    "fastify": "^3.20.1",
+    "sequelize": "^6.6.5"
   }
 }
