@@ -1,10 +1,11 @@
 {
-  "name": "@ezbackend/common",
+  "name": "@ezbackend/core",
   "version": "0.0.16",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Testing server with version: $npm_package_version"
+    "test": "echo \"Testing server with version: $npm_package_version",
+    "tsc":"tsc"
   },
   "keywords": [],
   "author": "",
