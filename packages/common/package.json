@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "@types/node": "^16.4.13"
   },
   "dependencies": {
-    "@ezbackend/core": "^0.0.20",
+    "@ezbackend/core": "^0.0.21",
     "fastify": "^3.20.1",
     "pino-pretty": "^5.1.2",
     "sequelize": "^6.6.5",
