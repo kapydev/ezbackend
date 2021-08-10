@@ -1,11 +1,11 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Testing server with version: $npm_package_version",
-    "tsc":"tsc"
+    "tsc": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,5 @@
   },
   "devDependencies": {
     "@types/node": "^16.4.13"
-  },
-  "dependencies": {}
+  }
 }
