@@ -1,15 +1,19 @@
 import { EzBackend } from "@ezbackend/common";
 import fastifySwagger from "fastify-swagger"
-import path from "path";
 import open from 'open'
 
-const ezb = EzBackend.app();
+//TODO: Figure out how we can avoid the as EzBackend repeatedly
+const ezb = EzBackend.app() as EzBackend;
+
 
 //Configure defaults
 ezb.plugins.postInit.push(() => {
   ezb.server.register(fastifySwagger, {
+    prefix: "/docs",
     routePrefix: "/docs",
     exposeRoute: true,
+    //TODO: Figure out why its logging so much
+    logLevel: 'warn',
     swagger: {
       info: {
         title: "EzBackend API",
@@ -28,6 +32,6 @@ ezb.plugins.postInit.push(() => {
 });
 
 ezb.plugins.postRun.push(()=> {
-  ezb.server.swagger();
+  // ezb.server.swagger();
   if (ezb.options.server.port) open(`http://localhost:${ezb.options.server.port}/docs`);
 })

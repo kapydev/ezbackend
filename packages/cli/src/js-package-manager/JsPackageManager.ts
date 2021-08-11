@@ -26,7 +26,7 @@ export abstract class JsPackageManager {
 
     //TODO: See if there is a better way than ts-node
     //TODO: Programmatically get the file path instead
-    const ezbCmd = `npx ts-node node_modules/ezbackend start`
+    const ezbCmd = `npx ts-node-dev --project .ezb/tsconfig.json node_modules/@ezbackend/core`
     this.addScripts({
       ezb: ezbCmd
     })

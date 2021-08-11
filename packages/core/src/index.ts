@@ -1,4 +1,10 @@
+import path from "path";
+
 type IEzbPlugin = () => void;
+
+interface IEzbConfig {
+  plugins: Array<string>;
+}
 
 export type IEzbPlugins = {
   preInit: Array<IEzbPlugin>;
@@ -43,7 +49,19 @@ export class EzBackend {
   }
 
   public static start(): void {
+    //TODO: Figure out why its not a recursive deadly loop
     const ezb = EzBackend.app();
+
+    //LOAD PLUGINS FROM CONFIG
+    //TODO: Allow changing of config path, or default config if none
+    const customConfigPath = path.join(process.cwd(), ".ezb/config.ts");
+
+    //TODO: Error handling for wrong format of config.ts
+    const customConfigs: IEzbConfig = require(customConfigPath).default;
+    customConfigs.plugins.forEach((pluginName) => {
+      require(pluginName);
+    });
+
     const plugins = ezb.plugins;
 
     plugins.preInit.forEach((plugin) => {
@@ -77,3 +95,5 @@ export class EzBackend {
     });
   }
 }
+
+EzBackend.start();

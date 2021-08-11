@@ -5,7 +5,14 @@ import { JsPackageManager } from "../js-package-manager/JsPackageManager";
 export async function baseGenerator(packageManager: JsPackageManager) {
   const packageJson = packageManager.retrievePackageJson();
   //TODO: Think about a possible need for versioning dependencies for different project types
-  packageManager.addDependencies({ packageJson: packageJson }, ["ezbackend"]);
+  //TODO: Think about keep this DRY with the common framework
+  //TODO: Think if these should be dev or normal dependencies (Right now they are dev)
+  packageManager.addDependencies({ packageJson: packageJson }, [
+    "@ezbackend/common",
+    "@ezbackend/openapi",
+    "ts-node-dev",
+    "typescript"
+  ]);
   packageManager.addEzbCommandInScripts()
   copyBoilerPlate();
 }
