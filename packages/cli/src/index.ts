@@ -13,3 +13,4 @@ program
   .action((options) => initiate(options, pkg));
 
 program.parse(process.argv);
+

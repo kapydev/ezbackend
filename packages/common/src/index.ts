@@ -41,6 +41,7 @@ ezb.plugins.handler = () => {
 ezb.plugins.preRun.push(() => {});
 
 ezb.plugins.run = async () => {
+  ezb.sequelize.sync()
   await ezb.server.listen(ezb.options.server.port, function (err, address) {
     if (err) {
       console.error(err);
