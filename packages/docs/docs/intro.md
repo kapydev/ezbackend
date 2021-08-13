@@ -20,7 +20,7 @@ or
 yarn ezb
 ```
 
-//TODO: Put a meme or something saying that's it
+<!-- TODO: Put a meme or something saying that's it -->
 
 ## How it works
 

@@ -11,6 +11,7 @@ export interface IEzbConfig {
   orm?: unknown;
   port?: number;
   entryPoint?: string;
+  connectionURI?: string;
 }
 
 export type IEzbPlugins = {
@@ -73,7 +74,6 @@ export class EzBackend {
     if (fs.existsSync(customConfigPath)) {
       customConfigs = require(customConfigPath).default;
       customConfigs.plugins.forEach((pluginName) => {
-        console.log(pluginName);
         require(pluginName);
       });
     }
@@ -88,7 +88,6 @@ export class EzBackend {
       //URGENT TODO: Error handling when plugin doesnt work
       const plugins = ezb.plugins;
 
-      console.log(ezb.plugins);
 
       plugins.preInit.forEach((plugin) => {
         ezb.use(plugin, customConfigs);
@@ -122,13 +121,9 @@ export class EzBackend {
       cb();
     });
 
-    console.log("starting");
 
     EzBackend.manager.start();
-    console.log("started");
     await EzBackend.manager.ready();
-
-    console.log("ready");
     return;
   }
 }

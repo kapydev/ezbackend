@@ -15,7 +15,7 @@ interface Iapis {
 export class EzRouter {
   apis: Iapis;
   routePrefix: string;
-  ezb: EzBackend;
+  private ezb: EzBackend;
 
   constructor(routePrefix?: string) {
     this.ezb = EzBackend.app() as EzBackend;
@@ -44,6 +44,8 @@ export class EzRouter {
 
 export class EzModel extends EzRouter {
   model: ModelCtor<Model<any, any>>;
+
+  //TODO: Get the relations from the model itself
   relations: Array<ModelCtor<Model<any, any>>>;
 
   constructor(modelName: string, attributes: ModelAttributes<Model<any, any>>) {
@@ -125,7 +127,7 @@ export class EzModel extends EzRouter {
     //UPDATE
     this.apis.updateOne = () => {
       const routeDetails: RouteOptions = {
-        method: "PUT",
+        method: "PATCH",
         url: "/:id",
         schema: {
           params: response.singleID,

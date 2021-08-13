@@ -16,5 +16,6 @@ export default {
     logging: false,
   },
   plugins: ["@ezbackend/common"],
-  entryPoint: path.resolve(__dirname,"./test.index.ts")
+  entryPoint: path.resolve(__dirname,"./test.index.ts"),
+  connectionURI: "sqlite::memory"
 };

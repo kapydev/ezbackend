@@ -32,6 +32,6 @@ ezb.plugins.postInit.push(() => {
 });
 
 ezb.plugins.postRun.push(()=> {
-  // ezb.server.swagger();
+  ezb.server.swagger();
   if (ezb.options.server.port) open(`http://localhost:${ezb.options.server.port}/docs`);
 })

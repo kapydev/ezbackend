@@ -97,7 +97,7 @@ describe("Basic CRUD", () => {
       const updatedData = { ...sampleData };
       updatedData.string = "This is a new string";
       const response = await ezb.server.inject({
-        method: "PUT",
+        method: "PATCH",
         url: "/sample/1",
         payload: updatedData,
       });
@@ -117,7 +117,7 @@ describe("Basic CRUD", () => {
         error: "Not found",
       };
       const response = await ezb.server.inject({
-        method: "PUT",
+        method: "PATCH",
         url: "/sample/999999",
         payload: sampleData,
       });
@@ -132,7 +132,7 @@ describe("Basic CRUD", () => {
       //@ts-ignore
       updatedData.int = "This is a new string";
       const response = await ezb.server.inject({
-        method: "PUT",
+        method: "PATCH",
         url: "/sample/1",
         payload: updatedData,
       });

@@ -89,4 +89,4 @@ yarn ezb
 
 Your backend will start, as well as a window with a complete reference of how exactly to connect to your backend and manipulate your database, generated automatically with [fastify-swagger](https://github.com/fastify/fastify-swagger)
 
-//TODO: Insert image of swagger CRUD
+<!-- TODO: Insert image of swagger CRUD -->

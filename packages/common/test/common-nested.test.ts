@@ -91,7 +91,7 @@ describe("Nested CRUD", () => {
       const updatedData = cloneDeep(sampleUser);
       updatedData.detail.age = 25;
       const response = await ezb.server.inject({
-        method: "PUT",
+        method: "PATCH",
         url: "/user/1",
         payload: updatedData,
       });
@@ -111,7 +111,7 @@ describe("Nested CRUD", () => {
         error: "Not found",
       };
       const response = await ezb.server.inject({
-        method: "PUT",
+        method: "PATCH",
         url: "/sample/999999",
         payload: sampleUser,
       });
@@ -126,7 +126,7 @@ describe("Nested CRUD", () => {
       //@ts-ignore
       updatedData.detail.age = "This is a new string";
       const response = await ezb.server.inject({
-        method: "PUT",
+        method: "PATCH",
         url: "/sample/1",
         payload: updatedData,
       });

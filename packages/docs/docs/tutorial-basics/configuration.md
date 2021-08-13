@@ -8,127 +8,67 @@ EzBackend is designed from the bottom up to be extremely customisable, so that y
 
 However, for simpler customisations, a `config.ts` file exists in `.ezb` to allow the user easy configuration of the fastify and sequelize instance (Assuming you are using fastify and sequelize)
 
-## Configuring Fastify
+## Default Config
 
+The default config file may look like this
 
-If you want to assess the database, you must first understand that EzBackend is a wrapper of [fastify](https://www.fastify.io/) and [sequelize](https://sequelize.org/master/)
-
-Hence, when thinking about creating an API route, we should be thinking of accessing the database using sequelize [fastify api route](https://www.fastify.io/docs/latest/Routes/)
-
-## Understanding Sequelize
-
-Sequelize is an [Object Relational Mapper (ORM)](https://stackoverflow.com/questions/1279613/what-is-an-orm-how-does-it-work-and-how-should-i-use-one) for the SQL databases Postgres, MySQL, MariaDB, SQLite and Microsoft SQL server.
-
-It lets you connect to any of the databases with the same code. Want to change from SQLite to Postgres? Just change the configuration and everything will still work.
-
-## Getting the sequelize model
-
-For each `EzModel`, there is a Sequelize `Model` which can access from `ezModel.model`
-
-Let's say we have a table of users
-
-```ts title="User Model"
-export const user = new EzModel("user", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
-```
-
-We can get the sequelize model like this:
-
-```ts title=".ezb/index.ts"
-const model = user.model; //model refers to the sequelize model
-```
-
-Now that we have the sequelize model, it is more a problem of ['How do I use the sequelize model?'](https://sequelize.org/v5/manual/models-usage.html/)?
-
-## A practical example
-
-Assuming we want an api endpoint that lets us know the number of users
-
-```ts title="API Endpoint"
-fastify.route({
-  method: "GET",
-  url: "/num-users",
-  schema: {
-    response: {
-      200: {
-        type: "object",
-        properties: {
-          numUsers: { type: "number" },
-        },
-      },
-    },
-  },
-  handler: async function (request, reply) {
-    reply.send(await getNumUsers());
-  },
-});
-```
-
-So instead of googling "How to get number of users for ezbackend" we can google ["How to get number of rows in a table sequelize"](https://sequelize.org/v5/manual/models-usage.html#-code-count--code----count-the-occurrences-of-elements-in-the-database)
-
-So the function `getNumUsers` may look like this
-
-```ts title="getNumUsers"
-async function getNumUsers() {
-  const numUsers = await user.model.count();
-  return numUsers;
-}
-```
-
-And with that we can now have an api route that gives us the total number of users
-
-## Putting it together
-
-For a working example, you can copy and past the below code into `.ezb/index.ts`
-
-```ts ./ezb/index.ts
-import { EzBackend, EzModel } from "@ezbackend/common";
-
-const ezb = EzBackend.app(); //This gets the singleton
-const fastify = ezb.server; //This lets you get the fastify instance from anywhere
-
-export const user = new EzModel("user", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
-
-async function getNumUsers() {
-  const numUsers = await user.model.count();
-  return numUsers;
-}
-
-fastify.route({
-  method: "GET",
-  url: "/num-users",
-  schema: {
-    response: {
-      200: {
-        type: "object",
-        properties: {
-          numUsers: { type: "number" },
-        },
-      },
-    },
-  },
-  handler: async function (request, reply) {
-    reply.send({ numUsers: await getNumUsers() });
-  },
-});
-```
-
-:::info
-
-You can access the sequelize instance directly with
+<!-- TODO: Make the default config generate from the actual default config -->
 
 ```ts
-const ezb = EzBackend.app();
-const sequelize = ezb.orm;
+import path from "path";
+
+export default {
+  port: 8888,
+  server: {
+    port: process.env.PORT ? Number(process.env.PORT) : 8888,
+    logger: {
+      prettyPrint: {
+        translateTime: "SYS:HH:MM:ss",
+        ignore: "pid,hostname,reqId,responseTime,req,res",
+        messageFormat: "[{req.method} {req.url}] {msg}",
+      },
+    },
+  },
+  orm: {
+    logging: false,
+  },
+  entryPoint: path.resolve(__dirname, "index.ts"),
+  connectionURI: "sqlite::memory"
+  plugins: [
+    "@ezbackend/common",
+    "@ezbackend/openapi"
+  ]
+};
 ```
 
-:::
+### Understanding the config
+
+`port` - The port on which the server runs on. e.g in this case your server runs at [http://localhost:8888](http://localhost:8888)
+
+`server` - The options that get passed to fastify. e.g 
+```ts
+import fastify from 'fastify'
+const server = fastify(options.server)
+```
+
+`connectionURI` - the connection URI as specified [here](https://sequelize.org/master/manual/getting-started.html)
+`orm` - The options that get passed to sequelize.
+```ts
+import {Sequelize} from 'sequelize'
+const sequelize = new Sequelize(options.connectionURI, options.orm)
+```
+
+`entryPoint` - The filename of the file where your models are specified. `path.resolve(__dirname, "index.ts")` will always resolve to an `index.ts` file in the same folder as `config.ts`
+
+## Understanding plugins
+
+EzBackend is designed to be extremely extensible, in other words everything should be a plugin. To illustrate this point, EzBackend is built like this:
+
+```
+@ezbackend/core
+|_ @ezbackend/common (Plugin to generate API routes automatically)
+|_ @ezbackend/openapi (Plugin to generate docs automatically)
+```
+
+Everything in ezbackend can be achieved with plugins, and you can understand about how they work [here](/)
+<!-- TODO: Add in actual description of how plugins work -->
