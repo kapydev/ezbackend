@@ -17,5 +17,8 @@
   },
   "scripts": {
     "build": "node ./scripts/build-package.js"
+  },
+  "dependencies": {
+    "typescript": "^4.3.5"
   }
 }

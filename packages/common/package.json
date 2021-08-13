@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Testing server with version: $npm_package_version",
+    "test": "jest",
     "build": "tsc",
     "watch": "tsc -w"
   },
@@ -15,8 +15,10 @@
     "access": "public"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.0",
     "@types/node": "^16.4.13",
     "jest": "^27.0.6",
+    "lodash": "^4.17.21",
     "ts-jest": "^27.0.4"
   },
   "dependencies": {

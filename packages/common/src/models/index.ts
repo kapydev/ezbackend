@@ -39,7 +39,6 @@ export class EzRouter {
     Object.entries(this.apis).forEach(([, api]) => {
       this.registerRoute(api());
     });
-    // ezmodel.model.
   }
 }
 
@@ -54,6 +53,16 @@ export class EzModel extends EzRouter {
     this.initAPI();
   }
 
+  public getRelationsOptions() {
+    return EzModel.getRelationsOptions(this);
+  }
+
+  public static getRelationsOptions(ezModel: EzModel) {
+    return {
+      include: ezModel.relations
+    };
+  }
+
   private initAPI() {
     let ezModel = this;
     //TODO: Consider if this can be simplified into a non function
@@ -65,7 +74,7 @@ export class EzModel extends EzRouter {
         schema: {
           body: ezModel.getJsonSchema(false),
           response: {
-            // 200: ezModel.getJsonSchema(true),
+            200: ezModel.getJsonSchema(true),
             400: response.badRequest,
           },
         },
@@ -75,6 +84,7 @@ export class EzModel extends EzRouter {
             req.body,
             ezModel.getRelationsOptions()
           );
+
           res.send(newObj);
         },
       };
@@ -102,6 +112,7 @@ export class EzModel extends EzRouter {
             req.params.id,
             ezModel.getRelationsOptions()
           );
+
           if (savedObj === null) {
             res.code(404).send(response.notFoundMsg);
             return;
@@ -124,6 +135,7 @@ export class EzModel extends EzRouter {
             404: response.notFound,
           },
         },
+        
         //TODO: Figure out a way to represent types
         async handler(req, res) {
           //TODO: Allow for eager and lazy fetching
@@ -137,6 +149,7 @@ export class EzModel extends EzRouter {
             return;
           }
           EzModel.updateNested(ezModel, req.body);
+
           const updatedObj = _.extend(savedObj, req.body);
           await updatedObj.save();
           res.send(updatedObj);
@@ -198,17 +211,7 @@ export class EzModel extends EzRouter {
     );
   }
 
-  public getRelationsOptions() {
-    return EzModel.getRelationsOptions(this);
-  }
-
-  public static getRelationsOptions(ezModel: EzModel) {
-    return {
-      include: ezModel.relations.map((relation) => {
-        return { model: relation };
-      }),
-    };
-  }
+  
 
   //TODO: Make this recursive depth
   public static updateNested(ezModel: EzModel, updateBody: any) {

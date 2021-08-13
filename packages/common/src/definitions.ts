@@ -1,12 +1,13 @@
 import {EzBackend as EzBackendBase} from '@ezbackend/core'
-import {Sequelize} from "sequelize"
-import {FastifyInstance} from "fastify"
+import {Sequelize,Options as SequelizeOptions} from "sequelize"
+import {FastifyInstance, FastifyLoggerOptions} from "fastify"
 
 export interface IOptions {
     server?: {
         port?: number
+        logger?:FastifyLoggerOptions
     }
-    orm?: {}
+    orm?: SequelizeOptions
     
 }
 

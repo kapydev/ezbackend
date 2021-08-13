@@ -24,9 +24,9 @@
     "read-pkg-up": "7.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.0",
     "@types/node": "^16.4.13",
     "jest": "^27.0.6",
     "ts-jest": "^27.0.4"
-
   }
 }

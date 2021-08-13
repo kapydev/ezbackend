@@ -1,6 +1,8 @@
 import path from "path";
+import fs from "fs";
+import avvio from "avvio";
 
-export type IEzbPlugin = () => void;
+export type IEzbPlugin = avvio.Plugin<unknown, EzBackend>;
 
 export interface IEzbConfig {
   plugins: Array<string>;
@@ -22,17 +24,25 @@ export class EzBackend {
   plugins: IEzbPlugins;
 
   private static instance: EzBackend;
+  private static manager: avvio.Avvio<EzBackend>;
 
+  //TODO: Think of why its not throuwing error when the type passed is not exactly an ezbplugin
   constructor() {
     this.plugins = {
       preInit: [],
-      init: () => {},
+      init: (ezb, opts, cb) => {
+        cb();
+      },
       postInit: [],
       preHandler: [],
-      handler: () => {},
+      handler: (ezb, opts, cb) => {
+        cb();
+      },
       postHandler: [],
       preRun: [],
-      run: () => {},
+      run: (ezb, opts, cb) => {
+        cb();
+      },
       postRun: [],
     };
   }
@@ -40,6 +50,7 @@ export class EzBackend {
   public static initializeApp() {
     if (!EzBackend.instance) {
       EzBackend.instance = new EzBackend();
+      EzBackend.manager = avvio(EzBackend.app());
     }
   }
 
@@ -48,50 +59,58 @@ export class EzBackend {
     return EzBackend.instance;
   }
 
-  public static start(configPath?:string): void {
-    //TODO: Figure out why its not a recursive deadly loop
-    const ezb = EzBackend.app();
+  public static async start() {
 
     //LOAD PLUGINS FROM CONFIG
     //TODO: Allow changing of config path, or default config if none
     const customConfigPath = path.join(process.cwd(), ".ezb/config.ts");
 
     //TODO: Error handling for wrong format of config.ts
-    const customConfigs: IEzbConfig = require(configPath ?? customConfigPath).default;
-    customConfigs.plugins.forEach((pluginName) => {
-      require(pluginName);
+
+    if (fs.existsSync(customConfigPath)) {
+      const customConfigs: IEzbConfig = require(customConfigPath).default;
+      customConfigs.plugins.forEach((pluginName) => {
+        require(pluginName);
+      });
+    }
+
+    EzBackend.manager.use((ezb, opts, cb) => {
+      const plugins = ezb.plugins;
+
+      plugins.preInit.forEach((plugin) => {
+        ezb.use(plugin, opts);
+      });
+
+      ezb.use(plugins.init, opts);
+
+      plugins.postInit.forEach((plugin) => {
+        ezb.use(plugin, opts);
+      });
+
+      plugins.preHandler.forEach((plugin) => {
+        ezb.use(plugin, opts);
+      });
+
+      ezb.use(plugins.handler, opts);
+
+      plugins.postHandler.forEach((plugin) => {
+        ezb.use(plugin, opts);
+      });
+
+      plugins.preRun.forEach((plugin) => {
+        ezb.use(plugin, opts);
+      });
+
+      ezb.use(plugins.run, opts);
+
+      plugins.postRun.forEach((plugin) => {
+        ezb.use(plugin, opts);
+      });
+      cb();
     });
 
-    const plugins = ezb.plugins;
-
-    plugins.preInit.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.init();
-
-    plugins.postInit.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.preHandler.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.handler();
-
-    plugins.postHandler.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.preRun.forEach((plugin) => {
-      plugin();
-    });
-
-    plugins.run();
-
-    plugins.postRun.forEach((plugin) => {
-      plugin();
-    });
+    EzBackend.manager.start();
+    await EzBackend.manager.ready();
+    return;
   }
 }
