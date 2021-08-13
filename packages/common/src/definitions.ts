@@ -12,8 +12,7 @@ export interface IOptions {
 }
 
 //TODO: Think about programatically adding types
-export class EzBackend extends EzBackendBase {
+export class  EzBackend extends EzBackendBase {
     sequelize: Sequelize
     server: FastifyInstance
-    options: IOptions
 }

@@ -1,4 +1,4 @@
-import { EzModel } from "../src";
+import { EzModel } from "@ezbackend/common";
 import { DataTypes } from "sequelize";
 
 //TODO: Make arrays work

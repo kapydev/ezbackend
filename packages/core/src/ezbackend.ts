@@ -2,10 +2,15 @@ import path from "path";
 import fs from "fs";
 import avvio from "avvio";
 
+//TODO: Make it not unknown
 export type IEzbPlugin = avvio.Plugin<unknown, EzBackend>;
 
 export interface IEzbConfig {
   plugins: Array<string>;
+  server?: unknown;
+  orm?: unknown;
+  port?: number;
+  entryPoint?: string;
 }
 
 export type IEzbPlugins = {
@@ -59,58 +64,71 @@ export class EzBackend {
     return EzBackend.instance;
   }
 
-  public static async start() {
+  public static async start(configPath?: string) {
+    let customConfigs: IEzbConfig | undefined;
 
-    //LOAD PLUGINS FROM CONFIG
-    //TODO: Allow changing of config path, or default config if none
-    const customConfigPath = path.join(process.cwd(), ".ezb/config.ts");
-
-    //TODO: Error handling for wrong format of config.ts
+    const customConfigPath =
+      configPath ?? path.resolve(process.cwd(), ".ezb/config.ts");
 
     if (fs.existsSync(customConfigPath)) {
-      const customConfigs: IEzbConfig = require(customConfigPath).default;
+      customConfigs = require(customConfigPath).default;
       customConfigs.plugins.forEach((pluginName) => {
+        console.log(pluginName);
         require(pluginName);
       });
     }
 
+    //LOAD PLUGINS FROM CONFIG
+    //TODO: Allow changing of config path, or default config if none
+
+    //TODO: Error handling for wrong format of config.ts
+
+    //TODO: Figure out how to pass in options at top level
     EzBackend.manager.use((ezb, opts, cb) => {
+      //URGENT TODO: Error handling when plugin doesnt work
       const plugins = ezb.plugins;
 
+      console.log(ezb.plugins);
+
       plugins.preInit.forEach((plugin) => {
-        ezb.use(plugin, opts);
+        ezb.use(plugin, customConfigs);
       });
 
-      ezb.use(plugins.init, opts);
+      ezb.use(plugins.init, customConfigs);
 
       plugins.postInit.forEach((plugin) => {
-        ezb.use(plugin, opts);
+        ezb.use(plugin, customConfigs);
       });
 
       plugins.preHandler.forEach((plugin) => {
-        ezb.use(plugin, opts);
+        ezb.use(plugin, customConfigs);
       });
 
-      ezb.use(plugins.handler, opts);
+      ezb.use(plugins.handler, customConfigs);
 
       plugins.postHandler.forEach((plugin) => {
-        ezb.use(plugin, opts);
+        ezb.use(plugin, customConfigs);
       });
 
       plugins.preRun.forEach((plugin) => {
-        ezb.use(plugin, opts);
+        ezb.use(plugin, customConfigs);
       });
 
-      ezb.use(plugins.run, opts);
+      ezb.use(plugins.run, customConfigs);
 
       plugins.postRun.forEach((plugin) => {
-        ezb.use(plugin, opts);
+        ezb.use(plugin, customConfigs);
       });
       cb();
     });
 
+    console.log("starting");
+
     EzBackend.manager.start();
+    console.log("started");
     await EzBackend.manager.ready();
+
+    console.log("ready");
     return;
   }
 }

@@ -1,21 +1,10 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from "lodash";
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import {  EzRouter, EzBackend } from "../src";
+import { EzBackend } from "../src";
+import path from "path";
 
 beforeAll(async () => {
-  const ezb = EzBackend.app();
-  //TODO: Make it programatically use the real code instead of writing the same thing in a different place
-  ezb.plugins.handler = (ezb, opts, cb) => {
-    const customEzb = require("./test.index.ts");
-    const routers = Object.values(customEzb).filter(
-      (obj) => obj instanceof EzRouter
-    ) as Array<EzRouter>;
-    routers.forEach((router) => {
-      router.registerRoutes();
-    });
-    cb();
-  };
-  await EzBackend.start();
+  await EzBackend.start(path.resolve(__dirname, "test.config.ts"));
 });
 
 afterAll(() => {
@@ -27,8 +16,8 @@ afterAll(() => {
 const sampleUser = {
   name: "Robert",
   detail: {
-    age: 20
-  }
+    age: 20,
+  },
 };
 
 describe("Nested CRUD", () => {
