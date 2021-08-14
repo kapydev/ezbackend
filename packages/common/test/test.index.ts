@@ -54,7 +54,5 @@ export const detail = new EzModel("detail", {
   }
 })
 
-//TODO: Test cyclic graph
-
 program.hasMany(user)
 user.hasOne(detail)

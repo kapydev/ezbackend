@@ -25,10 +25,6 @@ const sampleProgram = {
   ],
 };
 
-const nonNestedProgram = {
-  name: "My first program"
-}
-
 describe("Nested CRUD", () => {
   describe("Create", () => {
     test("Nested creation", async () => {
