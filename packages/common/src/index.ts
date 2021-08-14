@@ -25,6 +25,12 @@ ezb.plugins.handler = (ezb: mixedInstance<EzBackend>, opts:IEzbConfig, cb) => {
   routers.forEach((router) => {
     router.registerRoutes();
   });
+  const models = Object.values(customEzb).filter(
+    (obj) => obj instanceof EzModel
+  ) as Array<EzModel>
+  models.forEach((model)=> {
+    EzModel.addSchema(model)
+  })
   cb();
 };
 

@@ -13,12 +13,21 @@ afterAll(() => {
   ezb.sequelize.close();
 });
 
-const sampleUser = {
-  name: "Robert",
-  detail: {
-    age: 20,
-  },
+const sampleProgram = {
+  name: "My first program",
+  users: [
+    {
+      name: "Robert",
+      detail: {
+        age: 20,
+      },
+    },
+  ],
 };
+
+const nonNestedProgram = {
+  name: "My first program"
+}
 
 describe("Nested CRUD", () => {
   describe("Create", () => {
@@ -26,151 +35,32 @@ describe("Nested CRUD", () => {
       const ezb = EzBackend.app() as EzBackend;
       const response = await ezb.server.inject({
         method: "POST",
-        url: "/user",
-        payload: sampleUser,
+        url: "/program",
+        payload: sampleProgram,
       });
+      
       expect(response.statusCode).toEqual(200);
-      expect(JSON.parse(response.body)).toMatchObject(sampleUser);
+
+      expect(JSON.parse(response.body)).toMatchObject(sampleProgram);
       expect(JSON.parse(response.body)).toHaveProperty("createdAt");
       expect(JSON.parse(response.body)).toHaveProperty("id");
       expect(JSON.parse(response.body)).toHaveProperty("updatedAt");
-    });
-    test("Basic invalid input", async () => {
-      //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
-      const input = {};
-      const response = await ezb.server.inject({
-        method: "POST",
-        url: "/sample",
-        payload: input,
-      });
-      const expectedResponse = {
-        statusCode: 400,
-        error: "Bad Request",
-      };
-      expect(response.statusCode).toEqual(400);
-      expect(JSON.parse(response.body)).toMatchObject(expectedResponse);
-      expect(JSON.parse(response.body)).toHaveProperty("message");
-    });
+    })
   });
   describe("Read", () => {
     test("Basic read", async () => {
       const ezb = EzBackend.app() as EzBackend;
       const response = await ezb.server.inject({
         method: "GET",
-        url: "/user/1",
+        url: "/program/1",
       });
 
       expect(response.statusCode).toEqual(200);
-      expect(JSON.parse(response.body)).toMatchObject(sampleUser);
-      expect(JSON.parse(response.body)).toHaveProperty("createdAt");
-      expect(JSON.parse(response.body)).toHaveProperty("id");
-      expect(JSON.parse(response.body)).toHaveProperty("updatedAt");
-    });
-    test("Basic 404", async () => {
-      //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
-      const input = {};
-      const expectedResponse = {
-        statusCode: 404,
-        error: "Not found",
-      };
-      const response = await ezb.server.inject({
-        method: "GET",
-        url: "/sample/99999",
-        payload: input,
-      });
-      expect(response.statusCode).toEqual(404);
-      expect(JSON.parse(response.body)).toMatchObject(expectedResponse);
-      expect(JSON.parse(response.body)).toHaveProperty("message");
-    });
-  });
-  describe("Update", () => {
-    test("Basic update", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const updatedData = cloneDeep(sampleUser);
-      updatedData.detail.age = 25;
-      const response = await ezb.server.inject({
-        method: "PATCH",
-        url: "/user/1",
-        payload: updatedData,
-      });
 
-      expect(response.statusCode).toEqual(200);
-      expect(JSON.parse(response.body)).toMatchObject(updatedData);
+      expect(JSON.parse(response.body)).toMatchObject(sampleProgram);
       expect(JSON.parse(response.body)).toHaveProperty("createdAt");
       expect(JSON.parse(response.body)).toHaveProperty("id");
       expect(JSON.parse(response.body)).toHaveProperty("updatedAt");
-    });
-    test("Basic 404", async () => {
-      //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
-      const input = {};
-      const expectedResponse = {
-        statusCode: 404,
-        error: "Not found",
-      };
-      const response = await ezb.server.inject({
-        method: "PATCH",
-        url: "/sample/999999",
-        payload: sampleUser,
-      });
-      expect(response.statusCode).toEqual(404);
-      expect(JSON.parse(response.body)).toMatchObject(expectedResponse);
-      expect(JSON.parse(response.body)).toHaveProperty("message");
-    });
-    test("Basic invalid input", async () => {
-      //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
-      const updatedData = cloneDeep(sampleUser);
-      //@ts-ignore
-      updatedData.detail.age = "This is a new string";
-      const response = await ezb.server.inject({
-        method: "PATCH",
-        url: "/sample/1",
-        payload: updatedData,
-      });
-      const expectedResponse = {
-        statusCode: 400,
-        error: "Bad Request",
-      };
-      expect(response.statusCode).toEqual(400);
-      expect(JSON.parse(response.body)).toMatchObject(expectedResponse);
-      expect(JSON.parse(response.body)).toHaveProperty("message");
-    });
-  });
-  describe("Delete", () => {
-    test("Basic delete", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const updatedData = cloneDeep(sampleUser);
-      updatedData.detail.age = 25;
-      const response = await ezb.server.inject({
-        method: "DELETE",
-        url: "/sample/1",
-      });
-
-      expect(response.statusCode).toEqual(200);
-      expect(JSON.parse(response.body)).toMatchObject(updatedData);
-      expect(JSON.parse(response.body)).toHaveProperty("createdAt");
-      expect(JSON.parse(response.body)).toHaveProperty("id");
-      expect(JSON.parse(response.body)).toHaveProperty("updatedAt");
-    });
-    test("Basic 404", async () => {
-      //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
-      const input = {};
-      const expectedResponse = {
-        statusCode: 404,
-        error: "Not found",
-      };
-      const response = await ezb.server.inject({
-        method: "DELETE",
-        url: "/sample/99999",
-        payload: input,
-      });
-      expect(response.statusCode).toEqual(404);
-      expect(JSON.parse(response.body)).toMatchObject(expectedResponse);
-      expect(JSON.parse(response.body)).toHaveProperty("message");
-    });
+    })
   });
 });

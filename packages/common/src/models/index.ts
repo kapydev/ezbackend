@@ -1,19 +1,26 @@
-import { ModelCtor, Model, ModelAttributes } from "sequelize/types";
+import {
+  ModelCtor,
+  Model,
+  ModelAttributes,
+  HasOneOptions,
+  BelongsToOptions,
+  HasManyOptions,
+} from "sequelize/types";
 import { EzBackend } from "../definitions";
 import { getModelSchema } from ".";
 import { RouteOptions } from "fastify";
 import * as response from "./generic-response";
 import * as _ from "lodash"; //TODO: Tree shaking
 
-type Iapi = () => RouteOptions;
+type Iapi<model> = (self: model) => RouteOptions;
 
-interface Iapis {
-  [index: string]: Iapi;
+interface Iapis<model> {
+  [index: string]: Iapi<model>;
 }
 
 //TODO: Encapsulation
 export class EzRouter {
-  apis: Iapis;
+  apis: Iapis<EzRouter>;
   routePrefix: string;
   private ezb: EzBackend;
 
@@ -37,155 +44,68 @@ export class EzRouter {
 
   public registerRoutes() {
     Object.entries(this.apis).forEach(([, api]) => {
-      this.registerRoute(api());
+      this.registerRoute(api(this));
     });
   }
 }
 
 export class EzModel extends EzRouter {
+  apis: Iapis<EzModel>;
   model: ModelCtor<Model<any, any>>;
 
-  //TODO: Get the relations from the model itself
-  relations: Array<ModelCtor<Model<any, any>>>;
+  private static apiGenerators: Iapis<EzModel> = {};
 
-  constructor(modelName: string, attributes: ModelAttributes<Model<any, any>>) {
+  constructor(
+    modelName: string,
+    attributes: ModelAttributes<Model<any, any>>,
+    opts?: any
+  ) {
+    const ezb = EzBackend.app() as EzBackend;
     super(modelName);
-    this.relations = [];
-    this.model = this.ezb.sequelize.define(modelName, attributes);
-    this.initAPI();
+    this.model = ezb.sequelize.define(modelName, attributes);
+    this.apis = EzModel.apiGenerators;
   }
 
-  public getRelationsOptions() {
-    return EzModel.getRelationsOptions(this);
+  public static getAPIgenerators() {
+    return EzModel.apiGenerators;
   }
 
-  public static getRelationsOptions(ezModel: EzModel) {
-    return {
-      include: ezModel.relations
-    };
+  public static setAPIgenerator(name: string, newAPIgenerator: Iapi<EzModel>) {
+    EzModel.apiGenerators[name] = newAPIgenerator;
   }
 
-  private initAPI() {
-    let ezModel = this;
-    //TODO: Consider if this can be simplified into a non function
-    //CREATE
-    this.apis.createOne = () => {
-      const routeDetails: RouteOptions = {
-        method: "POST",
-        url: "/",
-        schema: {
-          body: ezModel.getJsonSchema(false),
-          response: {
-            200: ezModel.getJsonSchema(true),
-            400: response.badRequest,
-          },
-        },
-        //TODO: Check nested
-        async handler(req, res) {
-          const newObj = await ezModel.model.create(
-            req.body,
-            ezModel.getRelationsOptions()
-          );
+  //TODO: reqBody type?
+  //URGENT TODO: Check nested and throw error if wrong format
 
-          res.send(newObj);
-        },
-      };
-      return routeDetails;
-    };
-    //READ
-    this.apis.getOne = () => {
-      const routeDetails: RouteOptions = {
-        method: "GET",
-        url: "/:id",
-        schema: {
-          params: response.singleID,
-          response: {
-            200: ezModel.getJsonSchema(true),
-            404: response.notFound,
-          },
-        },
-        //TODO: Figure out a way to represent types
-        async handler(req, res) {
-          //TODO: Allow for eager and lazy fetching
-          //TODO: Check multi depth nested
-          //TODO: Make params.id part of params
-          const savedObj = await ezModel.model.findByPk(
-            //@ts-ignore
-            req.params.id,
-            ezModel.getRelationsOptions()
-          );
-
-          if (savedObj === null) {
-            res.code(404).send(response.notFoundMsg);
-            return;
+  public static associationOptions(
+    model: ModelCtor<Model<any, any>>,
+    reqBody?: any
+  ) {
+    if (Array.isArray(reqBody)) {
+      reqBody = reqBody[0];
+    }
+    const assocOptions = Object.entries(model.associations).flatMap(
+      ([key, assoc]) => {
+        if (reqBody === undefined || Object.keys(reqBody).includes(key)) {
+          if (Object.keys(assoc.target.associations).length !== 0) {
+            //There are deeper associations
+            const nestedModel = assoc.target;
+            const nestedReqBody = reqBody ? reqBody[key] : undefined;
+            return [
+              {
+                association: assoc,
+                ...EzModel.associationOptions(nestedModel, nestedReqBody),
+              },
+            ];
+          } else {
+            //There are no deeper associations
+            return [assoc.target];
           }
-          res.send(savedObj);
-        },
-      };
-      return routeDetails;
-    };
-    //UPDATE
-    this.apis.updateOne = () => {
-      const routeDetails: RouteOptions = {
-        method: "PATCH",
-        url: "/:id",
-        schema: {
-          params: response.singleID,
-          body: ezModel.getJsonSchema(false),
-          response: {
-            200: ezModel.getJsonSchema(true),
-            404: response.notFound,
-          },
-        },
-        
-        //TODO: Figure out a way to represent types
-        async handler(req, res) {
-          //TODO: Allow for eager and lazy fetching
-          const savedObj = await ezModel.model.findByPk(
-            //@ts-ignore
-            req.params.id,
-            EzModel.getRelationsOptions(ezModel)
-          );
-          if (savedObj === null) {
-            res.code(404).send(response.notFoundMsg);
-            return;
-          }
-          EzModel.updateNested(ezModel, req.body);
-
-          const updatedObj = _.extend(savedObj, req.body);
-          await updatedObj.save();
-          res.send(updatedObj);
-        },
-      };
-      return routeDetails;
-    };
-    //DELETE
-    this.apis.deleteOne = () => {
-      const routeDetails: RouteOptions = {
-        method: "DELETE",
-        url: "/:id",
-        schema: {
-          params: response.singleID,
-          response: {
-            200: ezModel.getJsonSchema(true),
-            404: response.notFound,
-          },
-        },
-        //TODO: Figure out a way to represent types
-        //TODO: Figure out nested delete
-        async handler(req, res) {
-          //@ts-ignore
-          const savedObj = await ezModel.model.findByPk(req.params.id);
-          if (savedObj === null) {
-            res.code(404).send(response.notFoundMsg);
-            return;
-          }
-          await savedObj.destroy();
-          res.send(savedObj);
-        },
-      };
-      return routeDetails;
-    };
+        }
+        return [];
+      }
+    );
+    return { include: assocOptions };
   }
 
   public getJsonSchema(full: boolean) {
@@ -199,33 +119,154 @@ export class EzModel extends EzRouter {
     }
   }
 
-  public hasOne(ezModel: EzModel) {
-    this.model.hasOne(ezModel.model);
-    this.relations.push(ezModel.model);
+  public static addSchema(ezModel: EzModel) {
     //TODO: Figure out if its possible to switch all to schema
     //LEFT OFF: Need to make available to all scopes with fasitfy plugin
-    this.ezb.server.addSchema(
-      {
-        $id: `#/definitions/${ezModel.routePrefix}`,
-        ...ezModel.getJsonSchema(false),
-      }
-      //   ...ezModel.getJsonSchema(false),
-    );
-  }
-
-  
-
-  //TODO: Make this recursive depth
-  public static updateNested(ezModel: EzModel, updateBody: any) {
-    const schema = ezModel.getJsonSchema(false);
-    Object.entries(schema.properties).forEach(([key, value]) => {
-      if (value.hasOwnProperty("$ref")) {
-        const updatedObj = _.extend(ezModel.model[key], updateBody[key]);
-        updatedObj.save();
-      }
+    const ezb = EzBackend.app() as EzBackend;
+    ezb.server.addSchema({
+      $id: `#/definitions/${ezModel.routePrefix}`,
+      ...ezModel.getJsonSchema(false),
     });
   }
+
+  public belongsTo(ezModel: EzModel, opts?: BelongsToOptions) {
+    this.model.belongsTo(ezModel.model, opts);
+  }
+
+  public hasMany(ezModel: EzModel, opts?: HasManyOptions) {
+    this.model.hasMany(ezModel.model, opts);
+  }
+
+  public hasOne(ezModel: EzModel, opts?: HasOneOptions) {
+    this.model.hasOne(ezModel.model, opts);
+  }
+
+  //TODO: Add belongs to many option
 }
+
+//CREATE
+
+//URGENT TODO: Make it such that more that different input format in nested will throw error instead of going unnoticed
+EzModel.setAPIgenerator("createOne", (ezModel) => {
+  const routeDetails: RouteOptions = {
+    method: "POST",
+    url: "/",
+    schema: {
+      body: ezModel.getJsonSchema(false),
+      response: {
+        200: ezModel.getJsonSchema(true),
+        400: response.badRequest,
+      },
+    },
+    async handler(req, res) {
+      const newObj = await ezModel.model.create(
+        req.body,
+        EzModel.associationOptions(ezModel.model, req.body)
+      );
+
+      //TODO: Error handling when object was not successfully saved
+      const savedObj = newObj && newObj.toJSON()
+
+      res.send(savedObj);
+    },
+  };
+  return routeDetails;
+});
+
+//READ
+EzModel.setAPIgenerator("getOne", (ezModel) => {
+  const routeDetails: RouteOptions = {
+    method: "GET",
+    url: "/:id",
+    schema: {
+      params: response.singleID,
+      response: {
+        200: ezModel.getJsonSchema(true),
+        404: response.notFound,
+      },
+    },
+    //TODO: Figure out a way to represent types
+    async handler(req, res) {
+      //TODO: Allow for eager and lazy fetching
+      //TODO: Make params.id part of params
+
+      const savedObj = await ezModel.model.findByPk(
+        //@ts-ignore
+        req.params.id,
+        EzModel.associationOptions(ezModel.model)
+      );
+
+      if (savedObj === null) {
+        res.code(404).send(response.notFoundMsg);
+        return;
+      }
+      res.send(savedObj.toJSON());
+    },
+  };
+  return routeDetails;
+});
+
+//UPDATE
+EzModel.setAPIgenerator("updateOne", (ezModel) => {
+  const routeDetails: RouteOptions = {
+    method: "PATCH",
+    url: "/:id",
+    schema: {
+      params: response.singleID,
+      body: ezModel.getJsonSchema(false),
+      response: {
+        200: ezModel.getJsonSchema(true),
+        404: response.notFound,
+      },
+    },
+
+    //TODO: Figure out a way to represent types
+    async handler(req, res) {
+      //TODO: Allow for eager and lazy fetching
+      const savedObj = await ezModel.model.findByPk(
+        //@ts-ignore
+        req.params.id
+      );
+      if (savedObj === null) {
+        res.code(404).send(response.notFoundMsg);
+        return;
+      }
+
+      const updatedObj = _.extend(savedObj, req.body);
+      await updatedObj.save();
+      res.send(updatedObj);
+    },
+  };
+  return routeDetails;
+});
+
+//DELETE
+EzModel.setAPIgenerator("deleteOne", (ezModel) => {
+  const routeDetails: RouteOptions = {
+    method: "DELETE",
+    url: "/:id",
+    schema: {
+      params: response.singleID,
+      response: {
+        200: ezModel.getJsonSchema(true),
+        404: response.notFound,
+      },
+    },
+    //TODO: Figure out a way to represent types
+    //TODO: Figure out nested delete
+    async handler(req, res) {
+      //@ts-ignore
+      const savedObj = await ezModel.model.findByPk(req.params.id);
+      if (savedObj === null) {
+        res.code(404).send(response.notFoundMsg);
+        return;
+      }
+      await savedObj.destroy();
+      res.send(savedObj);
+    },
+  };
+  return routeDetails;
+});
 
 export { getModelSchema } from "./sequelize-json-schema";
 export * as response from "./generic-response";

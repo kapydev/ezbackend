@@ -48,10 +48,13 @@ export const user = new EzModel("user",{
   }
 })
 
-export const details = new EzModel("details", {
+export const detail = new EzModel("detail", {
   age: {
     type: DataTypes.INTEGER
   }
 })
 
-user.hasOne(details)
+//TODO: Test cyclic graph
+
+program.hasMany(user)
+user.hasOne(detail)
