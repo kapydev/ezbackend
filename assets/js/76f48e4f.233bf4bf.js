@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[734],{2084:function(a){a.exports=JSON.parse('{"allTagsPath":"/ezbackend/blog/tags","slug":"hola","name":"hola","count":1,"permalink":"/ezbackend/blog/tags/hola"}')}}]);
