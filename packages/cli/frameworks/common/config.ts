@@ -15,7 +15,10 @@ export default {
   orm: {
     logging: false,
   },
-  plugins: ["@ezbackend/common","@ezbackend/openapi"],
-  entryPoint: path.resolve(__dirname,"./test.index.ts"),
+  plugins: [
+    "@ezbackend/common",
+    "@ezbackend/openapi"
+  ],
+  entryPoint: path.resolve(__dirname,"./index.ts"),
   connectionURI: "sqlite::memory"
 };

@@ -8,10 +8,13 @@ export async function baseGenerator(packageManager: JsPackageManager) {
   //TODO: Think about keep this DRY with the common framework
   //TODO: Think if these should be dev or normal dependencies (Right now they are dev)
   packageManager.addDependencies({ packageJson: packageJson }, [
+    "@ezbackend/core",
     "@ezbackend/common",
     "@ezbackend/openapi",
     "ts-node-dev",
-    "typescript"
+    "typescript",
+    "sequelize",
+    "@types/node"
   ]);
   packageManager.addEzbCommandInScripts()
   copyBoilerPlate();

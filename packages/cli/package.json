@@ -1,5 +1,5 @@
 {
-  "name": "ezbackend",
+  "name": "@ezbackend/cli",
   "version": "0.0.28",
   "description": "",
   "bin": {

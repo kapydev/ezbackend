@@ -87,7 +87,7 @@ export class EzBackend {
     EzBackend.manager.use((ezb, opts, cb) => {
       //URGENT TODO: Error handling when plugin doesnt work
       const plugins = ezb.plugins;
-
+      
 
       plugins.preInit.forEach((plugin) => {
         ezb.use(plugin, customConfigs);

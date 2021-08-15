@@ -1,3 +1,5 @@
+import { IEzbConfig } from '@ezbackend/core';
+import { mixedInstance } from 'avvio';
 import { EzBackend } from "@ezbackend/common";
 import fastifySwagger from "fastify-swagger"
 import open from 'open'
@@ -7,7 +9,7 @@ const ezb = EzBackend.app() as EzBackend;
 
 
 //Configure defaults
-ezb.plugins.postInit.push(() => {
+ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>,opts,cb) => {
   ezb.server.register(fastifySwagger, {
     prefix: "/docs",
     routePrefix: "/docs",
@@ -29,9 +31,11 @@ ezb.plugins.postInit.push(() => {
       produces: ["application/json"],
     },
   });
+  cb()
 });
 
-ezb.plugins.postRun.push(()=> {
-  ezb.server.swagger();
-  if (ezb.options.server.port) open(`http://localhost:${ezb.options.server.port}/docs`);
+ezb.plugins.postRun.push((ezb: mixedInstance<EzBackend>,opts:IEzbConfig,cb)=> {
+  // ezb.server.swagger();
+  if (opts.port) open(`http://localhost:${opts.port}/docs`);
+  cb()
 })
