@@ -7,7 +7,7 @@ export function isEzbInstalled(dependencies: PackageJson| false, force?:boolean)
     }
 
     if (!force && dependencies.devDependencies) {
-        if (dependencies.devDependencies[`ezbackend`]) {
+        if (dependencies.devDependencies[`@ezbackend/core`]) {
             return ProjectType.ALREADY_HAS_EZB
         }
     }
