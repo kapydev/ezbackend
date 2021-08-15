@@ -21,5 +21,13 @@
 .buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+}
+
+.grid-container {
+  display: grid;
+}
+
+.grid-item {
+  display: grid;
 }

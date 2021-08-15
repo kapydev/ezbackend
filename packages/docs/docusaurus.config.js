@@ -3,7 +3,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'My Site',
+  title: 'EzBackend',
   tagline: 'Dinosaurs are cool',
   url: 'https://collaboroo.github.io',
   baseUrl: '/ezbackend/',
@@ -15,7 +15,7 @@ module.exports = {
   trailingSlash: 'false',
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: 'EzBackend',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -25,7 +25,7 @@ module.exports = {
           type: 'doc',
           docId: 'intro',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Docs',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
@@ -42,7 +42,7 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Docs',
               to: '/docs/intro',
             },
           ],
