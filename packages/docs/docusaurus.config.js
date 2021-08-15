@@ -4,7 +4,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'EzBackend',
-  tagline: 'Dinosaurs are cool',
+  tagline: 'Create your backend in two lines of code',
   url: 'https://collaboroo.github.io',
   baseUrl: '/ezbackend/',
   onBrokenLinks: 'warn', //Not sure if this will break
