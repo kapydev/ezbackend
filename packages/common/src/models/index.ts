@@ -121,7 +121,6 @@ export class EzModel extends EzRouter {
 
   public static addSchema(ezModel: EzModel) {
     //TODO: Figure out if its possible to switch all to schema
-    //LEFT OFF: Need to make available to all scopes with fasitfy plugin
     const ezb = EzBackend.app() as EzBackend;
     ezb.server.addSchema({
       $id: `#/definitions/${ezModel.routePrefix}`,
