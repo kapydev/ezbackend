@@ -14,14 +14,14 @@ You can imagine this by comparing it to excel,
 
 ## Create your first EzModel
 
-To create a new schema, add the following to `.ezb/index.ts`
+For example, if we want a user, add the following to `.ezb/index.ts`
 
 ```ts title=".ezb/index.ts"
 import {EzModel} from "@ezbackend/common"
 import {DataTypes} from 'sequelize'
 
-export const mySchema = new EzModel("mySchema", {
-  string: {
+export const user = new EzModel("user", {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -34,7 +34,7 @@ export const mySchema = new EzModel("mySchema", {
 ### Breaking it down
 
 ```ts
-export const mySchema;
+export const user
 ```
 
 EzBackend looks for exported models from the `index.ts` file to create the database and generate APIs, so you **must** export any schemas created
@@ -42,28 +42,28 @@ EzBackend looks for exported models from the `index.ts` file to create the datab
 ```ts
 import {EzModel} from "@ezbackend/common"
 
-new EzModel("mySchema",{...})
+new EzModel("user",{...})
 ```
 
-This creates a sequelize model with the name "mySchema". Under the hood we are calling
+This creates a sequelize model with the name "user". Under the hood we are calling
 
 [`sequelize.define(modelName, attributes)`](https://sequelize.org/master/manual/model-basics.html)
 
-This creates a table in the DB with the name `MySchema`
+This creates a table in the DB with the name `user`
 
 :::tip Tip
-You can access the sequelize model directly from `mySchema.model`
+You can access the sequelize model directly from `user.model`
 :::
 
 :::warning Warning
-Sequelize __auto-pluralises__ and __capitalises__ table names. Eg. `new EzModel('detail')` will be called `Details` in the database
+Sequelize __auto-pluralises__ and __capitalises__ table names. Eg. `new EzModel('user')` will be called `users` in the database
 :::
 
 ```ts
 import {DataTypes} from 'sequelize'
 
 {
-  string: {
+  name: {
     type: DataTypes.STRING,
     allowNull:false
   },

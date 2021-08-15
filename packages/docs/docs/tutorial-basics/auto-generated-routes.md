@@ -1,8 +1,8 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
-# Auto Generated Routes
+# Auto Generated APIs
 
 EzBackend automatically generates API routes from schemas defined by the user
 
@@ -10,12 +10,12 @@ EzBackend automatically generates API routes from schemas defined by the user
 
 By default, EzBackend generates the following routes:
 
-| Route Name | Method | URL    | Action                                |
-| ---------- | ------ | ------ | ------------------------------------- |
-| createOne  | POST   | `/`    | Create a single entry in the database |
-| getOne     | GET    | `/:id` | Get a single entry in the database    |
-| updateOne  | PATCH  | `/:id` | Update a single entry in the database |
-| deleteOne  | DELETE | `/:id` | Delete a single entry in the database |
+| Route Name | Method | URL    | Action                                |Nested|
+| ---------- | ------ | ------ | ------------------------------------- |------|
+| createOne  | POST   | `/`    | Create a single entry in the database |✅|
+| getOne     | GET    | `/:id` | Get a single entry in the database    |✅|
+| updateOne  | PATCH  | `/:id` | Update a single entry in the database |❌|
+| deleteOne  | DELETE | `/:id` | Delete a single entry in the database |❌|
 
 ## Making your own route API
 
@@ -32,42 +32,30 @@ Right now its pretty complicated, but we will be expanding the EzBackend API soo
 :::
 
 ```ts
-import {response} from '@ezbackend/common'
+import {response, EzModel} from '@ezbackend/common'
 
-export class ExtendedEzModel extends EzModel {
-    constructor(modelName: string, attributes: ModelAttributes<Model<any, any>>) {
-        super (modelName, attributes)
-        this.addGetAll()
-    }
-
-    private addGetAll() {
-        let ezModel = this
-
-        this.apis.getAll = () => {
-            const routeDetails: RouteOptions = {
-                method: "GET",
-                url: "/",
-                schema: {
-                    response: {
-                        200: {
-                            type : "array",
-                            items: user.getJsonSchema(true)
-                        },
-                        400: response.badRequest
-                    }
-                },
-                async handler(req,res) {
-                    const allObj = await user.model.findAll()
-                    return allObj
-                }
-            }
-        }
-    }
-
-  }
-}
-
-
+EzModel.setAPIgenerator("getAll", (ezModel) => {
+  const routeDetails: RouteOptions = {
+    method: "GET",
+    url: "/",
+    schema: {
+      response: {
+        200: {
+          type: "array",
+          items: ezModel.getJsonSchema(true),
+        },
+        400: response.badRequest,
+      },
+    },
+    async handler(req, res) {
+      const allObj = await ezModel.model.findAll(
+        EzModel.associationOptions(ezModel.model)
+      );
+      res.send(allObj.map(obj => obj.toJSON()));
+    },
+  };
+  return routeDetails
+});
 ```
 
 ### Understanding API generation

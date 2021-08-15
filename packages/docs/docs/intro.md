@@ -21,13 +21,16 @@ npm run ezb
 ![drawing](thats-it.jpg)
 
 
-You're done! You'll have a working backend of a **default *sample* schema** running on:
+You're done! The [following routes](tutorial-basics/auto-generated-routes) for your schemas will be generated
 
-**[http://localhost:8888](http://localhost:8888)**. 
+
+You'll have a working backend running on:
+
+**[localhost:8888](http://localhost:8888)**. 
 
 **API Documentation** will also be generated at:
 
-**[http://localhost:8888/docs/static/index.html](http://localhost:8888/docs/static/index.html)**
+**[localhost:8888/docs](http://localhost:8888/docs/static/index.html)**
 
 
 <!-- ## How It Works

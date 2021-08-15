@@ -6,7 +6,7 @@ sidebar_position: 1
 
 EzBackend allows you to create custom plugins by hooking your plugins into any part of the EzBackend lifecycle as you so wish
 
-TODO: Make hooks into functions instead of replacing properties because thats kinda weird
+<!-- TODO: Make hooks into functions instead of replacing properties because thats kinda weird -->
 
 ## An introduction to lifecycle and hooks
 

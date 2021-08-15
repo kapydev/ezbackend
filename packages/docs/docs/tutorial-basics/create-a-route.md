@@ -1,8 +1,12 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Create an API Route
+
+
+
+
 
 If you want to create an API route, you must first understand that EzBackend is a wrapper of [fastify](https://www.fastify.io/) and [sequelize](https://sequelize.org/master/)
 
@@ -30,7 +34,7 @@ Now that we have the fastify instance, it is more a problem of ['How do I create
 
 ## Creating an api route using fastify
 
-Let's say we want an API route that adds two numbers
+The below is an example of how to create an API route that adds two numbers
 
 ```ts title=".ezb/index.ts"
 fastify.route({
@@ -57,7 +61,7 @@ fastify.route({
 
 ```
 
-So creating and api route is as simple as creating the route with fastify. For additional details creating a router with fastify click [here](https://www.fastify.io/docs/latest/Routes/)
+So creating and api route is as simple as creating the route with fastify. For additional details creating a route with fastify click [here](https://www.fastify.io/docs/latest/Routes/)
 
 
 ## Putting it together
@@ -92,3 +96,17 @@ fastify.route({
   }
 })
 ```
+
+:::note
+An upcoming feature is to make one line of code
+
+```ts
+EzBackend.addAPI((request:Request, reply: Reply) {
+  ...
+})
+```
+
+Automatically generate the schemas from the types `Request` and `Reply`, and automatically generate the error codes as well
+
+However, we need your support to implement this feature. Please contact us at we.are.collaboroo@gmail.com to tell us why you need it 😊
+:::
