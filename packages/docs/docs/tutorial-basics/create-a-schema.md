@@ -56,7 +56,7 @@ You can access the sequelize model directly from `user.model`
 :::
 
 :::warning Warning
-Sequelize __auto-pluralises__ and __capitalises__ table names. Eg. `new EzModel('user')` will be called `users` in the database
+Sequelize __auto-pluralises__ table names. Eg. `new EzModel('user')` will be called `users` in the database
 :::
 
 ```ts
