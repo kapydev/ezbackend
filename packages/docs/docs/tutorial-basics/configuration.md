@@ -15,7 +15,7 @@ The default config file may look like this
 <!-- TODO: Make the default config generate from the actual default config -->
 
 ```ts
-import path from "path";
+import path from 'path'
 
 export default {
   port: 8888,
@@ -30,15 +30,18 @@ export default {
     },
   },
   orm: {
-    logging: false,
+    type: "sqlite",
+    database: ":memory:",
+    synchronize : true,
+    entities: [path.resolve(__dirname,"**/*.ts")]
   },
-  entryPoint: path.resolve(__dirname, "index.ts"),
-  connectionURI: "sqlite::memory"
   plugins: [
     "@ezbackend/common",
     "@ezbackend/openapi"
-  ]
+  ],
+  entryPoint: path.resolve(__dirname,"./index.ts"),
 };
+
 ```
 
 ### Understanding the config
@@ -51,11 +54,10 @@ import fastify from 'fastify'
 const server = fastify(options.server)
 ```
 
-`connectionURI` - the connection URI as specified [here](https://sequelize.org/master/manual/getting-started.html)
-`orm` - The options that get passed to sequelize.
+`orm` - The options that get passed to typeorm.
 ```ts
-import {Sequelize} from 'sequelize'
-const sequelize = new Sequelize(options.connectionURI, options.orm)
+import {createConnection} from 'typeorm'
+const connection = await createConnection(opts.orm);
 ```
 
 `entryPoint` - The filename of the file where your models are specified. `path.resolve(__dirname, "index.ts")` will always resolve to an `index.ts` file in the same folder as `config.ts`

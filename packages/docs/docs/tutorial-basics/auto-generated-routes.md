@@ -13,6 +13,7 @@ By default, EzBackend generates the following routes:
 | Route Name | Method | URL    | Action                                |Nested|
 | ---------- | ------ | ------ | ------------------------------------- |------|
 | createOne  | POST   | `/`    | Create a single entry in the database |✅|
+| getAll     | GET    | `/`    | Get all entries in the database       |✅|
 | getOne     | GET    | `/:id` | Get a single entry in the database    |✅|
 | updateOne  | PATCH  | `/:id` | Update a single entry in the database |❌|
 | deleteOne  | DELETE | `/:id` | Delete a single entry in the database |❌|
@@ -32,53 +33,27 @@ Right now its pretty complicated, but we will be expanding the EzBackend API soo
 :::
 
 ```ts
-import {response, EzModel} from '@ezbackend/common'
+import {APIGenerator} from "@ezbackend/common"
 
-EzModel.setAPIgenerator("getAll", (ezModel) => {
-  const routeDetails: RouteOptions = {
+APIGenerator.setGenerator("getAll", (repo) => {
+  const routeDetails:RouteOptions = {
     method: "GET",
     url: "/",
     schema: {
-      response: {
-        200: {
-          type: "array",
-          items: ezModel.getJsonSchema(true),
-        },
-        400: response.badRequest,
-      },
     },
-    async handler(req, res) {
-      const allObj = await ezModel.model.findAll(
-        EzModel.associationOptions(ezModel.model)
-      );
-      res.send(allObj.map(obj => obj.toJSON()));
-    },
-  };
-  return routeDetails
-});
+    handler: async(req,res) => {
+      //@ts-ignore
+      const newObj = await repo.find(req.params.id);
+      res.send(newObj);
+    }
+  }
+  return routeDetails; 
+})
 ```
 
-### Understanding API generation
+### Understanding API Generation
 
-An EzModel is structured like this:
-
-<!-- TODO: Update this when relations enter the scene (Although it is probably better we get the relations from the model itself)-->
-
-```ts
-class EzRouter {
-    apis: {keys: () => route:RouteOptions}
-    routePrefix: string
-}
-
-class EzModel extends EzRouter {
-    model: Model
-}
-```
-
-EzBackend automatically generates routes by
-
-1. finding all the instances of EzRouters (or instances inheriting from EzRouter) exported from the main file
-1. Then running `registerRoutes()` on them.
-
-`registerRoutes()` gets all the functions `() => {RouteOptions}` and the creates an api for it based on the specification for `fastify.route(options:RouteOptions)`
+:::info
+Coming soon
+:::
 

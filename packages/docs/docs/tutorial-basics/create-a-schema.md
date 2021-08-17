@@ -17,63 +17,56 @@ You can imagine this by comparing it to excel,
 For example, if we want a user, add the following to `.ezb/index.ts`
 
 ```ts title=".ezb/index.ts"
-import {EzModel} from "@ezbackend/common"
-import {DataTypes} from 'sequelize'
+import { PrimaryGeneratedColumn, Column } from 'typeorm';
+import { EzModel } from "@ezbackend/common";
 
-export const user = new EzModel("user", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  age: {
-    type: DataTypes.INTEGER,
-  },
-});
+@EzModel()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
+  name: string
+
+  @Column()
+  age: number
+}
 ```
 
 ### Breaking it down
 
 ```ts
-export const user
+@EzModel()
+export class User
 ```
-
-EzBackend looks for exported models from the `index.ts` file to create the database and generate APIs, so you **must** export any schemas created
-
-```ts
-import {EzModel} from "@ezbackend/common"
-
-new EzModel("user",{...})
-```
-
-This creates a sequelize model with the name "user". Under the hood we are calling
-
-[`sequelize.define(modelName, attributes)`](https://sequelize.org/master/manual/model-basics.html)
-
-This creates a table in the DB with the name `user`
-
-:::tip Tip
-You can access the sequelize model directly from `user.model`
+You can make any class into an EzModel by putting the [decorator](https://fireship.io/lessons/ts-decorators-by-example/) `@EzModel()` above the class definition.
+:::warning
+You **must** export any models created
 :::
 
-:::warning Warning
-Sequelize __auto-pluralises__ table names. Eg. `new EzModel('user')` will be called `users` in the database
-:::
+Under the hood we are creating a creating a typeorm [Entity](https://typeorm.io/#/entities), so you can define everything within the Entity as if it were a Typeorm entity and expect it to work
+
 
 ```ts
-import {DataTypes} from 'sequelize'
+import { PrimaryGeneratedColumn, Column } from 'typeorm';
 
 {
-  name: {
-    type: DataTypes.STRING,
-    allowNull:false
-  },
-  age: {
-    type: DataTypes.INTEGER
-  }
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
+  name: string
+
+  @Column()
+  age: number
 }
 ```
 
-For each property in the schema, you must specify the type. These DataTypes must be imported directly from sequelize, and you can view all the supported types [here](../tutorial-extras/supported-datatypes)
+Over here we are adding to the table according to the [typeorm specification](https://typeorm.io/#/undefined/adding-table-columns)
+
+:::info
+EzBackend automatically generates default CRUD routes for each of your defined models
+:::
 
 ## Accessing your database
 

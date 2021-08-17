@@ -9,26 +9,29 @@ A default schema is generated for you. You can edit this schema or create your o
 Running this will automatically create POST, GET, PUT, and DELETE endpoints that you can test on [localhost:8888/docs](http://localhost:8888/docs/static/index.html)
 
 ```ts title=".ezb/index.ts"
-import { EzModel, EzRouter } from "@ezbackend/common";
-import { DataTypes } from "sequelize";
+import { PrimaryGeneratedColumn, Column } from 'typeorm';
+import { EzModel } from "@ezbackend/common";
 
-export const user = new EzModel("user", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  age: {
-    type: DataTypes.INTEGER
-  }
-});
+@EzModel()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number
 
-export const framework = new EzModel("framework", {
-  name: {
-    type: DataTypes.STRING
-  }
-});
+  @Column()
+  name: string
 
-user.hasOne(framework);
+  @Column()
+  age: number
+}
+
+@EzModel()
+export class Pets {
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
+  species: string
+}
 ```
 
 You can also make your own [custom endpoints](tutorial-basics/create-a-route)

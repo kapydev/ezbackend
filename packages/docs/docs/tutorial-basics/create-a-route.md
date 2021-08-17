@@ -8,7 +8,7 @@ sidebar_position: 3
 
 
 
-If you want to create an API route, you must first understand that EzBackend is a wrapper of [fastify](https://www.fastify.io/) and [sequelize](https://sequelize.org/master/)
+If you want to create an API route, you must first understand that EzBackend is a wrapper of [fastify](https://www.fastify.io/) and [typeorm](https://typeorm.io/)
 
 Hence, when thinking about creating an API route, we should be thinking of making a [fastify api route](https://www.fastify.io/docs/latest/Routes/)
 

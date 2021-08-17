@@ -74,9 +74,11 @@ export class EzBackend {
     if (fs.existsSync(customConfigPath)) {
       customConfigs = require(customConfigPath).default;
       customConfigs.plugins.forEach((pluginName) => {
-        require(pluginName);
+        const loadedPlugin = require(pluginName);
       });
     }
+
+    
 
     //LOAD PLUGINS FROM CONFIG
     //TODO: Allow changing of config path, or default config if none
@@ -87,13 +89,13 @@ export class EzBackend {
     EzBackend.manager.use((ezb, opts, cb) => {
       //URGENT TODO: Error handling when plugin doesnt work
       const plugins = ezb.plugins;
-      
 
       plugins.preInit.forEach((plugin) => {
         ezb.use(plugin, customConfigs);
       });
 
       ezb.use(plugins.init, customConfigs);
+
 
       plugins.postInit.forEach((plugin) => {
         ezb.use(plugin, customConfigs);
@@ -121,9 +123,12 @@ export class EzBackend {
       cb();
     });
 
-
     EzBackend.manager.start();
-    await EzBackend.manager.ready();
+    await EzBackend.manager.ready((err) => {
+      if (err) {
+        throw err;
+      }
+    });
     return;
   }
 }

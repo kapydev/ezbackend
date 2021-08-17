@@ -6,45 +6,210 @@ sidebar_position: 2
 
 Adding relations is like stealing candy from a baby
 
-Assuming we have models `parent`, `baby`, `candy` and `thief`, we can do the following
+Assume we have models `parent` and `baby`:
 
 ```ts
-parent.hasOne(baby)
-baby.hasMany(candy)
-candy.belongsTo(thief)
+@EzModel()
+export class Baby {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+}
+
+@EzModel()
+export class Parent {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+}
 ```
 
-:::note
-Currently `belongsToMany` is not supported, but we need your support in order to implement it. Tell us why you need it by contacting us at we.are.collaboroo@gmail.com
-:::
+## One to One relations
 
-And all your APIs will be automatically generated for you.
+To create a one-to-one relation between parents and the baby we can add the following to our baby model:
 
-:::warning
-The order of what is on the left and right affects the way your API is generated.
-:::
-
-For example
-```ts
-//Parent has foreign key for baby
-parent.hasOne(baby)
-
-//Baby has foreign key for parent
-baby.belongsTo(parent)
+```ts title=BabyModel
+@EzModel()
+export class Parent {
+  .
+  .
+  @OneToOne(type => Baby)
+  @JoinColumn()
+  baby: Baby
+}
 ```
 
-:::warning
-In the first example
-1. We *can* get the baby from the parent `GET` endpoint
-2. We *cannot* get the parent from the baby `GET` endpoint
+Each of the added decorators performs a different functionality:
 
-In the second example
-1. We *cannot* get the baby from the parent `GET` endpoint
-2. We *can* get the parent from the baby `GET` endpoint
-:::
+`@OneToOne` - Specifies that a parent has one baby and vice versa
+`@JoinColumn` - Specifies that the baby model contains the parent foreign key
 
-You can view more details from the [sequelize docs](https://sequelize.org/master/manual/assocs.html#:~:text=the%20order%20in%20which%20the%20association%20is%20defined%20is%20relevant.%20in%20other%20words%2C%20the%20order%20matters%2C%20for%20the%20four%20cases.%20in%20all%20examples%20above%2C%20a%20is%20called%20the%20source%20model%20and%20b%20is%20called%20the%20target%20model.%20this%20terminology%20is%20important.)
+A more detailed explanation can be found [here](https://typeorm.io/#/one-to-one-relations)
 
+## Nested Creation
 
+For nested creation to work, we need to enable cascade creation. We can do so by adding `cascade:true`
 
+```ts title=BabyModel
+@EzModel()
+export class Parent {
+  .
+  .
+  @OneToOne(type => Baby, {
+      cascade: true
+  })
+  .
+  .
+}
+```
 
+We can test all our endpoints at the [generated docs](http://localhost:8888/docs)
+
+We can 
+1. Click on the `POST` request for the url `/Parent/`
+2. Click on `Try it out`
+3. Use the following request body:
+
+```json
+{ "name": "Robert", "baby": { "name": "Thomas" } }
+```
+
+Now we can get all the parents using the `GET` request for `/Parent` to obtain:
+```json
+[
+  {
+    "id": 1,
+    "name": "Robert"
+  }
+]
+```
+
+And all the babies with the `GET` request for `/Baby/`
+```json
+[
+  {
+    "id": 1,
+    "name": "Thomas"
+  }
+]
+```
+
+## Nested Retrieval
+
+Right now we notice that the returned parent does not come with his child. However, if we want to return the nested field we can add `eager:true`
+
+Now, when we get the parents we have:
+```json
+[
+  {
+    "id": 1,
+    "name": "Robert",
+    "baby": {
+      "id": 1,
+      "name": "Thomas"
+    }
+  }
+]
+```
+
+## Updating by ID
+
+Let's say a baby was born, but we did not know the mother yet, by creating a baby with
+
+```json
+{"name":"Sarah"}
+```
+
+But we managed to get her mother, Rebecca
+
+```json
+{"name":"Rebecca"}
+```
+
+To update by the mother's account by ID, we have to make a reference to the `foreign key` that typeorm automatically generates.
+
+We can do this by adding the column `babyId`
+```ts title=ParentModel
+@EzModel()
+export class Parent {
+  .
+  .
+  @OneToOne(type => Baby)
+  @JoinColumn()
+  baby: Baby
+
+  @Column({
+      nullable:true
+  })
+  babyId: number
+}
+```
+
+```ts title=BabyModel
+@EzModel()
+export class Parent {
+  .
+  .
+  @OneToOne(type => Baby)
+  @JoinColumn()
+  baby: Baby
+}
+```
+
+Now we can update the mother with her baby's id by using the `PATCH` request using the mother's `id`
+
+```json
+{"babyId" : 1}
+```
+
+Now if we obtain all the parents, we find that Rebecca has been succesfully reunited with her child
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Rebecca",
+    "baby": {
+      "id": 1,
+      "name": "Sarah"
+    },
+    "babyId": 1
+  }
+]
+```
+
+## Nested Delete
+
+Let's say when a parent leaves, her child leaves too. By default, removing the parent from the database does not remove the child, but if we want to make it such that deleting the parent removes the child, we can use
+
+```ts title=BabyModel
+@EzModel()
+export class Parent {
+  .
+  .
+  @OneToOne(type => Baby, {
+      cascade: true
+      onDelete: 'CASCADE'
+  })
+  .
+  .
+}
+```
+
+## Understanding how it works
+
+Oversimplifying, the apis are mapped to the typeorm functions in the following way
+
+|name|url|endpoint|action|
+|-|-|-|-|
+|create|`/`|`POST`|[save](https://typeorm.io/#/undefined/creating-and-inserting-a-photo-into-the-database)|
+|readMany|`/`|`GET`|[find](https://typeorm.io/#undefined/loading-from-the-database)|
+|read|`/:id`|`GET`|[findOne](https://typeorm.io/#undefined/loading-from-the-database)|
+|update|`/:id`|`PATCH`|[update](https://typeorm.io/#/update-query-builder)|
+|delete|`/:id`|`DELETE`|[update](https://typeorm.io/#/delete-query-builder)|
+
+So in order to adjust the functionality of the endpoints, you just need to adjust the functionality of your generated schemas
