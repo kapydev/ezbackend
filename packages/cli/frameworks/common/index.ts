@@ -1,20 +1,34 @@
-import { EzModel, EzRouter } from "@ezbackend/common";
-import { DataTypes } from "sequelize";
+import { PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { EzModel } from "@ezbackend/common";
 
-export const user = new EzModel("user", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  age: {
-    type: DataTypes.INTEGER
-  }
-});
+@EzModel()
+export class Baby {
+  @PrimaryGeneratedColumn()
+  id: number
 
-export const framework = new EzModel("framework", {
-  name: {
-    type: DataTypes.STRING
-  }
-});
+  @Column()
+  name: string
 
-user.hasOne(framework);
+}
+
+@EzModel()
+export class Parent {
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
+  name: string
+
+  @OneToOne(type => Baby, {
+    cascade:true,
+    eager:true
+  })
+  @JoinColumn()
+  baby: Baby
+
+  @Column({
+    nullable:true
+  })
+  babyId: number
+}
+

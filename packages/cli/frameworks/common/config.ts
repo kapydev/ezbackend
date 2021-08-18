@@ -13,12 +13,15 @@ export default {
     },
   },
   orm: {
-    logging: false,
+    type: "sqlite",
+    database: ":memory:",
+    synchronize : true,
+    // logging: true,
+    entities: [path.resolve(__dirname,"**/*.ts")]
   },
   plugins: [
     "@ezbackend/common",
     "@ezbackend/openapi"
   ],
   entryPoint: path.resolve(__dirname,"./index.ts"),
-  connectionURI: "sqlite::memory"
 };
