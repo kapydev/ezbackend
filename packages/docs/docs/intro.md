@@ -9,6 +9,8 @@ sidebar_position: 1
 
 ## Installation
 
+**In a new folder/your frontend repository**
+
 ```
 npx ezbackend init
 ```

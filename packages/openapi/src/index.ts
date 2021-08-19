@@ -38,6 +38,6 @@ ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>,opts,cb) => {
 //URGENT TODO: Generate Schemas for openapi properly
 ezb.plugins.postRun.push((ezb: mixedInstance<EzBackend>,opts:IEzbConfig,cb)=> {
   // ezb.server.swagger();
-  // if (opts.port) open(`http://localhost:${opts.port}/docs`);
+  if (opts.port) open(`http://localhost:${opts.port}/docs`);
   cb()
 })

@@ -17,15 +17,13 @@ ezb.plugins.init = async (
   opts: IEzbConfig & IOptions,
   cb
 ) => {
-  ezb.orm = await createConnection(opts.orm);
   ezb.server = fastify(opts.server);
   cb();
 };
 
-ezb.plugins.handler = (ezb: mixedInstance<EzBackend>, opts: IEzbConfig, cb) => {
-  const customEzbPath =
-    opts.entryPoint ?? path.join(process.cwd(), ".ezb/index.ts");
-  require(customEzbPath);
+ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IOptions, cb) => {
+  //URGENT TODO: Think about consequences of using createConnection to import index.ts
+  ezb.orm = await createConnection(opts.orm);
   ezb.models.forEach((model) => {
     const repo = ezb.orm.getRepository(model);
 
