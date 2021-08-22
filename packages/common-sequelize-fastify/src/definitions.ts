@@ -15,4 +15,8 @@ export interface IOptions {
 export class  EzBackend extends EzBackendBase {
     sequelize: Sequelize
     server: FastifyInstance
+
+    public static app() {
+        return super.app() as EzBackend
+    }
 }

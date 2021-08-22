@@ -1,58 +1,94 @@
-import { EzModel } from "@ezbackend/common";
-import { DataTypes } from "sequelize";
+import { EzModel } from "../src";
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+  ManyToOne,
+} from "typeorm";
 
-//TODO: Make arrays work
-export const sample = new EzModel("sample", {
-    string: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    int: {
-      type: DataTypes.INTEGER,
-    },
-    float: {
-      type: DataTypes.FLOAT,
-    },
-    double: {
-      type: DataTypes.DOUBLE
-    },
-    real: {
-      type: DataTypes.REAL
-    },
-    enum: {
-      type: DataTypes.ENUM,
-      values: ['one','two','three']
-    },
-    date: {
-      type: DataTypes.DATE
-    },
-    uuid: {
-      type: DataTypes.UUID
-    },
-    json: {
-      type: DataTypes.JSON
-    }
-  });
+//TODO: Figure out a way to stop vsc from linting these wrongly just because they are not included in the tsconfig
+@EzModel()
+export class Sample {
+  @PrimaryGeneratedColumn()
+  id: number
+  
+  @Column({
+    type: "varchar"
+  })
+  varchar: string
 
-export const program = new EzModel("program", {
-  name: {
-    type:DataTypes.STRING,
-    allowNull: false
-  }
-})
+  @Column({
+    type: "integer"
+  })
+  int: number
 
-export const user = new EzModel("user",{
-  name: {
-    type:DataTypes.STRING,
-    allowNull:false
-  }
-})
+  @Column({
+    type: "float"
+  })
+  float: number
 
-export const detail = new EzModel("detail", {
-  age: {
-    type: DataTypes.INTEGER
-  }
-})
+  @Column({
+    type: "double"
+  })
+  double: number
 
-program.hasMany(user)
-user.hasOne(detail)
+  @Column({
+    type: "real"
+  })
+  real: number
+
+  @Column({
+    type: "date"
+  })
+  date: string
+
+  @Column("simple-json")
+  json: {field1: string, field2: number}
+}
+
+@EzModel()
+export class Program {
+
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
+  name: string 
+
+  @OneToMany(type => User, user => user.program, {
+    cascade: true,
+    eager: true
+  })
+  users: User[]
+}
+
+@EzModel()
+export class User {
+
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
+  name: string
+
+  @OneToOne(type => Detail, {
+    cascade: true,
+    eager: true
+  })
+  @JoinColumn()
+  detail: Detail
+
+  @ManyToOne(type => Program, program => program.users)
+  program: Program
+}
+
+@EzModel()
+export class Detail {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  age: number;
+}

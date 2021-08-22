@@ -1,12 +1,11 @@
 import { IOptions } from "./definitions";
 import { IEzbConfig } from "@ezbackend/core";
 import { fastify } from "fastify";
-import path from "path";
 import { EzBackend } from "./definitions";
 import { mixedInstance } from "avvio";
 import { createConnection } from "typeorm";
-import { RouteOptions } from "fastify";
 import { APIGenerator } from "./models";
+import { kebabCase } from "./helpers";
 import {convert} from './models/typeorm-json-schema'
 
 const ezb = EzBackend.app();
@@ -21,17 +20,18 @@ ezb.plugins.init = async (
   cb();
 };
 
+//TODO: Consider if automatically including createdAt and updatedAt is useful
 ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IOptions, cb) => {
   //URGENT TODO: Think about consequences of using createConnection to import index.ts
   ezb.orm = await createConnection(opts.orm);
   ezb.models.forEach((model) => {
     const repo = ezb.orm.getRepository(model);
-
+    
     //LEFT OFF
     // const metaData = ezb.orm.getMetadata(model)
     // console.log(convert(metaData))
 
-    const generator = new APIGenerator(repo, { prefix: repo.metadata.name });
+    const generator = new APIGenerator(repo, { prefix: kebabCase(repo.metadata.name) });
     generator.generateRoutes();
   });
   cb();
@@ -45,7 +45,6 @@ ezb.plugins.run = async (
   await ezb.server.listen(opts.port, function (err, address) {
     if (err) {
       console.error(err);
-      process.exit(1);
     }
   });
   cb();

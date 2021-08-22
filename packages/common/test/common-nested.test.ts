@@ -1,16 +1,17 @@
-import { cloneDeep } from "lodash";
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import { EzBackend } from "../src";
 import path from "path";
 
 beforeAll(async () => {
+  const ezb = EzBackend.app()
+  ezb.plugins.run = (ezb,opts,cb) => {cb()}
   await EzBackend.start(path.resolve(__dirname, "test.config.ts"));
 });
 
 afterAll(() => {
-  const ezb = EzBackend.app() as EzBackend;
+  const ezb = EzBackend.app();
   ezb.server.close();
-  ezb.sequelize.close();
+  ezb.orm.close()
 });
 
 const sampleProgram = {
@@ -38,9 +39,7 @@ describe("Nested CRUD", () => {
       expect(response.statusCode).toEqual(200);
 
       expect(JSON.parse(response.body)).toMatchObject(sampleProgram);
-      expect(JSON.parse(response.body)).toHaveProperty("createdAt");
       expect(JSON.parse(response.body)).toHaveProperty("id");
-      expect(JSON.parse(response.body)).toHaveProperty("updatedAt");
     })
   });
   describe("Read", () => {
@@ -54,9 +53,7 @@ describe("Nested CRUD", () => {
       expect(response.statusCode).toEqual(200);
 
       expect(JSON.parse(response.body)).toMatchObject(sampleProgram);
-      expect(JSON.parse(response.body)).toHaveProperty("createdAt");
       expect(JSON.parse(response.body)).toHaveProperty("id");
-      expect(JSON.parse(response.body)).toHaveProperty("updatedAt");
     })
   });
 });

@@ -4,6 +4,12 @@ import { EzBackend } from "../src";
 import path from "path";
 
 beforeAll(async () => {
+  const ezb = EzBackend.app()
+  ezb.plugins.run = async (ezb, opts, cb) => {
+    //@ts-ignore
+    await ezb.sequelize.sync();
+    cb();
+  };
   await EzBackend.start(path.resolve(__dirname, "test.config.ts"));
 });
 

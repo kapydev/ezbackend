@@ -10,7 +10,6 @@ export interface IEzbConfig {
   server?: unknown;
   orm?: unknown;
   port?: number;
-  entryPoint?: string;
   connectionURI?: string;
 }
 

@@ -16,7 +16,8 @@
     "window-size": "^1.1.1"
   },
   "scripts": {
-    "build": "node ./scripts/build-package.js"
+    "build": "node ./scripts/build-package.js",
+    "test": "jest"
   },
   "dependencies": {
     "typescript": "^4.3.5"
