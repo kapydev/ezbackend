@@ -12,5 +12,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: -rf node_modules && yarn install --frozen-lockfile
+      - run: rm -rf node_modules && yarn install --frozen-lockfile
       - run: yarn test
