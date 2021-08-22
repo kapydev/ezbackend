@@ -92,6 +92,7 @@ export class EzBackend {
 
       plugins.preInit.forEach((plugin) => {
         ezb.use(plugin, customConfigs);
+        
       });
 
       ezb.use(plugins.init, customConfigs);
@@ -122,13 +123,17 @@ export class EzBackend {
       });
       cb();
     });
-
     EzBackend.manager.start();
-    await EzBackend.manager.ready((err) => {
-      if (err) {
-        throw err;
-      }
-    });
+    await new Promise<void>(resolve => {
+      EzBackend.manager.ready((err) => {
+        if (err) {
+          throw err;
+        }
+        resolve()
+      });
+    })
+
     return;
+
   }
 }

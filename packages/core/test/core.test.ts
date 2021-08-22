@@ -45,7 +45,6 @@ describe("Default Behaviour", () => {
       arr.push(10);
       cb();
     });
-
     await EzBackend.start();
 
     expect(arr).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
