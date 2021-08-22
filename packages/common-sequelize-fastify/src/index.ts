@@ -39,7 +39,6 @@ ezb.plugins.run = async (ezb: mixedInstance<EzBackend>, opts:IEzbConfig, cb) => 
   await ezb.server.listen(opts.port, function (err, address) {
     if (err) {
       console.error(err);
-      process.exit(1);
     }
   });
   cb();
