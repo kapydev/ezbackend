@@ -59,7 +59,7 @@ describe("Nested CRUD", () => {
 
       expect(response.statusCode).toEqual(200);
 
-      expect(JSON.parse(response.body)).toMatchObject({"gadz":"bdaz"});
+      expect(JSON.parse(response.body)).toMatchObject({"gaddz":"bdaz"});
       expect(JSON.parse(response.body)).toHaveProperty("createdAt");
       expect(JSON.parse(response.body)).toHaveProperty("id");
       expect(JSON.parse(response.body)).toHaveProperty("updatedAt");
