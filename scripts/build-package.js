@@ -55,6 +55,7 @@ function run() {
 
   const main = program.version('5.0.0').option('--all', `build everything ${chalk.gray('(all)')}`);
 
+
   Object.keys(tasks)
     .reduce((acc, key) => acc.option(tasks[key].suffix, tasks[key].helpText), main)
     .parse(process.argv);
@@ -62,7 +63,7 @@ function run() {
   Object.keys(tasks).forEach((key) => {
     // checks if a flag is passed e.g. yarn build --@ezbackend/addon-docs --watch
     const containsFlag = program.rawArgs.includes(tasks[key].suffix);
-    tasks[key].value = containsFlag || program.all;
+    tasks[key].value = containsFlag || program.opts().all;
   });
 
   let selection;
@@ -72,6 +73,7 @@ function run() {
       .map((key) => tasks[key].value)
       .filter(Boolean).length
   ) {
+
     selection = prompts([
       {
         type: 'toggle',
@@ -123,6 +125,8 @@ function run() {
             ? `@ezbackend/{${packageNames.join(',')}}`
             : `@ezbackend/${packageNames[0]}`;
 
+
+
         const isAllPackages = process.argv.includes('--all');
         if (isAllPackages) {
           glob = '@ezbackend/*';
@@ -146,7 +150,9 @@ function run() {
 
           runWatchMode();
         } else {
-          spawn(`lerna exec --scope '${glob}' --parallel -- tsc`);
+          //TODO: Figure out how to avoid this disgusting workaround
+          spawn(`lerna exec --scope '${glob}' --parallel --no-bail -- tsc || exit 0`);
+          spawn(`lerna exec --scope '${glob}' --parallel -- tsc --noEmit`);
         }
         process.stdout.write('\x07');
       }

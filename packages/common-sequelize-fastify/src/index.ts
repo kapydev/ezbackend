@@ -16,7 +16,7 @@ ezb.plugins.init = (ezb: mixedInstance<EzBackend>, opts:IEzbConfig, cb) => {
   cb();
 };
 
-ezb.plugins.handler = (ezb: mixedInstance<EzBackend>, opts:IEzbConfig, cb) => {
+ezb.plugins.handler = (ezb: mixedInstance<EzBackend>, opts:IEzbConfig & {entryPoint:string}, cb) => {
   const customEzbPath = opts.entryPoint ?? path.join(process.cwd(), ".ezb/index.ts");
   const customEzb = require(customEzbPath);
   const routers = Object.values(customEzb).filter(
