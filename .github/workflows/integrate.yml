@@ -13,7 +13,6 @@ jobs:
         with:
           node-version: 12
       - run: rm -rf node_modules && yarn install --frozen-lockfile
-          node_version: 12
       - run: yarn build --all
       - run: yarn lerna bootstrap
       - run: yarn test
