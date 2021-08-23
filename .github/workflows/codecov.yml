@@ -8,7 +8,6 @@ jobs:
   get_code_cov:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Environment
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
@@ -16,11 +15,7 @@ jobs:
       - run: rm -rf node_modules && yarn install --frozen-lockfile
       - run: yarn build --all
       - run: yarn lerna bootstrap
-      
-      - name: Generate Coverage Report
       - run: yarn test --coverage
-      
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v2
 
 
