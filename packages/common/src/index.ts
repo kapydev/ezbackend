@@ -27,9 +27,11 @@ ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IO
   ezb.models.forEach((model) => {
     const repo = ezb.orm.getRepository(model);
     
-    //LEFT OFF
-    // const metaData = ezb.orm.getMetadata(model)
-    // console.log(convert(metaData))
+    //Add all models to be a schema
+    const metaData = ezb.orm.getMetadata(model)
+    const schema = convert(metaData)
+    ezb.server.addSchema(schema)
+
 
     const generator = new APIGenerator(repo, { prefix: kebabCase(repo.metadata.name) });
     generator.generateRoutes();
