@@ -20,6 +20,7 @@ ezb.plugins.init = async (
   cb();
 };
 
+//TODO: Remove the requirement for including mixedINstance and IEzbConfig & IOptions
 //TODO: Consider if automatically including createdAt and updatedAt is useful
 ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IOptions, cb) => {
   //URGENT TODO: Think about consequences of using createConnection to import index.ts
