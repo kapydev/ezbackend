@@ -1,6 +1,6 @@
 {
   "name": "ezbackend",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/Collaboroo/ezbackend#readme",
@@ -25,6 +25,6 @@
     "url": "https://github.com/Collaboroo/ezbackend/issues"
   },
   "dependencies": {
-    "@ezbackend/cli": "^0.0.36"
+    "@ezbackend/cli": "^0.0.37"
   }
 }
