@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common-sequelize-fastify",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -22,11 +22,12 @@
     "ts-jest": "^27.0.4"
   },
   "dependencies": {
-    "@ezbackend/core": "^0.0.37",
+    "@ezbackend/core": "^0.0.38",
     "fastify": "^3.20.1",
     "lodash": "^4.17.21",
     "pino-pretty": "^5.1.2",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2"
-  }
+  },
+  "gitHead": "28b2b9161e49aefd313a9f5e8f820675310e99c5"
 }

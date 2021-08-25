@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/cors",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/PhilipWee/ezbackend#readme",
@@ -13,6 +13,9 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PhilipWee/ezbackend.git"
@@ -22,5 +25,6 @@
   },
   "bugs": {
     "url": "https://github.com/PhilipWee/ezbackend/issues"
-  }
+  },
+  "gitHead": "28b2b9161e49aefd313a9f5e8f820675310e99c5"
 }

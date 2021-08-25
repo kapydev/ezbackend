@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/cli",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "",
   "bin": {
     "ezb": "./bin/index.js"
@@ -28,5 +28,6 @@
     "@types/node": "^16.4.13",
     "jest": "^27.0.6",
     "ts-jest": "^27.0.4"
-  }
+  },
+  "gitHead": "28b2b9161e49aefd313a9f5e8f820675310e99c5"
 }
