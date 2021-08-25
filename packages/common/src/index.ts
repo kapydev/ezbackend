@@ -25,14 +25,14 @@ ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IO
   //URGENT TODO: Think about consequences of using createConnection to import index.ts
   ezb.orm = await createConnection(opts.orm);
   ezb.models.forEach((model) => {
-    const repo = ezb.orm.getRepository(model);
     
     //Add all models to be a schema
     const metaData = ezb.orm.getMetadata(model)
     const schema = convert(metaData)
     ezb.server.addSchema(schema)
 
-
+    //Create api routes for all repositories
+    const repo = ezb.orm.getRepository(model);
     const generator = new APIGenerator(repo, { prefix: kebabCase(repo.metadata.name) });
     generator.generateRoutes();
   });

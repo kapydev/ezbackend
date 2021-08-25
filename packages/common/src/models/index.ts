@@ -3,6 +3,7 @@ import { RouteOptions } from "fastify";
 import * as response from "./generic-response";
 import * as _ from "lodash"; //TODO: Tree shaking
 import { Entity, Repository } from "typeorm";
+import { convert, getSchemaName } from "./typeorm-json-schema";
 
 //TODO: Give options for prefix
 export function EzModel(): ClassDecorator {
@@ -65,16 +66,23 @@ export class APIGenerator {
   }
 }
 
+//TODO: Replace all http errors with BOOM
+//URGENT TODO: Replace schemas with stricter updated ones
+//TODO: Remove trailing slash from path names
 APIGenerator.setGenerator("createOne", (repo) => {
   const routeDetails: RouteOptions = {
     method: "POST",
     url: "/",
     schema: {
-      body: {},
+      body: { $ref: `${getSchemaName(repo.metadata)}#` },
+      response: {
+        200: { $ref: `${getSchemaName(repo.metadata)}#` },
+      },
     },
     handler: async (req, res) => {
-      if (req.body["id"]) {
-        throw "Cannot specify id for create request";
+      //@ts-ignore
+      if (req.body.id) {
+        throw "";
       }
       try {
         const newObj = await repo.save(req.body);
@@ -94,6 +102,9 @@ APIGenerator.setGenerator("getOne", (repo) => {
     url: "/:id",
     schema: {
       params: response.singleID,
+      response: {
+        200: { $ref: `${getSchemaName(repo.metadata)}#` },
+      },
     },
     handler: async (req, res) => {
       //TODO: Better status code
@@ -113,7 +124,14 @@ APIGenerator.setGenerator("getAll", (repo) => {
   const routeDetails: RouteOptions = {
     method: "GET",
     url: "/",
-    schema: {},
+    schema: {
+      response: {
+        200: {
+          type: "array",
+          items: { $ref: `${getSchemaName(repo.metadata)}#` },
+        },
+      },
+    },
     handler: async (req, res) => {
       //@ts-ignore
       const newObj = await repo.find(req.params.id);
@@ -123,12 +141,16 @@ APIGenerator.setGenerator("getAll", (repo) => {
   return routeDetails;
 });
 
+//URGENT TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
 APIGenerator.setGenerator("updateOne", (repo) => {
   const routeDetails: RouteOptions = {
     method: "PATCH",
     url: "/:id",
     schema: {
-      body: {},
+      body: { $ref: `${getSchemaName(repo.metadata)}#` },
+      response: {
+        200: { $ref: `${getSchemaName(repo.metadata)}#` },
+      },
       params: response.singleID,
     },
     handler: async (req, res) => {
@@ -161,6 +183,20 @@ APIGenerator.setGenerator("deleteOne", (repo) => {
     url: "/:id",
     schema: {
       params: response.singleID,
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+            },
+            id: {
+              type: "integer",
+            },
+          },
+          required: ["success", "id"],
+        },
+      },
     },
     handler: async (req, res) => {
       try {
