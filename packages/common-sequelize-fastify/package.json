@@ -29,5 +29,5 @@
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2"
   },
-  "gitHead": "28b2b9161e49aefd313a9f5e8f820675310e99c5"
+  "gitHead": "584c61d9e9ef66104f9e49a570cbcd84300ae1e3"
 }

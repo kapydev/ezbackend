@@ -19,8 +19,15 @@ export default {
     // logging: true,
     entities: [path.resolve(__dirname,"**/*.ts")]
   },
+  //TODO: Make the cors every variation of localhost
+  cors: {
+    origin: (origin, cb) => {
+      cb(null, true)
+    }
+  },
   plugins: [
     "@ezbackend/common",
+    "@ezbackend/cors",
     "@ezbackend/openapi"
   ],
   entryPoint: path.resolve(__dirname,"./index.ts"),
