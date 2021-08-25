@@ -1,11 +1,11 @@
 {
-  "name": "ezbackend",
+  "name": "@ezbackend/cors",
   "version": "0.0.36",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
-  "homepage": "https://github.com/Collaboroo/ezbackend#readme",
+  "homepage": "https://github.com/PhilipWee/ezbackend#readme",
   "license": "ISC",
-  "main": "lib/cli-wrapper.js",
+  "main": "dist/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -13,18 +13,14 @@
   "files": [
     "lib"
   ],
-  "bin": "./lib/cli-wrapper.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Collaboroo/ezbackend.git"
+    "url": "git+https://github.com/PhilipWee/ezbackend.git"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
-    "url": "https://github.com/Collaboroo/ezbackend/issues"
-  },
-  "dependencies": {
-    "@ezbackend/cli": "^0.0.36"
+    "url": "https://github.com/PhilipWee/ezbackend/issues"
   }
 }
