@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -28,5 +28,5 @@
     "sqlite3": "^5.0.2",
     "typeorm": "^0.2.37"
   },
-  "gitHead": "584c61d9e9ef66104f9e49a570cbcd84300ae1e3"
+  "gitHead": "e1d5d46e1bdc1d6cb8edd787797284c65e26e666"
 }

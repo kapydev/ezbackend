@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/auth",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/kapydev/ezbackend#readme",
@@ -13,6 +13,9 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kapydev/ezbackend.git"
@@ -30,5 +33,6 @@
     "passport-google-oauth20": "^2.0.0",
     "typeorm": "^0.2.37",
     "typescript": "^4.3.5"
-  }
+  },
+  "gitHead": "e1d5d46e1bdc1d6cb8edd787797284c65e26e666"
 }
