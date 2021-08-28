@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -22,7 +22,9 @@
     "ts-jest": "^27.0.4"
   },
   "dependencies": {
+    "@hapi/boom": "^9.1.4",
     "fastify": "^3.20.1",
+    "fastify-boom": "^1.0.0",
     "lodash": "^4.17.21",
     "pino-pretty": "^5.1.2",
     "sqlite3": "^5.0.2",
