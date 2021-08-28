@@ -7,6 +7,7 @@ import { createConnection } from "typeorm";
 import { APIGenerator } from "./models";
 import { kebabCase } from "./helpers";
 import {convert} from './models/typeorm-json-schema'
+import fastifyBoom from 'fastify-boom'
 
 const ezb = EzBackend.app();
 
@@ -17,6 +18,7 @@ ezb.plugins.init = async (
   cb
 ) => {
   ezb.server = fastify(opts.server);
+  ezb.server.register(fastifyBoom)
   cb();
 };
 
@@ -25,12 +27,24 @@ ezb.plugins.init = async (
 ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IOptions, cb) => {
   //URGENT TODO: Think about consequences of using createConnection to import index.ts
   ezb.orm = await createConnection(opts.orm);
+  //TODO: Think about a better place of adding this schema
+  ezb.server.addSchema({
+    "$id": "ErrorResponse",
+    type: 'object',
+    properties: {
+      statusCode: {type: 'number'},
+      error: {type:'string'},
+      message: {type: 'string'}
+    }
+  })
   ezb.models.forEach((model) => {
     
     //Add all models to be a schema
     const metaData = ezb.orm.getMetadata(model)
-    const schema = convert(metaData)
-    ezb.server.addSchema(schema)
+    const {createSchema,updateSchema,fullSchema} = convert(metaData)
+    ezb.server.addSchema(createSchema)
+    ezb.server.addSchema(updateSchema)
+    ezb.server.addSchema(fullSchema)
 
     //Create api routes for all repositories
     const repo = ezb.orm.getRepository(model);
@@ -54,4 +68,4 @@ ezb.plugins.run = async (
 };
 
 export { EzBackend } from "./definitions";
-export { EzModel, response, APIGenerator } from "./models";
+export * from "./models";

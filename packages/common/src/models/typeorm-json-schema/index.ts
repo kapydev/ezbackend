@@ -6,10 +6,12 @@ import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 /*
 URGENT TODO:
 We need the following 3 schemas to be made at the same time
-1. Schema with no primary generated
-2. Schema with primary generated columns
-3. Schema with required columns
+1. Schema with no primary generated (createSchema)
+2. Schema with primary generated columns (fullSchema)
+3. Schema with required columns (updateSchema)
 */
+
+
 
 function colMetaToSchemaProps(colMeta: ColumnMetadata) {
   if (colMeta.relationMetadata) {
@@ -40,14 +42,16 @@ function colTypeToJsonSchemaType(colType: ColumnType) {
 }
 
 
-export function getSchemaName(meta: EntityMetadata | RelationMetadata) {
+
+
+export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema'|'updateSchema'|'fullSchema') {
   //@ts-ignore
-  return meta.name
+  return `${type}-${meta.name}`
 }
 
-export function convert(meta: EntityMetadata) {
-  const columns = meta.columns;
-  return Object.entries(columns).reduce(
+function getUpdateSchema(meta: EntityMetadata) {
+  const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
+  return Object.entries(nonGeneratedColumns).reduce(
     (jsonSchema, [key, value]) => {
       return {
         $id: jsonSchema.$id,
@@ -59,9 +63,47 @@ export function convert(meta: EntityMetadata) {
       };
     },
     {
-      "$id": getSchemaName(meta),
+      "$id": getSchemaName(meta,'updateSchema'),
       type: "object",
       properties: {},
     }
   );
+}
+
+function getCreateSchema(meta: EntityMetadata, updateSchema) {
+  const requiredPropertyNames = meta.columns
+    .filter(col => !col.isNullable && !col.isGenerated)
+    .map(col => col.propertyName)
+  return {
+    ...updateSchema,
+    required: requiredPropertyNames,
+    "$id": getSchemaName(meta,'createSchema'),
+  }
+
+}
+
+function getFullSchema(meta: EntityMetadata, createSchema) {
+  const generatedColumns = meta.generatedColumns
+  const fullSchema = Object.entries(generatedColumns).reduce(
+    (jsonSchema, [key, value]) => {
+      return {
+        $id: jsonSchema.$id,
+        type: jsonSchema.type,
+        properties: {
+          ...jsonSchema.properties,
+          [value.propertyName]: colMetaToSchemaProps(value),
+        },
+      };
+    },
+    createSchema
+  );
+  fullSchema["$id"] = getSchemaName(meta,'fullSchema')
+  return fullSchema
+}
+
+export function convert(meta: EntityMetadata) {
+  const updateSchema = getUpdateSchema(meta)
+  const createSchema = getCreateSchema(meta,updateSchema)
+  const fullSchema = getFullSchema(meta, createSchema)
+  return {createSchema,updateSchema,fullSchema}
 }

@@ -1,15 +1,16 @@
 import { IEzbConfig } from '@ezbackend/core';
 import { mixedInstance } from 'avvio';
-import { EzBackend } from "@ezbackend/common";
+import { EzBackend, APIGenerator, getPrimaryColName } from "@ezbackend/common";
+import { RouteOptions } from 'fastify';
 import fastifySwagger from "fastify-swagger"
-import open from 'open'
+import chalk from 'chalk'
 
 //TODO: Figure out how we can avoid the as EzBackend repeatedly
 const ezb = EzBackend.app() as EzBackend;
 
 
 //Configure defaults
-ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>,opts,cb) => {
+ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>, opts, cb) => {
   ezb.server.register(fastifySwagger, {
     prefix: "/docs",
     routePrefix: "/docs",
@@ -23,7 +24,7 @@ ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>,opts,cb) => {
         version: "1.0.0",
       },
       externalDocs: {
-        url: "https://github.com/Collaboroo/ezbackend",
+        url: "https://github.com/kapydev/ezbackend",
         description: "Find more info here",
       },
       schemes: ["http"],
@@ -34,10 +35,106 @@ ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>,opts,cb) => {
   cb()
 });
 
+const originalGenerators = APIGenerator.getGenerators()
+
+if (originalGenerators['createOne'] !== undefined) {
+  const oldGenerator = originalGenerators['createOne']
+  APIGenerator.setGenerator("createOne", (repo) => {
+    const routeDetails = oldGenerator(repo)
+    const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
+    return {
+      ...routeDetails,
+      schema: {
+        ...routeDetails.schema,
+        summary: `Create ${repo.metadata.name}`,
+        tags: [repo.metadata.name],
+        description: `During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()}).
+        All non nullable columns must be specified on creation`
+      }
+    }
+  });
+}
+
+if (originalGenerators['getOne'] !== undefined) {
+  const oldGenerator = originalGenerators['getOne']
+  APIGenerator.setGenerator("getOne", (repo) => {
+    const primaryColName = getPrimaryColName(repo)
+    const routeDetails = oldGenerator(repo)
+    return {
+      ...routeDetails,
+      schema: {
+        ...routeDetails.schema,
+        summary: `Get ${repo.metadata.name} by ${primaryColName}`,
+        tags: [repo.metadata.name],
+        description: `If the ${primaryColName} does not contain the value specified in the url paramters, there will be a 'not found' error.`
+      }
+    }
+  });
+}
+
+if (originalGenerators['getAll'] !== undefined) {
+  const oldGenerator = originalGenerators['getAll']
+  APIGenerator.setGenerator("getAll", (repo) => {
+    const routeDetails = oldGenerator(repo)
+    return {
+      ...routeDetails,
+      schema: {
+        ...routeDetails.schema,
+        summary: `Get all ${repo.metadata.name} instances`,
+        tags: [repo.metadata.name],
+        description: `If none exist, an empty array is returned`
+      }
+    }
+  });
+}
+
+
+if (originalGenerators['updateOne'] !== undefined) {
+  const oldGenerator = originalGenerators['updateOne']
+  APIGenerator.setGenerator("updateOne", (repo) => {
+    const primaryColName = getPrimaryColName(repo)
+    const routeDetails = oldGenerator(repo)
+    const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
+    return {
+      ...routeDetails,
+      schema: {
+        ...routeDetails.schema,
+        summary: `Update ${repo.metadata.name} by ${primaryColName}`,
+        tags: [repo.metadata.name],
+        description: `The ${repo.metadata.name} with the ${primaryColName} specified must exist, otherwise a 'not found' error is returned
+        During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()})`
+      }
+    }
+  });
+}
+
+if (originalGenerators['deleteOne'] !== undefined) {
+  const oldGenerator = originalGenerators['deleteOne']
+  APIGenerator.setGenerator("deleteOne", (repo) => {
+    const primaryColName = getPrimaryColName(repo)
+    const routeDetails = oldGenerator(repo)
+    return {
+      ...routeDetails,
+      schema: {
+        ...routeDetails.schema,
+        summary: `Delete ${repo.metadata.name} by ${primaryColName}`,
+        tags: [repo.metadata.name],
+        description: `The ${repo.metadata.name} with the ${primaryColName} specified must exist, otherwise a 'not found' error is returned`
+      }
+    }
+  });
+}
+
+
+
+
 
 //URGENT TODO: Generate Schemas for openapi properly
-ezb.plugins.postRun.push((ezb: mixedInstance<EzBackend>,opts:IEzbConfig,cb)=> {
+//TODO: Make page when user reopens swagger
+ezb.plugins.postRun.push((ezb: mixedInstance<EzBackend>, opts: IEzbConfig, cb) => {
   // ezb.server.swagger();
-  if (opts.port) open(`http://localhost:${opts.port}/docs`);
+  if (opts.port) {
+    console.log(chalk.greenBright(`\nView your auto-generated Documentation at `) + chalk.yellow.underline(`http://localhost:${opts.port}/docs\n`))
+  }
   cb()
 })

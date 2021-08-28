@@ -7,7 +7,8 @@ export async function baseGenerator(packageManager: JsPackageManager) {
   //TODO: Think about a possible need for versioning dependencies for different project types
   //TODO: Think about keep this DRY with the common framework
   //TODO: Think if these should be dev or normal dependencies (Right now they are dev)
-  packageManager.addDependencies({ packageJson: packageJson }, [
+  //TODO: Make lerna publish run prepare, and make prepare run tsc build
+  const dependencies = [
     "@ezbackend/core",
     "@ezbackend/common",
     "@ezbackend/openapi",
@@ -15,7 +16,8 @@ export async function baseGenerator(packageManager: JsPackageManager) {
     "ts-node-dev",
     "typescript",
     "@types/node"
-  ]);
+  ]
+  packageManager.addDependencies({ packageJson: packageJson }, dependencies);
   packageManager.addEzbCommandInScripts()
   copyBoilerPlate();
 }
