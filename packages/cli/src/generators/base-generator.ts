@@ -14,8 +14,6 @@ export async function baseGenerator(packageManager: JsPackageManager) {
     "@ezbackend/cors",
     "ts-node-dev",
     "typescript",
-    "sequelize",
-    "fastify-cors",
     "@types/node"
   ]);
   packageManager.addEzbCommandInScripts()

@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/PhilipWee/ezbackend/issues"
   },
-  "gitHead": "e1d5d46e1bdc1d6cb8edd787797284c65e26e666"
+  "gitHead": "e1d5d46e1bdc1d6cb8edd787797284c65e26e666",
+  "dependencies": {
+    "fastify-cors": "^6.0.2"
+  }
 }

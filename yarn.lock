@@ -6075,6 +6075,14 @@ fastify-cookie@^5.0.0:
     cookie-signature "^1.1.0"
     fastify-plugin "^3.0.0"
 
+fastify-cors@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/fastify-cors/-/fastify-cors-6.0.2.tgz#4fd5102549659e9b34d252fd7ee607b63d021390"
+  integrity sha512-sE0AOyzmj5hLLRRVgenjA6G2iOGX35/1S3QGYB9rr9TXelMZB3lFrXy4CzwYVOMiujJeMiLgO4J7eRm8sQSv8Q==
+  dependencies:
+    fastify-plugin "^3.0.0"
+    vary "^1.1.2"
+
 fastify-error@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/fastify-error/-/fastify-error-0.3.1.tgz#8eb993e15e3cf57f0357fc452af9290f1c1278d2"
@@ -13688,7 +13696,7 @@ value-equal@^1.0.1:
   resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-1.0.1.tgz#1e0b794c734c5c0cade179c437d356d931a34d6c"
   integrity sha512-NOJ6JZCAWr0zlxZt+xqCHNTEKOsrks2HQd4MqhP1qy4z1SkbEP467eNx6TgDKXMvUOb+OENfJCZwM+16n7fRfw==
 
-vary@~1.1.2:
+vary@^1.1.2, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
