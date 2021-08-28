@@ -27,6 +27,7 @@ export type IEzbPlugins = {
 
 export class EzBackend {
   plugins: IEzbPlugins;
+  config: IEzbConfig;
 
   private static instance: EzBackend;
   private static manager: avvio.Avvio<EzBackend>;
@@ -65,14 +66,16 @@ export class EzBackend {
   }
 
   public static async start(configPath?: string) {
-    let customConfigs: IEzbConfig | undefined;
 
     const customConfigPath =
       configPath ?? path.resolve(process.cwd(), ".ezb/config.ts");
 
     if (fs.existsSync(customConfigPath)) {
-      customConfigs = require(customConfigPath).default;
-      customConfigs.plugins.forEach((pluginName) => {
+      const ezb = EzBackend.app()
+      //URGENT TODO: Consider consequences of putting config in singleton. Perhaps make it readonly?
+      ezb.config = require(customConfigPath).default;
+      ezb.config.plugins.forEach((pluginName) => {
+        //URGENT TODO: Make sure that for a new user, the plugins required are resolved from his directory, not the ezbackend directory
         const loadedPlugin = require(pluginName);
       });
     }
@@ -90,35 +93,35 @@ export class EzBackend {
       const plugins = ezb.plugins;
 
       plugins.preInit.forEach((plugin) => {
-        ezb.use(plugin, customConfigs);
+        ezb.use(plugin, ezb.config);
         
       });
 
-      ezb.use(plugins.init, customConfigs);
+      ezb.use(plugins.init, ezb.config);
 
 
       plugins.postInit.forEach((plugin) => {
-        ezb.use(plugin, customConfigs);
+        ezb.use(plugin, ezb.config);
       });
 
       plugins.preHandler.forEach((plugin) => {
-        ezb.use(plugin, customConfigs);
+        ezb.use(plugin, ezb.config);
       });
 
-      ezb.use(plugins.handler, customConfigs);
+      ezb.use(plugins.handler, ezb.config);
 
       plugins.postHandler.forEach((plugin) => {
-        ezb.use(plugin, customConfigs);
+        ezb.use(plugin, ezb.config);
       });
 
       plugins.preRun.forEach((plugin) => {
-        ezb.use(plugin, customConfigs);
+        ezb.use(plugin, ezb.config);
       });
 
-      ezb.use(plugins.run, customConfigs);
+      ezb.use(plugins.run, ezb.config);
 
       plugins.postRun.forEach((plugin) => {
-        ezb.use(plugin, customConfigs);
+        ezb.use(plugin, ezb.config);
       });
       cb();
     });

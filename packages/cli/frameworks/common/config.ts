@@ -1,5 +1,6 @@
 import path from 'path'
 
+//URGENT TODO: Make this export strict type checked for ease of use
 export default {
   port: 8888,
   server: {

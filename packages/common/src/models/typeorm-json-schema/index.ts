@@ -1,4 +1,4 @@
-import {ColumnType, EntityMetadata} from 'typeorm'
+import { ColumnType, EntityMetadata } from 'typeorm'
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 
@@ -19,14 +19,28 @@ function colMetaToSchemaProps(colMeta: ColumnMetadata) {
     };
   } else {
     return {
-      //@ts-ignore
-      type: colMeta.type.name.toLocaleLowerCase(),
+      type: colTypeToJsonSchemaType(colMeta.type),
     };
   }
 }
 
+function colTypeToJsonSchemaType(colType: ColumnType) {
+  if (colType instanceof Function) {
+    return colType.name.toLocaleLowerCase()
+  } else {
+    //URGENT TODO: Figure out if typeorm has a way of getting the js type from the sql type
+    switch (colType) {
+      case "varchar":
+        return 'string'
+      case "simple-json":
+        return 'string'
+    }
+  }
+  throw `Unable to determine the Json Schema type for col type ${colType}`
+}
 
-export function getSchemaName(meta: EntityMetadata |RelationMetadata) {
+
+export function getSchemaName(meta: EntityMetadata | RelationMetadata) {
   //@ts-ignore
   return meta.name
 }
