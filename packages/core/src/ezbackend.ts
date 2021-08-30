@@ -25,6 +25,105 @@ export type IEzbPlugins = {
   postRun: Array<IEzbPlugin>;
 };
 
+export type IEzPlugin<O> = avvio.Plugin<O,EzPlugin<O>>
+
+export type IEzPlugins<O> = {
+  preInit: Array<IEzPlugin<O>>;
+  init: IEzPlugin<O> | null;
+  postInit: Array<IEzPlugin<O>>;
+  preHandler: Array<IEzPlugin<O>>;
+  handler: IEzPlugin<O> | null;
+  postHandler: Array<IEzPlugin<O>>;
+  preRun: Array<IEzPlugin<O>>;
+  run: IEzPlugin<O> | null;
+  postRun: Array<IEzPlugin<O>>;
+};
+
+export class EzPlugin<O> {
+  manager: avvio.Avvio<EzPlugin<O>>
+  plugins: IEzPlugins<O>
+
+  //TODO: Think of why its not throuwing error when the type passed is not exactly an ezbplugin
+  constructor() {
+    this.plugins = {
+      preInit: [],
+      init: async (ezb, opts) => {
+      },
+      postInit: [],
+      preHandler: [],
+      handler: async (ezb, opts) => {
+      },
+      postHandler: [],
+      preRun: [],
+      run: async (ezb, opts) => {
+      },
+      postRun: [],
+    };
+    this.manager = avvio(this)
+  }
+
+  public async start(opts?:O) {
+  
+    this.manager.use(async (ezp, opts) => {
+      //URGENT TODO: Error handling when plugin doesnt work
+      const plugins = ezp.plugins;
+
+      plugins.preInit.forEach((plugin) => {
+        ezp.use(plugin, opts);
+        
+      });
+
+      ezp.use(plugins.init, opts);
+
+
+      plugins.postInit.forEach((plugin) => {
+        ezp.use(plugin, opts);
+      });
+
+      plugins.preHandler.forEach((plugin) => {
+        ezp.use(plugin, opts);
+      });
+
+      ezp.use(plugins.handler, opts);
+
+      plugins.postHandler.forEach((plugin) => {
+        ezp.use(plugin, opts);
+      });
+
+      plugins.preRun.forEach((plugin) => {
+        ezp.use(plugin, opts);
+      });
+
+      ezp.use(plugins.run, opts);
+
+      plugins.postRun.forEach((plugin) => {
+        ezp.use(plugin, opts);
+      });
+    },opts);
+    this.manager.start();
+    await new Promise<void>(resolve => {
+      this.manager.ready((err) => {
+        if (err) {
+          throw err;
+        }
+        resolve()
+      });
+    })
+
+    return;
+
+  }
+}
+
+const test = new EzPlugin()
+test.plugins.handler = async (ezp,opts) => {
+  console.log('hello world')
+}
+test.plugins.preInit.push(async (ezp,opts) => {
+  console.log('before world')
+})
+test.start()
+
 export class EzBackend {
   plugins: IEzbPlugins;
   config: IEzbConfig;
