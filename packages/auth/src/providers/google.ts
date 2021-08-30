@@ -2,9 +2,11 @@ import { BaseProvider } from './base'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import fastifyPassport from 'fastify-passport'
 import { AnyStrategy } from 'fastify-passport/dist/strategies'
-import { EzBackend } from '@ezbackend/common'
+import { EzBackend } from '@ezbackend/core'
 import { RouteOptions } from 'fastify'
 import { DeserializeFunction, SerializeFunction } from 'fastify-passport/dist/Authenticator'
+import {OpenAPIV3} from 'openapi-types'
+import '@ezbackend/common'
 
 interface IGoogleProviderOptions {
     googleClientId: string
@@ -56,10 +58,8 @@ export class GoogleProvider extends BaseProvider {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash()}/login`,
-            preValidation: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
-            handler: async function (req, res) {
-                return { loggedIn: true }
-            }
+            // preValidation: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
+            handler: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope })
         }
     }
 
@@ -113,6 +113,26 @@ export class GoogleProvider extends BaseProvider {
                 throw 'pass'
             }
 
+        }
+    }
+
+    getSecurityScheme() {
+        const that = this
+        const securityScheme: OpenAPIV3.SecuritySchemeObject = {
+            type: "oauth2",
+            //@ts-ignore
+            description: "## ⚠️Do not fill client id, just click __'Authorize'__ [(explanation)](http://google.com)",
+            flows:
+            {
+                implicit: {
+                    authorizationUrl: `/${that.getRoutePrefixNoPrePostSlash()}/login`,
+                    scopes: {
+                    }
+                }
+            }
+        }
+        return {
+            [`${that.model.name}-${that.providerName}`]: securityScheme
         }
     }
 }

@@ -1,10 +1,11 @@
-import { EzBackend } from '@ezbackend/common'
+import { EzBackend } from '@ezbackend/core'
 import { mixedInstance } from 'avvio'
 import { Column } from 'typeorm'
 import fastifySecureSession from 'fastify-secure-session'
 import fastifyPassport from 'fastify-passport'
 import providers from './providers'
 import fs from 'fs'
+// import '@ezbackend/openapi'
 
 
 const ezb = EzBackend.app()
@@ -17,7 +18,7 @@ interface IOptions {
     auth: IAuth
 }
 
-ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>, opts: IOptions, cb) => {
+ezb.plugins.postInit.push((ezb, opts: IOptions, cb) => {
 
     ezb.server.register(fastifySecureSession, {
         key: fs.readFileSync(opts.auth.secretKeyPath),
@@ -31,7 +32,6 @@ ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>, opts: IOptions, cb) =>
     ezb.server.register(fastifyPassport.initialize())
     //@ts-ignore
     ezb.server.register(fastifyPassport.secureSession())
-
 
     cb()
 })

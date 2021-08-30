@@ -23,7 +23,7 @@ For example if you changed something in `EzBackend.app()` from `index.ts`, it wo
 :::
 
 ```ts title=".ezb/index.ts"
-import {EzBackend} from "@ezbackend/common"
+import {EzBackend} from "@ezbackend/core"
 
 const ezb = EzBackend.app() //This gets the singleton
 const fastify = ezb.server //This lets you get the fastify instance from anywhere

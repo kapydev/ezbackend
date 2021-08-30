@@ -1,23 +1,22 @@
 import { IEzbConfig } from '@ezbackend/core';
 import { mixedInstance } from 'avvio';
-import { EzBackend, APIGenerator, getPrimaryColName } from "@ezbackend/common";
+import { EzBackend } from '@ezbackend/core'
+import { APIGenerator, getPrimaryColName } from "@ezbackend/common";
 import { RouteOptions } from 'fastify';
 import fastifySwagger from "fastify-swagger"
 import chalk from 'chalk'
+import './definitions'
 
-//TODO: Figure out how we can avoid the as EzBackend repeatedly
-const ezb = EzBackend.app() as EzBackend;
+const ezb = EzBackend.app();
 
-
-//Configure defaults
-ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>, opts, cb) => {
-  ezb.server.register(fastifySwagger, {
+ezb.openapi = {
+  config: {
     prefix: "/docs",
     routePrefix: "/docs",
     exposeRoute: true,
     //TODO: Figure out why its logging so much
     logLevel: 'warn',
-    swagger: {
+    openapi: {
       info: {
         title: "EzBackend API",
         description: "Automatically generated documentation for EzBackend",
@@ -26,13 +25,36 @@ ezb.plugins.postInit.push((ezb: mixedInstance<EzBackend>, opts, cb) => {
       externalDocs: {
         url: "https://github.com/kapydev/ezbackend",
         description: "Find more info here",
-      },
-      schemes: ["http"],
-      consumes: ["application/json"],
-      produces: ["application/json"],
+      }
     },
-  });
-  cb()
+    
+  }
+}
+
+// components: {
+//   securitySchemes: {
+//     OAuth2: {
+//       type: "oauth2",
+//       description: "## ⚠️Do not fill client id, just click __'Authorize'__ [(explanation)](http://google.com)",
+//       flows:
+//       {
+//         implicit: {
+//           authorizationUrl: 'http://localhost:8888/User/auth/google/login',
+//           scopes: {
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+//   },
+// }
+
+//Configure defaults
+ezb.plugins.postHandler.push((ezb, opts, cb) => {
+  console.log(ezb.openapi.config)
+  ezb.server.register(fastifySwagger,ezb.openapi.config);
+cb()
 });
 
 const originalGenerators = APIGenerator.getGenerators()
@@ -138,3 +160,5 @@ ezb.plugins.postRun.push((ezb: mixedInstance<EzBackend>, opts: IEzbConfig, cb) =
   }
   cb()
 })
+
+export * from './definitions'

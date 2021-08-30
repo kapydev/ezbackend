@@ -1,4 +1,4 @@
-import { EzBackend } from "../definitions";
+import { EzBackend } from "@ezbackend/core";
 import { FastifyRequest, RouteOptions } from "fastify";
 import * as _ from "lodash"; //TODO: Tree shaking
 import { Entity, PrimaryColumn, Repository } from "typeorm";

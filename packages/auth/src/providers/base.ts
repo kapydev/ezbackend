@@ -3,7 +3,8 @@ import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
 import { AnyStrategy } from "fastify-passport/dist/strategies"
 import { RouteOptions } from "fastify"
 import fastifyPassport from 'fastify-passport'
-import { EzBackend } from "@ezbackend/common"
+import { EzBackend } from "@ezbackend/core"
+import type {OpenAPIV3} from 'openapi-types'
 
 export abstract class BaseProvider {
 
@@ -23,6 +24,8 @@ export abstract class BaseProvider {
     abstract getLoginRoute():RouteOptions
     abstract getLogoutRoute():RouteOptions
     abstract getCallbackRoute():RouteOptions
+    //TODO: Implement this security scheme in the swagger spec
+    abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
     addProvider() {
         const ezb = EzBackend.app()

@@ -19,7 +19,7 @@ It lets you connect to any of the databases with the same code. Want to change f
 You can get the TypeORM connection with
 
 ```ts title=".ezb/index.ts"
-import {EzBackend} from "@ezbackend/common"
+import {EzBackend} from "@ezbackend/core"
 
 const ezb = EzBackend.app() //This gets the singleton
 const connection = ezb.orm //This lets you get the connection instance from anywhere

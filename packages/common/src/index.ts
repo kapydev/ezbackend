@@ -1,13 +1,13 @@
 import { IOptions } from "./definitions";
-import { IEzbConfig } from "@ezbackend/core";
+import { IEzbConfig, EzBackend } from "@ezbackend/core";
 import { fastify } from "fastify";
-import { EzBackend } from "./definitions";
 import { mixedInstance } from "avvio";
 import { createConnection } from "typeorm";
 import { APIGenerator } from "./models";
 import { kebabCase } from "./helpers";
 import {convert} from './models/typeorm-json-schema'
 import fastifyBoom from 'fastify-boom'
+import "./definitions";
 
 const ezb = EzBackend.app();
 
@@ -67,5 +67,4 @@ ezb.plugins.run = async (
   cb();
 };
 
-export { EzBackend } from "./definitions";
 export * from "./models";

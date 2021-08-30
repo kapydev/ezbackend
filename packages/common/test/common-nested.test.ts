@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import { EzBackend } from "../src";
+import { EzBackend } from "@ezbackend/core";
 import path from "path";
+import "../src"
 
 beforeAll(async () => {
   const ezb = EzBackend.app()

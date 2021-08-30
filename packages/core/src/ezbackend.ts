@@ -75,6 +75,7 @@ export class EzBackend {
       //URGENT TODO: Consider consequences of putting config in singleton. Perhaps make it readonly?
       ezb.config = require(customConfigPath).default;
       ezb.config.plugins.forEach((pluginName) => {
+        //URGENT TODO: Load plugins by running load function, instead of polluting environment with every import
         //URGENT TODO: Make sure that for a new user, the plugins required are resolved from his directory, not the ezbackend directory
         const loadedPlugin = require(pluginName);
       });
