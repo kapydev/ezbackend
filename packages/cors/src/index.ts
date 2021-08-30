@@ -1,5 +1,6 @@
 import { EzBackend } from "@ezbackend/core";
 import { mixedInstance } from "avvio";
+import "@ezbackend/common"
 
 const ezb = EzBackend.app()
 
