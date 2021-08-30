@@ -2,39 +2,56 @@ import { ColumnType, EntityMetadata } from 'typeorm'
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 
+export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema') {
+  if (meta instanceof RelationMetadata) {
+    return `${type}-${meta.type['name'] ?? meta.type}`
 
-/*
-URGENT TODO:
-We need the following 3 schemas to be made at the same time
-1. Schema with no primary generated (createSchema)
-2. Schema with primary generated columns (fullSchema)
-3. Schema with required columns (updateSchema)
-*/
-
-
+  } else {
+    return `${type}-${meta.name}`
+  }
+  
+}
 
 function colMetaToSchemaProps(colMeta: ColumnMetadata) {
   if (colMeta.relationMetadata) {
     return {
-      //@ts-ignore
-      "$ref": `${getSchemaName(colMeta.relationMetadata.type)}#`,
+      "$ref": `${getSchemaName(colMeta.relationMetadata, 'createSchema')}#`,
     };
   } else {
+    const type = colTypeToJsonSchemaType(colMeta.type)
+    if (type ==='object') {
+      //TODO: Consider if this is the best way of accepting additional properties for simple json, especially if the simple json needs to have a coerced data structure
+      return {
+        additionalProperties: true,
+        type: "object"
+      }
+    }
     return {
       type: colTypeToJsonSchemaType(colMeta.type),
     };
   }
 }
 
-function colTypeToJsonSchemaType(colType: ColumnType) {
+
+function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
   if (colType instanceof Function) {
     return colType.name.toLocaleLowerCase()
   } else {
-    //URGENT TODO: Figure out if typeorm has a way of getting the js type from the sql type
+    //URGENT TODO: Figure out if typeorm has a way of getting the js type from the sql type (Or extend the types below but thats kinda scary)
     switch (colType) {
       case "varchar":
         return 'string'
       case "simple-json":
+        return 'object'
+      case "integer":
+        return 'number'
+      case 'float':
+        return 'number'
+      case 'double':
+        return 'number'
+      case 'real':
+        return 'number'
+      case 'date':
         return 'string'
     }
   }
@@ -44,10 +61,7 @@ function colTypeToJsonSchemaType(colType: ColumnType) {
 
 
 
-export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema'|'updateSchema'|'fullSchema') {
-  //@ts-ignore
-  return `${type}-${meta.name}`
-}
+
 
 function getUpdateSchema(meta: EntityMetadata) {
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
@@ -63,7 +77,7 @@ function getUpdateSchema(meta: EntityMetadata) {
       };
     },
     {
-      "$id": getSchemaName(meta,'updateSchema'),
+      "$id": getSchemaName(meta, 'updateSchema'),
       type: "object",
       properties: {},
     }
@@ -77,12 +91,13 @@ function getCreateSchema(meta: EntityMetadata, updateSchema) {
   return {
     ...updateSchema,
     required: requiredPropertyNames,
-    "$id": getSchemaName(meta,'createSchema'),
+    "$id": getSchemaName(meta, 'createSchema'),
   }
 
 }
 
 function getFullSchema(meta: EntityMetadata, createSchema) {
+  console.dir(meta.relations, {depth:1})
   const generatedColumns = meta.generatedColumns
   const fullSchema = Object.entries(generatedColumns).reduce(
     (jsonSchema, [key, value]) => {
@@ -97,13 +112,13 @@ function getFullSchema(meta: EntityMetadata, createSchema) {
     },
     createSchema
   );
-  fullSchema["$id"] = getSchemaName(meta,'fullSchema')
+  fullSchema["$id"] = getSchemaName(meta, 'fullSchema')
   return fullSchema
 }
 
 export function convert(meta: EntityMetadata) {
   const updateSchema = getUpdateSchema(meta)
-  const createSchema = getCreateSchema(meta,updateSchema)
+  const createSchema = getCreateSchema(meta, updateSchema)
   const fullSchema = getFullSchema(meta, createSchema)
-  return {createSchema,updateSchema,fullSchema}
+  return { createSchema, updateSchema, fullSchema }
 }

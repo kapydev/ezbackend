@@ -5,7 +5,7 @@ import { mixedInstance } from "avvio";
 import { createConnection } from "typeorm";
 import { APIGenerator } from "./models";
 import { kebabCase } from "./helpers";
-import {convert} from './models/typeorm-json-schema'
+import { convert } from './models/typeorm-json-schema'
 import fastifyBoom from 'fastify-boom'
 import "./definitions";
 
@@ -24,7 +24,7 @@ ezb.plugins.init = async (
 
 //TODO: Remove the requirement for including mixedINstance and IEzbConfig & IOptions
 //TODO: Consider if automatically including createdAt and updatedAt is useful
-ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IOptions, cb) => {
+ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig & IOptions, cb) => {
   //URGENT TODO: Think about consequences of using createConnection to import index.ts
   ezb.orm = await createConnection(opts.orm);
   //TODO: Think about a better place of adding this schema
@@ -32,26 +32,29 @@ ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IO
     "$id": "ErrorResponse",
     type: 'object',
     properties: {
-      statusCode: {type: 'number'},
-      error: {type:'string'},
-      message: {type: 'string'}
+      statusCode: { type: 'number' },
+      error: { type: 'string' },
+      message: { type: 'string' }
     }
   })
   ezb.models.forEach((model) => {
-    
+
     //Add all models to be a schema
     const metaData = ezb.orm.getMetadata(model)
-    const {createSchema,updateSchema,fullSchema} = convert(metaData)
+    const { createSchema, updateSchema, fullSchema } = convert(metaData)
+    //URGENT TODO: Figure out why the error for adding a schema repeatedly is thrown when 'Detail' comes after 'User' in the specification
     ezb.server.addSchema(createSchema)
     ezb.server.addSchema(updateSchema)
     ezb.server.addSchema(fullSchema)
 
+  });
+  ezb.models.forEach((model) => {
     //Create api routes for all repositories
     const repo = ezb.orm.getRepository(model);
     const generator = new APIGenerator(repo, { prefix: kebabCase(repo.metadata.name) });
     //LEFT OFF: Edit the generator to add authuser and auth
     generator.generateRoutes();
-  });
+  })
   cb();
 };
 

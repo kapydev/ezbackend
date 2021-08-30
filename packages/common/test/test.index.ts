@@ -65,6 +65,15 @@ export class Program {
 }
 
 @EzModel()
+export class Detail {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  age: number;
+}
+
+@EzModel()
 export class User {
 
   @PrimaryGeneratedColumn()
@@ -84,11 +93,4 @@ export class User {
   program: Program
 }
 
-@EzModel()
-export class Detail {
-  @PrimaryGeneratedColumn()
-  id: number;
 
-  @Column()
-  age: number;
-}
