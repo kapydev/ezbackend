@@ -51,8 +51,7 @@ ezb.openapi = {
 // }
 
 //Configure defaults
-ezb.plugins.postHandler.push((ezb, opts, cb) => {
-  console.log(ezb.openapi.config)
+ezb.plugins.postInit.push((ezb, opts, cb) => {
   ezb.server.register(fastifySwagger,ezb.openapi.config);
 cb()
 });
