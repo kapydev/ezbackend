@@ -27,10 +27,11 @@ ezb.openapi = {
         description: "Find more info here",
       }
     },
-    
+
   }
 }
 
+//TODO: Figure out how to make this automatically generate
 // components: {
 //   securitySchemes: {
 //     OAuth2: {
@@ -52,8 +53,8 @@ ezb.openapi = {
 
 //Configure defaults
 ezb.plugins.postInit.push((ezb, opts, cb) => {
-  ezb.server.register(fastifySwagger,ezb.openapi.config);
-cb()
+  ezb.server.register(fastifySwagger, ezb.openapi.config);
+  cb()
 });
 
 const originalGenerators = APIGenerator.getGenerators()
