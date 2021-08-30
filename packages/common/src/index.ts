@@ -49,6 +49,7 @@ ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig &IO
     //Create api routes for all repositories
     const repo = ezb.orm.getRepository(model);
     const generator = new APIGenerator(repo, { prefix: kebabCase(repo.metadata.name) });
+    //LEFT OFF: Edit the generator to add authuser and auth
     generator.generateRoutes();
   });
   cb();
