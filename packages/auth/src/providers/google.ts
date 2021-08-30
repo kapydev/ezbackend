@@ -59,7 +59,17 @@ export class GoogleProvider extends BaseProvider {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash()}/login`,
             // preValidation: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
-            handler: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope })
+            handler: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
+            schema: {
+                //TODO: Figure out how to import types for summary
+                //@ts-ignore
+                summary: `Login for model '${this.model.name}' with provider ${this.providerName}`,
+                //@ts-ignore
+                description: `# 🔑 [Click here](/${this.getRoutePrefixNoPrePostSlash()}/login) to login
+                1. Creates/Updates '${this.model.name}' on login
+                2. Provider ${this.providerName}
+                3. Scopes: ${this.providerOptions.scope.toString()}` 
+            }
         }
     }
 
@@ -70,6 +80,13 @@ export class GoogleProvider extends BaseProvider {
             handler: async function (req, res) {
                 req.logout()
                 return { loggedIn: false }
+            },
+            schema: {
+                //TODO: Figure out how to import types for summary
+                //@ts-ignore
+                summary: `Logout for model '${this.model.name}' with provider ${this.providerName}`,
+                //@ts-ignore
+                description: `# 🔑 [Click here](/${this.getRoutePrefixNoPrePostSlash()}/logout) to logout`
             }
         }
     }

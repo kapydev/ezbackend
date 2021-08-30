@@ -1,12 +1,9 @@
 import { EzBackend } from '@ezbackend/core'
-import { mixedInstance } from 'avvio'
 import { Column } from 'typeorm'
 import fastifySecureSession from 'fastify-secure-session'
 import fastifyPassport from 'fastify-passport'
 import providers from './providers'
 import fs from 'fs'
-// import '@ezbackend/openapi'
-
 
 const ezb = EzBackend.app()
 
@@ -41,9 +38,10 @@ type IProviders = Array<'google'>
 export function EzAuthUser(...providerNames: IProviders): ClassDecorator {
 
     return function (constructor: Function) {
-        //URGENT TODO: Add some way of getting the google id/data from the user
+        //URGENT TODO: Throw error if there are non-nullable, non generated columns the model
         //TODO: Avoid using this fakeclass method
         //TODO: Throw error if there are repeat providers
+
         const fakeClass = { constructor: constructor }
         Column('varchar')(fakeClass, 'googleId')
         Column('simple-json')(fakeClass, 'googleData')

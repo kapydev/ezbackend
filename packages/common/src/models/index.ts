@@ -32,6 +32,7 @@ interface IGenerators {
 export class APIGenerator {
   repo: Repository<unknown>;
   opts: IAPIGeneratorOpts;
+  generators: IGenerators
 
   private static generators: IGenerators = {};
 
@@ -46,14 +47,14 @@ export class APIGenerator {
   constructor(repo: Repository<unknown>, opts?: IAPIGeneratorOpts) {
     this.repo = repo;
     this.opts = opts;
+    this.generators = APIGenerator.getGenerators();
   }
 
   public generateRoutes() {
-    const generators = APIGenerator.getGenerators();
     const ezb = EzBackend.app();
     let that = this;
 
-    Object.entries(generators).forEach(([, generator]) => {
+    Object.entries(this.generators).forEach(([, generator]) => {
       ezb.server.register(
         (server, opts, cb) => {
           server.route(generator(this.repo));
