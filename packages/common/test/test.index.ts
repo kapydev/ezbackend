@@ -8,7 +8,6 @@ import {
   ManyToOne,
 } from "typeorm";
 
-//TODO: Figure out a way to stop vsc from linting these wrongly just because they are not included in the tsconfig
 @EzModel()
 export class Sample {
   @PrimaryGeneratedColumn()

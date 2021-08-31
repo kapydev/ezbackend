@@ -34,9 +34,10 @@ describe("Basic CRUD", () => {
       const ezb = EzBackend.app() as EzBackend;
       const response = await ezb.server.inject({
         method: "POST",
-        url: "/sample",
+        url: "/Sample",
         payload: sampleData,
       });
+      console.log(response.body)
       expect(response.statusCode).toEqual(200);
       expect(JSON.parse(response.body)).toMatchObject(sampleData);
       expect(JSON.parse(response.body)).toHaveProperty("id");
@@ -46,13 +47,14 @@ describe("Basic CRUD", () => {
       const input = {};
       const response = await ezb.server.inject({
         method: "POST",
-        url: "/sample",
+        url: "/Sample",
         payload: input,
       });
       const expectedResponse = {
         statusCode: 400,
         error: "Bad Request",
       };
+
       expect(response.statusCode).toEqual(400);
       expect(JSON.parse(response.body)).toMatchObject(expectedResponse);
       expect(JSON.parse(response.body)).toHaveProperty("message");
@@ -63,7 +65,7 @@ describe("Basic CRUD", () => {
       const ezb = EzBackend.app() as EzBackend;
       const response = await ezb.server.inject({
         method: "GET",
-        url: "/sample/1",
+        url: "/Sample/1",
       });
 
       expect(response.statusCode).toEqual(200);
@@ -80,7 +82,7 @@ describe("Basic CRUD", () => {
       };
       const response = await ezb.server.inject({
         method: "GET",
-        url: "/sample/99999",
+        url: "/Sample/99999",
         payload: input,
       });
       expect(response.statusCode).toEqual(404);
@@ -95,7 +97,7 @@ describe("Basic CRUD", () => {
       updatedData.varchar = "This is a new string";
       const response = await ezb.server.inject({
         method: "PATCH",
-        url: "/sample/1",
+        url: "/Sample/1",
         payload: updatedData,
       });
       expect(response.statusCode).toEqual(200);
@@ -112,7 +114,7 @@ describe("Basic CRUD", () => {
       };
       const response = await ezb.server.inject({
         method: "PATCH",
-        url: "/sample/999999",
+        url: "/Sample/999999",
         payload: sampleData,
       });
       expect(response.statusCode).toEqual(404);
@@ -127,7 +129,7 @@ describe("Basic CRUD", () => {
       updatedData.int = "This is a new string";
       const response = await ezb.server.inject({
         method: "PATCH",
-        url: "/sample/1",
+        url: "/Sample/1",
         payload: updatedData,
       });
       const expectedResponse = {
@@ -146,7 +148,7 @@ describe("Basic CRUD", () => {
       updatedData.varchar = "This is a new string";
       const response = await ezb.server.inject({
         method: "DELETE",
-        url: "/sample/1",
+        url: "/Sample/1",
       });
 
       expect(response.statusCode).toEqual(200);
@@ -165,7 +167,7 @@ describe("Basic CRUD", () => {
       };
       const response = await ezb.server.inject({
         method: "DELETE",
-        url: "/sample/99999",
+        url: "/Sample/99999",
         payload: input,
       });
       expect(response.statusCode).toEqual(404);

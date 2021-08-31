@@ -33,7 +33,7 @@ describe("Nested CRUD", () => {
       const ezb = EzBackend.app() as EzBackend;
       const response = await ezb.server.inject({
         method: "POST",
-        url: "/program",
+        url: "/Program",
         payload: sampleProgram,
       });
       
@@ -47,7 +47,7 @@ describe("Nested CRUD", () => {
       const ezb = EzBackend.app() as EzBackend;
       const response = await ezb.server.inject({
         method: "GET",
-        url: "/program/1",
+        url: "/Program/1",
       });
 
       expect(response.statusCode).toEqual(200);
