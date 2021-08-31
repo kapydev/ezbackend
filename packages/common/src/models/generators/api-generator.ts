@@ -79,7 +79,7 @@ APIGenerator.setGenerator("createOne", (repo) => {
         handler: async (req, res) => {
             try {
                 const newObj = await repo.save(req.body);
-                res.send(newObj);
+                return newObj;
             } catch (e) {
                 //Assumption: If it fails, it is because of a bad request, not the code breaking
                 throw Boom.badRequest(e)
@@ -109,7 +109,7 @@ APIGenerator.setGenerator("getOne", (repo) => {
         handler: async (req, res) => {
             try {
                 const newObj = await repo.findOneOrFail(req.params[primaryCol]);
-                res.send(newObj);
+                return newObj;
             } catch (e) {
                 throw Boom.notFound(e)
             }
@@ -132,7 +132,7 @@ APIGenerator.setGenerator("getAll", (repo) => {
         },
         handler: async (req, res) => {
             const newObj = await repo.find();
-            res.send(newObj);
+            return newObj;
         },
     };
     return routeDetails;
@@ -172,7 +172,7 @@ APIGenerator.setGenerator("updateOne", (repo) => {
                     //@ts-ignore
                     ...req.body,
                 });
-                res.send(updatedObj);
+                return updatedObj;
             } catch (e) {
                 throw Boom.badRequest(e)
             }
@@ -219,12 +219,12 @@ APIGenerator.setGenerator("deleteOne", (repo) => {
             }
             try {
                 await repo.delete(req.params[primaryCol]);
-                res.send({
+                return {
                     success: true,
                     id: req.params[primaryCol],
-                });
+                }
             } catch (e) {
-                res.status(400).send(e);
+                throw Boom.badRequest(e)
             }
         },
     };
