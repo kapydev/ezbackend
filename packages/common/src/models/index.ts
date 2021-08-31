@@ -1,245 +1,94 @@
-import { EzBackend } from "@ezbackend/core";
-import { FastifyRequest, RouteOptions } from "fastify";
+import { EzBackend, EzPlugin } from "@ezbackend/core";
 import * as _ from "lodash"; //TODO: Tree shaking
-import { Entity, PrimaryColumn, Repository } from "typeorm";
-import { getSchemaName } from "./typeorm-json-schema";
-import Boom from '@hapi/boom'
-import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
+import { Entity, Repository, } from "typeorm";
+import { APIGenerator } from "./generators/api-generator";
+import { convert } from "./typeorm-json-schema";
+
+//TODO: Type checking for include and exclude arrays
+type IEzModelOpts = Partial<{
+}> & (
+    { include?: Array<string> } |
+    { exclude?: Array<string> }
+  )
 
 //TODO: Give options for prefix
-export function EzModel(): ClassDecorator {
+export function EzModel(modelOpts?: IEzModelOpts): ClassDecorator {
   return function (target) {
     Entity()(target);
     const ezb = EzBackend.app();
     if (ezb.models === undefined) {
       ezb.models = [];
     }
-    ezb.models.push(target);
-  };
-}
+    const meta = new EzModelMeta(target)
 
-interface IAPIGeneratorOpts {
-  prefix?: string;
-}
+    if (modelOpts) {
+      const configureGenerator = async (emm, opts) => {
+        const generators = emm.generator.generators
+        //URGENT TODO: Throw error message with allowed include and excludes if an invalid include or exclude is used
+        if ('include' in modelOpts) {
+          emm.generator.generators = Object.fromEntries(
+            Object.entries(generators).filter(([k, v]) => modelOpts.include.includes(k)
+            )
+          )
 
-type IGenerator = (repo: Repository<unknown>) => RouteOptions;
-
-interface IGenerators {
-  [index: string]: IGenerator;
-}
-
-//CREATE
-export class APIGenerator {
-  repo: Repository<unknown>;
-  opts: IAPIGeneratorOpts;
-  generators: IGenerators
-
-  private static generators: IGenerators = {};
-
-  public static setGenerator(generatorName: string, generator: IGenerator) {
-    APIGenerator.generators[generatorName] = generator;
-  }
-
-  public static getGenerators() {
-    return APIGenerator.generators;
-  }
-
-  constructor(repo: Repository<unknown>, opts?: IAPIGeneratorOpts) {
-    this.repo = repo;
-    this.opts = opts;
-    this.generators = APIGenerator.getGenerators();
-  }
-
-  public generateRoutes() {
-    const ezb = EzBackend.app();
-    let that = this;
-
-    Object.entries(this.generators).forEach(([, generator]) => {
-      ezb.server.register(
-        (server, opts, cb) => {
-          server.route(generator(this.repo));
-          cb();
-        },
-        {
-          prefix: that.opts.prefix,
+        } else if ('exclude' in modelOpts) {
+          emm.generator.generators = Object.fromEntries(
+            Object.entries(generators).filter(([k, v]) => !(modelOpts.exclude.includes(k)))
+          )
         }
-      );
-    });
+      }
+
+      meta.plugins.postInit.push(configureGenerator)
+    }
+
+
+    ezb.models.push(meta);
+  };
+}
+
+interface IEzModelMeta {
+
+}
+
+//URGENT TODO: Fix the type declarations so that when a class extends ezplugin it gets the new types
+export class EzModelMeta extends EzPlugin<IEzModelMeta>{
+  model: any
+  generator: APIGenerator
+  //TODO: Give this a proper type definition from the constructor
+  repo: Repository<unknown>
+
+  constructor(model) {
+    super()
+    this.model = model
+    this.initGenerator()
+  }
+
+  initGenerator() {
+
+    const addSchemas = async (emm, opts) => {
+      const ezb = EzBackend.app()
+      //Add all models to be a schema
+      emm.repo = ezb.orm.getRepository(emm.model)
+      const { createSchema, updateSchema, fullSchema } = convert(emm.repo.metadata)
+      //URGENT TODO: Figure out why the error for adding a schema repeatedly is thrown when 'Detail' comes after 'User' in the specification
+      ezb.server.addSchema(createSchema)
+      ezb.server.addSchema(updateSchema)
+      ezb.server.addSchema(fullSchema)
+      emm.generator = new APIGenerator(emm.repo, { prefix: emm.model.name })
+    }
+
+    this.plugins.init = addSchemas
+
+    const generateRoutes = async (emm, opts) => {
+      emm.generator.generateRoutes()
+
+    }
+    this.plugins.run = generateRoutes
   }
 }
 
-export function getPrimaryColName(repo:Repository<unknown>) {
-  const primaryColumns = repo.metadata.primaryColumns
-  if (primaryColumns.length > 1) {
-    throw "EzBackend currently only supports one Primary Column per entity. Raise an issue on github with your use case if you need more than one primary column in your entity"
-  } 
-  return primaryColumns[0].propertyName
-}
+export * from './generators/api-generator'
 
-//TODO: Remove trailing slash from path names
-APIGenerator.setGenerator("createOne", (repo) => {
-  const routeDetails: RouteOptions = {
-    method: "POST",
-    url: "/",
-    schema: {
-      body: { $ref: `${getSchemaName(repo.metadata,'createSchema')}#` },
-      response: {
-        200: { $ref: `${getSchemaName(repo.metadata,'fullSchema')}#` },
-        400: {$ref: `ErrorResponse#`}
-      },
-    },
-    handler: async (req, res) => {
-      try {
-        const newObj = await repo.save(req.body);
-        res.send(newObj);
-      } catch (e) {
-        //Assumption: If it fails, it is because of a bad request, not the code breaking
-        throw Boom.badRequest(e)
-      }
-    },
-  };
-  return routeDetails;
-});
 
-APIGenerator.setGenerator("getOne", (repo) => {
-  const primaryCol = getPrimaryColName(repo)
-  const routeDetails: RouteOptions = {
-    method: "GET",
-    url: `/:${primaryCol}`,
-    schema: {
-      params: {
-        type: "object",
-        properties: {
-          [primaryCol]: { type: "number" },
-        },
-      },
-      response: {
-        200: { $ref: `${getSchemaName(repo.metadata,'fullSchema')}#` },
-        404: {$ref: `ErrorResponse#`}
-      },
-    },
-    handler: async (req, res) => {
-      try {
-        const newObj = await repo.findOneOrFail(req.params[primaryCol]);
-        res.send(newObj);
-      } catch (e) {
-        throw Boom.notFound(e)
-      }
-    },
-  };
-  return routeDetails;
-});
 
-APIGenerator.setGenerator("getAll", (repo) => {
-  const routeDetails: RouteOptions = {
-    method: "GET",
-    url: "/",
-    schema: {
-      response: {
-        200: {
-          type: "array",
-          items: { $ref: `${getSchemaName(repo.metadata,'fullSchema')}#` },
-        },
-      },
-    },
-    handler: async (req, res) => {
-      const newObj = await repo.find();
-      res.send(newObj);
-    },
-  };
-  return routeDetails;
-});
-
-//URGENT TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
-APIGenerator.setGenerator("updateOne", (repo) => {
-  const primaryCol = getPrimaryColName(repo)
-  const routeDetails: RouteOptions = {
-    method: "PATCH",
-    url: `/:${primaryCol}`,
-    schema: {
-      body: { $ref: `${getSchemaName(repo.metadata,"updateSchema")}#` },
-      response: {
-        200: { $ref: `${getSchemaName(repo.metadata,"fullSchema")}#` },
-        400: {$ref: `ErrorResponse#`},
-        404: {$ref: `ErrorResponse#`}
-      },
-      params: {
-        type: "object",
-        properties: {
-          [primaryCol]: { type: "number" },
-        },
-      },
-    },
-    handler: async (req, res) => {
-      try {
-        await repo.findOneOrFail(req.params[primaryCol]);
-      } catch (e) {
-        throw Boom.notFound(e)
-      }
-      //URGENT TODO: Right now typeorm sqlite does NOT throw an error, even if you save a string in an integer column!!!
-      
-      try {
-        const updatedObj = await repo.save({
-          id: req.params[primaryCol],
-          //@ts-ignore
-          ...req.body,
-        });
-        res.send(updatedObj);
-      } catch (e) {
-        throw Boom.badRequest(e)
-      }
-    },
-  };
-  return routeDetails;
-});
-
-APIGenerator.setGenerator("deleteOne", (repo) => {
-  const primaryCol = getPrimaryColName(repo)
-  const routeDetails: RouteOptions = {
-    method: "DELETE",
-    url: `/:${primaryCol}`,
-    schema: {
-      params: {
-        type: "object",
-        properties: {
-          [primaryCol]: { type: "number" },
-        },
-      },
-      response: {
-        200: {
-          type: "object",
-          properties: {
-            success: {
-              type: "boolean",
-            },
-            id: {
-              type: ["integer","string"],
-            },
-          },
-          required: ["success", "id"],
-        },
-        400: {$ref: `ErrorResponse#`},
-        404: {$ref: `ErrorResponse#`}
-
-      },
-    },
-    handler: async (req, res) => {
-      try {
-        await repo.findOneOrFail(req.params[primaryCol]);
-      } catch (e) {
-        res.status(404).send(e);
-      }
-      try {
-        await repo.delete(req.params[primaryCol]);
-        res.send({
-          success: true,
-          id: req.params[primaryCol],
-        });
-      } catch (e) {
-        res.status(400).send(e);
-      }
-    },
-  };
-  return routeDetails;
-});
 

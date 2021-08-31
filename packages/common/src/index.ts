@@ -37,23 +37,8 @@ ezb.plugins.handler = async (ezb: mixedInstance<EzBackend>, opts: IEzbConfig & I
       message: { type: 'string' }
     }
   })
-  ezb.models.forEach((model) => {
-
-    //Add all models to be a schema
-    const metaData = ezb.orm.getMetadata(model)
-    const { createSchema, updateSchema, fullSchema } = convert(metaData)
-    //URGENT TODO: Figure out why the error for adding a schema repeatedly is thrown when 'Detail' comes after 'User' in the specification
-    ezb.server.addSchema(createSchema)
-    ezb.server.addSchema(updateSchema)
-    ezb.server.addSchema(fullSchema)
-
-  });
-  ezb.models.forEach((model) => {
-    //Create api routes for all repositories
-    const repo = ezb.orm.getRepository(model);
-    const generator = new APIGenerator(repo, { prefix: kebabCase(repo.metadata.name) });
-    //LEFT OFF: Edit the generator to add authuser and auth
-    generator.generateRoutes();
+  ezb.models.forEach((modelMeta) => {
+    modelMeta.start()
   })
   cb();
 };

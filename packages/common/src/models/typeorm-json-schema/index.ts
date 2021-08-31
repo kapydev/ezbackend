@@ -9,17 +9,18 @@ export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'cr
   } else {
     return `${type}-${meta.name}`
   }
-  
+
 }
 
 function colMetaToSchemaProps(colMeta: ColumnMetadata) {
+
   if (colMeta.relationMetadata) {
     return {
       "$ref": `${getSchemaName(colMeta.relationMetadata, 'createSchema')}#`,
     };
   } else {
     const type = colTypeToJsonSchemaType(colMeta.type)
-    if (type ==='object') {
+    if (type === 'object') {
       //TODO: Consider if this is the best way of accepting additional properties for simple json, especially if the simple json needs to have a coerced data structure
       return {
         additionalProperties: true,
@@ -64,6 +65,7 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
 
 
 function getUpdateSchema(meta: EntityMetadata) {
+
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
   return Object.entries(nonGeneratedColumns).reduce(
     (jsonSchema, [key, value]) => {
@@ -96,10 +98,8 @@ function getCreateSchema(meta: EntityMetadata, updateSchema) {
 
 }
 
-function getFullSchema(meta: EntityMetadata, createSchema) {
-  console.dir(meta.relations, {depth:1})
-  const generatedColumns = meta.generatedColumns
-  const fullSchema = Object.entries(generatedColumns).reduce(
+function getFullSchema(meta: EntityMetadata) {
+  const fullSchema = Object.entries(meta.columns).reduce(
     (jsonSchema, [key, value]) => {
       return {
         $id: jsonSchema.$id,
@@ -110,15 +110,18 @@ function getFullSchema(meta: EntityMetadata, createSchema) {
         },
       };
     },
-    createSchema
+    {
+      "$id": getSchemaName(meta, 'fullSchema'),
+      type: "object",
+      properties: {},
+    }
   );
-  fullSchema["$id"] = getSchemaName(meta, 'fullSchema')
   return fullSchema
 }
 
 export function convert(meta: EntityMetadata) {
   const updateSchema = getUpdateSchema(meta)
   const createSchema = getCreateSchema(meta, updateSchema)
-  const fullSchema = getFullSchema(meta, createSchema)
+  const fullSchema = getFullSchema(meta)
   return { createSchema, updateSchema, fullSchema }
 }

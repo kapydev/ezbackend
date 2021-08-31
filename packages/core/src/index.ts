@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { EzBackend } from "./ezbackend";
 
-export { EzBackend } from "./ezbackend";
+export { EzBackend, EzPlugin } from "./ezbackend";
 export type { IEzbConfig, IEzbPlugin, IEzbPlugins } from "./ezbackend";
 
 if (require.main === module) {
