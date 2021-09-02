@@ -38,14 +38,18 @@ function SignUpPage() {
           fontSize: '20px',
         }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <p style={{fontFamily:"monospace"}}>
+          <p style={{ fontFamily: "monospace" }}>
             Email:
           </p>
           <label>
             <input type="text" name="name" {...register("email", { required: true, pattern: /^\S+@\S+$/i })} />
           </label>
           <br/>
-          <input type="submit" value="Submit" style={{fontFamily:"monospace"}}/>
+          <sub style={{fontFamily:"monospace"}}>
+            Powered by EzBackend
+          </sub>
+          <br />
+          <input type="submit" value="Submit" style={{ fontFamily: "monospace" }} />
         </form>
 
       </div>
