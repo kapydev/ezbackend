@@ -4,6 +4,7 @@
  * CSS files with the .module.css suffix will be treated as CSS modules
  * and scoped locally.
  */
+ 
 
 .heroBanner {
   padding: 4rem 0;
@@ -31,3 +32,30 @@
 .grid-item {
   display: grid;
 }
+
+input[type=text] {
+  height: 3em;
+  padding:5px; 
+  border:2px solid #ccc; 
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  font-size: x-large;
+  font-family: monospace;
+}
+
+input[type=text]:focus {
+  border-color:#333;
+  font-family: monospace;
+}
+
+input[type=submit] {
+  padding:15px;
+  font-size: large;
+  /* background:#ccc;  */
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin-top: 24px;
+}
+

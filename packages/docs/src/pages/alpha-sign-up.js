@@ -4,7 +4,9 @@ import { TextField, Button } from "@material-ui/core"
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import axios from 'axios'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import { createTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import styles from './index.module.css';
 
 //URGENT TODO: Make backend URL https
 const backendURL = "http://ec2-54-169-82-203.ap-southeast-1.compute.amazonaws.com:3000"
@@ -36,12 +38,14 @@ function SignUpPage() {
           fontSize: '20px',
         }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            variant="outlined"
-
-            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
-          />
-          <Button type="submit">Sign Up</Button>
+          <p style={{fontFamily:"monospace"}}>
+            Email:
+          </p>
+          <label>
+            <input type="text" name="name" {...register("email", { required: true, pattern: /^\S+@\S+$/i })} />
+          </label>
+          <br/>
+          <input type="submit" value="Submit" style={{fontFamily:"monospace"}}/>
         </form>
 
       </div>
