@@ -4,45 +4,42 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'CRUD REST Endpoints',
-    Svg: require('../../static/img/endpts.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
-  },
-  {
-    title: 'Automatic API Documentation',
+    title: 'CRUD REST Endpoints and Documentation',
     Svg: require('../../static/img/docs.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Fastify to create the endpoints and <b>Fastify Swagger</b> to generate the documentation
       </>
     ),
   },
   {
-    title: 'Nested Database',
+    title: 'Database with Nested Functionality',
     Svg: require('../../static/img/db.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Typeorm to connect to <b>Postgres</b>, <b>MySQL</b>, or <b>SQLite</b>, and Material UI Datagrid to view the DB
       </>
     ),
   },
+  {
+    title: `Secure Authentication (Coming Soon)`,
+    Svg: require('../../static/img/security.svg').default,
+    description: (
+      <>
+        Select from several federated authentication providers: <b>Google</b>, <b>Facebook</b>, or <b>Github</b>
+      </>
+    ),
+  }
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({ Svg, title, description }) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
         <Svg className={styles.featureSvg} alt={title} />
       </div>
       <div className="text--center padding-horiz--md">
-        <h2 style={{fontFamily:"monospace"}}>{title}</h2>
+        <h2 style={{ fontFamily: "monospace" }}>{title}</h2>
         <p>{description}</p>
       </div>
     </div>
