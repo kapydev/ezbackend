@@ -24,6 +24,7 @@ export function EzModel(modelOpts?: IEzModelOpts): ClassDecorator {
     if (modelOpts) {
       const configureGenerator = async (emm, opts) => {
         const generators = emm.generator.generators
+        //URGENT TODO: Switch Object.fromEntires to something that works with older node or polyfill it
         //URGENT TODO: Throw error message with allowed include and excludes if an invalid include or exclude is used
         if ('include' in modelOpts) {
           emm.generator.generators = Object.fromEntries(

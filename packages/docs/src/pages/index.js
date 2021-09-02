@@ -30,7 +30,7 @@ function HomepageHeader() {
         </p>
       </Grid>
       <Grid item style={{ marginRight: -48 }}>
-        <Link to="/docs/intro">
+        <Link to="/alpha-sign-up">
           <Button
             variant="contained"
             size="large"
@@ -45,7 +45,7 @@ function HomepageHeader() {
               fontWeight: "bold",
               width: 200
             }}>
-            Get Started
+            Alpha Signup
           </Button>
         </Link>
       </Grid>
