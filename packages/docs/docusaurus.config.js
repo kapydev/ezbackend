@@ -6,7 +6,7 @@ module.exports = {
   title: 'EzBackend',
   tagline: 'Create your backend in two lines of code',
   url: 'https://collaboroo.github.io',
-  baseUrl: '/ezbackend/',
+  baseUrl: '/',
   onBrokenLinks: 'warn', //Not sure if this will break
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
