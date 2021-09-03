@@ -8,8 +8,7 @@ import { useHistory } from 'react-router-dom'
 import { createTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import styles from './index.module.css';
 
-//URGENT TODO: Make backend URL https
-const backendURL = "http://ec2-54-169-82-203.ap-southeast-1.compute.amazonaws.com:3000"
+const backendURL = "https://kapydev.com"
 
 function SignUpPage() {
 
