@@ -3,6 +3,8 @@ import { EzBackend } from "@ezbackend/core";
 import path from "path";
 import "../src"
 
+//TODO: Make tests independent of each other
+
 beforeAll(async () => {
   const ezb = EzBackend.app()
   ezb.plugins.run = (ezb, opts, cb) => { cb() }
@@ -143,6 +145,13 @@ describe("Nested CRUD", () => {
 
       test("Update with Foreign Key ID", async () => {
         const ezb = EzBackend.app() as EzBackend;
+
+        //Add a second NoCascadeProgram so that we can change the programId to 2
+        await ezb.server.inject({
+          method: "POST",
+          url: "/NoCascadeProgram",
+          payload: sampleProgram,
+        });
         
         const response = await ezb.server.inject({
           method: "PATCH",
@@ -151,11 +160,10 @@ describe("Nested CRUD", () => {
             programId: 2
           }
         });
-        console.log(response.body)
+
         expect(response.statusCode).toEqual(200);
 
         expect(JSON.parse(response.body)).toMatchObject({
-          name: "Willip Pee",
           programId: 2
         });
         expect(JSON.parse(response.body)).toHaveProperty("id");

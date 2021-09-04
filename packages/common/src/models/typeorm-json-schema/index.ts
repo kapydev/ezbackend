@@ -29,6 +29,18 @@ function colMetaToSchemaProps(colMeta: ColumnMetadata) {
 
 }
 
+//NOTE: This relation col basically means that the column is a true relation, like program => <Object>
+//Not applicable to programId => <Number>
+function isRelationCol(col:ColumnMetadata) {
+  //URGENT TODO: Confirm there are no edge cases for property names not ending in Id
+  if (col.propertyName.endsWith('Id') ) {
+    return false
+  }
+  if (col.relationMetadata) {
+    return true
+  }
+  return false
+}
 
 function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
   if (colType instanceof Function) {
@@ -64,7 +76,7 @@ function getUpdateSchema(meta: EntityMetadata) {
 
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
   let updateSchema = Object.entries(nonGeneratedColumns)
-    .filter(([key, val]) => !val.relationMetadata)
+    .filter(([key, val]) => !isRelationCol(val))
     .reduce(
       (jsonSchema, [key, value]) => {
         return {
@@ -106,8 +118,9 @@ function getUpdateSchema(meta: EntityMetadata) {
 
 function getCreateSchema(meta: EntityMetadata) {
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
+  
   let createSchema = Object.entries(nonGeneratedColumns)
-    .filter(([key, val]) => !val.relationMetadata)
+    .filter(([key, val]) => !isRelationCol(val))
     .reduce(
       (jsonSchema, [key, value]) => {
         return {
@@ -151,6 +164,7 @@ function getCreateSchema(meta: EntityMetadata) {
     .filter(col => !col.isNullable && !col.isGenerated)
     .map(col => col.propertyName)
   createSchema['required'] = requiredPropertyNames
+  
   return createSchema
 
 }
@@ -165,7 +179,7 @@ function makeArray(schema: any) {
 function getFullSchema(meta: EntityMetadata) {
   let fullSchema = Object.entries(meta.columns)
     //Remove all relations
-    .filter(([key, val]) => !val.relationMetadata)
+    .filter(([key, val]) => !isRelationCol(val))
     .reduce(
       (jsonSchema, [key, value]) => {
 

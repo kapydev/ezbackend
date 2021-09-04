@@ -188,7 +188,8 @@ export class Program {
 
   @OneToMany(type => User, user => user.program, {
     cascade: true,
-    eager: true
+    eager: true,
+    onDelete: 'CASCADE'
   })
   users: User[]
 }
@@ -202,7 +203,7 @@ export class NoCascadeProgram {
   name: string
 
   @OneToMany(type => NoCascadeUser, user => user.program)
-  users: User[]
+  users: NoCascadeUser[]
 }
 
 @EzModel()
@@ -228,7 +229,7 @@ export class NoCascadeUser {
   detail: Detail
 
   @ManyToOne(type => NoCascadeProgram, program => program.users)
-  program: Program
+  program: NoCascadeProgram
   
   //LEFT OFF: Why is this not in the create schema?
   @Column({

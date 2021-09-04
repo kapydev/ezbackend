@@ -37,7 +37,6 @@ describe("Basic CRUD", () => {
         url: "/Sample",
         payload: sampleData,
       });
-      console.log(response.body)
       expect(response.statusCode).toEqual(200);
       expect(JSON.parse(response.body)).toMatchObject(sampleData);
       expect(JSON.parse(response.body)).toHaveProperty("id");
