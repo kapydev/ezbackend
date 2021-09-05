@@ -64,6 +64,15 @@ export function getPrimaryColName(meta: EntityMetadata) {
     return primaryColumns[0].propertyName
 }
 
+//TODO: Check if this function is efficient
+const removeNestedNulls = (obj) => {
+    Object.keys(obj).forEach(k =>
+      (obj[k] && typeof obj[k] === 'object') && removeNestedNulls(obj[k]) ||
+      (!obj[k] && obj[k] !== undefined) && delete obj[k]
+    );
+    return obj;
+  };
+
 //TODO: Remove trailing slash from path names
 APIGenerator.setGenerator("createOne", (repo) => {
     const routeDetails: RouteOptions = {
@@ -79,7 +88,7 @@ APIGenerator.setGenerator("createOne", (repo) => {
         handler: async (req, res) => {
             try {
                 const newObj = await repo.save(req.body);
-                return newObj;
+                return removeNestedNulls(newObj);
             } catch (e) {
                 //Assumption: If it fails, it is because of a bad request, not the code breaking
                 throw Boom.badRequest(e)
@@ -88,6 +97,8 @@ APIGenerator.setGenerator("createOne", (repo) => {
     };
     return routeDetails;
 });
+
+
 
 APIGenerator.setGenerator("getOne", (repo) => {
     const primaryCol = getPrimaryColName(repo.metadata)
@@ -109,7 +120,7 @@ APIGenerator.setGenerator("getOne", (repo) => {
         handler: async (req, res) => {
             try {
                 const newObj = await repo.findOneOrFail(req.params[primaryCol]);
-                return newObj;
+                return removeNestedNulls(newObj);
             } catch (e) {
                 throw Boom.notFound(e)
             }
@@ -132,7 +143,7 @@ APIGenerator.setGenerator("getAll", (repo) => {
         },
         handler: async (req, res) => {
             const newObj = await repo.find();
-            return newObj;
+            return removeNestedNulls(newObj);
         },
     };
     return routeDetails;
