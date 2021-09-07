@@ -13,7 +13,7 @@ module.exports = {
   organizationName: 'collaboroo', // Usually your GitHub org/user name.
   projectName: 'ezbackend', // Usually your repo name.
   trailingSlash: 'false',
-  plugins: ['@docusaurus/plugin-google-analytics'],
+  // plugins: ['@docusaurus/plugin-google-analytics'],
   themeConfig: {
     googleAnalytics: {
       trackingID: 'G-NYKC5QB870',
