@@ -1486,6 +1486,13 @@
   dependencies:
     "@docusaurus/core" "2.0.0-beta.4"
 
+"@docusaurus/plugin-google-gtag@^2.0.0-beta.6":
+  version "2.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@docusaurus/plugin-google-gtag/-/plugin-google-gtag-2.0.0-beta.6.tgz#ccde43934d5a193711d118058092d4251965079d"
+  integrity sha512-uJyQ30sXbVRS3TGtVJFA0s1ozrluuREu6NK2Z3TLtKpeT2NTe5iaqXN0Xp749hr3bjbgpEe6gMixVh//jg503w==
+  dependencies:
+    "@docusaurus/core" "2.0.0-beta.6"
+
 "@docusaurus/plugin-sitemap@2.0.0-beta.4":
   version "2.0.0-beta.4"
   resolved "https://registry.yarnpkg.com/@docusaurus/plugin-sitemap/-/plugin-sitemap-2.0.0-beta.4.tgz#60b189107af772ef2bbc94b83055eff8a3013da3"
