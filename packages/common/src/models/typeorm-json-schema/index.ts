@@ -4,13 +4,16 @@ import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 
 //URGENT TODO: See if there is a json schema library that can help with this... (fluent schema?)
 
-export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema') {
+export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema',prefix?:string) {
+  let baseName
   if (meta instanceof RelationMetadata) {
-    return `${type}-${meta.type['name'] ?? meta.type}`
+    baseName = `${meta.type['name'] ?? meta.type}`
 
   } else {
-    return `${type}-${meta.name}`
+    baseName = `${meta.name}`
   }
+  const resolvedPrefix = prefix ? prefix+'/' : ''
+  return `${resolvedPrefix}${type}-${baseName}`
 
 }
 
@@ -72,7 +75,7 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
 
 
 //TODO: Combine schemas if possible
-function getUpdateSchema(meta: EntityMetadata) {
+function getUpdateSchema(meta: EntityMetadata,prefix?:string) {
 
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
   let updateSchema = Object.entries(nonGeneratedColumns)
@@ -89,7 +92,7 @@ function getUpdateSchema(meta: EntityMetadata) {
         };
       },
       {
-        "$id": getSchemaName(meta, 'updateSchema'),
+        "$id": getSchemaName(meta, 'updateSchema',prefix),
         type: "object",
         properties: {},
       }
@@ -116,7 +119,7 @@ function getUpdateSchema(meta: EntityMetadata) {
   return updateSchema
 }
 
-function getCreateSchema(meta: EntityMetadata) {
+function getCreateSchema(meta: EntityMetadata,prefix?:string) {
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
   
   let createSchema = Object.entries(nonGeneratedColumns)
@@ -133,7 +136,7 @@ function getCreateSchema(meta: EntityMetadata) {
         };
       },
       {
-        "$id": getSchemaName(meta, 'createSchema'),
+        "$id": getSchemaName(meta, 'createSchema',prefix),
         type: "object",
         properties: {},
       }
@@ -176,7 +179,7 @@ function makeArray(schema: any) {
   }
 }
 
-function getFullSchema(meta: EntityMetadata) {
+function getFullSchema(meta: EntityMetadata,prefix?:string) {
   let fullSchema = Object.entries(meta.columns)
     //Remove all relations
     .filter(([key, val]) => !isRelationCol(val))
@@ -193,7 +196,7 @@ function getFullSchema(meta: EntityMetadata) {
         };
       },
       {
-        "$id": getSchemaName(meta, 'fullSchema'),
+        "$id": getSchemaName(meta, 'fullSchema',prefix),
         type: "object",
         properties: {},
       }
@@ -246,9 +249,9 @@ function getNestedMetadata(meta: EntityMetadata, type: 'create' | 'update' | 're
   })
 }
 
-export function convert(meta: EntityMetadata) {
-  const updateSchema = getUpdateSchema(meta)
-  const createSchema = getCreateSchema(meta)
-  const fullSchema = getFullSchema(meta)
+export function convert(meta: EntityMetadata, prefix?: string) {
+  const updateSchema = getUpdateSchema(meta,prefix)
+  const createSchema = getCreateSchema(meta,prefix)
+  const fullSchema = getFullSchema(meta,prefix)
   return { createSchema, updateSchema, fullSchema }
 }

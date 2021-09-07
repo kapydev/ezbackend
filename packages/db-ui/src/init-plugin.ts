@@ -1,11 +1,9 @@
-import { defaultGenerators, APIGenerator } from '@ezbackend/common'
+import { defaultGenerators, APIGenerator, convert } from '@ezbackend/common'
 import { EzBackend } from "@ezbackend/core"
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 
 export default function init(config) {
-
-    console.log(defaultGenerators)
 
     const ezb = EzBackend.app()
 
@@ -13,11 +11,25 @@ export default function init(config) {
         //Generate DB Routes
         ezb.models.forEach(emm => {
 
+
+            const addDBschemas = async (emm, opts) => {
+                emm.repo = ezb.orm.getRepository(emm.model)
+                const { createSchema, updateSchema, fullSchema } = convert(emm.repo.metadata, 'db-ui')
+                ezb.server.addSchema(createSchema)
+                ezb.server.addSchema(updateSchema)
+                ezb.server.addSchema(fullSchema)
+            }
+            
+            //URGENT TODO: Figure out why preInit and postInit pushes seem to do nothing
+            emm.plugins.preRun.push(addDBschemas)
+
+
             //URGENT TODO: typechecking
-            const generateDBroutes = async (emm,opts) => {
-                emm.dbGenerator = new APIGenerator(emm.repo, {prefix: `db-ui/${emm.model.name}`})
+            const generateDBroutes = async (emm, opts) => {
+                //URGENT TODO: Seperate the DB routes from the user defined ones
+                emm.dbGenerator = new APIGenerator(emm.repo, { prefix: `db-ui/${emm.model.name}` })
                 emm.dbGenerator.generator = defaultGenerators
-                emm.dbGenerator.generateRoutes()
+                emm.dbGenerator.generateRoutes({schemaPrefix:"db-ui"})
             }
 
             emm.plugins.preRun.push(generateDBroutes)

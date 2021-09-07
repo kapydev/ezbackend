@@ -1,14 +1,14 @@
 import { Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import { EzBackend } from "@ezbackend/core";
-import { defaultGenerators } from "./default-generators"
+import { defaultGenerators, GenerateOpts } from "./default-generators"
 
 
 interface IAPIGeneratorOpts {
     prefix: string;
 }
 
-type IGenerator = (repo: Repository<unknown>) => RouteOptions | Array<RouteOptions>;
+type IGenerator = (repo: Repository<unknown>, opts?:GenerateOpts) => RouteOptions | Array<RouteOptions>;
 
 interface IGenerators {
     [index: string]: IGenerator;
@@ -19,10 +19,7 @@ export class APIGenerator {
     opts: IAPIGeneratorOpts;
     generators: IGenerators
 
-    private static generators: IGenerators = defaultGenerators;
-    
-    public static readonly defaultGenerators: IGenerators = defaultGenerators
-
+    private static generators: IGenerators = {...defaultGenerators};
 
     public static setGenerator(generatorName: string, generator: IGenerator) {
         APIGenerator.generators[generatorName] = generator;
@@ -38,14 +35,15 @@ export class APIGenerator {
         this.generators = APIGenerator.getGenerators();
     }
 
-    public generateRoutes() {
+    public generateRoutes(opts:GenerateOpts) {
         const ezb = EzBackend.app();
         let that = this;
+        const generateOpts = opts
 
         Object.entries(this.generators).forEach(([, generator]) => {
             ezb.server.register(
                 (server, opts, cb) => {
-                    const routes: Array<RouteOptions> = [].concat(generator(this.repo))
+                    const routes: Array<RouteOptions> = [].concat(generator(this.repo,generateOpts))
                     routes.forEach((route) =>
                         server.route(route)
                     )

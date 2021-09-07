@@ -1,6 +1,6 @@
 import { getSchemaName } from "../typeorm-json-schema";
 import Boom from '@hapi/boom'
-import { EntityMetadata } from "typeorm";
+import { EntityMetadata, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 
 export function getPrimaryColName(meta: EntityMetadata) {
@@ -20,17 +20,22 @@ const removeNestedNulls = (obj) => {
     return obj;
 };
 
+//URGENT TODO: Neaten this up, we can't have opts everywhere
+export interface GenerateOpts {
+    schemaPrefix?:string
+}
+
 //TODO: Remove trailing slash from path names
 //URGENT TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
 export const defaultGenerators = {
-    createOne : (repo) => {
+    createOne : (repo:Repository<unknown>, opts?:GenerateOpts) => {
         const routeDetails: RouteOptions = {
             method: "POST",
             url: "/",
             schema: {
-                body: { $ref: `${getSchemaName(repo.metadata, 'createSchema')}#` },
+                body: { $ref: `${getSchemaName(repo.metadata, 'createSchema',opts?.schemaPrefix)}#` },
                 response: {
-                    200: { $ref: `${getSchemaName(repo.metadata, 'fullSchema')}#` },
+                    200: { $ref: `${getSchemaName(repo.metadata, 'fullSchema',opts?.schemaPrefix)}#` },
                     400: { $ref: `ErrorResponse#` }
                 },
             },
@@ -46,7 +51,7 @@ export const defaultGenerators = {
         };
         return routeDetails;
     },
-    getOne: (repo) => {
+    getOne: (repo:Repository<unknown>, opts?:GenerateOpts) => {
         const primaryCol = getPrimaryColName(repo.metadata)
         const routeDetails: RouteOptions = {
             method: "GET",
@@ -59,7 +64,7 @@ export const defaultGenerators = {
                     },
                 },
                 response: {
-                    200: { $ref: `${getSchemaName(repo.metadata, 'fullSchema')}#` },
+                    200: { $ref: `${getSchemaName(repo.metadata, 'fullSchema',opts?.schemaPrefix)}#` },
                     404: { $ref: `ErrorResponse#` }
                 },
             },
@@ -74,7 +79,7 @@ export const defaultGenerators = {
         };
         return routeDetails;
     },
-    getAll: (repo) => {
+    getAll: (repo:Repository<unknown>, opts?:GenerateOpts) => {
         const routeDetails: RouteOptions = {
             method: "GET",
             url: "/",
@@ -82,7 +87,7 @@ export const defaultGenerators = {
                 response: {
                     200: {
                         type: "array",
-                        items: { $ref: `${getSchemaName(repo.metadata, 'fullSchema')}#` },
+                        items: { $ref: `${getSchemaName(repo.metadata, 'fullSchema',opts?.schemaPrefix)}#` },
                     },
                 },
             },
@@ -93,15 +98,15 @@ export const defaultGenerators = {
         };
         return routeDetails;
     },
-    updateOne: (repo) => {
+    updateOne: (repo:Repository<unknown>, opts?:GenerateOpts) => {
         const primaryCol = getPrimaryColName(repo.metadata)
         const routeDetails: RouteOptions = {
             method: "PATCH",
             url: `/:${primaryCol}`,
             schema: {
-                body: { $ref: `${getSchemaName(repo.metadata, "updateSchema")}#` },
+                body: { $ref: `${getSchemaName(repo.metadata, "updateSchema",opts?.schemaPrefix)}#` },
                 response: {
-                    200: { $ref: `${getSchemaName(repo.metadata, "fullSchema")}#` },
+                    200: { $ref: `${getSchemaName(repo.metadata, "fullSchema",opts?.schemaPrefix)}#` },
                     400: { $ref: `ErrorResponse#` },
                     404: { $ref: `ErrorResponse#` }
                 },
@@ -134,7 +139,7 @@ export const defaultGenerators = {
         };
         return routeDetails;
     },
-    deleteOne: (repo) => {
+    deleteOne: (repo:Repository<unknown>, opts?:GenerateOpts) => {
         const primaryCol = getPrimaryColName(repo.metadata)
         const routeDetails: RouteOptions = {
             method: "DELETE",

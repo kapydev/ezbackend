@@ -73,9 +73,9 @@ function setGeneratorRouteMetadata() {
 
     if (originalGenerators['createOne'] !== undefined) {
         const oldGenerator = originalGenerators['createOne']
-        APIGenerator.setGenerator("createOne", (repo) => {
+        APIGenerator.setGenerator("createOne", (repo,opts) => {
             //TODO: throw an error if aray is provided, remove the 'as'
-            const routeDetails = oldGenerator(repo) as RouteOptions
+            const routeDetails = oldGenerator(repo,opts) as RouteOptions
             const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             return {
                 ...routeDetails,
@@ -92,10 +92,10 @@ function setGeneratorRouteMetadata() {
 
     if (originalGenerators['getOne'] !== undefined) {
         const oldGenerator = originalGenerators['getOne']
-        APIGenerator.setGenerator("getOne", (repo) => {
+        APIGenerator.setGenerator("getOne", (repo,opts) => {
             const primaryColName = getPrimaryColName(repo.metadata)
             //TODO: throw an error if aray is provided, remove the 'as'
-            const routeDetails = oldGenerator(repo) as RouteOptions
+            const routeDetails = oldGenerator(repo,opts) as RouteOptions
             return {
                 ...routeDetails,
                 schema: {
@@ -110,9 +110,9 @@ function setGeneratorRouteMetadata() {
 
     if (originalGenerators['getAll'] !== undefined) {
         const oldGenerator = originalGenerators['getAll']
-        APIGenerator.setGenerator("getAll", (repo) => {
+        APIGenerator.setGenerator("getAll", (repo,opts) => {
             //TODO: throw an error if aray is provided, remove the 'as'
-            const routeDetails = oldGenerator(repo) as RouteOptions
+            const routeDetails = oldGenerator(repo,opts) as RouteOptions
             return {
                 ...routeDetails,
                 schema: {
@@ -128,10 +128,10 @@ function setGeneratorRouteMetadata() {
 
     if (originalGenerators['updateOne'] !== undefined) {
         const oldGenerator = originalGenerators['updateOne']
-        APIGenerator.setGenerator("updateOne", (repo) => {
+        APIGenerator.setGenerator("updateOne", (repo,opts) => {
             const primaryColName = getPrimaryColName(repo.metadata)
             //TODO: throw an error if aray is provided, remove the 'as'
-            const routeDetails = oldGenerator(repo) as RouteOptions
+            const routeDetails = oldGenerator(repo,opts) as RouteOptions
             const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             return {
                 ...routeDetails,
@@ -148,10 +148,10 @@ function setGeneratorRouteMetadata() {
 
     if (originalGenerators['deleteOne'] !== undefined) {
         const oldGenerator = originalGenerators['deleteOne']
-        APIGenerator.setGenerator("deleteOne", (repo) => {
+        APIGenerator.setGenerator("deleteOne", (repo,opts) => {
             const primaryColName = getPrimaryColName(repo.metadata)
             //TODO: throw an error if aray is provided, remove the 'as'
-            const routeDetails = oldGenerator(repo) as RouteOptions
+            const routeDetails = oldGenerator(repo,opts) as RouteOptions
             return {
                 ...routeDetails,
                 schema: {
