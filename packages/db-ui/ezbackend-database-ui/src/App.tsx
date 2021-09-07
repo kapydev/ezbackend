@@ -191,8 +191,8 @@ function App() {
           <Grid item xs={12} sm={2}>
             <Grid container direction="column" spacing={5}>
               <Grid item xs>
-                <Box style={{ borderRadius: 10, backgroundColor: "white", padding: 24 }}>
-                  <Scrollbars autoHide autoHideTimeout={100} style={{ width: "100%", height: "38vh" }}>
+                <Box style={{ borderRadius: 10, backgroundColor: "white", padding: 24, overflow:"hidden"}}>
+                  <Scrollbars autoHide autoHideTimeout={100} style={{ width: "100%", height: "38vh"}}>
                     {modelNameCustomRemover(modelNames).map((s) => <SchemaListItem text={s} key={s} selectedItem={selectedItem} handleListItemClick={handleListItemClick} />)}
                   </Scrollbars>
                 </Box>

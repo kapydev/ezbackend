@@ -1,7 +1,10 @@
-import { defaultGenerators, APIGenerator, convert } from '@ezbackend/common'
+import { defaultGenerators, APIGenerator, convert, } from '@ezbackend/common'
+import { IEzbConfig } from '@ezbackend/core'
 import { EzBackend } from "@ezbackend/core"
 import fastifyStatic from 'fastify-static'
+import {RouteOptions} from 'fastify'
 import path from 'path'
+import chalk from 'chalk'
 
 //URGENT TODO: Right now this has a dependency on common and openapi. we need to make this clear to the user
 
@@ -21,20 +24,38 @@ export default function init(config) {
                 ezb.server.addSchema(updateSchema)
                 ezb.server.addSchema(fullSchema)
             }
-            
+
             //URGENT TODO: Figure out why preInit and postInit pushes seem to do nothing
             emm.plugins.preRun.push(addDBschemas)
 
 
             //URGENT TODO: typechecking
+            //TODO: Optimisation, run once instead of for all models
             const generateDBroutes = async (emm, opts) => {
-                //URGENT TODO: Seperate the DB routes from the user defined ones
                 emm.dbGenerator = new APIGenerator(emm.repo, { prefix: `db-ui/${emm.model.name}` })
-                emm.dbGenerator.generator = defaultGenerators
-                emm.dbGenerator.generateRoutes({schemaPrefix:"db-ui"})
+                emm.dbGenerator.generators = { ...defaultGenerators }
+                //Seperate db-ui routes
+                Object.keys(emm.dbGenerator.generators).forEach(key => {
+                    const oldGenerator = emm.dbGenerator.generators[key]
+                    emm.dbGenerator.generators[key] = (repo, opts) => {
+                        const routeDetails = oldGenerator(repo, opts) as RouteOptions
+                        return {
+                            ...routeDetails,
+                            schema: {
+                                ...routeDetails.schema,
+                                summary: `Used internally by database UI`,
+                                tags: ['db-ui'],
+                                deprecated:true
+                            }
+                        }
+                    }
+                })
+
+                emm.dbGenerator.generateRoutes({ schemaPrefix: "db-ui" })
+
             }
 
-            emm.plugins.preRun.push(generateDBroutes)
+            emm.plugins.postRun.push(generateDBroutes)
         })
     })
 
@@ -46,5 +67,14 @@ export default function init(config) {
             prefix: "/db-ui",
             prefixAvoidTrailingSlash: true
         })
+    })
+
+    //TODO: Make page when user reopens swagger
+    ezb.plugins.postRun.push((ezb, opts: IEzbConfig, cb) => {
+        // ezb.server.swagger();
+        if (opts.port) {
+            console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui`))
+        }
+        cb()
     })
 }

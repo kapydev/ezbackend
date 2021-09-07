@@ -62,7 +62,7 @@ export default function init(config) {
     ezb.plugins.postRun.push((ezb, opts: IEzbConfig, cb) => {
         // ezb.server.swagger();
         if (opts.port) {
-            console.log(chalk.greenBright(`\nView your auto-generated Documentation at `) + chalk.yellow.underline(`http://localhost:${opts.port}/docs\n`))
+            console.log(chalk.greenBright(`View your auto-generated Documentation at `) + chalk.yellow.underline(`http://localhost:${opts.port}/docs`))
         }
         cb()
     })

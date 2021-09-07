@@ -29,7 +29,8 @@ export default {
   plugins: [
     "@ezbackend/common",
     "@ezbackend/cors",
-    "@ezbackend/openapi"
+    "@ezbackend/openapi",
+    "@ezbackend/db-ui"
   ],
   entryPoint: path.resolve(__dirname,"./index.ts"),
 };

@@ -8,7 +8,7 @@ interface IAPIGeneratorOpts {
     prefix: string;
 }
 
-type IGenerator = (repo: Repository<unknown>, opts?:GenerateOpts) => RouteOptions | Array<RouteOptions>;
+type IGenerator = (repo: Repository<unknown>, opts?: GenerateOpts) => RouteOptions | Array<RouteOptions>;
 
 interface IGenerators {
     [index: string]: IGenerator;
@@ -19,7 +19,7 @@ export class APIGenerator {
     opts: IAPIGeneratorOpts;
     generators: IGenerators
 
-    private static generators: IGenerators = {...defaultGenerators};
+    private static generators: IGenerators = { ...defaultGenerators };
 
     public static setGenerator(generatorName: string, generator: IGenerator) {
         APIGenerator.generators[generatorName] = generator;
@@ -35,18 +35,18 @@ export class APIGenerator {
         this.generators = APIGenerator.getGenerators();
     }
 
-    public generateRoutes(opts:GenerateOpts) {
+    public generateRoutes(opts: GenerateOpts) {
         const ezb = EzBackend.app();
         let that = this;
         const generateOpts = opts
 
-        Object.entries(this.generators).forEach(([, generator]) => {
+        Object.entries(that.generators).forEach(([, generator]) => {
             ezb.server.register(
                 (server, opts, cb) => {
-                    const routes: Array<RouteOptions> = [].concat(generator(this.repo,generateOpts))
-                    routes.forEach((route) =>
+                    const routes: Array<RouteOptions> = [].concat(generator(that.repo, generateOpts))
+                    routes.forEach((route) => {
                         server.route(route)
-                    )
+                    })
                     cb();
                 },
                 {

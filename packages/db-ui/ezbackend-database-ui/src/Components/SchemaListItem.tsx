@@ -44,6 +44,7 @@ export default function SchemaListItem(props: ISchemaListItem) {
                         component="div"
                         fontFamily={(match) ? "monospace" : "Inter"}
                         color={(match) ? "#F5EEEB" : "#404040"}
+                        overflow="hidden"
                         textOverflow="ellipsis"
                     // fontWeight={(match) ? "bold" : null}
                     >
