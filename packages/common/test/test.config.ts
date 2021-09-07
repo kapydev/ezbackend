@@ -12,6 +12,6 @@ export default {
     synchronize : true,
     entities: [path.resolve(__dirname,"./test.index.ts")]
   },
-  plugins: ["../src"],
+  plugins: [path.resolve(__dirname,"../src")],
   connectionURI: "sqlite::memory"
 };

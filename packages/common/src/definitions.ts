@@ -1,4 +1,4 @@
-import {EzBackend} from '@ezbackend/core'
+import '@ezbackend/core'
 import {Connection, ConnectionOptions} from 'typeorm'
 import {FastifyInstance, FastifyLoggerOptions} from "fastify"
 import { EzModelMeta } from '.'
@@ -18,5 +18,6 @@ declare module '@ezbackend/core' {
         server: FastifyInstance
         models: Array<EzModelMeta>
     }
+
 }
 

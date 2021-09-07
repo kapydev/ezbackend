@@ -155,7 +155,13 @@ export class EzBackend {
       ezb.config.plugins.forEach((pluginName) => {
         //URGENT TODO: Load plugins by running load function, instead of polluting environment with every import
         //URGENT TODO: Make sure that for a new user, the plugins required are resolved from his directory, not the ezbackend directory
-        const loadedPlugin = require(pluginName);
+        /*URGENT TODO: Right now config is being passed in three places:
+        1. When require()(config)
+        2. When avvio.use
+        3. singleton ezb.config
+        Can we reduce this to 1 single source of truth
+        */
+        require(pluginName).default(ezb.config);
       });
     }
 
