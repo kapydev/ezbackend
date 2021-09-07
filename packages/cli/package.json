@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/cli",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "description": "",
   "bin": {
     "ezb": "./bin/index.js"
@@ -10,6 +10,10 @@
     "build": "tsc",
     "watch": "tsc -w"
   },
+  "files": [
+    "dist/*",
+    "frameworks/*"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

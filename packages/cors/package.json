@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/cors",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/PhilipWee/ezbackend#readme",
@@ -11,7 +11,7 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "dist/*"
   ],
   "publishConfig": {
     "access": "public"

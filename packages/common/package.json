@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,6 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w"
   },
+  "files": [
+    "dist/*"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
