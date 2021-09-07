@@ -3,6 +3,8 @@ import { EzBackend } from "@ezbackend/core"
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 
+//URGENT TODO: Right now this has a dependency on common and openapi. we need to make this clear to the user
+
 export default function init(config) {
 
     const ezb = EzBackend.app()
@@ -40,7 +42,7 @@ export default function init(config) {
 
         //Serve static files
         ezb.server.register(fastifyStatic, {
-            root: path.join(__dirname, "../placeholder/build"),
+            root: path.join(__dirname, "../ezbackend-database-ui/build"),
             prefix: "/db-ui",
             prefixAvoidTrailingSlash: true
         })
