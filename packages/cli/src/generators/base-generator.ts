@@ -13,6 +13,7 @@ export async function baseGenerator(packageManager: JsPackageManager) {
     "@ezbackend/common",
     "@ezbackend/openapi",
     "@ezbackend/cors",
+    "@ezbackend/db-ui",
     "ts-node-dev",
     "typescript",
     "@types/node"

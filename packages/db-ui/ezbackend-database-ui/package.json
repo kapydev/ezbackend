@@ -1,7 +1,6 @@
 {
     "name": "ezbackend-database-ui",
     "version": "0.1.0",
-    "private": true,
     "homepage": "/db-ui",
     "dependencies": {
         "@material-ui/core": "^4.12.3",
