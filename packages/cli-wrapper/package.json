@@ -1,6 +1,6 @@
 {
   "name": "ezbackend",
-  "version": "0.0.67",
+  "version": "0.0.68",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/kapydev/ezbackend#readme",
@@ -25,7 +25,7 @@
     "url": "https://github.com/kapydev/ezbackend/issues"
   },
   "dependencies": {
-    "@ezbackend/cli": "^0.0.67"
+    "@ezbackend/cli": "^0.0.68"
   },
-  "gitHead": "d017015d65f0f9085b01d548fb82bc61a72cb44e"
+  "gitHead": "2f0daeaa2176f8908e4ae59effe90ef1251e3134"
 }
