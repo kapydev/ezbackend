@@ -6153,7 +6153,7 @@ fastify-secure-session@^2.3.1:
     fastify-plugin "^3.0.0"
     sodium-native "^3.0.0"
 
-fastify-static@^4.0.0:
+fastify-static@^4.0.0, fastify-static@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-4.2.3.tgz#dc1876f3f876bbc78afd68ef8edae08752ed3e28"
   integrity sha512-uFRgwYXZwLKyaMrByf10efO+HTjAPqyQOlUthoGljQKGCfbwUeTeE7EHadsDWeN7NMeqBE617RamVh9uqatuUw==
