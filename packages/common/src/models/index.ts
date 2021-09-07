@@ -66,6 +66,7 @@ export class EzModelMeta extends EzPlugin<IEzModelMeta>{
 
   initGenerator() {
 
+    //TODO: Add types to these
     const addSchemas = async (emm, opts) => {
       const ezb = EzBackend.app()
       //Add all models to be a schema
@@ -89,6 +90,7 @@ export class EzModelMeta extends EzPlugin<IEzModelMeta>{
 }
 
 export * from './generators/api-generator'
+export * from './generators/default-generators'
 
 
 
