@@ -1,34 +1,68 @@
-import { PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 import { EzModel } from "@ezbackend/common";
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+  ManyToOne,
+} from "typeorm";
 
 @EzModel()
-export class Baby {
-  @PrimaryGeneratedColumn()
-  id: number
+export class UserDetails {
 
-  @Column()
-  name: string
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: "varchar" })
+  company: string
+
+  @Column({ type: "integer" })
+  age: number
+
+  @Column({ type: "float" })
+  score: number
 
 }
 
 @EzModel()
-export class Parent {
+export class Session {
+
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
   name: string
 
-  @OneToOne(type => Baby, {
-    cascade:true,
-    eager:true
+  @OneToMany(type => User, user => user.session, {
+    cascade: true,
+    eager: true,
+    onDelete: 'CASCADE'
+  })
+  users: User[]
+}
+
+@EzModel()
+export class User {
+
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
+  name: string
+
+  @Column()
+  age: string
+
+
+  @OneToOne(type => UserDetails, {
+    cascade: true,
+    eager: true
   })
   @JoinColumn()
-  baby: Baby
+  userDetails: UserDetails
 
-  @Column({
-    nullable:true
-  })
-  babyId: number
+  @ManyToOne(type => Session, session => session.users)
+  session: Session
 }
 

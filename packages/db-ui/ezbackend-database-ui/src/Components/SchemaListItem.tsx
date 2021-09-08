@@ -2,6 +2,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import removeDbui from '../Utils/removeDbui';
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() =>
@@ -43,12 +44,12 @@ export default function SchemaListItem(props: ISchemaListItem) {
                     <Box
                         component="div"
                         fontFamily={(match) ? "monospace" : "Inter"}
+                        fontWeight="normal"
                         color={(match) ? "#F5EEEB" : "#404040"}
                         overflow="hidden"
                         textOverflow="ellipsis"
-                    // fontWeight={(match) ? "bold" : null}
                     >
-                        {props.text.replace(/^(db-ui\/)/,"")}
+                        {removeDbui(props.text)}
                     </Box>
                 </Typography>
             </ListItemText>

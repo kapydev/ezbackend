@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { DataGrid, GridColDef, GridCellEditCommitParams, GridCellValue } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridCellEditCommitParams, GridCellValue, GridCellParams } from '@mui/x-data-grid';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import SchemaListItem from './Components/SchemaListItem';
@@ -15,18 +15,15 @@ import IJsonSchema from './Interfaces/IJsonSchema';
 import Typography from '@material-ui/core/Typography';
 import promiseToast from './Utils/promiseToast';
 import ReactJson from 'react-json-view'
+import modelNameCustomRemover from './Utils/modelNameCustomRemover';
 import dotenv from "dotenv";
 import { makeStyles, createTheme, Theme } from "@material-ui/core/styles";
 import { Scrollbars } from 'react-custom-scrollbars';
-import {getBaseURL} from './Helpers'
+import { getBaseURL } from './Helpers';
 
 dotenv.config()
 
 const URL = getBaseURL()
-
-function getThemePaletteMode(palette: any): string {
-  return palette.type || palette.mode;
-}
 
 const defaultTheme = createTheme();
 const useStyles = makeStyles(
@@ -132,6 +129,7 @@ function App() {
 
   function handleOpenPostRequestDialog() {
     setOpenPostRequestDialog(true)
+    console.log(getCreateSchema())
   }
 
   function handleClosePostRequestDialog() {
@@ -168,19 +166,14 @@ function App() {
 
   }
 
-  function modelNameCustomRemover(modelnames: string[]){
-    return modelnames.filter((name) => name.startsWith('db-ui/'))
-  }
-
   function getCreateSchema() {
     let createschemas: IJsonSchema[] = [...createSchemas]
-    return createschemas?.filter(createschema => {
-      return createschema.title === selectedItem
-    })[0]
+    let c = createschemas?.filter(createschema => { return createschema.title === selectedItem })[0]
+    return c
   }
 
   return (
-    <div style={{ backgroundColor: "#eee", height: "100vh" }}>
+    <div style={{ backgroundColor: "#eee", minHeight: "100vh" }}>
       <Box padding={4}>
         <Grid
           container
@@ -191,14 +184,14 @@ function App() {
           <Grid item xs={12} sm={2}>
             <Grid container direction="column" spacing={5}>
               <Grid item xs>
-                <Box style={{ borderRadius: 10, backgroundColor: "white", padding: 24, overflow:"hidden"}}>
-                  <Scrollbars autoHide autoHideTimeout={100} style={{ width: "100%", height: "38vh"}}>
+                <Box style={{ borderRadius: 10, backgroundColor: "white", padding: 24, overflow: "hidden" }}>
+                  <Scrollbars autoHide autoHideTimeout={100} style={{ width: "100%", height: "38vh" }}>
                     {modelNameCustomRemover(modelNames).map((s) => <SchemaListItem text={s} key={s} selectedItem={selectedItem} handleListItemClick={handleListItemClick} />)}
                   </Scrollbars>
                 </Box>
               </Grid>
               <Grid item xs>
-                <Scrollbars style={{ width: "100%", height: "38vh", borderRadius: 10 }}>
+                <Scrollbars style={{ width: "100%", minHeight: "200px", borderRadius: 10 }}>
                   <ReactJson //@ts-ignore
                     src={cellDataValue}
                     style={{ padding: 18, borderRadius: 10 }}
@@ -216,7 +209,7 @@ function App() {
                   <Grid item xs>
                     <Box marginLeft={1}>
                       <Typography color="textSecondary" variant="subtitle2">
-                        Click row to view json | Double-click cell to edit
+                        Click row to view json. Double-click cell to edit
                       </Typography>
                     </Box>
                   </Grid>
@@ -247,7 +240,14 @@ function App() {
               <Grid item>
                 <div className={classes.root}>
                   <DataGrid
-                    style={{ height: "79vh", backgroundColor: "#fff", borderRadius: 10, borderStyle: "hidden", padding: 12, fontFamily: "Inter" }}
+                    style={{
+                      height: "79vh",
+                      backgroundColor: "#fff",
+                      borderRadius: 10,
+                      borderStyle: "hidden",
+                      padding: 12,
+                      fontFamily: "Inter"
+                    }}
                     rows={rowData}
                     columns={columnNames}
                     checkboxSelection
@@ -255,9 +255,14 @@ function App() {
                     onSelectionModelChange={(newSelections) => { setDeleteRowsIndex(newSelections) }}
                     onCellEditCommit={(cellData) => { handlePatchSelectedCell(cellData) }}
                     onRowClick={(cellData) => { setCellDataValue(cellData.row) }}
-                    getRowClassName={(params) =>
-                      `super-app-theme`
-                    }
+                    // getCellClassName={(params: GridCellParams) => {
+                    //   if (params.value instanceof Object) {
+                    //     return "toBeReplaced"
+                    //   }
+                    //   else {
+                    //     return ""
+                    //   }
+                    // }}
                   />
                 </div>
               </Grid>
@@ -275,6 +280,7 @@ function App() {
           handleGetRowData={() => handleGetRowData(selectedItem)}
           selectedItem={selectedItem}
           handleCloseDialog={handleClosePostRequestDialog}
+
         />
       </Box >
       <Toaster
