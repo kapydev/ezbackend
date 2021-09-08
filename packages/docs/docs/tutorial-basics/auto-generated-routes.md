@@ -10,13 +10,37 @@ EzBackend automatically generates API routes from schemas defined by the user
 
 By default, EzBackend generates the following routes:
 
-| Route Name | Method | URL    | Action                                |Nested|
-| ---------- | ------ | ------ | ------------------------------------- |------|
-| createOne  | POST   | `/`    | Create a single entry in the database |✅|
-| getAll     | GET    | `/`    | Get all entries in the database       |✅|
-| getOne     | GET    | `/:id` | Get a single entry in the database    |✅|
-| updateOne  | PATCH  | `/:id` | Update a single entry in the database |❌|
-| deleteOne  | DELETE | `/:id` | Delete a single entry in the database |❌|
+| Route Name | Method | URL    | Action                                |
+| ---------- | ------ | ------ | ------------------------------------- |
+| createOne  | POST   | `/`    | Create a single entry in the database |
+| getAll     | GET    | `/`    | Get all entries in the database       |
+| getOne     | GET    | `/:id` | Get a single entry in the database    |
+| updateOne  | PATCH  | `/:id` | Update a single entry in the database |
+| deleteOne  | DELETE | `/:id` | Delete a single entry in the database |
+
+All the routes support nested functionality, and you can see more details [here](/docs/tutorial-basics/relations#nested-functionality)
+
+## Removing Default Routes
+
+You can include only specific routes, or exclude specific routes easily by specifying the routes required in `@EzModel`
+
+`include` - Only the routes in the array will be generated
+
+`exclude` - Only the routes not in the array will be generated
+
+```ts title=Model
+@EzModel({
+  include: ['createOne','getAll','getOne','updateOne','deleteOne']
+  exclude: ['createOne','getAll','getOne','updateOne','deleteOne']
+})
+export class User {
+  .
+  .
+  .
+}
+
+```
+
 
 ## Making your own route API
 

@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Accessing the database
+# Custom Database Functions
 
 If you want to assess the database, you must first understand that EzBackend is a wrapper of [fastify](https://www.fastify.io/) and [typeorm](https://typeorm.io/)
 

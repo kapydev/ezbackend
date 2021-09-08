@@ -2,17 +2,15 @@
 sidebar_position: 3
 ---
 
-# Create an API Route
+# Custom API Routes
 
-
-
-
+## Creating an API Route
 
 If you want to create an API route, you must first understand that EzBackend is a wrapper of [fastify](https://www.fastify.io/) and [typeorm](https://typeorm.io/)
 
 Hence, when thinking about creating an API route, we should be thinking of making a [fastify api route](https://www.fastify.io/docs/latest/Routes/)
 
-## Getting the fastify server instance
+### Getting the fastify server instance
 
 The EzBackend instance uses the singleton pattern so that you can access the fastify and sequelize instances anywhere.
 
@@ -32,7 +30,7 @@ const fastify = ezb.server //This lets you get the fastify instance from anywher
 
 Now that we have the fastify instance, it is more a problem of ['How do I create a route using fastify'](https://www.fastify.io/docs/latest/Routes/)?
 
-## Creating an api route using fastify
+### Creating an api route using fastify
 
 The below is an example of how to create an API route that adds two numbers
 
@@ -64,7 +62,7 @@ fastify.route({
 So creating and api route is as simple as creating the route with fastify. For additional details creating a route with fastify click [here](https://www.fastify.io/docs/latest/Routes/)
 
 
-## Putting it together
+### Putting it together
 
 For a working example, you can copy and past the below code into `.ezb/index.ts`
 

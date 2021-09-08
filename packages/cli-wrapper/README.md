@@ -15,7 +15,7 @@ npm init -y
 Instantiate ezbackend
 
 ```
-npx ezbackend init
+npx ezbackend@0.0.71 init
 ```
 
 ## Usage
@@ -23,6 +23,12 @@ npx ezbackend init
 ```
 npm run ezb
 ```
+
+## Read the Docs
+
+Get the full details from the [official documentation](https://www.ezbackend.io/docs)
+
+----
 
 ## Getting Started
 
