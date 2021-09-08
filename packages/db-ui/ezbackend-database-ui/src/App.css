@@ -1,0 +1,11 @@
+.toBeReplaced {
+    visibility: hidden;
+    position: relative;
+}
+.toBeReplaced:after {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "Object";
+}
