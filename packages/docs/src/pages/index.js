@@ -19,18 +19,18 @@ function HomepageHeader() {
 
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Grid container direction="row" justifyContent="center" alignItems="flex-start" style={{ padding: 48 }}>
-      <Grid item xs={12} lg={5}>
-        <h1 className="hero__title" style={{ fontSize: 48, fontFamily: "monospace", textAlign: "start" }}>
-          Create a <span style={{ color: "#5396CE" }}>fully <br />
-            extensible</span><br /> backend in <br />
-          <span style={{ color: "#5396CE" }}>2 lines</span> of code
+    <Grid container direction="row" justifyContent="center" alignItems="flex-start" style={{ padding: 48 }} spacing={2}>
+      <Grid item>
+        <h1 className="hero__title" style={{ fontSize: '80', fontFamily: "monospace", textAlign: "start", maxWidth:450}}>
+          Create a <span style={{ color: "#5396CE" }}>fully
+            extensible</span> backend in 
+          <span style={{ color: "#5396CE" }}> 2 lines</span> of code
         </h1>
-        <p className="hero__title" style={{ fontSize: 22, textAlign: "start" }}>
+        <p className="hero__title" style={{ fontSize: 21, textAlign: "start" }}>
           <b>Backend development in one npm package</b>
           <br />
           <br />
-          <p style={{ fontStyle: "italic", fontSize: "1.3em" }}>
+          <p style={{ fontStyle: "italic", fontSize: "14" }}>
             "Focus on the stuff that matters"
           </p>
           <br />
@@ -50,7 +50,7 @@ function HomepageHeader() {
               fontSize: 24,
               fontFamily: "monospace",
               fontWeight: "bold",
-              width: 200
+              width: 200,
             }}>
             Alpha Signup
           </Button>

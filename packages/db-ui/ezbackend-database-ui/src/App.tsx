@@ -255,14 +255,14 @@ function App() {
                     onSelectionModelChange={(newSelections) => { setDeleteRowsIndex(newSelections) }}
                     onCellEditCommit={(cellData) => { handlePatchSelectedCell(cellData) }}
                     onRowClick={(cellData) => { setCellDataValue(cellData.row) }}
-                    // getCellClassName={(params: GridCellParams) => {
-                    //   if (params.value instanceof Object) {
-                    //     return "toBeReplaced"
-                    //   }
-                    //   else {
-                    //     return ""
-                    //   }
-                    // }}
+                    getCellClassName={(params: GridCellParams) => {
+                      if (params.value instanceof Object) {
+                        return "toBeReplaced"
+                      }
+                      else {
+                        return ""
+                      }
+                    }}
                   />
                 </div>
               </Grid>

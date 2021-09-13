@@ -5,12 +5,12 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 module.exports = {
   title: 'EzBackend',
   tagline: 'Create your backend in two lines of code',
-  url: 'https://collaboroo.github.io',
+  url: 'https://www.ezbackend.io/',
   baseUrl: '/',
   onBrokenLinks: 'warn', //Not sure if this will break
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'collaboroo', // Usually your GitHub org/user name.
+  organizationName: 'kapydev', // Usually your GitHub org/user name.
   projectName: 'ezbackend', // Usually your repo name.
   trailingSlash: 'false',
   themeConfig: {
@@ -35,7 +35,7 @@ module.exports = {
         },
         // {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/kapydev/ezbackend',
           label: 'GitHub',
           position: 'right',
         },
@@ -62,7 +62,7 @@ module.exports = {
             // },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              href: 'https://discord.gg/7b7pPWFP',
             },
             // {
             //   label: 'Twitter',
@@ -79,7 +79,7 @@ module.exports = {
             // },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/kapydev/ezbackend',
             },
           ],
         },

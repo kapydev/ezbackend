@@ -1,6 +1,7 @@
 .toBeReplaced {
     visibility: hidden;
     position: relative;
+    margin-bottom: 10;
 }
 .toBeReplaced:after {
     visibility: visible;

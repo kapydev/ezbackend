@@ -106,5 +106,5 @@ EzBackend.addAPI((request:Request, reply: Reply) {
 
 Automatically generate the schemas from the types `Request` and `Reply`, and automatically generate the error codes as well
 
-However, we need your support to implement this feature. Please contact us at we.are.collaboroo@gmail.com to tell us why you need it 😊
+However, we need your support to implement this feature. Please contact us at we.are.kapydev@gmail.com to tell us why you need it 😊
 :::
