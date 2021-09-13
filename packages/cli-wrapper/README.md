@@ -61,8 +61,6 @@ export class User {
 4. Automatically create the documentation for each endpoint
 5. Leave you more time to work on the things that actually matter
 
-![documentation](/swagger-image.png)
-
 ## How it works
 
 1. It uses [typeorm](https://typeorm.io/) to connect to any typeorm supported DB (Postgres, MySQL, SQLite, etc)
