@@ -26,7 +26,7 @@ npm run ezb
 
 ## Read the Docs
 
-Get the full details from the [official documentation](https://www.ezbackend.io/docs)
+Get the full details from the [official documentation](https://www.ezbackend.io/docs/intro)
 
 ----
 
