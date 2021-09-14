@@ -95,9 +95,10 @@ function App() {
     fullschemas?.forEach(schema => {
       if (routeName === schema.schemaName) {
         setColumnNames(Object.keys(schema.properties).map(property => {
+          let [charLenThreshHold, maxCellWidth, widthMultiplier] = [5, 150, 45]
           return {
             field: property,
-            width: (property.length > 5) ? 150 : 45 * property.length,
+            width: (property.length > charLenThreshHold) ? maxCellWidth : widthMultiplier * property.length,
             editable: (property === 'id') ? false : true
           }
         }))
