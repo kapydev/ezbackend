@@ -1,26 +1,22 @@
 import { DataGrid, GridColDef, GridCellEditCommitParams, GridCellValue } from '@mui/x-data-grid';
+import { Fade, IconButton, Typography, Box, Grid } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { getBaseURL } from '../Helpers';
 import modelNameCustomRemover from '../Utils/modelNameCustomRemover';
 import replaceCellObject from '../Utils/replaceCellObject'
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
 import SchemaListItem from '../Components/SchemaListItem';
-import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import PostRequestDialog from '../Components/PostRequestDialog';
 import ISchema from '../Interfaces/ISchema';
 import IJsonSchema from '../Interfaces/IJsonSchema';
-import Typography from '@material-ui/core/Typography';
 import promiseToast from '../Utils/promiseToast';
 import ReactJson from 'react-json-view'
 import dotenv from "dotenv";
 import '../App.css';
-import { Fade } from '@material-ui/core';
 
 dotenv.config()
 
