@@ -17,9 +17,9 @@ import promiseToast from './Utils/promiseToast';
 import ReactJson from 'react-json-view'
 import modelNameCustomRemover from './Utils/modelNameCustomRemover';
 import dotenv from "dotenv";
-import { makeStyles, createTheme, Theme } from "@material-ui/core/styles";
 import { Scrollbars } from 'react-custom-scrollbars';
 import { getBaseURL } from './Helpers';
+import replaceCellObject from './Utils/replaceCellObject'
 
 dotenv.config()
 
@@ -243,14 +243,7 @@ function App() {
                   onSelectionModelChange={(newSelections) => { setDeleteRowsIndex(newSelections) }}
                   onCellEditCommit={(cellData) => { handlePatchSelectedCell(cellData) }}
                   onRowClick={(cellData) => { setCellDataValue(cellData.row) }}
-                  getCellClassName={(params: GridCellParams) => {
-                    if (params.value instanceof Object) {
-                      return "toBeReplaced"
-                    }
-                    else {
-                      return ""
-                    }
-                  }}
+                  getCellClassName={replaceCellObject}
                 />
               </Grid>
             </Grid>
