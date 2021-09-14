@@ -25,26 +25,7 @@ dotenv.config()
 
 const URL = getBaseURL()
 
-const defaultTheme = createTheme();
-const useStyles = makeStyles(
-  (theme: Theme) => {
-    return {
-      root: {
-        '& .super-app-theme': {
-          backgroundColor: "#fff",
-          '&:hover': {
-            backgroundColor: "#eee",
-          },
-        }
-      },
-    };
-  },
-  { defaultTheme },
-);
-
 function App() {
-
-  const classes = useStyles();
 
   const [fullSchemas, setFullSchemas] = useState<ISchema[]>([]);
 
@@ -99,7 +80,7 @@ function App() {
 
       .catch((error) => toast("ERROR", error.message));
 
-  }, []);
+  }, [])
 
   function handleListItemClick(clickedItem: string) {
 
@@ -108,12 +89,18 @@ function App() {
     handleGetColumnData(clickedItem, fullSchemas)
     setCellDataValue({})
 
-  };
+  }
 
   function handleGetColumnData(routeName: string, fullschemas: ISchema[]) {
     fullschemas?.forEach(schema => {
       if (routeName === schema.schemaName) {
-        setColumnNames(Object.keys(schema.properties).map(property => { return { field: property, minWidth: 120, editable: (property === 'id') ? false : true } }))
+        setColumnNames(Object.keys(schema.properties).map(property => {
+          return {
+            field: property,
+            width: (property.length > 5) ? 150 : 45 * property.length,
+            editable: (property === 'id') ? false : true
+          }
+        }))
       }
     })
   }
@@ -129,7 +116,6 @@ function App() {
 
   function handleOpenPostRequestDialog() {
     setOpenPostRequestDialog(true)
-    console.log(getCreateSchema())
   }
 
   function handleClosePostRequestDialog() {
@@ -138,6 +124,9 @@ function App() {
 
   function handleDeleteSelectedRows() {
     let ids = [...deleteRowsIndex]
+    if (ids.length === 0) {
+      toast('Please select some rows')
+    }
     ids.forEach(id => {
 
       let fetchPromise = fetch(`${URL}/${selectedItem}/${id}`, { method: 'DELETE' })
@@ -181,11 +170,11 @@ function App() {
           justifyContent="center"
           spacing={5}
         >
-          <Grid item xs={12} sm={2}>
+          <Grid item sm={12} md={3}>
             <Grid container direction="column" spacing={5}>
               <Grid item xs>
                 <Box style={{ borderRadius: 10, backgroundColor: "white", padding: 24, overflow: "hidden" }}>
-                  <Scrollbars autoHide autoHideTimeout={100} style={{ width: "100%", height: "38vh" }}>
+                  <Scrollbars autoHide autoHideTimeout={100} style={{ width: "100%", minHeight: "200px" }}>
                     {modelNameCustomRemover(modelNames).map((s) => <SchemaListItem text={s} key={s} selectedItem={selectedItem} handleListItemClick={handleListItemClick} />)}
                   </Scrollbars>
                 </Box>
@@ -202,22 +191,22 @@ function App() {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={9}>
+          <Grid item sm={12} md={8}>
             <Grid container direction="column" spacing={2}>
               <Grid item>
                 <Grid container direction="row" alignItems="flex-end">
                   <Grid item xs>
                     <Box marginLeft={1}>
                       <Typography color="textSecondary" variant="subtitle2">
-                        Click row to view json. Double-click cell to edit
+                        Click row to view json | Double-click cell to edit | Select row to delete
                       </Typography>
                     </Box>
                   </Grid>
                   <Grid item xs>
                     <Grid container justifyContent="flex-end">
                       <Grid item>
-                        <IconButton color="primary">
-                          <AddIcon onMouseDown={handleOpenPostRequestDialog} />
+                        <IconButton color="primary" onMouseDown={handleOpenPostRequestDialog}>
+                          <AddIcon />
                         </IconButton>
                       </Grid>
                       <Grid item>
@@ -238,36 +227,35 @@ function App() {
                 </Grid>
               </Grid>
               <Grid item>
-                <div className={classes.root}>
-                  <DataGrid
-                    style={{
-                      height: "79vh",
-                      backgroundColor: "#fff",
-                      borderRadius: 10,
-                      borderStyle: "hidden",
-                      padding: 12,
-                      fontFamily: "Inter"
-                    }}
-                    rows={rowData}
-                    columns={columnNames}
-                    checkboxSelection
-                    disableSelectionOnClick //@ts-ignore
-                    onSelectionModelChange={(newSelections) => { setDeleteRowsIndex(newSelections) }}
-                    onCellEditCommit={(cellData) => { handlePatchSelectedCell(cellData) }}
-                    onRowClick={(cellData) => { setCellDataValue(cellData.row) }}
-                    getCellClassName={(params: GridCellParams) => {
-                      if (params.value instanceof Object) {
-                        return "toBeReplaced"
-                      }
-                      else {
-                        return ""
-                      }
-                    }}
-                  />
-                </div>
+                <DataGrid
+                  style={{
+                    height: "79vh",
+                    backgroundColor: "#fff",
+                    borderRadius: 10,
+                    borderStyle: "hidden",
+                    padding: 12,
+                    fontFamily: "Inter"
+                  }}
+                  rows={rowData}
+                  columns={columnNames}
+                  checkboxSelection
+                  disableSelectionOnClick //@ts-ignore
+                  onSelectionModelChange={(newSelections) => { setDeleteRowsIndex(newSelections) }}
+                  onCellEditCommit={(cellData) => { handlePatchSelectedCell(cellData) }}
+                  onRowClick={(cellData) => { setCellDataValue(cellData.row) }}
+                  getCellClassName={(params: GridCellParams) => {
+                    if (params.value instanceof Object) {
+                      return "toBeReplaced"
+                    }
+                    else {
+                      return ""
+                    }
+                  }}
+                />
               </Grid>
             </Grid>
           </Grid>
+
           <Typography variant="body1" align="center">
             <Box fontFamily="monospace">
               Powered by EzBackend

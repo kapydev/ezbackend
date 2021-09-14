@@ -27,7 +27,7 @@ export default function SchemaListItem(props: ISchemaListItem) {
 
     const classes = useStyles();
 
-    let match = (props.selectedItem === props.text)
+    let match = (removeDbui(props.selectedItem) === removeDbui(props.text))
 
     return (
         <ListItem
