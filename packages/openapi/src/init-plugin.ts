@@ -61,9 +61,9 @@ export default function init(config) {
     //TODO: Make page when user reopens swagger
     ezb.plugins.postRun.push((ezb, opts: IEzbConfig, cb) => {
         // ezb.server.swagger();
-        if (opts.port) {
-            console.log(chalk.greenBright(`View your auto-generated Documentation at `) + chalk.yellow.underline(`http://localhost:${opts.port}/docs`))
-        }
+        // if (opts.port) {
+        //     console.log(chalk.greenBright(`View your auto-generated Documentation at `) + chalk.yellow.underline(`http://localhost:${opts.port}/docs`))
+        // }
         cb()
     })
 }

@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require('../../static/img/docs.svg').default,
     description: (
       <>
-        Fastify to create the endpoints and <b>Fastify Swagger</b> to generate the documentation
+        Fastify to create the endpoints and API documentation powered by <b>Rapidoc</b>
       </>
     ),
   },
@@ -22,7 +22,7 @@ const FeatureList = [
     ),
   },
   {
-    title: `Secure Authentication (Coming Soon)`,
+    title: `Secure Authentication`,
     Svg: require('../../static/img/security.svg').default,
     description: (
       <>

@@ -1,20 +1,26 @@
 import Layout from "./Components/Layout";
-import 'rapidoc';
 import { useState } from "react";
+import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 
-const items: string[] = ['Database ', 'API Documentation']
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Inter, Roboto Mono, monospace',
+  }
+});
 
 function App() {
 
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <Layout
-      drawerItems={items}
-      open={open}
-      handleClose={() => { setOpen(false) }}
-      handleOpen={() => { setOpen(true) }}
-    />
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
+      <Layout
+        open={open}
+        handleClose={() => { setOpen(false) }}
+        handleOpen={() => { setOpen(true) }}
+      />
+    </ThemeProvider>
   );
 }
 

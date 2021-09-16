@@ -8,7 +8,7 @@ function DrawerItem(props: IDrawerItem) {
     return (
         <ListItem button={true}>
             <Typography>
-                <Box color="white">
+                <Box color="white" fontFamily="monospace">
                     {props.name}
                 </Box>
             </Typography>

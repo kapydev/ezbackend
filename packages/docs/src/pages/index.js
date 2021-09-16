@@ -10,7 +10,7 @@ import clickhere from './clickhere.png'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
+import ReactPlayer from 'react-player/youtube'
 import Hidden from '@material-ui/core/Hidden'
 
 function HomepageHeader() {
@@ -19,24 +19,15 @@ function HomepageHeader() {
 
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Grid container direction="row" justifyContent="center" alignItems="flex-start" style={{ padding: 48 }} spacing={2}>
+    <Grid container justifyContent="center" alignItems="flex-start" style={{ padding: 48 }} spacing={8}>
       <Grid item>
-        <h1 className="hero__title" style={{ fontSize: '80', fontFamily: "monospace", textAlign: "start", maxWidth:450}}>
-          Create a <span style={{ color: "#5396CE" }}>fully
-            extensible</span> backend in 
-          <span style={{ color: "#5396CE" }}> 2 lines</span> of code
+        <h1 className="hero__title" style={{ fontSize: '80', fontFamily: "monospace", textAlign: "start", maxWidth: 450 }}>
+          Create a <span style={{ color: "#5396CE" }}>fully extensible</span> backend in<span style={{ color: "#5396CE" }}> 2 lines</span> of code
         </h1>
-        <p className="hero__title" style={{ fontSize: 21, textAlign: "start" }}>
-          <b>Backend development in one npm package</b>
-          <br />
-          <br />
-          <p style={{ fontStyle: "italic", fontSize: "14" }}>
-            "Focus on the stuff that matters"
-          </p>
-          <br />
-        </p>
-      </Grid>
-      <Grid item style={{ marginRight: -48 }}>
+        {/* <p style={{fontSize:23}}>
+          Scalable, Safe, and Secure
+        </p> */}
+        <br/>
         <Link to="/alpha-sign-up">
           <Button
             variant="contained"
@@ -44,10 +35,10 @@ function HomepageHeader() {
             onMouseOver={() => setRaise(true)}
             onMouseOut={() => setRaise(false)}
             style={{
-              padding: 12,
+              padding: 10,
               backgroundColor: (!raise) ? "#5396CE" : "#fff",
               color: (!raise) ? "#003A2D" : "#5396CE",
-              fontSize: 24,
+              fontSize: 22,
               fontFamily: "monospace",
               fontWeight: "bold",
               width: 200,
@@ -57,26 +48,9 @@ function HomepageHeader() {
         </Link>
       </Grid>
       <Grid item>
-        <Hidden only={['xs', 'sm', 'md']}>
-          <Box width={400} padding={4}>
-            <img alt="clickhere" src={clickhere} />
-          </Box>
-        </Hidden>
-        <Hidden only={['lg', 'xl']} >
-          <Box width={300} padding={4}>
-            <img alt="clickhere" src={clickhere} />
-          </Box>
-        </Hidden>
+        <ReactPlayer url='https://youtu.be/rA8_m0UQ-O0' maxWidth="600px" />
       </Grid>
     </Grid>
-    // <header className={clsx('hero hero--primary-darkest', styles.heroBanner)} style={{ backgroundColor: "#18191a" }}>
-    //   <div className="container">
-    //     <h1 className="hero__title" style={{ fontSize: 64, fontFamily: "monospace", textAlign: "start" }}>Create a <span style={{ color: "#5396CE" }}>fully <br /> extensible</span> backend <br /> in <span style={{ color: "#5396CE" }}>2 lines</span> of code</h1>
-    //   </div>
-    //   <div className="container">
-    //     <img alt="clickhere" src={clickhere} style={{width:300}} />
-    //   </div>
-    // </header>
   );
 }
 
@@ -91,7 +65,10 @@ export default function Home() {
       <main>
         <HomepageFeatures />
         <br />
+        <br />
+        <br />
+        <br />
       </main>
-    </Layout>
+    </Layout >
   );
 }

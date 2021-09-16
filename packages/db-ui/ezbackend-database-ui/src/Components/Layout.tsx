@@ -1,8 +1,9 @@
-import { Grid, Hidden, AppBar, IconButton, Toolbar, Typography, Box, List } from "@material-ui/core";
+import { Grid, Hidden, AppBar, IconButton, Toolbar, Typography, Box, Button } from "@material-ui/core";
 import DrawerItem from "./DrawerItem";
 import MenuIcon from '@material-ui/icons/Menu';
 import Database from "../Pages/Database";
 import Docs from "../Pages/Docs";
+import openInNewTab from "../Utils/openInNewTab";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const drawerItems =
@@ -16,7 +17,6 @@ const drawerItems =
     </>
 
 interface ILayout {
-    drawerItems: string[]
     open: boolean
     handleOpen(): void
     handleClose(): void
@@ -39,13 +39,13 @@ function Layout(props: ILayout) {
                                     </IconButton>
                                 </Hidden>
 
-                                <Box padding={2}>
+                                <Button style={{ textTransform: 'none' }} onClick={() => { openInNewTab('https://www.ezbackend.io/') }}>
                                     <Typography variant="h5" align="center">
-                                        <Box fontFamily="monospace">
+                                        <Box fontFamily="monospace" padding={2} color="#F5EEEB">
                                             EzBackend
                                         </Box>
                                     </Typography>
-                                </Box>
+                                </Button>
 
                                 {drawerItems}
 

@@ -193,7 +193,7 @@ function Database() {
                         <Grid container direction="column" spacing={2}>
                             <Grid item>
                                 <Grid container direction="row" alignItems="flex-end">
-                                    <Grid item xs>
+                                    <Grid item>
                                         <Box marginLeft={1}>
                                             <Typography color="textSecondary" variant="subtitle2">
                                                 Click row to view json | Double-click cell to edit | Select row to delete
