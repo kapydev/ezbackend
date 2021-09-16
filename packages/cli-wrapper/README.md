@@ -15,7 +15,7 @@ npm init -y
 Instantiate ezbackend
 
 ```
-npx ezbackend@0.0.71 init
+npx ezbackend init
 ```
 
 ## Usage
