@@ -1,52 +1,99 @@
 import { describe, it, expect } from "@jest/globals";
-import { EzBackend } from "../src/ezbackend";
+import exp from "constants";
+import { App } from "../src";
 
 describe("Default Behaviour", () => {
-  it("expects the plugins to run in order", async () => {
+  it("Plugins run in order", async () => {
+    const app = new App()
     const arr = [];
-    const ezb = EzBackend.app();
-    ezb.plugins.preInit.push((ezb, opts, cb) => {
+    app.setInit('init', async (instance, opts) => {
       arr.push(1);
-      cb();
-    });
-    ezb.plugins.init = (ezb, opts, cb) => {
+    })
+    app.setHandler('handler', async (instance, opts) => {
       arr.push(2);
-      cb();
-    };
-    ezb.plugins.postInit.push((ezb, opts, cb) => {
+    })
+    app.setRun('run', async (instance, opts) => {
       arr.push(3);
-      cb();
-    });
-    ezb.plugins.postInit.push((ezb, opts, cb) => {
-      arr.push(4);
-      cb();
-    });
-    ezb.plugins.preHandler.push((ezb, opts, cb) => {
-      arr.push(5);
-      cb();
-    });
-    ezb.plugins.handler = (ezb, opts, cb) => {
-      arr.push(6);
-      cb();
-    };
-    ezb.plugins.postHandler.push((ezb, opts, cb) => {
-      arr.push(7);
-      cb();
-    });
-    ezb.plugins.preRun.push((ezb, opts, cb) => {
-      arr.push(8);
-      cb();
-    });
-    ezb.plugins.run = (ezb, opts, cb) => {
-      arr.push(9);
-      cb();
-    };
-    ezb.plugins.postRun.push((ezb, opts, cb) => {
-      arr.push(10);
-      cb();
-    });
-    await EzBackend.start();
+    })
+    await app.start()
 
-    expect(arr).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(arr).toEqual([1, 2, 3]);
   });
+
+  it("Plugins in sub app run in order", async () => {
+    const app = new App()
+    const subApp = new App()
+    const arr = [];
+    app.setInit('init', async (instance, opts) => {
+      arr.push(1);
+    })
+    app.setHandler('handler', async (instance, opts) => {
+      arr.push(2);
+    })
+    app.setRun('run', async (instance, opts) => {
+      arr.push(3);
+    })
+    subApp.setInit('sub_init', async (instance, opts) => {
+      arr.push(1.5)
+    })
+    app.addApp('subApp', subApp)
+    await app.start()
+
+    expect(arr).toEqual([1, 1.5, 2, 3]);
+  })
+
+  it("Encapsulation allows access to only parents", async () => {
+    const app = new App()
+    const subApp = new App()
+    const subApp2 = new App()
+    const arr = [];
+
+    app.setInit('init', async (instance, opts) => {
+      instance.rootVar = 'rootVar'
+    })
+
+    subApp.setInit('init', async (instance, opts) => {
+      instance.subApp1Var = 'subApp1Var'
+      expect(instance.rootVar).toEqual('rootVar')
+      expect(instance.subApp2Var).toEqual(undefined)
+    })
+
+    subApp2.setInit('init', async (instance, opts) => {
+      instance.subApp2Var = 'subApp2Var'
+      expect(instance.rootVar).toEqual('rootVar')
+      expect(instance.subApp1Var).toEqual(undefined)
+    })
+    app.addApp('subApp', subApp)
+    app.addApp('subApp2', subApp2)
+    await app.start()
+  })
+
+  it("Encapsulation allows access scope of previous lifecycle hooks", async () => {
+    const app = new App()
+    const subApp = new App()
+    const subApp2 = new App()
+
+    app.setInit('init', async (instance, opts) => {
+      instance.rootVar = 'rootVar'
+    })
+
+    subApp.setInit('init', async (instance, opts) => {
+      instance.subApp1Var = 'subApp1Var'
+    })
+
+    subApp.setHandler('handler', async (instance, opts) => {
+      expect(instance.rootVar).toEqual('rootVar')
+      expect(instance.subApp1Var).toEqual('subApp1Var')
+      expect(instance.subApp2Var).toEqual(undefined)
+    })
+
+    subApp2.setInit('init', async (instance, opts) => {
+      instance.subApp2Var = 'subApp2Var'
+    })
+    app.addApp('subApp', subApp)
+    app.addApp('subApp2', subApp2)
+    await app.start()
+  })
+
+
 });
