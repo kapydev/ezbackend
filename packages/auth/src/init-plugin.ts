@@ -23,10 +23,7 @@ export default function init(config) {
                 // options for setCookie, see https://github.com/fastify/fastify-cookie
             }
         })
-        //URGENT TODO: Figure out why the types are mismatched
-        //@ts-ignore
         ezb.server.register(fastifyPassport.initialize())
-        //@ts-ignore
         ezb.server.register(fastifyPassport.secureSession())
     
         cb()

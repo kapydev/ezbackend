@@ -3,6 +3,7 @@ import * as _ from "lodash"; //TODO: Tree shaking
 import { Entity, Repository, } from "typeorm";
 import { APIGenerator } from "./generators/api-generator";
 import { convert } from "./typeorm-json-schema";
+import {EzError} from '@ezbackend/utils'
 
 //TODO: Type checking for include and exclude arrays
 type IEzModelOpts = Partial<{
@@ -10,6 +11,8 @@ type IEzModelOpts = Partial<{
     { include?: Array<string> } |
     { exclude?: Array<string> }
   )
+
+
 
 //TODO: Give options for prefix
 export function EzModel(modelOpts?: IEzModelOpts): ClassDecorator {
@@ -24,18 +27,32 @@ export function EzModel(modelOpts?: IEzModelOpts): ClassDecorator {
     if (modelOpts) {
       const configureGenerator = async (emm, opts) => {
         const generators = emm.generator.generators
-        //URGENT TODO: Switch Object.fromEntires to something that works with older node or polyfill it
-        //URGENT TODO: Throw error message with allowed include and excludes if an invalid include or exclude is used
+        let unusedKeys
         if ('include' in modelOpts) {
-          emm.generator.generators = Object.fromEntries(
-            Object.entries(generators).filter(([k, v]) => modelOpts.include.includes(k)
-            )
-          )
+          unusedKeys = new Set(modelOpts.include)
+          emm.generator.generators = Object.keys(generators).reduce((filtered,key) => {
+            if (modelOpts.include.includes(key)) {
+              filtered[key] = generators[key]
+              unusedKeys.delete(key)
+            }
+            return filtered
+          }, {})
 
         } else if ('exclude' in modelOpts) {
-          emm.generator.generators = Object.fromEntries(
-            Object.entries(generators).filter(([k, v]) => !(modelOpts.exclude.includes(k)))
-          )
+          unusedKeys = new Set(modelOpts.exclude)
+          emm.generator.generators = Object.keys(generators).reduce((filtered,key) => {
+            if (!modelOpts.exclude.includes(key)) {
+              filtered[key] = generators[key]
+              unusedKeys.delete(key)
+            }
+            return filtered
+          }, {})
+        }
+        if (unusedKeys.size !== 0) {
+          const includeOrExclude = 'include' in modelOpts ? 'include' : 'exclude'
+          const msg = `"${Array.from(unusedKeys)}" was not used in "${includeOrExclude}" for model "${meta.model.name}"`
+          const desc = `The values provided to "${includeOrExclude}" must be of one of the values ${Object.keys(generators)}`
+          throw new EzError(msg,desc)
         }
       }
 

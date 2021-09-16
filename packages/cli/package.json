@@ -5,6 +5,7 @@
   "bin": {
     "ezb": "./bin/index.js"
   },
+  "main": "./bin/index.js",
   "scripts": {
     "test": "echo \"Testing server with version: $npm_package_version",
     "build": "tsc",
@@ -22,7 +23,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.2",
-    "commander": "^8.1.0",
+    "commander": "5.1.0",
     "cross-spawn": "^7.0.3",
     "fs-extra": "^10.0.0",
     "read-pkg-up": "7.0.1"

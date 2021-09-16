@@ -1,11 +1,11 @@
 {
-  "name": "ezbackend",
+  "name": "@ezbackend/utils",
   "version": "0.0.72",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/kapydev/ezbackend#readme",
   "license": "ISC",
-  "main": "./lib/cli-wrapper.js",
+  "main": "dist/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -13,7 +13,6 @@
   "files": [
     "lib"
   ],
-  "bin": "./lib/cli-wrapper.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kapydev/ezbackend.git"
@@ -25,7 +24,6 @@
     "url": "https://github.com/kapydev/ezbackend/issues"
   },
   "dependencies": {
-    "@ezbackend/cli": "^0.0.72"
-  },
-  "gitHead": "2f0daeaa2176f8908e4ae59effe90ef1251e3134"
+    "pretty-error": "^3.0.4"
+  }
 }

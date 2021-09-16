@@ -129,7 +129,6 @@ function App() {
 
   function handleOpenPostRequestDialog() {
     setOpenPostRequestDialog(true)
-    console.log(getCreateSchema())
   }
 
   function handleClosePostRequestDialog() {

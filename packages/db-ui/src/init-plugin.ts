@@ -73,7 +73,7 @@ export default function init(config) {
     ezb.plugins.postRun.push((ezb, opts: IEzbConfig, cb) => {
         // ezb.server.swagger();
         if (opts.port) {
-            console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui`))
+            console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui/`))
         }
         cb()
     })

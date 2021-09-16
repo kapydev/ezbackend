@@ -35,13 +35,10 @@ export class GoogleProvider extends BaseProvider {
         return [this.providerName, new GoogleStrategy({
             clientID: this.providerOptions.googleClientId,
             clientSecret: this.providerOptions.googleClientSecret,
-            //URGENT TODO: Single source of truth for making model names kebab case for website URL
             callbackURL: `${this.providerOptions.backendURL}/${this.getCallbackURLNoPreSlash()}`
         }, function (accessToken, refreshToken, profile, cb) {
             const model = new that.model()
-            //@ts-ignore
             model[`${that.providerName}Id`] = profile.id
-            //@ts-ignore
             model[`${that.providerName}Data`] = profile
             const ezb = EzBackend.app()
             ezb.orm.manager.save(model).then(
@@ -92,6 +89,7 @@ export class GoogleProvider extends BaseProvider {
     }
 
     getCallbackRoute(): RouteOptions {
+        let that = this
         return {
             method: 'GET',
             url: `/${this.getCallbackURLNoPreSlash()}`,
@@ -101,8 +99,7 @@ export class GoogleProvider extends BaseProvider {
                 failureRedirect: this.providerOptions.failureRedirectURL
             }),
             handler: async function (req, res) {
-                //URGENT TODO: Figure about the security implications of this
-                return { user: req.user }
+                res.redirect(that.providerOptions.successRedirectURL)
             }
         }
     }
