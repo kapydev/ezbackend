@@ -14,6 +14,10 @@ module.exports = {
   projectName: 'ezbackend', // Usually your repo name.
   trailingSlash: 'false',
   themeConfig: {
+    colorMode:{
+      defaultMode: 'dark',
+      // disableSwitch: true
+    },
     gtag: {
       // You can also use your "G-" Measurement ID here.
       trackingID: 'G-NYKC5QB870',
