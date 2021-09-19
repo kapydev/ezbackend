@@ -39,6 +39,7 @@ export class EzOpenAPI extends App {
             }
         })
 
+        //TODO: Think about naming of PluginScope for scope... should it be a function instead?
         this.scope = PluginScope.PARENT
     }
 }
