@@ -75,7 +75,7 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
 
 
 //TODO: Combine schemas if possible
-function getUpdateSchema(meta: EntityMetadata,prefix?:string) {
+export function getUpdateSchema(meta: EntityMetadata,prefix?:string) {
 
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
   let updateSchema = Object.entries(nonGeneratedColumns)
@@ -119,7 +119,7 @@ function getUpdateSchema(meta: EntityMetadata,prefix?:string) {
   return updateSchema
 }
 
-function getCreateSchema(meta: EntityMetadata,prefix?:string) {
+export function getCreateSchema(meta: EntityMetadata,prefix?:string) {
   const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
   
   let createSchema = Object.entries(nonGeneratedColumns)
@@ -179,7 +179,7 @@ function makeArray(schema: any) {
   }
 }
 
-function getFullSchema(meta: EntityMetadata,prefix?:string) {
+export function getFullSchema(meta: EntityMetadata,prefix?:string) {
   let fullSchema = Object.entries(meta.columns)
     //Remove all relations
     .filter(([key, val]) => !isRelationCol(val))

@@ -2,6 +2,21 @@ import { describe, it, expect } from "@jest/globals";
 import exp from "constants";
 import { App } from "../src";
 
+interface Root {
+  rootVar: string
+}
+
+interface SubApp {
+  subApp1Var: string
+}
+
+interface SubApp2 {
+  subApp2Var: string
+}
+
+interface NullOpts {
+
+}
 describe("Default Behaviour", () => {
   it("Plugins run in order", async () => {
     const app = new App()
@@ -46,7 +61,9 @@ describe("Default Behaviour", () => {
     const app = new App()
     const subApp = new App()
     const subApp2 = new App()
-    const arr = [];
+
+    app.addApp('subApp', subApp)
+    app.addApp('subApp2', subApp2)
 
     app.setInit('init', async (instance, opts) => {
       instance.rootVar = 'rootVar'
@@ -63,8 +80,7 @@ describe("Default Behaviour", () => {
       expect(instance.rootVar).toEqual('rootVar')
       expect(instance.subApp1Var).toEqual(undefined)
     })
-    app.addApp('subApp', subApp)
-    app.addApp('subApp2', subApp2)
+    
     await app.start()
   })
 
