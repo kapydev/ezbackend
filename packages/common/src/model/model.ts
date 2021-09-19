@@ -97,14 +97,15 @@ function schemaToEntityOptions(schema: ModelSchema) {
             primary: true,
             generated: true
         },
-        createdAt: {
-            type: 'date',
-            createDate: true
-        },
-        updatedAt: {
-            type: 'date',
-            updateDate: true
-        }
+        //URGENT TODO: Figure out why TypeORM is not automatically generating the createdAt and updatedAt dates
+        // createdAt: {
+        //     type: 'date',
+        //     createDate: true
+        // },
+        // updatedAt: {
+        //     type: 'date',
+        //     updateDate: true
+        // }
     }
     const relations:{[key:string]:EntitySchemaRelationOptions} = {}
     Object.entries(schema).forEach(([key, value]) => {

@@ -5,10 +5,10 @@ import {
 } from './symbols'
 import avvio, { Avvio, mixedInstance, Plugin } from 'avvio'
 
-type Meta = { [key: string]: any }
-type Override = Avvio<AppInstance>['override']
-type PluginType = Plugin<unknown, AppInstance>
-type Lifecycle =
+export type Meta = { [key: string]: any }
+export type Override = Avvio<AppInstance>['override']
+export type PluginType = Plugin<unknown, AppInstance>
+export type Lifecycle =
     '_preInit' |
     '_init' |
     '_postInit' |
@@ -19,12 +19,12 @@ type Lifecycle =
     '_run' |
     '_postRun'
 
-enum PluginScope {
+export enum PluginScope {
     PARENT,
     DEFAULT
 }
 
-const LIFECYCLE: Array<Lifecycle> = [
+export const LIFECYCLE: Array<Lifecycle> = [
     '_preInit',
     '_init',
     '_postInit',
@@ -36,7 +36,7 @@ const LIFECYCLE: Array<Lifecycle> = [
     '_postRun'
 ]
 
-class AppInstance {
+export class AppInstance {
     [kApp]: App
 }
 

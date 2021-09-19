@@ -26,14 +26,22 @@ export interface GenerateOpts {
 }
 
 //TODO: Remove trailing slash from path names
+//TODO: Make function to get generated Cols
 //URGENT TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
 export const getDefaultGenerators = () => {
     return {
         createOne: (repo: Repository<unknown>, opts?: GenerateOpts) => {
+            const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             const routeDetails: RouteOptions = {
                 method: "POST",
                 url: "/",
                 schema: {
+                    //TODO: Figure out how to import types from fastify swagger correctly for this and below
+                    //@ts-ignore
+                    summary: `Create ${repo.metadata.name}`,
+                    tags: [repo.metadata.name],
+                    description: `During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()}).
+        All non nullable columns must be specified on creation`,
                     body: { $ref: `${getSchemaName(repo.metadata, 'createSchema', opts?.schemaPrefix)}#` },
                     response: {
                         200: { $ref: `${getSchemaName(repo.metadata, 'fullSchema', opts?.schemaPrefix)}#` },
@@ -58,6 +66,10 @@ export const getDefaultGenerators = () => {
                 method: "GET",
                 url: `/:${primaryCol}`,
                 schema: {
+                    //@ts-ignore
+                    summary: `Get ${repo.metadata.name} by ${primaryCol}`,
+                    tags: [repo.metadata.name],
+                    description: `If the ${primaryCol} does not contain the value specified in the url paramters, there will be a 'not found' error.`,
                     params: {
                         type: "object",
                         properties: {
@@ -85,6 +97,10 @@ export const getDefaultGenerators = () => {
                 method: "GET",
                 url: "/",
                 schema: {
+                    //@ts-ignore
+                    summary: `Get all ${repo.metadata.name} instances`,
+                    tags: [repo.metadata.name],
+                    description: `If none exist, an empty array is returned`,
                     response: {
                         200: {
                             type: "array",
@@ -101,10 +117,16 @@ export const getDefaultGenerators = () => {
         },
         updateOne: (repo: Repository<unknown>, opts?: GenerateOpts) => {
             const primaryCol = getPrimaryColName(repo.metadata)
+            const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             const routeDetails: RouteOptions = {
                 method: "PATCH",
                 url: `/:${primaryCol}`,
                 schema: {
+                    //@ts-ignore
+                    summary: `Update ${repo.metadata.name} by ${primaryCol}`,
+                    tags: [repo.metadata.name],
+                    description: `The ${repo.metadata.name} with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned
+        During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()})`,
                     body: { $ref: `${getSchemaName(repo.metadata, "updateSchema", opts?.schemaPrefix)}#` },
                     response: {
                         200: { $ref: `${getSchemaName(repo.metadata, "fullSchema", opts?.schemaPrefix)}#` },
@@ -146,6 +168,10 @@ export const getDefaultGenerators = () => {
                 method: "DELETE",
                 url: `/:${primaryCol}`,
                 schema: {
+                    //@ts-ignore
+                    summary: `Delete ${repo.metadata.name} by ${primaryCol}`,
+                    tags: [repo.metadata.name],
+                    description: `The ${repo.metadata.name} with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned`,
                     params: {
                         type: "object",
                         properties: {
