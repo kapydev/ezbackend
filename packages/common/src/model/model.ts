@@ -31,8 +31,8 @@ type NestedNormalType = { type: NormalType } & Omit<EntitySchemaColumnOptions, '
 type FullType =
     NormalType |
     RelationType |
-    NestedRelationType |
-    NestedNormalType
+    NestedNormalType|
+    NestedRelationType 
 
 type ModelSchema = {
     [index: string]: FullType
@@ -47,7 +47,7 @@ function normalTypeToTypeORMtype(type:NormalType):ColumnType {
     case NormalType.VARCHAR:
         return 'varchar'
     case NormalType.INT:
-        return 'int'
+        return 'integer'
     case NormalType.FLOAT:
         return 'float'
     case NormalType.DOUBLE:
@@ -57,7 +57,8 @@ function normalTypeToTypeORMtype(type:NormalType):ColumnType {
     case NormalType.DATE:
         return 'date'
     case NormalType.JSON:
-        return 'json'
+        //URGENT TODO: Switch between simple json and normal json depending on postgres column?
+        return 'simple-json'
     }
 }
 

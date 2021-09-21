@@ -50,7 +50,7 @@ export const getDefaultGenerators = () => {
                 },
                 handler: async (req, res) => {
                     try {
-                        const newObj = await repo.save(req.body);
+                        const newObj = await repo.save(req.body);         
                         return removeNestedNulls(newObj);
                     } catch (e) {
                         //Assumption: If it fails, it is because of a bad request, not the code breaking
@@ -69,7 +69,7 @@ export const getDefaultGenerators = () => {
                     //@ts-ignore
                     summary: `Get ${repo.metadata.name} by ${primaryCol}`,
                     tags: [repo.metadata.name],
-                    description: `If the ${primaryCol} does not contain the value specified in the url paramters, there will be a 'not found' error.`,
+                    description: `If the ${primaryCol} does not contain the value specified in the url parameters, there will be a 'not found' error.`,
                     params: {
                         type: "object",
                         properties: {

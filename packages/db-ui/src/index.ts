@@ -1,1 +1,1 @@
-export {default} from './init-plugin'
+export * from './db-ui'

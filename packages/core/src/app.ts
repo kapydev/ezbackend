@@ -114,6 +114,16 @@ export class App {
     setRun(funcName: string, plugin: Plugin<any, any>) { this.setHook('_run', funcName, plugin) }
     setPostRun(funcName: string, plugin: Plugin<any, any>) { this.setHook('_postRun', funcName, plugin) }
 
+
+    removeHook(lifecycle: Lifecycle, funcName: string) {
+        if (!this[lifecycle].has(funcName)) {
+            throw `${funcName} does not exist in ${lifecycle}`
+        }
+        //Override the plugin name
+        this[lifecycle].delete(funcName)
+
+    }
+
     setHook(lifecycle: Lifecycle, funcName: string, plugin: Plugin<any, any>) {
         if (this[lifecycle].has(funcName)) {
             throw `${funcName} already declared for ${lifecycle}`

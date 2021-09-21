@@ -210,7 +210,6 @@ export function getFullSchema(meta: EntityMetadata, prefix?: string) {
     );
   //Add eagerly loaded columns
   const eagerMeta = getNestedMetadata(meta, 'read')
-
   fullSchema = eagerMeta
     .reduce(
       (jsonSchema, meta) => {

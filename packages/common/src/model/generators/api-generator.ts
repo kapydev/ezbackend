@@ -33,11 +33,11 @@ function getRoutePrefix(prefixes: Array<string>) {
     return prefixes.reduceRight(buildRoutePrefix)
 }
 
-
-function generateRouteFactory(genOpts, generator) {
+//TODO: Custom routes involving apps?
+export function generateRouteFactory(genOpts, generator) {
     return async (instance, opts) => {
         const meta = instance[kApp].getChainedMeta()
-        const prefix = getRoutePrefix(meta.prefix)
+        const prefix = meta.prefix ? getRoutePrefix(meta.prefix) : ''
         instance.server.register(
             async (server, opts) => {
                 const routes: Array<RouteOptions> = [].concat(generator(instance.repo, genOpts))
@@ -52,9 +52,8 @@ function generateRouteFactory(genOpts, generator) {
     }
 }
 
-//LEFT OFF: Shift generator to EzBackend Main App, to allow plugins to extend it
-//Follow open for extension, closed for modification system (Using App plugin system?)
 //TODO: Think about function naming
+//TODO: Figure out what the heck this genOpts done and if its useless remove it
 export class EzRouter extends App {
     constructor(opts: IAPIGeneratorOpts, generators = getDefaultGenerators()) {
         super()
@@ -74,9 +73,6 @@ export class EzRouter extends App {
             const schema = getFullSchema(instance.repo.metadata)
             instance.server.addSchema(schema)
         })
-
-
-        //TODO: Can we switch it back so the names of all routes generated are in the plugin tree?
 
         Object.entries(generators).forEach(([generatorName, generator]) => {
             this.setHandler(
