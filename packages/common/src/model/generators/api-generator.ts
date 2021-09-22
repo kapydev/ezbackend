@@ -13,7 +13,7 @@ interface IAPIGeneratorOpts {
 type IGenerator = (repo: Repository<unknown>, opts?: GenerateOpts) => RouteOptions | Array<RouteOptions>;
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
-function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
+export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
     if (!pluginPrefix) {
         return instancePrefix
     }
@@ -29,7 +29,7 @@ function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
     return instancePrefix + pluginPrefix
 }
 
-function getRoutePrefix(prefixes: Array<string>) {
+export function getRoutePrefix(prefixes: Array<string>) {
     return prefixes.reduceRight(buildRoutePrefix)
 }
 

@@ -1,9 +1,10 @@
-import { App, PluginScope } from '@ezbackend/core'
+import { App, PluginScope,kApp } from '@ezbackend/core'
 import { convert, getDefaultGenerators, generateRouteFactory } from '@ezbackend/common'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 import {RouteOptions} from 'fastify'
 import chalk from 'chalk'
+import {getRoutePrefix} from '@ezbackend/common'
 
 //TODO: Source maps for debugging?
 function getDbUIGenerators() {
@@ -38,6 +39,8 @@ async function addDBSchemas(instance, opts) {
 
 async function addDbUIEndpoints(instance, opts) {
     const generators = getDbUIGenerators()
+    const meta = instance[kApp].getChainedMeta()
+    const prefix = meta.prefix ? getRoutePrefix(meta.prefix) : ''
 
     instance.entities.forEach(entity => {
         const repo = instance.orm.getRepository(entity)
@@ -50,7 +53,7 @@ async function addDbUIEndpoints(instance, opts) {
                     })
                 },
                 {
-                    prefix: 'prefix'
+                    prefix: `/db-ui/${repo.metadata.name}`
                 }
             )
         })
