@@ -1,22 +1,6 @@
 import { describe, it, expect } from "@jest/globals";
-import exp from "constants";
 import { App } from "../src";
 
-interface Root {
-  rootVar: string
-}
-
-interface SubApp {
-  subApp1Var: string
-}
-
-interface SubApp2 {
-  subApp2Var: string
-}
-
-interface NullOpts {
-
-}
 describe("Default Behaviour", () => {
   it("Plugins run in order", async () => {
     const app = new App()

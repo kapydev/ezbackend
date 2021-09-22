@@ -6,7 +6,6 @@ import {
 import avvio, { Avvio, mixedInstance, Plugin } from 'avvio'
 
 export type Meta = { [key: string]: any }
-export type Override = Avvio<AppInstance>['override']
 export type PluginType = Plugin<unknown, AppInstance>
 export type Lifecycle =
     '_preInit' |
@@ -40,6 +39,10 @@ export class AppInstance {
     [kApp]: App
 }
 
+export type Override = Avvio<AppInstance>['override']
+
+export type Overrides = {[name:string]: Avvio<unknown>['override']}
+
 //URGENT TODO: Add types
 //TODO: Added safety for overriding instance variables?
 export class App {
@@ -58,6 +61,10 @@ export class App {
     protected _instance: Avvio<AppInstance>
     protected _name: string
     protected _scope: PluginScope
+    protected _overrides: Overrides
+
+    //TODO: Make this follow the convention I guess
+    opts: any
 
     //TODO: Add tests for localdata
     //TOOD: Add test for obtaining parent
@@ -78,6 +85,8 @@ export class App {
         this._name = 'Root'
         this._scope = PluginScope.DEFAULT
         this._meta = {}
+        this._overrides = {}
+        this.opts = {}
     }
 
     get apps() { return this._apps }
@@ -88,6 +97,7 @@ export class App {
     get name() { return this._name }
     get scope() { return this._scope }
     get parent() { return this._parent }
+    get overrides() {return this._overrides}
 
     get meta() { return this._meta }
 
@@ -160,13 +170,13 @@ export class App {
         }
     }
 
-    addApp(name: string, newApp: App, metaData: Meta = {}, scope: PluginScope = PluginScope.DEFAULT) {
+    addApp(name: string, newApp: App, opts: any, scope: PluginScope = PluginScope.DEFAULT) {
         if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
             throw (`Child app ${name} already exists`)
         }
         newApp.scope = scope
         newApp.name = name
-        newApp.meta = metaData
+        newApp.opts = opts
         newApp._setParent(this)
         this._apps.set(name, newApp)
         
@@ -227,6 +237,10 @@ export class App {
         await this._instance.ready()
     }
 
+    setCustomOverride(varName:string, override: Avvio<unknown>['override']) {
+        this._overrides[varName] = override
+    }
+
     protected override: Override = (old, fn, opts) => {
         let newInstance: mixedInstance<AppInstance>
         const parentApp = fn.prototype[kApp] ?? this
@@ -235,6 +249,17 @@ export class App {
             //Uses new scope
             if (parentApp[kInstance] === undefined) {
                 parentApp[kInstance] = Object.create(old)
+                Object.entries(this.overrides).forEach(([varName,override]) => {
+                    if (parentApp[kInstance][varName] === undefined) {
+                        //Don't do anything if variable has not been defined yet
+                        return
+                    }
+                    parentApp[kInstance][varName] = override(
+                        parentApp[kInstance][varName],
+                        async (instance,opts) => {},
+                        parentApp.opts
+                    )
+                })
             }
             newInstance = parentApp[kInstance]
         } else if (fn.prototype[kScope] === PluginScope.PARENT) {
