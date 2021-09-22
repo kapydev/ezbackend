@@ -28,18 +28,18 @@ export const Type = { ...RelationType, ...NormalType }
 type NestedRelationType = { type: RelationType } & Omit<EntitySchemaRelationOptions, 'type'>
 type NestedNormalType = { type: NormalType } & Omit<EntitySchemaColumnOptions, 'type'>
 
-type FullType =
+export type FullType =
     NormalType |
     RelationType |
     NestedNormalType|
     NestedRelationType 
 
-type ModelSchema = {
+export type ModelSchema = {
     [index: string]: FullType
 
 }
 
-type ModelOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
+export type ModelOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
 
 //URGENT TODO: Allow normal typeorm types?
 function normalTypeToTypeORMtype(type:NormalType):ColumnType {

@@ -1,24 +1,27 @@
-import { Column } from 'typeorm'
-import providers from './providers'
+import {App, PluginScope} from '@ezbackend/core'
+import fastifySecureSession from 'fastify-secure-session'
+import fastifyPassport from 'fastify-passport'
+import fs from 'fs'
 
-type IProviders = Array<'google'>
-
-export function EzAuthUser(...providerNames: IProviders): ClassDecorator {
-
-    return function (constructor: Function) {
-        //URGENT TODO: Throw error if there are non-nullable, non generated columns the model
-        //TODO: Avoid using this fakeclass method
-        //TODO: Throw error if there are repeat providers
-
-        const fakeClass = { constructor: constructor }
-        Column('varchar')(fakeClass, 'googleId')
-        Column('simple-json')(fakeClass, 'googleData')
-
-
-        providerNames.forEach((providerName) => {
-            const Provider = providers[providerName]
-            const provider = new Provider(constructor)
-            provider.addProvider()
+export class EzAuth extends App {
+    constructor() {
+        super()
+        this.setPostInit("Add Fastify Secure Session", async (instance,opts) => {
+            //TODO: Create key if no key
+            instance.server.register(fastifySecureSession, {
+                key: fs.readFileSync(opts.auth.secretKeyPath),
+                cookie: {
+                    path: '/'
+                }
+            })
         })
+
+        this.setPostInit("Add Fastify Passport", async (instance,opts) => {
+            //TODO: Create key if no key
+            instance.server.register(fastifyPassport.initialize())
+            instance.server.register(fastifyPassport.secureSession())
+        })
+
+        this.scope = PluginScope.PARENT
     }
 }

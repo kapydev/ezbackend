@@ -1,48 +1,48 @@
 import { SerializeFunction } from "fastify-passport/dist/Authenticator"
 import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
 import { AnyStrategy } from "fastify-passport/dist/strategies"
-import { RouteOptions } from "fastify"
+import { RouteOptions, FastifyInstance } from "fastify"
 import fastifyPassport from 'fastify-passport'
-import { EzBackend } from "@ezbackend/core"
+import {App} from '@ezbackend/core'
 import type {OpenAPIV3} from 'openapi-types'
 
-export abstract class BaseProvider {
+export abstract class BaseProvider extends App {
 
-    providerOptions: any
     providerName: string
-    model: any
+    modelName: string
 
-    constructor(providerName: string, model: any, providerOptions: any){
+    constructor(providerName: string, modelName: string){
+        super()
         this.providerName = providerName
-        this.model = model
-        this.providerOptions = providerOptions
+        this.modelName = modelName
+
+        this.setHandler(`Add ${this.providerName} Auth Provider`,async (instance,opts) => {
+            this.addProvider(instance,opts)
+        })
     }
 
-    abstract addStrategy():[name:string, Strategy:AnyStrategy]
-    abstract registerUserSerializer():SerializeFunction<unknown, unknown>
-    abstract registerUserDeserializer():DeserializeFunction<any,any>
-    abstract getLoginRoute():RouteOptions
-    abstract getLogoutRoute():RouteOptions
-    abstract getCallbackRoute():RouteOptions
+    abstract addStrategy(instance,opts):[name:string, Strategy:AnyStrategy]
+    abstract registerUserSerializer(instance,opts):SerializeFunction<unknown, unknown>
+    abstract registerUserDeserializer(instance,opts):DeserializeFunction<any,any>
+    abstract getLoginRoute(instance,opts):RouteOptions
+    abstract getLogoutRoute(instance,opts):RouteOptions
+    abstract getCallbackRoute(instance,opts):RouteOptions
     //TODO: Implement this security scheme in the swagger spec
     abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
-    addProvider() {
-        const ezb = EzBackend.app()
-        fastifyPassport.use(...this.addStrategy())
-        fastifyPassport.registerUserSerializer(this.registerUserSerializer())
-        fastifyPassport.registerUserDeserializer(this.registerUserDeserializer())
-        //TODO: Figure out why this is throwing a type error, something to do with fastify passport authenticate
-        //@ts-ignore
-        ezb.server.route(this.getLoginRoute())
-        //@ts-ignore
-        ezb.server.route(this.getLogoutRoute())
-        //@ts-ignore
-        ezb.server.route(this.getCallbackRoute())
+    addProvider(instance, opts) {
+        const providerOpts = opts.auth[this.providerName]
+        fastifyPassport.use(...this.addStrategy(instance,providerOpts))
+        fastifyPassport.registerUserSerializer(this.registerUserSerializer(instance,providerOpts))
+        fastifyPassport.registerUserDeserializer(this.registerUserDeserializer(instance,providerOpts))
+
+        instance.server.route(this.getLoginRoute(instance,providerOpts))
+        instance.server.route(this.getLogoutRoute(instance,providerOpts))
+        instance.server.route(this.getCallbackRoute(instance,providerOpts))
     }
 
     getRoutePrefixNoPrePostSlash() {
-        return `${this.model.name}/auth/${this.providerName}`
+        return `${this.modelName}/auth/${this.providerName}`
     }
 
     getCallbackURLNoPreSlash () {
