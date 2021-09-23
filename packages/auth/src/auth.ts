@@ -3,6 +3,12 @@ import providers from './providers'
 
 type IProviders = Array<'google'>
 
+/**
+ * Represents a TEST OBJECT.
+ * @constructor
+ * @param {string} TESTPARAM1 - Lorem Ipsum Dolor 1.
+ * @param {string} TESTPARAM2 - Lorem Ipsum Dolor 2.
+ */
 export function EzAuthUser(...providerNames: IProviders): ClassDecorator {
 
     return function (constructor: Function) {

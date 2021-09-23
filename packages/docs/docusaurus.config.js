@@ -13,10 +13,31 @@ module.exports = {
   organizationName: 'kapydev', // Usually your GitHub org/user name.
   projectName: 'ezbackend', // Usually your repo name.
   trailingSlash: 'false',
+  plugins: [
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        "githubPages": false,
+        "readme": "none",
+        "tsconfig": "../../tsconfig.json",
+        "hideInPageTOC": true,
+        "hideBreadcrumbs": true,
+        "entryPointStrategy": "packages",
+        "entryPoints": [
+          "../auth",
+          "../common",
+          "../common-sequelize-fastify",
+          "../core",
+          "../db-ui",
+          "../openapi"
+        ]
+      }
+    ],
+  ],
   themeConfig: {
-    colorMode:{
+    colorMode: {
       defaultMode: 'dark',
-      // disableSwitch: true
+      disableSwitch: true
     },
     gtag: {
       // You can also use your "G-" Measurement ID here.

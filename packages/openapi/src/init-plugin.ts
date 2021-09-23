@@ -68,6 +68,12 @@ export default function init(config) {
     })
 }
 
+/**
+ * Represents a TEST OBJECT.
+ * @constructor
+ * @param {string} TESTPARAM1 - Lorem Ipsum Dolor 1.
+ * @param {string} TESTPARAM2 - Lorem Ipsum Dolor 2.
+ */
 function setGeneratorRouteMetadata() {
     const originalGenerators = APIGenerator.getGenerators()
 
