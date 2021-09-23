@@ -5,7 +5,6 @@ import {
 } from './symbols'
 import avvio, { Avvio, mixedInstance, Plugin } from 'avvio'
 
-export type Meta = { [key: string]: any }
 export type PluginType = Plugin<unknown, AppInstance>
 export type Lifecycle =
     '_preInit' |
@@ -46,7 +45,6 @@ export type Overrides = {[name:string]: Avvio<unknown>['override']}
 //URGENT TODO: Add types
 //TODO: Added safety for overriding instance variables?
 export class App {
-    protected _meta: Meta
     protected _parent: App | undefined
     protected _apps: Map<string, App>
     protected _preInit: Map<string, Plugin<any, any>>
@@ -84,7 +82,6 @@ export class App {
         this._instance = avvio(new AppInstance(), { autostart: false })
         this._name = 'Root'
         this._scope = PluginScope.DEFAULT
-        this._meta = {}
         this._overrides = {}
         this.opts = {}
     }
@@ -98,12 +95,6 @@ export class App {
     get scope() { return this._scope }
     get parent() { return this._parent }
     get overrides() {return this._overrides}
-
-    get meta() { return this._meta }
-
-    set meta(newMeta: Meta) {
-        this._meta = newMeta
-    } 
 
     set name(newName: string) {
         //Should we prevent setting the name more than once?
@@ -152,25 +143,9 @@ export class App {
         }
     }
 
-    //TODO: Dynamic programming for caching previously obtained metadata
-    //TODO: Make sure you only call this after start, otherwise metadata may not be fully populated
-    getChainedMeta(curMeta = {}) {
-        Object.entries(this.meta).forEach(([key,value]) => {
-            if (curMeta[key] === undefined) {
-                curMeta[key] = [value]
-            } else {
-                curMeta[key].push(value)
-            }
-        })
-        if (!this.parent) {
-            //Recursive end condition
-            return curMeta
-        } else {
-            return this.parent.getChainedMeta(curMeta)
-        }
-    }
 
-    addApp(name: string, newApp: App, opts: any, scope: PluginScope = PluginScope.DEFAULT) {
+
+    addApp(name: string, newApp: App, opts: any = {}, scope: PluginScope = PluginScope.DEFAULT) {
         if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
             throw (`Child app ${name} already exists`)
         }

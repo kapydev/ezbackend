@@ -36,17 +36,12 @@ export function getRoutePrefix(prefixes: Array<string>) {
 //TODO: Custom routes involving apps?
 export function generateRouteFactory(genOpts, generator) {
     return async (instance, opts) => {
-        const meta = instance[kApp].getChainedMeta()
-        const prefix = meta.prefix ? getRoutePrefix(meta.prefix) : ''
         instance.server.register(
             async (server, opts) => {
                 const routes: Array<RouteOptions> = [].concat(generator(instance.repo, genOpts))
                 routes.forEach((route) => {
                     server.route(route)
                 })
-            },
-            {
-                prefix: prefix
             }
         )
     }

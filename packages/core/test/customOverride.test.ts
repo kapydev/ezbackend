@@ -9,8 +9,17 @@ let app
 beforeEach(() => {
     app = new App()
 
-    app.setInit('add fastify instance', async (instance, opts) => {
+    app.setInit('Create Fastify Server', async (instance, opts) => {
         instance.server = fastify()
+    })
+
+    //TODO: Switch this with .ready()
+    app.setRun("Run Fastify Server", async (instance, opts) => {
+        await instance.server.listen()
+    })
+
+    app.setPostRun("Kill Server", async (instance, opts) => {
+        await instance.server.close()
     })
 
     //The location of this function should not matter
@@ -102,22 +111,29 @@ describe("test with fastify", () => {
     describe('Schema testing', () => {
 
         let prefixedChild
-        let schema
+
+        const schema = {
+            $id: 'schemaId',
+            type: 'object',
+            properties: {
+                hello: { type: 'string' }
+            }
+        }
+
+        const schema2 = {
+            $id: 'schemaId2',
+            type: 'object',
+            properties: {
+                hello: { type: 'string' }
+            }
+        }
 
         beforeEach(() => {
             prefixedChild = new App()
 
             app.addApp('Prefixed Child', prefixedChild, { prefix: 'prefix' })
 
-            schema = {
-                $id: 'schemaId',
-                type: 'object',
-                properties: {
-                    hello: { type: 'string' }
-                }
-            }
-
-            app.setHandler('create schema', async (instance, opts) => {
+            app.setPreHandler('create schema', async (instance, opts) => {
                 instance.server.addSchema(schema)
             })
         })
@@ -131,17 +147,110 @@ describe("test with fastify", () => {
         })
 
         it("Manually registered plugins should have parent schemas", async () => {
-            const prefixedChild = new App()
-
-            app.addApp('Prefixed Child', prefixedChild, { prefix: 'prefix' })
 
             prefixedChild.setHandler('check schema in manual plugin', async (instance, opts) => {
-                instance.server.register(async(server,opts) => {
+                instance.server.register(async (server, opts) => {
                     expect(server.getSchema('schemaId')).toEqual(schema)
                 })
             })
 
 
+        })
+
+        it("Plugins two levels deep should share schemas", async () => {
+            const v1 = new App()
+            const modelStub = new App()
+            const routerStub = new App()
+
+            app.addApp('v1', v1)
+            v1.addApp('model', modelStub)
+            modelStub.addApp('router', routerStub)
+
+            const schema2 = {
+                $id: 'schemaId2',
+                type: 'object',
+                properties: {
+                    hello: { type: 'string' }
+                }
+            }
+
+            const combinedSchema = { schemaId: schema, schemaId2: schema2 }
+
+            modelStub.setPreHandler('Add Create Schema', async (instance, opts) => {
+                instance.server.addSchema(schema2)
+            })
+
+            modelStub.setHandler('Simulate Route Generation', async (instance, opts) => {
+                expect(instance.server.getSchemas()).toEqual(combinedSchema)
+            })
+
+            await app.start()
+        })
+
+        it("Instance two levels deep should be the same", async () => {
+            const v1 = new App()
+            const modelStub = new App()
+            const routerStub = new App()
+
+            app.addApp('v1', v1)
+            v1.addApp('model', modelStub)
+            modelStub.addApp('router', routerStub)
+
+            let preHandlerServer
+
+            modelStub.setPreHandler('Add Create Schema', async (instance, opts) => {
+                preHandlerServer = instance.server
+            })
+
+            modelStub.setHandler('Simulate Route Generation', async (instance, opts) => {
+                expect(instance.server).toBe(preHandlerServer)
+            })
+        })
+
+        it("Manually registered plugins two levels deep should share schemas", async () => {
+
+            const v1 = new App()
+            const modelStub = new App()
+            const routerStub = new App()
+
+            app.addApp('v1', v1)
+            v1.addApp('model', modelStub)
+            modelStub.addApp('router', routerStub)
+
+            let preHandlerSchema
+            
+            v1.setPreHandler("Add v1 schema", async (instance,opts) => {
+                instance.server.addSchema({
+                    $id: 'v1Schema',
+                    type: 'object',
+                    properties: {
+                        hello: { type: 'string' }
+                    }
+                })
+            })
+
+            modelStub.setPreHandler('Add Create Schema', async (instance, opts) => {
+                instance.server.addSchema(schema2)
+                preHandlerSchema = instance.server.getSchemas()
+            })
+
+            modelStub.setHandler('Simulate Route Generation', async (instance, opts) => {
+                expect(instance.server.getSchemas()).toEqual(preHandlerSchema)
+                instance.server.register(async (server, opts) => {
+                    //It has schema1 but not schema2... So where is that added?
+                    //schema 1 is added in app...
+                    //What is I add a schema in v1?
+                    //The v1 schema DOES NOT get loaded as well... Is it only getting schemas from root?
+                    //Seems like an app only schema gets loaded, perhaps when register is called, the encapsulation is not properly done, so it inherits from the parent?
+                    //Can we fix this by manually running register, then returning the instance from inside?
+                    console.log(server.getSchemas())
+                    expect(server.getSchemas()).toEqual(preHandlerSchema)
+                })
+            })
+
+            await app.start()
+
+            console.log(app.instance.prettyPrint())
         })
     })
 

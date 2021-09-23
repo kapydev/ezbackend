@@ -2,6 +2,7 @@ import { App } from "@ezbackend/core";
 import fastify from "fastify";
 import fastifyBoom from 'fastify-boom'
 import { createConnection } from "typeorm";
+import override from 'fastify/lib/pluginOverride'
 
 //TODO: Check if emojis will break instance names
 //URGENT TODO: Strict types for instance, opts
@@ -40,8 +41,10 @@ export class EzBackend extends App {
         this.setPreHandler('Add Error Schema', addErrorSchema)
 
         this.setRun('Run Fastify Server', async (instance, opts) => {
-            instance.server.listen(opts.port)
+            await instance.server.listen(opts.port)
         })
+
+        this.setCustomOverride("server", override)
 
     }
 }
