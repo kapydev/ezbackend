@@ -1,6 +1,12 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import ezb from "./test.index"
-import {getInternalInstance} from './helpers'
+import { EzBackend } from "@ezbackend/common";
+
+//TODO: Figure if there is a better way of getting this data
+function getInternalInstance(ezb: EzBackend) {
+    //@ts-ignore
+    return ezb.instance._lastUsed.server
+}
 
 
 

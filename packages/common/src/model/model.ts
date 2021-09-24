@@ -167,7 +167,7 @@ export class EzModel extends App {
             instance.repo = instance.orm.getRepository(modelName)
         })
 
-        const router = new EzRouter({prefix:""})
+        const router = new EzRouter()
 
         //TODO: Think about customisability of EzRouter
         this.addApp("Router", router)

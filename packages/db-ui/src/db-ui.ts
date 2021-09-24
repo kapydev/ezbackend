@@ -1,10 +1,10 @@
-import { App, PluginScope,kApp } from '@ezbackend/core'
+import { App, PluginScope, kApp } from '@ezbackend/core'
 import { convert, getDefaultGenerators, generateRouteFactory } from '@ezbackend/common'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
-import {RouteOptions} from 'fastify'
+import { RouteOptions } from 'fastify'
 import chalk from 'chalk'
-import {getRoutePrefix} from '@ezbackend/common'
+import { buildRoutePrefix } from '@ezbackend/common'
 
 //TODO: Source maps for debugging?
 function getDbUIGenerators() {
@@ -37,27 +37,50 @@ async function addDBSchemas(instance, opts) {
     })
 }
 
+//TODO: Make generator more robust? Like add prefix options for example
+
 async function addDbUIEndpoints(instance, opts) {
     const generators = getDbUIGenerators()
-    const meta = instance[kApp].getChainedMeta()
-    const prefix = meta.prefix ? getRoutePrefix(meta.prefix) : ''
+
+    //LEFT OFF: Schemas not showing on API documentation!!! Why you gotta be like this fastify!?!?!
 
     instance.entities.forEach(entity => {
-        const repo = instance.orm.getRepository(entity)
+    const repo = instance.orm.getRepository(entity)
         Object.values(generators).forEach(generator => {
-            instance.server.register(
-                async (server, opts) => {
-                    const routes: Array<RouteOptions> = [].concat(generator(repo))
-                    routes.forEach((route) => {
-                        server.route(route)
-                    })
-                },
-                {
-                    prefix: `/db-ui/${repo.metadata.name}`
-                }
-            )
+            const routes: Array<RouteOptions> = [].concat(generator(repo,{schemaPrefix:"db-ui"}))
+            routes.forEach((route) => {
+                //Update the route prefix manually here
+                route.url = buildRoutePrefix(`/db-ui/${repo.metadata.name}`,route.url)
+                instance.server.route(route)
+            })
         })
     })
+
+    // instance.entities.forEach(entity => {
+    //     const repo = instance.orm.getRepository(entity)
+    //     Object.values(generators).forEach(generator => {
+    //         instance.server.register(
+    //             async (server, opts) => {
+    //                 //TODO: Check schema prefix is correct
+    //                 const routes: Array<RouteOptions> = [].concat(generator(repo))
+    //                 routes.forEach((route) => {
+    //                     server.route(route)
+    //                 })
+    //             },
+    //             {
+    //                 prefix: `/db-ui/${repo.metadata.name}`
+    //             }
+    //         )
+    //     })
+    // })
+}
+
+class DBEndpointRouter extends App {
+    constructor() {
+        super()
+        this.setPostHandler("Add DB-UI endpoints", addDbUIEndpoints)
+
+    }
 }
 
 export class EzDbUI extends App {
@@ -65,7 +88,7 @@ export class EzDbUI extends App {
         super()
         this.setPostHandler("Add DB-UI endpoint schemas", addDBSchemas)
 
-        this.setPostHandler("Add DB-UI endpoints", addDbUIEndpoints)
+        this.addApp("DB-UI Endpoint Router", new DBEndpointRouter())
 
         this.setPreRun("Serve UI Interface", async (instance, opts) => {
             instance.server.register(fastifyStatic, {
@@ -75,7 +98,7 @@ export class EzDbUI extends App {
             })
         })
 
-        this.setPostRun("Display DB UI URL", async (instance,opts) => {
+        this.setPostRun("Display DB UI URL", async (instance, opts) => {
             if (opts.port) {
                 console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui/`))
             }

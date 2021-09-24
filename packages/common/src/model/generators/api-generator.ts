@@ -36,21 +36,18 @@ export function getRoutePrefix(prefixes: Array<string>) {
 //TODO: Custom routes involving apps?
 export function generateRouteFactory(genOpts, generator) {
     return async (instance, opts) => {
-        instance.server.register(
-            async (server, opts) => {
-                const routes: Array<RouteOptions> = [].concat(generator(instance.repo, genOpts))
-                routes.forEach((route) => {
-                    server.route(route)
-                })
-            }
-        )
+        const routes: Array<RouteOptions> = [].concat(generator(instance.repo, genOpts))
+        routes.forEach((route) => {
+            instance.server.route(route)
+        })
+
     }
 }
 
 //TODO: Think about function naming
 //TODO: Figure out what the heck this genOpts done and if its useless remove it
 export class EzRouter extends App {
-    constructor(opts: IAPIGeneratorOpts, generators = getDefaultGenerators()) {
+    constructor(opts: IAPIGeneratorOpts = { prefix: '' }, generators = getDefaultGenerators()) {
         super()
         const genOpts = opts
 

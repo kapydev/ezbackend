@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import ezb from "./test.index"
-import {getInternalInstance} from './helpers'
+import { getInternalInstance } from './helpers'
 
 //TODO: Make tests independent of each other
 
@@ -131,7 +131,7 @@ describe("Nested CRUD", () => {
     describe("Foreign Key ID", () => {
       test("Create with Foreign Key ID", async () => {
         const instance = getInternalInstance(ezb)
-        
+
         const response = await instance.server.inject({
           method: "POST",
           url: "/NoCascadeUser",
@@ -159,7 +159,7 @@ describe("Nested CRUD", () => {
           url: "/NoCascadeProgram",
           payload: sampleProgram,
         });
-        
+
         const response = await instance.server.inject({
           method: "PATCH",
           url: "/NoCascadeUser/1",
@@ -177,7 +177,7 @@ describe("Nested CRUD", () => {
       })
       test("Get entity with just foreign key IDs", async () => {
         const instance = getInternalInstance(ezb)
-        
+
         const response = await instance.server.inject({
           method: "GET",
           url: "/NoCascadeUser/1"
@@ -196,7 +196,13 @@ describe("Nested CRUD", () => {
   })
 
   describe("Delete", () => {
-    test("Cascade Delete", async () => {
+    test.skip("Cascade Delete", async () => {
+
+    })
+  })
+
+  describe("Auto ID Column Generation", () => {
+    test.skip("For all relations, the id column should automatically expose", async () => {
 
     })
   })
