@@ -6,6 +6,10 @@ import { RouteOptions } from "fastify"
 
 //TODO: Allow configuration editing
 async function addSwaggerPlugin(instance, opts) {
+    instance.server.register((s, opts, done) => {
+        s.get('/', async (req, res) => { return { hello: 'wordddld' } })
+        done()
+    }, { prefix: 'test' })
     instance.server.register(fastifySwagger, {
         prefix: "/docs",
         routePrefix: "/docs",

@@ -3,6 +3,7 @@ import { App } from "../src";
 import fastify from 'fastify'
 import override from 'fastify/lib/pluginOverride'
 import { kRoutePrefix } from 'fastify/lib/symbols'
+import fastq from 'fastq'
 
 let app
 
@@ -23,7 +24,63 @@ beforeEach(() => {
     })
 
     //The location of this function should not matter
-    app.setCustomOverride("server", override)
+    app.setCustomOverride("server", (old, fn, opts) => {
+        const newObj = override(old, fn, opts)
+
+        type Arg = {
+            fn: Function,
+            args: any
+        }
+
+        function worker(qObj: Arg, cb: Function) {
+
+            //The normal callback is just done() so we need a wrapper function for that
+            //p1 can either be the callback value or the error, whereas p2 is the callback val
+            const done = (p1, p2) => {
+                if (p1 && !p2) {
+                    cb(null, p1)
+                    return
+                }
+                if (p1 && p2 || !p1 && p2) {
+                    cb(p1, p2)
+                    return
+                }
+                if (!p1 && !p2) {
+                    cb(null, null)
+                    return
+                }
+                throw "All possible cases should be reached by here"
+
+            }
+
+            //Run the function with the specified arguments, with the done callback
+            const promise = qObj.fn(...qObj.args, done)
+
+            //Handling promises so we account for signature (s,opts,done) and async(s,opts)
+            if (promise && typeof promise.then === 'function') {
+                promise.then(
+                    () => { process.nextTick(done) },
+                    (e) => process.nextTick(done, e))
+            }
+        }
+
+        const queue = fastq(worker, 1)
+
+        newObj.register = (func: Function) => {
+            const childServer = override(newObj, () => { }, opts)
+            //Reference from avvio: https://github.com/fastify/avvio/blob/master/plugin.js#:~:text=const%20promise%20%3D%20func,%7D
+
+            queue.push({
+                fn: func,
+                args: [childServer, opts]
+            })
+
+        }
+        //URGENT TODO: Check if after, ready, listen work
+        //URGENT TODO: Any issues with fastify plugin?
+        //Maybe we can run the tests with the fastify test suite?
+        return newObj
+    })
 })
 
 describe("test with fastify", () => {
@@ -207,19 +264,52 @@ describe("test with fastify", () => {
             })
         })
 
-        it.skip("(May not be possible) Manually registered plugins two levels deep should share schemas", async () => {
+        //URGENT TODO: Move this test to common
+        it("Manually registered plugins should load in the correct order", async () => {
+
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            let order = []
+
+            app.setHandler("Test custom register", async (instance, opts) => {
+                instance.server.register(async (server, opts) => {
+                    server.register(async (server, opts) => {
+                        server.register((server, opts, done) => {
+                            setTimeout(() => {
+                                //URGENT TODO: Figure out why the tests are ending before this is called
+                                order.push(3)
+                                done()
+                            }, 100)
+                        })
+                        await sleep(200)
+                        order.push(2)
+                    })
+                    await sleep(300)
+                    order.push(1)
+                })
+            })
+            await app.start()
+
+            expect(order).toEqual([1, 2, 3])
+
+        })
+
+        //URGENT TODO: Move this test to common
+        it("Manually registered plugins two levels deep should share schemas", async () => {
 
             const v1 = new App()
             const modelStub = new App()
             const routerStub = new App()
 
-            app.addApp('v1', v1,{prefix:"v1"})
-            v1.addApp('model', modelStub,{prefix:"model"})
+            app.addApp('v1', v1, { prefix: "v1" })
+            v1.addApp('model', modelStub, { prefix: "model" })
             modelStub.addApp('router', routerStub)
 
             let preHandlerSchema
-            
-            v1.setPreHandler("Add v1 schema", async (instance,opts) => {
+
+            v1.setPreHandler("Add v1 schema", async (instance, opts) => {
                 instance.server.addSchema({
                     $id: 'v1Schema',
                     type: 'object',
@@ -236,27 +326,31 @@ describe("test with fastify", () => {
 
             //URGENT TODO: Make important disclaimer regarding encapsulation vs fastify encapsulation
             //URGENT TODO: Make important Error message regarding encapsulation vs fastify encapsulation (override register function)
+            v1.setHandler("Print some server instance to see difference", async (instance, opts) => {
+                // console.dir(instance.server,{depth:4})
+            })
 
             modelStub.setHandler('Simulate Route Generation', async (instance, opts) => {
-                console.log(instance.server[kRoutePrefix])
-                //So everything on instance.server is properly encapsulated... except register?
-                expect(instance.server.getSchemas()).toEqual(preHandlerSchema)
+
                 instance.server.register(async (server, opts) => {
-                    //Do we have the right prefix? Is it a schema only problem?
-                    console.log(server[kRoutePrefix])
-                    //It has schema1 but not schema2... So where is that added?
-                    //schema 1 is added in app...
-                    //What is I add a schema in v1?
-                    //The v1 schema DOES NOT get loaded as well... Is it only getting schemas from root?
-                    //Seems like an app only schema gets loaded, perhaps when register is called, the encapsulation is not properly done, so it inherits from the parent?
-                    //Can we fix this by manually running register, then returning the instance from inside?
                     expect(server.getSchemas()).toEqual(preHandlerSchema)
+
+                    //Go big with double nested register
+                    server.register(async (server, opts) => {
+                        expect(server.getSchemas()).toEqual(preHandlerSchema)
+
+                    })
+                }, opts)
+
+                instance.server.register((server, opts, done) => {
+                    expect(server.getSchemas()).toEqual(preHandlerSchema)
+                    done()
                 })
+
+
             })
 
             await app.start()
-
-            console.log(app.instance.prettyPrint())
         })
     })
 
