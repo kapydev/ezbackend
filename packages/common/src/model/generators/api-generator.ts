@@ -1,9 +1,8 @@
 import { Repository } from "typeorm";
 import { RouteOptions } from "fastify";
-import { App } from "@ezbackend/core"
+import { EzApp } from "../../ezapp"
 import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-json-schema";
 import { getDefaultGenerators, GenerateOpts } from "./default-generators"
-import { kApp } from "@ezbackend/core"
 
 
 interface IAPIGeneratorOpts {
@@ -46,22 +45,26 @@ export function generateRouteFactory(genOpts, generator) {
 
 //TODO: Think about function naming
 //TODO: Figure out what the heck this genOpts done and if its useless remove it
-export class EzRouter extends App {
+export class EzRouter extends EzApp {
     constructor(opts: IAPIGeneratorOpts = { prefix: '' }, generators = getDefaultGenerators()) {
         super()
         const genOpts = opts
 
-        this.setPreHandler(`Add Create Schema`, async (instance, opts) => {
+        //URGENT TODO
+        //LEFT OFF: Why are the schemas not displaying on the fastify? Registered too early or something?
+
+        this.setHandler(`Add Create Schema`, async (instance, opts) => {
+
             const schema = getCreateSchema(instance.repo.metadata)
             instance.server.addSchema(schema)
         })
 
-        this.setPreHandler(`Add Update Schema`, async (instance, opts) => {
+        this.setHandler(`Add Update Schema`, async (instance, opts) => {
             const schema = getUpdateSchema(instance.repo.metadata)
             instance.server.addSchema(schema)
         })
 
-        this.setPreHandler(`Add Full Schema`, async (instance, opts) => {
+        this.setHandler(`Add Full Schema`, async (instance, opts) => {
             const schema = getFullSchema(instance.repo.metadata)
             instance.server.addSchema(schema)
         })

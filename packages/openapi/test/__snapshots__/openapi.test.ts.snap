@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Basic Usage Should have schemas 1`] = `
+Object {
+  "schemas": Object {
+    "def-0": Object {
+      "properties": Object {
+        "error": Object {
+          "type": "string",
+        },
+        "message": Object {
+          "type": "string",
+        },
+        "statusCode": Object {
+          "type": "number",
+        },
+      },
+      "title": "ErrorResponse",
+      "type": "object",
+    },
+    "def-1": Object {
+      "properties": Object {
+        "var1": Object {
+          "type": "string",
+        },
+        "var2": Object {
+          "type": "string",
+        },
+      },
+      "required": Array [
+        "var1",
+        "var2",
+      ],
+      "title": "createSchema-model",
+      "type": "object",
+    },
+    "def-2": Object {
+      "properties": Object {
+        "var1": Object {
+          "type": "string",
+        },
+        "var2": Object {
+          "type": "string",
+        },
+      },
+      "title": "updateSchema-model",
+      "type": "object",
+    },
+    "def-3": Object {
+      "properties": Object {
+        "id": Object {
+          "type": "number",
+        },
+        "var1": Object {
+          "type": "string",
+        },
+        "var2": Object {
+          "type": "string",
+        },
+      },
+      "title": "fullSchema-model",
+      "type": "object",
+    },
+  },
+}
+`;

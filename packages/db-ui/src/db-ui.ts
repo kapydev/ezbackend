@@ -78,7 +78,7 @@ async function addDbUIEndpoints(instance, opts) {
 class DBEndpointRouter extends App {
     constructor() {
         super()
-        this.setPostHandler("Add DB-UI endpoints", addDbUIEndpoints)
+        this.setHandler("Add DB-UI endpoints", addDbUIEndpoints)
 
     }
 }
@@ -86,11 +86,11 @@ class DBEndpointRouter extends App {
 export class EzDbUI extends App {
     constructor() {
         super()
-        this.setPostHandler("Add DB-UI endpoint schemas", addDBSchemas)
+        this.setHandler("Add DB-UI endpoint schemas", addDBSchemas)
 
         this.addApp("DB-UI Endpoint Router", new DBEndpointRouter())
 
-        this.setPreRun("Serve UI Interface", async (instance, opts) => {
+        this.setHandler("Serve UI Interface", async (instance, opts) => {
             instance.server.register(fastifyStatic, {
                 root: path.join(__dirname, "../ezbackend-database-ui/build"),
                 prefix: "/db-ui",

@@ -30,10 +30,10 @@ beforeEach(() => {
     app.removeHook("_run", "Run Fastify Server")
 })
 
-afterAll(async () => {
+afterEach(async () => {
     const instance = getInternalInstance(app)
     await instance.orm.close();
-    await instance.server.close();
+    await instance._server.close();
 });
 
 describe("Basic Usage", () => {
@@ -42,7 +42,7 @@ describe("Basic Usage", () => {
 
         await app.start(defaultConfig)
 
-        const server: FastifyInstance = getInternalInstance(app).server
+        const server: FastifyInstance = getInternalInstance(app)._server
 
         const response = await server.inject({
             method: "GET",
@@ -63,41 +63,16 @@ describe("Basic Usage", () => {
 
         app.addApp('model', dummyModel)
 
-        dummyModel.apps.get('Router').setPostRun("Check schemas", async (instance, opts) => {
-            // console.log(instance.server.getSchemas())
-        })
-
         await app.start(defaultConfig)
 
-        const server: FastifyInstance = getInternalInstance(app).server
+        const server: FastifyInstance = getInternalInstance(app)._server
 
         const response = await server.inject({
             method: "GET",
             url: "/docs/json",
         })
 
-        console.log(JSON.parse(response.body)['components'])
+        expect(JSON.parse(response.body)['components']).toMatchSnapshot()
     })
 
-    it("Register hook should run", async () => {
-        app.setHandler("Add register hook", async (instance, opts) => {
-            const server: FastifyInstance = instance.server
-            server.addHook('onRegister', async (server) => {
-                console.log("A register has been called!")
-                console.log(server[kHooks])
-            })
-
-            server.addHook('onRoute', (routeOptions) => {
-                console.log('Route added')
-            })
-
-            console.log('hooks',server[kHooks])
-
-            server.register(async (server, opts) => {
-                console.log("Registering")
-            })
-        })
-
-        await app.start(defaultConfig)
-    })
 })

@@ -20,7 +20,7 @@ beforeAll(async () => {
 afterAll(async () => {
   const instance = getInternalInstance(ezb)
   await instance.orm.close();
-  await instance.server.close();
+  await instance._server.close();
 });
 
 const sampleProgram = {
@@ -41,7 +41,7 @@ describe("Nested CRUD", () => {
   describe("Create", () => {
     test("Cascade creation", async () => {
       const instance = getInternalInstance(ezb)
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "POST",
         url: "/Program",
         payload: sampleProgram,
@@ -54,7 +54,7 @@ describe("Nested CRUD", () => {
 
     test("No cascade creation", async () => {
       const instance = getInternalInstance(ezb)
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "POST",
         url: "/NoCascadeProgram",
         payload: sampleProgram,
@@ -68,7 +68,7 @@ describe("Nested CRUD", () => {
   describe("Read", () => {
     test("Eager Loading", async () => {
       const instance = getInternalInstance(ezb)
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "GET",
         url: "/Program/1",
       });
@@ -81,7 +81,7 @@ describe("Nested CRUD", () => {
 
     test("Lazy Loading", async () => {
       const instance = getInternalInstance(ezb)
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "GET",
         url: "/NoCascadeProgram/1",
       });
@@ -96,7 +96,7 @@ describe("Nested CRUD", () => {
   describe("Update", () => {
     test("Cascade Update", async () => {
       const instance = getInternalInstance(ezb)
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Program/1",
         payload: {
@@ -132,7 +132,7 @@ describe("Nested CRUD", () => {
       test("Create with Foreign Key ID", async () => {
         const instance = getInternalInstance(ezb)
 
-        const response = await instance.server.inject({
+        const response = await instance._server.inject({
           method: "POST",
           url: "/NoCascadeUser",
           payload: {
@@ -154,13 +154,13 @@ describe("Nested CRUD", () => {
         const instance = getInternalInstance(ezb)
 
         //Add a second NoCascadeProgram so that we can change the programId to 2
-        await instance.server.inject({
+        await instance._server.inject({
           method: "POST",
           url: "/NoCascadeProgram",
           payload: sampleProgram,
         });
 
-        const response = await instance.server.inject({
+        const response = await instance._server.inject({
           method: "PATCH",
           url: "/NoCascadeUser/1",
           payload: {
@@ -178,7 +178,7 @@ describe("Nested CRUD", () => {
       test("Get entity with just foreign key IDs", async () => {
         const instance = getInternalInstance(ezb)
 
-        const response = await instance.server.inject({
+        const response = await instance._server.inject({
           method: "GET",
           url: "/NoCascadeUser/1"
         });

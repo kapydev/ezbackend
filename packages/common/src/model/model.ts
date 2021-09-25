@@ -1,4 +1,4 @@
-import { App } from '@ezbackend/core'
+import { EzApp } from '../ezapp'
 import { Plugin } from 'avvio'
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions, EntitySchemaRelationOptions } from 'typeorm'
 import { EntitySchemaOptions,  } from 'typeorm/entity-schema/EntitySchemaOptions'
@@ -158,7 +158,7 @@ function entityGeneratorFactory (modelName: string, modelSchema: ModelSchema, mo
     return entityGenerator
 }
 
-export class EzModel extends App {
+export class EzModel extends EzApp {
     constructor(modelName: string, modelSchema: ModelSchema, modelOptions: ModelOptions = {}) {
         super()
         this.setInit(`Create "${modelName}" Entity`, entityGeneratorFactory(modelName, modelSchema, modelOptions))

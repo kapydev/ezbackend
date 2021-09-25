@@ -35,7 +35,7 @@ export class EzOpenAPI extends App {
     constructor() {
         super()
 
-        this.setPostInit('Add Swagger Plugin', addSwaggerPlugin)
+        this.setHandler('Add Swagger Plugin', addSwaggerPlugin)
 
         this.setPostRun('Display OpenAPI URL', async (instance, opts) => {
             if (opts.port) {

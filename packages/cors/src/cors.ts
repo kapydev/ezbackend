@@ -5,7 +5,7 @@ export class EzCors extends App {
     constructor() {
         super()
 
-        this.setPostInit('Add Cors Plugin', async (instance,opts) => {
+        this.setHandler('Add Cors Plugin', async (instance,opts) => {
             instance.server.register(fastifyCors,opts.cors)
         })
 

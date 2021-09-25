@@ -26,7 +26,7 @@ beforeAll(async () => {
 afterAll(async () => {
   const instance = getInternalInstance(ezb)
   await instance.orm.close();
-  await instance.server.close();
+  await instance._server.close();
 });
 
 const sampleData = {
@@ -48,7 +48,7 @@ describe("Basic CRUD", () => {
       const instance = getInternalInstance(ezb)
 
       //@ts-ignore
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "POST",
         url: "/Sample",
         payload: sampleData,
@@ -60,7 +60,7 @@ describe("Basic CRUD", () => {
     test("Basic invalid input", async () => {
       const instance = getInternalInstance(ezb)
       const input = {};
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "POST",
         url: "/Sample",
         payload: input,
@@ -78,7 +78,7 @@ describe("Basic CRUD", () => {
   describe("Read", () => {
     test("Basic read", async () => {
       const instance = getInternalInstance(ezb)
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "GET",
         url: "/Sample/1",
       });
@@ -96,7 +96,7 @@ describe("Basic CRUD", () => {
         error: "Not Found",
       };
       //@ts-ignore
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "GET",
         url: "/Sample/99999",
         payload: input,
@@ -112,7 +112,7 @@ describe("Basic CRUD", () => {
       const updatedData = { ...sampleData };
       updatedData.varchar = "This is a new string";
       //@ts-ignore
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Sample/1",
         payload: updatedData,
@@ -130,7 +130,7 @@ describe("Basic CRUD", () => {
         error: "Not Found",
       };
       //@ts-ignore
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Sample/999999",
         payload: sampleData,
@@ -146,7 +146,7 @@ describe("Basic CRUD", () => {
       //@ts-ignore
       updatedData.int = "This is a new string";
       //@ts-ignore
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Sample/1",
         payload: updatedData,
@@ -166,7 +166,7 @@ describe("Basic CRUD", () => {
       const updatedData = { ...sampleData };
       updatedData.varchar = "This is a new string";
       //@ts-ignore
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "DELETE",
         url: "/Sample/1",
       });
@@ -186,7 +186,7 @@ describe("Basic CRUD", () => {
         error: "Not Found",
       };
       //@ts-ignore
-      const response = await instance.server.inject({
+      const response = await instance._server.inject({
         method: "DELETE",
         url: "/Sample/99999",
         payload: input,
