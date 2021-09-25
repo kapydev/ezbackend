@@ -22,7 +22,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:32](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L32)
+[common/src/models/generators/api-generator.ts:32](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L32)
 
 ## Properties
 
@@ -32,7 +32,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:20](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L20)
+[common/src/models/generators/api-generator.ts:20](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L20)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:19](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L19)
+[common/src/models/generators/api-generator.ts:19](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L19)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:18](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L18)
+[common/src/models/generators/api-generator.ts:18](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L18)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:22](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L22)
+[common/src/models/generators/api-generator.ts:22](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L22)
 
 ## Methods
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:38](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L38)
+[common/src/models/generators/api-generator.ts:38](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L38)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:28](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L28)
+[common/src/models/generators/api-generator.ts:28](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L28)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-[common/src/models/generators/api-generator.ts:24](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/api-generator.ts#L24)
+[common/src/models/generators/api-generator.ts:24](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/api-generator.ts#L24)

@@ -31,7 +31,7 @@ EzPlugin&lt;IEzModelMeta\&gt;.constructor
 
 #### Defined in
 
-[common/src/models/index.ts:61](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/index.ts#L61)
+[common/src/models/index.ts:61](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/index.ts#L61)
 
 ## Properties
 
@@ -41,7 +41,7 @@ EzPlugin&lt;IEzModelMeta\&gt;.constructor
 
 #### Defined in
 
-[common/src/models/index.ts:57](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/index.ts#L57)
+[common/src/models/index.ts:57](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/index.ts#L57)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[common/src/models/index.ts:56](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/index.ts#L56)
+[common/src/models/index.ts:56](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/index.ts#L56)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[common/src/models/index.ts:59](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/index.ts#L59)
+[common/src/models/index.ts:59](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/index.ts#L59)
 
 ## Methods
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[common/src/models/index.ts:67](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/index.ts#L67)
+[common/src/models/index.ts:67](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/index.ts#L67)
 
 ___
 

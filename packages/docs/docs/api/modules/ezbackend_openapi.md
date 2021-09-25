@@ -24,4 +24,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[openapi/src/init-plugin.ts:8](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/openapi/src/init-plugin.ts#L8)
+[openapi/src/init-plugin.ts:8](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/openapi/src/init-plugin.ts#L8)

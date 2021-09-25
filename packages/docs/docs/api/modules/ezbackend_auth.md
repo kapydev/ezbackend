@@ -26,7 +26,7 @@ Represents a TEST OBJECT.
 
 #### Defined in
 
-[auth/src/auth.ts:12](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/auth/src/auth.ts#L12)
+[auth/src/auth.ts:12](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/auth/src/auth.ts#L12)
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-[auth/src/init-plugin.ts:16](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/auth/src/init-plugin.ts#L16)
+[auth/src/init-plugin.ts:16](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/auth/src/init-plugin.ts#L16)

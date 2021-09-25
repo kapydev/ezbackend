@@ -33,7 +33,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[common/src/models/generators/default-generators.ts:30](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/default-generators.ts#L30)
+[common/src/models/generators/default-generators.ts:30](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/default-generators.ts#L30)
 
 ## Functions
 
@@ -53,7 +53,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[common/src/models/index.ts:15](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/index.ts#L15)
+[common/src/models/index.ts:15](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/index.ts#L15)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[common/src/models/typeorm-json-schema/index.ts:252](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/typeorm-json-schema/index.ts#L252)
+[common/src/models/typeorm-json-schema/index.ts:252](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/typeorm-json-schema/index.ts#L252)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[common/src/init-plugin.ts:8](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/init-plugin.ts#L8)
+[common/src/init-plugin.ts:8](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/init-plugin.ts#L8)
 
 ___
 
@@ -129,4 +129,4 @@ ___
 
 #### Defined in
 
-[common/src/models/generators/default-generators.ts:6](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/common/src/models/generators/default-generators.ts#L6)
+[common/src/models/generators/default-generators.ts:6](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/common/src/models/generators/default-generators.ts#L6)

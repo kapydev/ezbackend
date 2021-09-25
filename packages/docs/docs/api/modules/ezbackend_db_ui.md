@@ -24,4 +24,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[db-ui/src/init-plugin.ts:11](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/db-ui/src/init-plugin.ts#L11)
+[db-ui/src/init-plugin.ts:11](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/db-ui/src/init-plugin.ts#L11)

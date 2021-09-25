@@ -15,7 +15,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[core/src/ezbackend.ts:114](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L114)
+[core/src/ezbackend.ts:114](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L114)
 
 ## Properties
 
@@ -25,7 +25,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[core/src/ezbackend.ts:108](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L108)
+[core/src/ezbackend.ts:108](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L108)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:107](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L107)
+[core/src/ezbackend.ts:107](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L107)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:110](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L110)
+[core/src/ezbackend.ts:110](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L110)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:111](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L111)
+[core/src/ezbackend.ts:111](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L111)
 
 ## Methods
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:141](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L141)
+[core/src/ezbackend.ts:141](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L141)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:134](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L134)
+[core/src/ezbackend.ts:134](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L134)
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:146](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L146)
+[core/src/ezbackend.ts:146](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L146)

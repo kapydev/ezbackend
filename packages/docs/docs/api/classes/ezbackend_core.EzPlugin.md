@@ -27,7 +27,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[core/src/ezbackend.ts:48](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L48)
+[core/src/ezbackend.ts:48](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L48)
 
 ## Properties
 
@@ -37,7 +37,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[core/src/ezbackend.ts:44](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L44)
+[core/src/ezbackend.ts:44](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L44)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:45](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L45)
+[core/src/ezbackend.ts:45](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L45)
 
 ## Methods
 
@@ -67,4 +67,4 @@ ___
 
 #### Defined in
 
-[core/src/ezbackend.ts:66](https://github.com/kapydev/ezbackend/blob/d8ca14a/packages/core/src/ezbackend.ts#L66)
+[core/src/ezbackend.ts:66](https://github.com/kapydev/ezbackend/blob/9a94ec3/packages/core/src/ezbackend.ts#L66)
