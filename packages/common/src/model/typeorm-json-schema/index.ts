@@ -4,7 +4,7 @@ import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 
 //URGENT TODO: See if there is a json schema library that can help with this... (fluent schema?)
 
-export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema',prefix?:string) {
+export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema', prefix?: string) {
   let baseName
   if (meta instanceof RelationMetadata) {
     baseName = `${meta.type['name'] ?? meta.type}`
@@ -12,7 +12,7 @@ export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'cr
   } else {
     baseName = `${meta.name}`
   }
-  const resolvedPrefix = prefix ? prefix+'/' : ''
+  const resolvedPrefix = prefix ? prefix + '/' : ''
   return `${resolvedPrefix}${type}-${baseName}`
 
 }
@@ -34,9 +34,9 @@ function colMetaToSchemaProps(colMeta: ColumnMetadata) {
 
 //NOTE: This relation col basically means that the column is a true relation, like program => <Object>
 //Not applicable to programId => <Number>
-function isRelationCol(col:ColumnMetadata) {
+function isRelationCol(col: ColumnMetadata) {
   //URGENT TODO: Confirm there are no edge cases for property names not ending in Id
-  if (col.propertyName.endsWith('Id') ) {
+  if (col.propertyName.endsWith('Id')) {
     return false
   }
   if (col.relationMetadata) {
@@ -70,14 +70,21 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
   throw `Unable to determine the Json Schema type for col type ${colType}`
 }
 
-
+function checkColIsGenerated(col: ColumnMetadata) {
+  return (
+    col.isGenerated ||
+    col.isCreateDate ||
+    col.isUpdateDate ||
+    col.isDeleteDate
+  )
+}
 
 
 
 //TODO: Combine schemas if possible
-function getUpdateSchema(meta: EntityMetadata,prefix?:string) {
+export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
 
-  const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
+  const nonGeneratedColumns = meta.columns.filter(col => !checkColIsGenerated(col));
   let updateSchema = Object.entries(nonGeneratedColumns)
     .filter(([key, val]) => !isRelationCol(val))
     .reduce(
@@ -92,7 +99,7 @@ function getUpdateSchema(meta: EntityMetadata,prefix?:string) {
         };
       },
       {
-        "$id": getSchemaName(meta, 'updateSchema',prefix),
+        "$id": getSchemaName(meta, 'updateSchema', prefix),
         type: "object",
         properties: {},
       }
@@ -119,9 +126,9 @@ function getUpdateSchema(meta: EntityMetadata,prefix?:string) {
   return updateSchema
 }
 
-function getCreateSchema(meta: EntityMetadata,prefix?:string) {
-  const nonGeneratedColumns = meta.columns.filter(col => !col.isGenerated);
-  
+export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
+  const nonGeneratedColumns = meta.columns.filter(col => !checkColIsGenerated(col));
+
   let createSchema = Object.entries(nonGeneratedColumns)
     .filter(([key, val]) => !isRelationCol(val))
     .reduce(
@@ -136,7 +143,7 @@ function getCreateSchema(meta: EntityMetadata,prefix?:string) {
         };
       },
       {
-        "$id": getSchemaName(meta, 'createSchema',prefix),
+        "$id": getSchemaName(meta, 'createSchema', prefix),
         type: "object",
         properties: {},
       }
@@ -148,7 +155,7 @@ function getCreateSchema(meta: EntityMetadata,prefix?:string) {
       (jsonSchema, meta) => {
         const nestedSchema = removeId(getCreateSchema(meta.data))
         if (meta.data.tableName == 'user') {
-          
+
         }
         return {
           $id: jsonSchema.$id,
@@ -167,7 +174,7 @@ function getCreateSchema(meta: EntityMetadata,prefix?:string) {
     .filter(col => !col.isNullable && !col.isGenerated)
     .map(col => col.propertyName)
   createSchema['required'] = requiredPropertyNames
-  
+
   return createSchema
 
 }
@@ -179,7 +186,7 @@ function makeArray(schema: any) {
   }
 }
 
-function getFullSchema(meta: EntityMetadata,prefix?:string) {
+export function getFullSchema(meta: EntityMetadata, prefix?: string) {
   let fullSchema = Object.entries(meta.columns)
     //Remove all relations
     .filter(([key, val]) => !isRelationCol(val))
@@ -196,14 +203,13 @@ function getFullSchema(meta: EntityMetadata,prefix?:string) {
         };
       },
       {
-        "$id": getSchemaName(meta, 'fullSchema',prefix),
+        "$id": getSchemaName(meta, 'fullSchema', prefix),
         type: "object",
         properties: {},
       }
     );
   //Add eagerly loaded columns
   const eagerMeta = getNestedMetadata(meta, 'read')
-
   fullSchema = eagerMeta
     .reduce(
       (jsonSchema, meta) => {
@@ -250,8 +256,8 @@ function getNestedMetadata(meta: EntityMetadata, type: 'create' | 'update' | 're
 }
 
 export function convert(meta: EntityMetadata, prefix?: string) {
-  const updateSchema = getUpdateSchema(meta,prefix)
-  const createSchema = getCreateSchema(meta,prefix)
-  const fullSchema = getFullSchema(meta,prefix)
+  const updateSchema = getUpdateSchema(meta, prefix)
+  const createSchema = getCreateSchema(meta, prefix)
+  const fullSchema = getFullSchema(meta, prefix)
   return { createSchema, updateSchema, fullSchema }
 }

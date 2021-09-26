@@ -2,7 +2,6 @@ import { BaseProvider } from './base'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import fastifyPassport from 'fastify-passport'
 import { AnyStrategy } from 'fastify-passport/dist/strategies'
-import { EzBackend } from '@ezbackend/core'
 import { RouteOptions } from 'fastify'
 import { DeserializeFunction, SerializeFunction } from 'fastify-passport/dist/Authenticator'
 import {OpenAPIV3} from 'openapi-types'
@@ -20,31 +19,24 @@ interface IGoogleProviderOptions {
 
 export class GoogleProvider extends BaseProvider {
 
-    constructor(model) {
-        const ezb = EzBackend.app()
-        //TODO: Expand the namespace to avoid having to use ts-ignore`
-        //@ts-ignore
-        const providerOptions: IGoogleProviderOptions = ezb.config.auth['google']
-        super('google', model, providerOptions)
+    constructor(modelName:string) {
+        super('google', modelName)
     }
 
-    addStrategy(): [name: string, Strategy: AnyStrategy] {
+    addStrategy(instance,opts): [name: string, Strategy: AnyStrategy] {
 
         const that = this
 
         return [this.providerName, new GoogleStrategy({
-            clientID: this.providerOptions.googleClientId,
-            clientSecret: this.providerOptions.googleClientSecret,
-            //URGENT TODO: Single source of truth for making model names kebab case for website URL
-            callbackURL: `${this.providerOptions.backendURL}/${this.getCallbackURLNoPreSlash()}`
+            clientID: opts.googleClientId,
+            clientSecret: opts.googleClientSecret,
+            callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash()}`
         }, function (accessToken, refreshToken, profile, cb) {
-            const model = new that.model()
-            //@ts-ignore
+            const repo = instance.orm.getRepository(that.modelName)
+            const model = {}
             model[`${that.providerName}Id`] = profile.id
-            //@ts-ignore
             model[`${that.providerName}Data`] = profile
-            const ezb = EzBackend.app()
-            ezb.orm.manager.save(model).then(
+            repo.save(model).then(
                 () => {
                     cb(undefined, profile.id)
                 }
@@ -53,27 +45,26 @@ export class GoogleProvider extends BaseProvider {
         })]
     }
 
-    getLoginRoute(): RouteOptions {
-        const ezb = EzBackend.app()
+    getLoginRoute(instance,opts): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash()}/login`,
             // preValidation: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
-            handler: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
+            handler: fastifyPassport.authenticate('google', { scope: opts.scope }),
             schema: {
                 //TODO: Figure out how to import types for summary
                 //@ts-ignore
-                summary: `Login for model '${this.model.name}' with provider ${this.providerName}`,
+                summary: `Login for model '${this.modelName}' with provider ${this.providerName}`,
                 //@ts-ignore
                 description: `# 🔑 [Click here](/${this.getRoutePrefixNoPrePostSlash()}/login) to login
-                1. Creates/Updates '${this.model.name}' on login
+                1. Creates/Updates '${this.modelName}' on login
                 2. Provider ${this.providerName}
-                3. Scopes: ${this.providerOptions.scope.toString()}` 
+                3. Scopes: ${opts.scope.toString()}` 
             }
         }
     }
 
-    getLogoutRoute(): RouteOptions {
+    getLogoutRoute(instance,opts): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash()}/logout`,
@@ -84,30 +75,29 @@ export class GoogleProvider extends BaseProvider {
             schema: {
                 //TODO: Figure out how to import types for summary
                 //@ts-ignore
-                summary: `Logout for model '${this.model.name}' with provider ${this.providerName}`,
+                summary: `Logout for model '${this.modelName}' with provider ${this.providerName}`,
                 //@ts-ignore
                 description: `# 🔑 [Click here](/${this.getRoutePrefixNoPrePostSlash()}/logout) to logout`
             }
         }
     }
 
-    getCallbackRoute(): RouteOptions {
+    getCallbackRoute(instance,opts): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getCallbackURLNoPreSlash()}`,
             preValidation: fastifyPassport.authenticate('google', {
-                scope: this.providerOptions.scope,
-                successRedirect: this.providerOptions.successRedirectURL,
-                failureRedirect: this.providerOptions.failureRedirectURL
+                scope: opts.scope,
+                successRedirect: opts.successRedirectURL,
+                failureRedirect: opts.failureRedirectURL
             }),
             handler: async function (req, res) {
-                //URGENT TODO: Figure about the security implications of this
-                return { user: req.user }
+                res.redirect(opts.successRedirectURL)
             }
         }
     }
 
-    registerUserSerializer(): SerializeFunction<unknown, unknown> {
+    registerUserSerializer(instance,opts): SerializeFunction<unknown, unknown> {
         const that = this
         return async function serializer(id, req) {
             //@ts-ignore
@@ -116,14 +106,13 @@ export class GoogleProvider extends BaseProvider {
     }
 
     //URGENT TODO: When failed to deserialize user because of database reset, think about logging the user out
-    registerUserDeserializer(): DeserializeFunction<any, any> {
+    registerUserDeserializer(instance,opts): DeserializeFunction<any, any> {
         const that = this
         return async function deserializer(providerAndId: string, req) {
             if (providerAndId.startsWith(`${that.providerName}-`)) {
                 //TODO: Consider the security implications of not checking that the replacement starts at 'google-'
                 const id = providerAndId.replace(`${that.providerName}-`, '')
-                const ezb = EzBackend.app()
-                const userRepo = ezb.orm.getRepository(that.model)
+                const userRepo = instance.orm.getRepository(that.modelName)
                 const fullUser = await userRepo.findOne({ [`${that.providerName}Id`]: id })
                 return fullUser
             } else {
@@ -149,7 +138,7 @@ export class GoogleProvider extends BaseProvider {
             }
         }
         return {
-            [`${that.model.name}-${that.providerName}`]: securityScheme
+            [`${that.modelName}-${that.providerName}`]: securityScheme
         }
     }
 }

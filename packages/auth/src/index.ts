@@ -1,2 +1,3 @@
 export * from './auth'
-export {default} from './init-plugin'
+export * from './ez-user'
+export * from './providers'

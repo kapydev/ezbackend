@@ -11,7 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "target": "es5",
     "declaration": true,
-    "lib": ["es2017","ESNext", "dom"]
+    "lib": ["es2017","ESNext", "dom"],
+    "sourceMap": true
   },
   "exclude": ["**/dist", "node_modules", "**/node_modules"]
 }

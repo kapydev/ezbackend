@@ -1,18 +1,32 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import { EzBackend } from "@ezbackend/core";
-import path from "path";
-import "../src"
+import ezb from "./test.index"
+import { EzBackend } from "@ezbackend/common";
+
+//TODO: Figure if there is a better way of getting this data
+function getInternalInstance(ezb: EzBackend) {
+    //@ts-ignore
+    return ezb.instance._lastUsed.server
+}
+
+
 
 beforeAll(async () => {
-  const ezb = EzBackend.app()
-  ezb.plugins.run = (ezb,opts,cb) => {cb()}
-  await EzBackend.start(path.resolve(__dirname, "test.config.ts"));
+  await ezb.start({
+    port: 3000,
+    server: {
+    },
+    orm: {
+      type: "sqlite",
+      database: ":memory:",
+      synchronize: true
+    }
+  })
 });
 
 afterAll(async () => {
-  const ezb = EzBackend.app() as EzBackend;
-  await ezb.orm.close();
-  await ezb.server.close();
+  const instance = getInternalInstance(ezb)
+  await instance.orm.close();
+  await instance._server.close();
 });
 
 const sampleData = {
@@ -31,8 +45,10 @@ const sampleData = {
 describe("Basic CRUD", () => {
   describe("Create", () => {
     test("Basic creation", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const response = await ezb.server.inject({
+      const instance = getInternalInstance(ezb)
+
+      //@ts-ignore
+      const response = await instance._server.inject({
         method: "POST",
         url: "/Sample",
         payload: sampleData,
@@ -42,9 +58,9 @@ describe("Basic CRUD", () => {
       expect(JSON.parse(response.body)).toHaveProperty("id");
     });
     test("Basic invalid input", async () => {
-      const ezb = EzBackend.app() as EzBackend;
+      const instance = getInternalInstance(ezb)
       const input = {};
-      const response = await ezb.server.inject({
+      const response = await instance._server.inject({
         method: "POST",
         url: "/Sample",
         payload: input,
@@ -61,8 +77,8 @@ describe("Basic CRUD", () => {
   });
   describe("Read", () => {
     test("Basic read", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const response = await ezb.server.inject({
+      const instance = getInternalInstance(ezb)
+      const response = await instance._server.inject({
         method: "GET",
         url: "/Sample/1",
       });
@@ -73,13 +89,14 @@ describe("Basic CRUD", () => {
     });
     test("Basic 404", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
+      const instance = getInternalInstance(ezb)
       const input = {};
       const expectedResponse = {
         statusCode: 404,
         error: "Not Found",
       };
-      const response = await ezb.server.inject({
+      //@ts-ignore
+      const response = await instance._server.inject({
         method: "GET",
         url: "/Sample/99999",
         payload: input,
@@ -91,10 +108,11 @@ describe("Basic CRUD", () => {
   });
   describe("Update", () => {
     test("Basic update", async () => {
-      const ezb = EzBackend.app() as EzBackend;
+      const instance = getInternalInstance(ezb)
       const updatedData = { ...sampleData };
       updatedData.varchar = "This is a new string";
-      const response = await ezb.server.inject({
+      //@ts-ignore
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Sample/1",
         payload: updatedData,
@@ -105,13 +123,14 @@ describe("Basic CRUD", () => {
     });
     test("Basic 404", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
+      const instance = getInternalInstance(ezb)
       const input = {};
       const expectedResponse = {
         statusCode: 404,
         error: "Not Found",
       };
-      const response = await ezb.server.inject({
+      //@ts-ignore
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Sample/999999",
         payload: sampleData,
@@ -122,11 +141,12 @@ describe("Basic CRUD", () => {
     });
     test.skip("Basic invalid input", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
+      const instance = getInternalInstance(ezb)
       const updatedData = { ...sampleData };
       //@ts-ignore
       updatedData.int = "This is a new string";
-      const response = await ezb.server.inject({
+      //@ts-ignore
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Sample/1",
         payload: updatedData,
@@ -142,10 +162,11 @@ describe("Basic CRUD", () => {
   });
   describe("Delete", () => {
     test("Basic delete", async () => {
-      const ezb = EzBackend.app() as EzBackend;
+      const instance = getInternalInstance(ezb)
       const updatedData = { ...sampleData };
       updatedData.varchar = "This is a new string";
-      const response = await ezb.server.inject({
+      //@ts-ignore
+      const response = await instance._server.inject({
         method: "DELETE",
         url: "/Sample/1",
       });
@@ -158,13 +179,14 @@ describe("Basic CRUD", () => {
     });
     test("Basic 404", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const ezb = EzBackend.app() as EzBackend;
+      const instance = getInternalInstance(ezb)
       const input = {};
       const expectedResponse = {
         statusCode: 404,
         error: "Not Found",
       };
-      const response = await ezb.server.inject({
+      //@ts-ignore
+      const response = await instance._server.inject({
         method: "DELETE",
         url: "/Sample/99999",
         payload: input,

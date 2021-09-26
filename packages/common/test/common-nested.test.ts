@@ -1,20 +1,26 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import { EzBackend } from "@ezbackend/core";
-import path from "path";
-import "../src"
+import ezb from "./test.index"
+import { getInternalInstance } from './helpers'
 
 //TODO: Make tests independent of each other
 
 beforeAll(async () => {
-  const ezb = EzBackend.app()
-  ezb.plugins.run = (ezb, opts, cb) => { cb() }
-  await EzBackend.start(path.resolve(__dirname, "test.config.ts"));
+  await ezb.start({
+    port: 3000,
+    server: {
+    },
+    orm: {
+      type: "sqlite",
+      database: ":memory:",
+      synchronize: true
+    }
+  })
 });
 
-afterAll(() => {
-  const ezb = EzBackend.app();
-  ezb.server.close();
-  ezb.orm.close()
+afterAll(async () => {
+  const instance = getInternalInstance(ezb)
+  await instance.orm.close();
+  await instance._server.close();
 });
 
 const sampleProgram = {
@@ -34,8 +40,8 @@ const sampleProgram = {
 describe("Nested CRUD", () => {
   describe("Create", () => {
     test("Cascade creation", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const response = await ezb.server.inject({
+      const instance = getInternalInstance(ezb)
+      const response = await instance._server.inject({
         method: "POST",
         url: "/Program",
         payload: sampleProgram,
@@ -47,8 +53,8 @@ describe("Nested CRUD", () => {
     })
 
     test("No cascade creation", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const response = await ezb.server.inject({
+      const instance = getInternalInstance(ezb)
+      const response = await instance._server.inject({
         method: "POST",
         url: "/NoCascadeProgram",
         payload: sampleProgram,
@@ -61,8 +67,8 @@ describe("Nested CRUD", () => {
   });
   describe("Read", () => {
     test("Eager Loading", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const response = await ezb.server.inject({
+      const instance = getInternalInstance(ezb)
+      const response = await instance._server.inject({
         method: "GET",
         url: "/Program/1",
       });
@@ -74,8 +80,8 @@ describe("Nested CRUD", () => {
     })
 
     test("Lazy Loading", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const response = await ezb.server.inject({
+      const instance = getInternalInstance(ezb)
+      const response = await instance._server.inject({
         method: "GET",
         url: "/NoCascadeProgram/1",
       });
@@ -89,8 +95,8 @@ describe("Nested CRUD", () => {
 
   describe("Update", () => {
     test("Cascade Update", async () => {
-      const ezb = EzBackend.app() as EzBackend;
-      const response = await ezb.server.inject({
+      const instance = getInternalInstance(ezb)
+      const response = await instance._server.inject({
         method: "PATCH",
         url: "/Program/1",
         payload: {
@@ -124,9 +130,9 @@ describe("Nested CRUD", () => {
 
     describe("Foreign Key ID", () => {
       test("Create with Foreign Key ID", async () => {
-        const ezb = EzBackend.app() as EzBackend;
-        
-        const response = await ezb.server.inject({
+        const instance = getInternalInstance(ezb)
+
+        const response = await instance._server.inject({
           method: "POST",
           url: "/NoCascadeUser",
           payload: {
@@ -145,16 +151,16 @@ describe("Nested CRUD", () => {
       })
 
       test("Update with Foreign Key ID", async () => {
-        const ezb = EzBackend.app() as EzBackend;
+        const instance = getInternalInstance(ezb)
 
         //Add a second NoCascadeProgram so that we can change the programId to 2
-        await ezb.server.inject({
+        await instance._server.inject({
           method: "POST",
           url: "/NoCascadeProgram",
           payload: sampleProgram,
         });
-        
-        const response = await ezb.server.inject({
+
+        const response = await instance._server.inject({
           method: "PATCH",
           url: "/NoCascadeUser/1",
           payload: {
@@ -170,9 +176,9 @@ describe("Nested CRUD", () => {
         expect(JSON.parse(response.body)).toHaveProperty("id");
       })
       test("Get entity with just foreign key IDs", async () => {
-        const ezb = EzBackend.app() as EzBackend;
-        
-        const response = await ezb.server.inject({
+        const instance = getInternalInstance(ezb)
+
+        const response = await instance._server.inject({
           method: "GET",
           url: "/NoCascadeUser/1"
         });
@@ -190,7 +196,13 @@ describe("Nested CRUD", () => {
   })
 
   describe("Delete", () => {
-    test("Cascade Delete", async () => {
+    test.skip("Cascade Delete", async () => {
+
+    })
+  })
+
+  describe("Auto ID Column Generation", () => {
+    test.skip("For all relations, the id column should automatically expose", async () => {
 
     })
   })

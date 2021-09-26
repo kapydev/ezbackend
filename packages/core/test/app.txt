@@ -1,0 +1,286 @@
+{
+    routing: [Function: bound lookup],
+    getDefaultRoute: [Function: bound getDefaultRoute],
+    setDefaultRoute: [Function: bound setDefaultRoute],
+    delete: [Function: _delete],
+    get: [Function: _get],
+    head: [Function: _head],
+    patch: [Function: _patch],
+    post: [Function: _post],
+    put: [Function: _put],
+    options: [Function: _options],
+    all: [Function: _all],
+    route: [Function: _route],
+    log: { child: [Function (anonymous)] },
+    addHook: [Function: addHook],
+    addSchema: [Function: addSchema],
+    getSchema: [Function: bound getSchema],
+    getSchemas: [Function: bound getSchemas],
+    setValidatorCompiler: [Function: setValidatorCompiler],
+    setSerializerCompiler: [Function: setSerializerCompiler],
+    setSchemaController: [Function: setSchemaController],
+    setReplySerializer: [Function: setReplySerializer],
+    setSchemaErrorFormatter: [Function: setSchemaErrorFormatter],
+    addContentTypeParser: [Function: addContentTypeParser],
+    hasContentTypeParser: [Function: hasContentTypeParser],
+    getDefaultJsonParser: [Function: getDefaultJsonParser],
+    defaultTextParser: [Function: defaultPlainTextParser],
+    removeContentTypeParser: [Function: removeContentTypeParser],
+    removeAllContentTypeParsers: [Function: removeAllContentTypeParsers],
+    register: [Function (anonymous)],
+    after: [Function (anonymous)],
+    ready: [Function: ready],
+    onClose: [Function (anonymous)],
+    close: [Function (anonymous)],
+    printPlugins: [Function: bound ],
+    listen: [Function: listen],
+    server: Server {
+      maxHeaderSize: undefined,
+      insecureHTTPParser: undefined,
+      _events: [Object: null prototype] {
+        request: [Function: bound lookup],
+        connection: [Function: connectionListener],
+        clientError: [Function: bound defaultClientErrorHandler]
+      },
+      _eventsCount: 3,
+      _maxListeners: undefined,
+      _connections: 0,
+      _handle: null,
+      _usingWorkers: false,
+      _workers: [],
+      _unref: false,
+      allowHalfOpen: true,
+      pauseOnConnect: false,
+      httpAllowHalfOpen: false,
+      timeout: 0,
+      keepAliveTimeout: 5000,
+      maxHeadersCount: null,
+      headersTimeout: 60000,
+      requestTimeout: 0,
+      [Symbol(IncomingMessage)]: [Function: IncomingMessage],
+      [Symbol(ServerResponse)]: [Function: ServerResponse],
+      [Symbol(kCapture)]: false,
+      [Symbol(async_id_symbol)]: -1
+    },
+    decorate: [Function: decorateFastify],
+    hasDecorator: [Function: checkExistence],
+    decorateReply: [Function: decorateReply],
+    decorateRequest: [Function: decorateRequest],
+    hasRequestDecorator: [Function: checkRequestExistence],
+    hasReplyDecorator: [Function: checkReplyExistence],
+    inject: [Function: inject],
+    printRoutes: [Function: printRoutes],
+    setNotFoundHandler: [Function: setNotFoundHandler],
+    setErrorHandler: [Function: setErrorHandler],
+    initialConfig: {
+      connectionTimeout: 0,
+      keepAliveTimeout: 5000,
+      requestIdHeader: 'request-id',
+      requestIdLogLabel: 'reqId',
+      disableRequestLogging: false,
+      bodyLimit: 1048576,
+      caseSensitive: true,
+      ignoreTrailingSlash: false,
+      jsonShorthand: true,
+      maxParamLength: 100,
+      onProtoPoisoning: 'error',
+      onConstructorPoisoning: 'error',
+      pluginTimeout: 10000,
+      http2SessionTimeout: 5000
+    },
+    [Symbol(fastify.state)]: { listening: false, closing: false, started: false },
+    [Symbol(fastify.options)]: {
+      connectionTimeout: 0,
+      keepAliveTimeout: 5000,
+      logger: { child: [Function (anonymous)] },
+      genReqId: [Function: genReqId],
+      requestIdHeader: 'request-id',
+      querystringParser: [Function: parse],
+      requestIdLogLabel: 'reqId',
+      disableRequestLogging: false,
+      ajv: { customOptions: {}, plugins: [] },
+      clientErrorHandler: [Function: defaultClientErrorHandler],
+      exposeHeadRoutes: false,
+      http2SessionTimeout: 5000
+    },
+    [Symbol(fastify.children)]: [
+      <ref *2> {
+        ready: [Function: bound ],
+        getSchema: [Function: bound getSchema],
+        getSchemas: [Function: bound getSchemas],
+        [Symbol(fastify.children)]: [
+          <ref *1> {
+            ready: [Function: bound ],
+            getSchema: [Function: bound getSchema],
+            getSchemas: [Function: bound getSchemas],
+            [Symbol(fastify.children)]: [],
+            [Symbol(fastify.Reply)]: [Function: _Reply],
+            [Symbol(fastify.Request)]: [Function: _Request],
+            [Symbol(fastify.contentTypeParser)]: [ContentTypeParser],
+            [Symbol(fastify.hooks)]: [Hooks],
+            [Symbol(fastify.routePrefix)]: '/v1/model',
+            [Symbol(fastify.logLevel)]: '',
+            [Symbol(fastify.schemaController)]: [SchemaController],
+            [Symbol(registered-plugin)]: Array {},
+            [Symbol(fastify.pluginNameChain)]: [Array],
+            [Symbol(fastify.404LogLevelInstance)]: [Circular *1],
+            [Symbol(fastify.canSetNotFoundHandler)]: true
+          }
+        ],
+        [Symbol(fastify.Reply)]: [Function: _Reply],
+        [Symbol(fastify.Request)]: [Function: _Request],
+        [Symbol(fastify.contentTypeParser)]: ContentTypeParser {
+          customParsers: { 'application/json': [Parser], 'text/plain': [Parser] },
+          parserList: [ 'application/json', 'text/plain' ],
+          parserRegExpList: [],
+          cache: LRU {
+            first: null,
+            items: [Object: null prototype] {},
+            last: null,
+            max: 100,
+            size: 0,
+            ttl: 0
+          },
+          [Symbol(fastify.defaultJSONParse)]: [Function: defaultJsonParser]
+        },
+        [Symbol(fastify.hooks)]: Hooks {
+          onRequest: [],
+          preParsing: [],
+          preValidation: [],
+          preSerialization: [],
+          preHandler: [],
+          onResponse: [],
+          onSend: [],
+          onError: [],
+          onRoute: [],
+          onRegister: [],
+          onReady: [],
+          onTimeout: []
+        },
+        [Symbol(fastify.routePrefix)]: '/v1',
+        [Symbol(fastify.logLevel)]: '',
+        [Symbol(fastify.schemaController)]: SchemaController {
+          opts: {
+            bucket: [Function: buildSchemas],
+            compilersFactory: [Object]
+          },
+          addedSchemas: true,
+          compilersFactory: {
+            buildValidator: [Function: buildCompilerFromPool],
+            buildSerializer: [Function: serializerFactory]
+          },
+          schemaBucket: Schemas { store: [Object] },
+          validatorCompiler: undefined,
+          serializerCompiler: undefined,
+          parent: SchemaController {
+            opts: [Object],
+            addedSchemas: true,
+            compilersFactory: [Object],
+            schemaBucket: [Schemas]
+          }
+        },
+        [Symbol(registered-plugin)]: Array {},
+        [Symbol(fastify.pluginNameChain)]: [
+          'function (instance, opts) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) { -- return [2 /*return*/];'
+        ],
+        [Symbol(fastify.404LogLevelInstance)]: [Circular *2],
+        [Symbol(fastify.canSetNotFoundHandler)]: true
+      }
+    ],
+    [Symbol(fastify.bodyLimit)]: 1048576,
+    [Symbol(fastify.routePrefix)]: '',
+    [Symbol(fastify.logLevel)]: '',
+    [Symbol(fastify.logSerializers)]: null,
+    [Symbol(fastify.hooks)]: Hooks {
+      onRequest: [],
+      preParsing: [],
+      preValidation: [],
+      preSerialization: [],
+      preHandler: [],
+      onResponse: [],
+      onSend: [],
+      onError: [],
+      onRoute: [],
+      onRegister: [],
+      onReady: [],
+      onTimeout: []
+    },
+    [Symbol(fastify.schemaController)]: SchemaController {
+      opts: {
+        bucket: [Function: buildSchemas],
+        compilersFactory: {
+          buildValidator: [Function: buildCompilerFromPool],
+          buildSerializer: [Function: serializerFactory]
+        }
+      },
+      addedSchemas: true,
+      compilersFactory: {
+        buildValidator: [Function: buildCompilerFromPool],
+        buildSerializer: [Function: serializerFactory]
+      },
+      schemaBucket: Schemas {
+        store: {
+          schemaId: { '$id': 'schemaId', type: 'object', properties: [Object] }
+        }
+      }
+    },
+    [Symbol(fastify.schemaErrorFormatter)]: null,
+    [Symbol(fastify.errorHandler)]: [Function: defaultErrorHandler],
+    [Symbol(fastify.replySerializerDefault)]: null,
+    [Symbol(fastify.contentTypeParser)]: ContentTypeParser {
+      customParsers: {
+        'application/json': Parser {
+          asString: true,
+          asBuffer: false,
+          bodyLimit: 1048576,
+          fn: [Function: defaultJsonParser]
+        },
+        'text/plain': Parser {
+          asString: true,
+          asBuffer: false,
+          bodyLimit: 1048576,
+          fn: [Function: defaultPlainTextParser]
+        }
+      },
+      parserList: [ 'application/json', 'text/plain' ],
+      parserRegExpList: [],
+      cache: LRU {
+        first: null,
+        items: [Object: null prototype] {},
+        last: null,
+        max: 100,
+        size: 0,
+        ttl: 0
+      },
+      [Symbol(fastify.defaultJSONParse)]: [Function: defaultJsonParser]
+    },
+    [Symbol(fastify.Reply)]: [Function: _Reply],
+    [Symbol(fastify.Request)]: [Function: _Request],
+    [Symbol(fastify.404)]: {
+      router: Router {
+        defaultRoute: [Function: fourOhFourFallBack],
+        onBadUrl: null,
+        buildPrettyMeta: [Function: defaultBuildPrettyMeta],
+        caseSensitive: true,
+        ignoreTrailingSlash: false,
+        maxParamLength: 100,
+        allowUnsafeRegex: false,
+        constrainer: Constrainer {
+          strategies: { version: [Object], host: [Object] },
+          strategiesInUse: Set(0) {}
+        },
+        trees: {},
+        routes: []
+      },
+      setNotFoundHandler: [Function: setNotFoundHandler],
+      setContext: [Function: setContext],
+      arrange404: [Function: arrange404]
+    },
+    [Symbol(registered-plugin)]: [],
+    [Symbol(fastify.pluginNameChain)]: [],
+    [Symbol(fastify.avvioBoot)]: [Function (anonymous)],
+    [Symbol(kAvvio)]: true,
+    [Symbol(fastify.canSetNotFoundHandler)]: true,
+    [Symbol(fastify.404ContextKey)]: null,
+    [Symbol(fastify.404LogLevelInstance)]: [Circular *3]
+  }
