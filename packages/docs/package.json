@@ -24,6 +24,7 @@
     "@svgr/webpack": "^5.5.0",
     "axios": "^0.21.1",
     "clsx": "^1.1.1",
+    "docusaurus-plugin-typedoc": "^0.16.3",
     "file-loader": "^6.2.0",
     "prism-react-renderer": "^1.2.1",
     "react": "^17.0.1",
@@ -31,6 +32,8 @@
     "react-hook-form": "^7.14.2",
     "react-hot-toast": "^2.1.1",
     "react-player": "^2.9.0",
+    "typedoc": "^0.22.4",
+    "typedoc-plugin-markdown": "^3.11.0",
     "url-loader": "^4.1.1"
   },
   "browserslist": {
