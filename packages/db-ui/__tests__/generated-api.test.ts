@@ -51,19 +51,19 @@ beforeAll(async () => {
 afterAll(async () => {
     const instance = getInternalInstance(app)
     await instance.orm.close();
-    await instance.server.close();
+    await instance._server.close();
 });
 
 describe("DB UI Endpoints", () => {
-    it("Should have the required schemas", async () => {
+    it.skip("Should have the required schemas", async () => {
 
     })
 
-    it("Should have the required APIs exposing the models", async () => {
+    it.skip("Should have the required APIs exposing the models", async () => {
 
     })
 
-    it("Should render the DB-UI", async () => {
+    it.skip("Should render the DB-UI", async () => {
         
     })
 })
