@@ -1,4 +1,5 @@
-import { App } from "@ezbackend/core"
+import { App, PluginScope } from "@ezbackend/core"
+import fp from 'fastify-plugin'
 
 function generateFastifyFuncWrapper(parent,funcName:string) {
 
@@ -39,7 +40,7 @@ export class EzApp extends App {
 
     registerFastifyPlugins(server,parent) {
 
-        server.register(async (server, opts) => {
+        const childFunc = async (server, opts) => {
             parent.functions.forEach(func => {
                 func(server)
             })
@@ -48,6 +49,10 @@ export class EzApp extends App {
                     app.registerFastifyPlugins(server,app)
                 }
             })
-        }, parent.opts)
+        }
+
+        const scopedChildFunc = (parent.scope === PluginScope.PARENT) ? fp(childFunc) : childFunc
+
+        server.register(scopedChildFunc, parent.opts)
     }
 }

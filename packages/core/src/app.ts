@@ -145,11 +145,10 @@ export class App {
 
 
 
-    addApp(name: string, newApp: App, opts: any = {}, scope: PluginScope = PluginScope.DEFAULT) {
+    addApp(name: string, newApp: App, opts: any = {}) {
         if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
             throw (`Child app ${name} already exists`)
         }
-        newApp.scope = scope
         newApp.name = name
         newApp.opts = opts
         newApp._setParent(this)

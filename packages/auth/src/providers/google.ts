@@ -30,6 +30,7 @@ export class GoogleProvider extends BaseProvider {
         return [this.providerName, new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
+            //LEFT OFF: Need to redesign the callback URL to properly support route prefixing
             callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash()}`
         }, function (accessToken, refreshToken, profile, cb) {
             const repo = instance.orm.getRepository(that.modelName)
@@ -56,7 +57,7 @@ export class GoogleProvider extends BaseProvider {
                 //@ts-ignore
                 summary: `Login for model '${this.modelName}' with provider ${this.providerName}`,
                 //@ts-ignore
-                description: `# 🔑 [Click here](/${this.getRoutePrefixNoPrePostSlash()}/login) to login
+                description: `# 🔑 Visit the URL with this extension to login
                 1. Creates/Updates '${this.modelName}' on login
                 2. Provider ${this.providerName}
                 3. Scopes: ${opts.scope.toString()}` 
@@ -77,7 +78,7 @@ export class GoogleProvider extends BaseProvider {
                 //@ts-ignore
                 summary: `Logout for model '${this.modelName}' with provider ${this.providerName}`,
                 //@ts-ignore
-                description: `# 🔑 [Click here](/${this.getRoutePrefixNoPrePostSlash()}/logout) to logout`
+                description: `# 🔑 Visit the URL with this extension to logout`
             }
         }
     }

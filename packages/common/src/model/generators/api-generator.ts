@@ -50,9 +50,6 @@ export class EzRouter extends EzApp {
         super()
         const genOpts = opts
 
-        //URGENT TODO
-        //LEFT OFF: Why are the schemas not displaying on the fastify? Registered too early or something?
-
         this.setHandler(`Add Create Schema`, async (instance, opts) => {
 
             const schema = getCreateSchema(instance.repo.metadata)

@@ -3,10 +3,10 @@ import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
 import { AnyStrategy } from "fastify-passport/dist/strategies"
 import { RouteOptions, FastifyInstance } from "fastify"
 import fastifyPassport from 'fastify-passport'
-import {App} from '@ezbackend/core'
+import {EzApp} from '@ezbackend/common'
 import type {OpenAPIV3} from 'openapi-types'
 
-export abstract class BaseProvider extends App {
+export abstract class BaseProvider extends EzApp {
 
     providerName: string
     modelName: string
@@ -36,9 +36,12 @@ export abstract class BaseProvider extends App {
         fastifyPassport.registerUserSerializer(this.registerUserSerializer(instance,providerOpts))
         fastifyPassport.registerUserDeserializer(this.registerUserDeserializer(instance,providerOpts))
 
-        instance.server.route(this.getLoginRoute(instance,providerOpts))
-        instance.server.route(this.getLogoutRoute(instance,providerOpts))
-        instance.server.route(this.getCallbackRoute(instance,providerOpts))
+        instance.server.register(async(server,opts) => {
+            server.route(this.getLoginRoute(instance,providerOpts))
+            server.route(this.getLogoutRoute(instance,providerOpts))
+            server.route(this.getCallbackRoute(instance,providerOpts))
+        })
+        
     }
 
     getRoutePrefixNoPrePostSlash() {

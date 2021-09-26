@@ -2,6 +2,7 @@ import { EzApp } from "./ezapp";
 import fastify from "fastify";
 import fastifyBoom from 'fastify-boom'
 import { createConnection } from "typeorm";
+import { PluginScope } from "@ezbackend/core";
 
 
 //TODO: Check if emojis will break instance names
@@ -51,6 +52,8 @@ export class EzBackend extends EzApp {
         this.setRun('Run Fastify Server', async (instance, opts) => {
             await instance._server.listen(opts.port)
         })
+
+        this.scope = PluginScope.PARENT
 
     }
 
