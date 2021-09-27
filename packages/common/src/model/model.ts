@@ -3,7 +3,7 @@ import { Plugin } from 'avvio'
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions, EntitySchemaRelationOptions } from 'typeorm'
 import { EntitySchemaOptions,  } from 'typeorm/entity-schema/EntitySchemaOptions'
 import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes'
-import { EzRouter } from './generators/api-generator'
+import { EzRouter, RouterOptions } from './generators/api-generator'
 
 enum NormalType {
     VARCHAR = 'VARCHAR',
@@ -42,7 +42,7 @@ export type ModelSchema = {
 
 export type RepoOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
 
-//TODO: Allow array?
+//URGENT TODO: Allow array? 
 //URGENT TODO: Allow normal typeorm types?
 function normalTypeToTypeORMtype(type:NormalType):ColumnType {
     switch (type) {
@@ -175,6 +175,7 @@ export class EzModelRepo extends EzApp {
 
 export type ModelOpts = {
     repoOpts?: RepoOptions
+    routerOpts?: RouterOptions
 }
 
 export class EzModel extends EzModelRepo {
@@ -187,7 +188,7 @@ export class EzModel extends EzModelRepo {
     constructor(modelName: string, modelSchema: ModelSchema, opts: ModelOpts = {}) {
         super(modelName, modelSchema, opts.repoOpts ?? {})
 
-        const router = new EzRouter()
+        const router = new EzRouter(opts.routerOpts)
 
         //TODO: Think about customisability of EzRouter
         this.addApp("router", router)

@@ -4,6 +4,7 @@ import fastifySecureSession from 'fastify-secure-session'
 import fastifyPassport from 'fastify-passport'
 import fs from 'fs'
 
+//URGENT TODO: If failed to deserialize user out of session remove user session
 export class EzAuth extends EzApp {
     constructor() {
         super()

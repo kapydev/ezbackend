@@ -3,10 +3,12 @@ import { RouteOptions } from "fastify";
 import { EzApp } from "../../ezapp"
 import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-json-schema";
 import { getDefaultGenerators, GenerateOpts } from "./default-generators"
+import merge from 'lodash.merge'
 
 
-interface IAPIGeneratorOpts {
-    prefix: string;
+export interface RouterOptions {
+    prefix?: string
+    generators?: { [name: string]: IGenerator }
 }
 
 type IGenerator = (repo: Repository<unknown>, opts?: GenerateOpts) => RouteOptions | Array<RouteOptions>;
@@ -66,12 +68,12 @@ export function middlewareFactory(optName: string, newValue: any): Middleware {
 export class EzRouter extends EzApp {
 
     _generators: { [key: string]: IGenerator }
-    _genOpts: IAPIGeneratorOpts
+    _genOpts: RouterOptions
 
-    constructor(opts: IAPIGeneratorOpts = { prefix: '' }, generators = getDefaultGenerators()) {
+    constructor(opts: RouterOptions = { prefix: '', generators: getDefaultGenerators() }) {
         super()
         this._genOpts = opts
-        this._generators = generators
+        this._generators = opts.generators
 
         this.setHandler(`Add Create Schema`, async (instance, opts) => {
 
@@ -89,6 +91,7 @@ export class EzRouter extends EzApp {
             instance.server.addSchema(schema)
         })
 
+        //URGENT TODO: Allow inclusion and exclusion of routes
         Object.entries(this._generators).forEach(([generatorName, generator]) => {
             this.addRouteFromGenerator(generatorName, generator)
         });
@@ -108,41 +111,42 @@ export class EzRouter extends EzApp {
     }
 
     //URGENT TODO: Make it such that invalid routeNames throw error which informs of possible route names
-    _forFactory<KeyType>(overrideName:string, routeNames:Array<string>) {
-        return (newVal:KeyType) => {
+    
+    _forFactory<KeyType>(overrideName: string, routeNames: Array<string>) {
+        return (newVal: KeyType) => {
             const middleware = middlewareFactory(overrideName, newVal)
-                Object.entries(this._generators).forEach(([generatorName, generator]) => {
-                    if (routeNames.includes(generatorName)) {
-                        this.addRouteFromGenerator(generatorName, generator, [middleware], true)
-                    }
-                });
+            Object.entries(this._generators).forEach(([generatorName, generator]) => {
+                if (routeNames.includes(generatorName)) {
+                    this.addRouteFromGenerator(generatorName, generator, [middleware], true)
+                }
+            });
         }
     }
 
     for(...routeNames: Array<string>) {
         return {
-            method: this._forFactory<RouteOptions['method']>('method',routeNames),
-            url: this._forFactory<RouteOptions['url']>('url',routeNames),
-            schema: this._forFactory<RouteOptions['schema']>('schema',routeNames),
-            exposeHeadRoute: this._forFactory<RouteOptions['exposeHeadRoute']>('exposeHeadRoute',routeNames),
-            attachValidation: this._forFactory<RouteOptions['attachValidation']>('attachValidation',routeNames),
-            onRequest: this._forFactory<RouteOptions['onRequest']>('onRequest',routeNames),
-            preParsing: this._forFactory<RouteOptions['preParsing']>('preParsing',routeNames),
-            preValidation: this._forFactory<RouteOptions['preValidation']>('preValidation',routeNames),
-            preHandler: this._forFactory<RouteOptions['preHandler']>('preHandler',routeNames),
-            preSerialization: this._forFactory<RouteOptions['preSerialization']>('preSerialization',routeNames),
-            onSend: this._forFactory<RouteOptions['onSend']>('onSend',routeNames),
-            onResponse: this._forFactory<RouteOptions['onResponse']>('onResponse',routeNames),
-            handler: this._forFactory<RouteOptions['handler']>('handler',routeNames),
-            errorHandler: this._forFactory<RouteOptions['errorHandler']>('errorHandler',routeNames),
-            validatorCompiler: this._forFactory<RouteOptions['validatorCompiler']>('validatorCompiler',routeNames),
-            serializerCompiler: this._forFactory<RouteOptions['serializerCompiler']>('serializerCompiler',routeNames),
-            schemaErrorFormatter: this._forFactory<RouteOptions['schemaErrorFormatter']>('schemaErrorFormatter',routeNames),
-            bodyLimit: this._forFactory<RouteOptions['bodyLimit']>('bodyLimit',routeNames),
-            logLevel: this._forFactory<RouteOptions['logLevel']>('logLevel',routeNames),
-            config: this._forFactory<RouteOptions['config']>('config',routeNames),
-            version: this._forFactory<RouteOptions['version']>('version',routeNames),
-            prefixTrailingSlash: this._forFactory<RouteOptions['prefixTrailingSlash']>('prefixTrailingSlash',routeNames),
+            method: this._forFactory<RouteOptions['method']>('method', routeNames),
+            url: this._forFactory<RouteOptions['url']>('url', routeNames),
+            schema: this._forFactory<RouteOptions['schema']>('schema', routeNames),
+            exposeHeadRoute: this._forFactory<RouteOptions['exposeHeadRoute']>('exposeHeadRoute', routeNames),
+            attachValidation: this._forFactory<RouteOptions['attachValidation']>('attachValidation', routeNames),
+            onRequest: this._forFactory<RouteOptions['onRequest']>('onRequest', routeNames),
+            preParsing: this._forFactory<RouteOptions['preParsing']>('preParsing', routeNames),
+            preValidation: this._forFactory<RouteOptions['preValidation']>('preValidation', routeNames),
+            preHandler: this._forFactory<RouteOptions['preHandler']>('preHandler', routeNames),
+            preSerialization: this._forFactory<RouteOptions['preSerialization']>('preSerialization', routeNames),
+            onSend: this._forFactory<RouteOptions['onSend']>('onSend', routeNames),
+            onResponse: this._forFactory<RouteOptions['onResponse']>('onResponse', routeNames),
+            handler: this._forFactory<RouteOptions['handler']>('handler', routeNames),
+            errorHandler: this._forFactory<RouteOptions['errorHandler']>('errorHandler', routeNames),
+            validatorCompiler: this._forFactory<RouteOptions['validatorCompiler']>('validatorCompiler', routeNames),
+            serializerCompiler: this._forFactory<RouteOptions['serializerCompiler']>('serializerCompiler', routeNames),
+            schemaErrorFormatter: this._forFactory<RouteOptions['schemaErrorFormatter']>('schemaErrorFormatter', routeNames),
+            bodyLimit: this._forFactory<RouteOptions['bodyLimit']>('bodyLimit', routeNames),
+            logLevel: this._forFactory<RouteOptions['logLevel']>('logLevel', routeNames),
+            config: this._forFactory<RouteOptions['config']>('config', routeNames),
+            version: this._forFactory<RouteOptions['version']>('version', routeNames),
+            prefixTrailingSlash: this._forFactory<RouteOptions['prefixTrailingSlash']>('prefixTrailingSlash', routeNames),
         }
     }
 }

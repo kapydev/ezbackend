@@ -43,9 +43,11 @@ export function copyBoilerPlate() {
   };
 
   const targetPath = () => {
-    return "./.ezb";
+    return "./src";
   };
 
   const destinationPath = targetPath();
   fse.copySync(boilerPlatePath(), destinationPath, { overwrite: true });
 }
+
+//URGENT TODO: Move env sample and tsconfig outside of src directory

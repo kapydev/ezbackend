@@ -1,0 +1,1470 @@
+---
+id: "_ezbackend_common.EzModel"
+title: "Class: EzModel"
+sidebar_label: "EzModel"
+custom_edit_url: null
+---
+
+[@ezbackend/common](../modules/_ezbackend_common).EzModel
+
+## Hierarchy
+
+- [`EzModelRepo`](_ezbackend_common.EzModelRepo)
+
+  ↳ **`EzModel`**
+
+## Constructors
+
+### constructor
+
+• **new EzModel**(`modelName`, `modelSchema`, `opts?`)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `modelName` | `string` |
+| `modelSchema` | [`ModelSchema`](../modules/_ezbackend_common#modelschema) |
+| `opts` | [`ModelOpts`](../modules/_ezbackend_common#modelopts) |
+
+#### Overrides
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[constructor](_ezbackend_common.EzModelRepo#constructor)
+
+#### Defined in
+
+[packages/common/src/model/model.ts:187](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L187)
+
+## Properties
+
+### \_apps
+
+• `Protected` **\_apps**: `Map`<`string`, `App`\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_apps](_ezbackend_common.EzModelRepo#_apps)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:19
+
+___
+
+### \_functions
+
+• `Protected` **\_functions**: `Function`[] = `[]`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_functions](_ezbackend_common.EzModelRepo#_functions)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:49](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L49)
+
+___
+
+### \_handler
+
+• `Protected` **\_handler**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_handler](_ezbackend_common.EzModelRepo#_handler)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:24
+
+___
+
+### \_init
+
+• `Protected` **\_init**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_init](_ezbackend_common.EzModelRepo#_init)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:21
+
+___
+
+### \_instance
+
+• `Protected` **\_instance**: `Avvio`<`AppInstance`\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_instance](_ezbackend_common.EzModelRepo#_instance)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:29
+
+___
+
+### \_name
+
+• `Protected` **\_name**: `string`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_name](_ezbackend_common.EzModelRepo#_name)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:30
+
+___
+
+### \_overrides
+
+• `Protected` **\_overrides**: `Overrides`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_overrides](_ezbackend_common.EzModelRepo#_overrides)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:32
+
+___
+
+### \_parent
+
+• `Protected` **\_parent**: `App`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_parent](_ezbackend_common.EzModelRepo#_parent)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:18
+
+___
+
+### \_postHandler
+
+• `Protected` **\_postHandler**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_postHandler](_ezbackend_common.EzModelRepo#_posthandler)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:25
+
+___
+
+### \_postInit
+
+• `Protected` **\_postInit**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_postInit](_ezbackend_common.EzModelRepo#_postinit)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:22
+
+___
+
+### \_postRun
+
+• `Protected` **\_postRun**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_postRun](_ezbackend_common.EzModelRepo#_postrun)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:28
+
+___
+
+### \_preHandler
+
+• `Protected` **\_preHandler**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_preHandler](_ezbackend_common.EzModelRepo#_prehandler)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:23
+
+___
+
+### \_preInit
+
+• `Protected` **\_preInit**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_preInit](_ezbackend_common.EzModelRepo#_preinit)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:20
+
+___
+
+### \_preRun
+
+• `Protected` **\_preRun**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_preRun](_ezbackend_common.EzModelRepo#_prerun)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:26
+
+___
+
+### \_run
+
+• `Protected` **\_run**: `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_run](_ezbackend_common.EzModelRepo#_run)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:27
+
+___
+
+### \_scope
+
+• `Protected` **\_scope**: `PluginScope`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_scope](_ezbackend_common.EzModelRepo#_scope)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:31
+
+___
+
+### addContentTypeParser
+
+• **addContentTypeParser**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[addContentTypeParser](_ezbackend_common.EzModelRepo#addcontenttypeparser)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:81](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L81)
+
+___
+
+### addHook
+
+• **addHook**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[addHook](_ezbackend_common.EzModelRepo#addhook)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:77](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L77)
+
+___
+
+### addSchema
+
+• **addSchema**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[addSchema](_ezbackend_common.EzModelRepo#addschema)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:78](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L78)
+
+___
+
+### all
+
+• **all**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[all](_ezbackend_common.EzModelRepo#all)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:74](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L74)
+
+___
+
+### decorate
+
+• **decorate**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[decorate](_ezbackend_common.EzModelRepo#decorate)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:83](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L83)
+
+___
+
+### decorateReply
+
+• **decorateReply**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[decorateReply](_ezbackend_common.EzModelRepo#decoratereply)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:84](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L84)
+
+___
+
+### decorateRequest
+
+• **decorateRequest**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[decorateRequest](_ezbackend_common.EzModelRepo#decoraterequest)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:85](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L85)
+
+___
+
+### delete
+
+• **delete**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[delete](_ezbackend_common.EzModelRepo#delete)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:67](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L67)
+
+___
+
+### get
+
+• **get**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[get](_ezbackend_common.EzModelRepo#get)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:68](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L68)
+
+___
+
+### head
+
+• **head**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[head](_ezbackend_common.EzModelRepo#head)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:69](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L69)
+
+___
+
+### options
+
+• **options**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[options](_ezbackend_common.EzModelRepo#options)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:73](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L73)
+
+___
+
+### opts
+
+• **opts**: `any`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[opts](_ezbackend_common.EzModelRepo#opts)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:33
+
+___
+
+### override
+
+• `Protected` **override**: (`server`: `mixedInstance`<`AppInstance`\>, `fn`: `Plugin`<`any`, `AppInstance`\>, `options`: `any`) => `mixedInstance`<`AppInstance`\>
+
+#### Type declaration
+
+▸ (`server`, `fn`, `options`): `mixedInstance`<`AppInstance`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `server` | `mixedInstance`<`AppInstance`\> |
+| `fn` | `Plugin`<`any`, `AppInstance`\> |
+| `options` | `any` |
+
+##### Returns
+
+`mixedInstance`<`AppInstance`\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[override](_ezbackend_common.EzModelRepo#override)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:63
+
+___
+
+### patch
+
+• **patch**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[patch](_ezbackend_common.EzModelRepo#patch)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:70](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L70)
+
+___
+
+### post
+
+• **post**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[post](_ezbackend_common.EzModelRepo#post)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:71](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L71)
+
+___
+
+### put
+
+• **put**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[put](_ezbackend_common.EzModelRepo#put)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:72](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L72)
+
+___
+
+### register
+
+• **register**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[register](_ezbackend_common.EzModelRepo#register)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:88](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L88)
+
+___
+
+### route
+
+• **route**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[route](_ezbackend_common.EzModelRepo#route)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:75](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L75)
+
+___
+
+### setErrorHandler
+
+• **setErrorHandler**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setErrorHandler](_ezbackend_common.EzModelRepo#seterrorhandler)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:91](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L91)
+
+___
+
+### setNotFoundHandler
+
+• **setNotFoundHandler**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setNotFoundHandler](_ezbackend_common.EzModelRepo#setnotfoundhandler)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:90](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L90)
+
+___
+
+### setSerializerCompiler
+
+• **setSerializerCompiler**: (...`opts`: `any`[]) => `void`
+
+#### Type declaration
+
+▸ (...`opts`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...opts` | `any`[] |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setSerializerCompiler](_ezbackend_common.EzModelRepo#setserializercompiler)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:80](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L80)
+
+## Accessors
+
+### apps
+
+• `get` **apps**(): `Map`<`string`, `App`\>
+
+#### Returns
+
+`Map`<`string`, `App`\>
+
+#### Defined in
+
+packages/core/dist/app.d.ts:35
+
+___
+
+### functions
+
+• `get` **functions**(): `Function`[]
+
+#### Returns
+
+`Function`[]
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:51](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L51)
+
+___
+
+### handler
+
+• `get` **handler**(): `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Returns
+
+`Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Defined in
+
+packages/core/dist/app.d.ts:37
+
+___
+
+### init
+
+• `get` **init**(): `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Returns
+
+`Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Defined in
+
+packages/core/dist/app.d.ts:36
+
+___
+
+### instance
+
+• `get` **instance**(): `Avvio`<`AppInstance`\>
+
+#### Returns
+
+`Avvio`<`AppInstance`\>
+
+#### Defined in
+
+packages/core/dist/app.d.ts:39
+
+___
+
+### name
+
+• `get` **name**(): `string`
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/core/dist/app.d.ts:40
+
+• `set` **name**(`newName`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `newName` | `string` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/core/dist/app.d.ts:44
+
+___
+
+### overrides
+
+• `get` **overrides**(): `Overrides`
+
+#### Returns
+
+`Overrides`
+
+#### Defined in
+
+packages/core/dist/app.d.ts:43
+
+___
+
+### parent
+
+• `get` **parent**(): `App`
+
+#### Returns
+
+`App`
+
+#### Defined in
+
+packages/core/dist/app.d.ts:42
+
+___
+
+### router
+
+• `get` **router**(): [`EzRouter`](_ezbackend_common.EzRouter)
+
+#### Returns
+
+[`EzRouter`](_ezbackend_common.EzRouter)
+
+#### Defined in
+
+[packages/common/src/model/model.ts:183](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L183)
+
+___
+
+### run
+
+• `get` **run**(): `Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Returns
+
+`Map`<`string`, `Plugin`<`any`, `any`\>\>
+
+#### Defined in
+
+packages/core/dist/app.d.ts:38
+
+___
+
+### scope
+
+• `get` **scope**(): `PluginScope`
+
+#### Returns
+
+`PluginScope`
+
+#### Defined in
+
+packages/core/dist/app.d.ts:41
+
+• `set` **scope**(`newScope`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `newScope` | `PluginScope` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/core/dist/app.d.ts:45
+
+## Methods
+
+### \_setParent
+
+▸ **_setParent**(`app`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `app` | `App` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[_setParent](_ezbackend_common.EzModelRepo#_setparent)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:57
+
+___
+
+### addApp
+
+▸ **addApp**(`name`, `newApp`, `opts?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
+| `newApp` | `App` |
+| `opts?` | `any` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[addApp](_ezbackend_common.EzModelRepo#addapp)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:58
+
+___
+
+### getApp
+
+▸ **getApp**(`name`): `App`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `any` |
+
+#### Returns
+
+`App`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[getApp](_ezbackend_common.EzModelRepo#getapp)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:59
+
+___
+
+### getHookPlugin
+
+▸ **getHookPlugin**(`lifecycle`): `PluginType`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `lifecycle` | `Lifecycle` |
+
+#### Returns
+
+`PluginType`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[getHookPlugin](_ezbackend_common.EzModelRepo#gethookplugin)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:60
+
+___
+
+### registerFastifyPlugins
+
+▸ **registerFastifyPlugins**(`server`, `parent`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `server` | `any` |
+| `parent` | `any` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[registerFastifyPlugins](_ezbackend_common.EzModelRepo#registerfastifyplugins)
+
+#### Defined in
+
+[packages/common/src/ezapp.ts:93](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/ezapp.ts#L93)
+
+___
+
+### removeHook
+
+▸ **removeHook**(`lifecycle`, `funcName`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `lifecycle` | `Lifecycle` |
+| `funcName` | `string` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[removeHook](_ezbackend_common.EzModelRepo#removehook)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:55
+
+___
+
+### setCustomOverride
+
+▸ **setCustomOverride**(`varName`, `override`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `varName` | `string` |
+| `override` | (`server`: `Server`<`unknown`\>, `fn`: `Plugin`<`any`, `unknown`\>, `options`: `any`) => `Server`<`unknown`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setCustomOverride](_ezbackend_common.EzModelRepo#setcustomoverride)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:62
+
+___
+
+### setHandler
+
+▸ **setHandler**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setHandler](_ezbackend_common.EzModelRepo#sethandler)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:50
+
+___
+
+### setHook
+
+▸ **setHook**(`lifecycle`, `funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `lifecycle` | `Lifecycle` |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setHook](_ezbackend_common.EzModelRepo#sethook)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:56
+
+___
+
+### setInit
+
+▸ **setInit**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setInit](_ezbackend_common.EzModelRepo#setinit)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:47
+
+___
+
+### setPostHandler
+
+▸ **setPostHandler**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setPostHandler](_ezbackend_common.EzModelRepo#setposthandler)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:51
+
+___
+
+### setPostInit
+
+▸ **setPostInit**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setPostInit](_ezbackend_common.EzModelRepo#setpostinit)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:48
+
+___
+
+### setPostRun
+
+▸ **setPostRun**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setPostRun](_ezbackend_common.EzModelRepo#setpostrun)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:54
+
+___
+
+### setPreHandler
+
+▸ **setPreHandler**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setPreHandler](_ezbackend_common.EzModelRepo#setprehandler)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:49
+
+___
+
+### setPreInit
+
+▸ **setPreInit**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setPreInit](_ezbackend_common.EzModelRepo#setpreinit)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:46
+
+___
+
+### setPreRun
+
+▸ **setPreRun**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setPreRun](_ezbackend_common.EzModelRepo#setprerun)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:52
+
+___
+
+### setRun
+
+▸ **setRun**(`funcName`, `plugin`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `funcName` | `string` |
+| `plugin` | `Plugin`<`any`, `any`\> |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[setRun](_ezbackend_common.EzModelRepo#setrun)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:53
+
+___
+
+### start
+
+▸ **start**(`opts?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `opts?` | `any` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Inherited from
+
+[EzModelRepo](_ezbackend_common.EzModelRepo).[start](_ezbackend_common.EzModelRepo#start)
+
+#### Defined in
+
+packages/core/dist/app.d.ts:61

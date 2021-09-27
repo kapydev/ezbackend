@@ -1,68 +1,50 @@
-import { EzModel } from "@ezbackend/common";
-import {
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-  JoinColumn,
-  OneToMany,
-  ManyToOne,
-} from "typeorm";
+import {EzBackend, EzModel, Type} from '@ezbackend/common'
+import { EzOpenAPI } from "@ezbackend/openapi";
+import { EzDbUI } from "@ezbackend/db-ui";
+import { EzCors } from "@ezbackend/cors";
 
-@EzModel()
-export class UserDetails {
+const app = new EzBackend()
 
-  @PrimaryGeneratedColumn()
-  id: number;
+//---Plugins---
+app.addApp('openapi', new EzOpenAPI())
+app.addApp('db-ui', new EzDbUI())
+app.addApp('cors', new EzCors())
+//---Plugins---
 
-  @Column({ type: "varchar" })
-  company: string
+const userDetails = new EzModel('UserDetails', {
+  company:Type.VARCHAR,
+  age: Type.INT,
+  score: Type.FLOAT
+})
 
-  @Column({ type: "integer" })
-  age: number
+const session = new EzModel('Session', {
+  name: Type.VARCHAR,
+  users: {
+    type: Type.ONE_TO_MANY,
+    target: 'User',
+    inverseSide: 'session',
+    eager:true
+  }
+})
 
-  @Column({ type: "float" })
-  score: number
-
-}
-
-@EzModel()
-export class Session {
-
-  @PrimaryGeneratedColumn()
-  id: number
-
-  @Column()
-  name: string
-
-  @OneToMany(type => User, user => user.session, {
+const user = new EzModel('User', {
+  name: Type.VARCHAR,
+  age: Type.INT,
+  userDetails: {
+    type: Type.ONE_TO_ONE,
+    joinColumn: true,
     cascade: true,
     eager: true,
-    onDelete: 'CASCADE'
-  })
-  users: User[]
-}
+    target: 'UserDetails'
+  },
+  session: {
+    type: Type.MANY_TO_ONE,
+    target: 'Session',
+    inverseSide: 'users'
+  }
+})
 
-@EzModel()
-export class User {
-
-  @PrimaryGeneratedColumn()
-  id: number
-
-  @Column()
-  name: string
-
-  @Column()
-  age: string
-
-
-  @OneToOne(type => UserDetails, {
-    cascade: true,
-    eager: true
-  })
-  @JoinColumn()
-  userDetails: UserDetails
-
-  @ManyToOne(type => Session, session => session.users)
-  session: Session
-}
-
+app.addApp('User', user, { prefix: 'user' })
+app.addApp('Session', session, { prefix: 'session' })
+app.addApp('UserDetails', userDetails, { prefix: 'user-details' })
+app.start()

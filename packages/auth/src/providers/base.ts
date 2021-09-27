@@ -4,9 +4,6 @@ import { AnyStrategy } from "fastify-passport/dist/strategies"
 import { RouteOptions, FastifyInstance } from "fastify"
 import fastifyPassport from 'fastify-passport'
 import { EzApp } from '@ezbackend/common'
-import type { OpenAPIV3 } from 'openapi-types'
-import { kRoutePrefix } from 'fastify/lib/symbols'
-
 
 export abstract class BaseProvider extends EzApp {
 
@@ -52,7 +49,7 @@ export abstract class BaseProvider extends EzApp {
     }
 
     getFullRoutePrefixNoPrePostSlash(server:FastifyInstance) {
-        const encapsulatedPrefix = server[kRoutePrefix].replace(/^\//,"")
+        const encapsulatedPrefix = server.prefix.replace(/^\//,"")
         const fullRoute = `${encapsulatedPrefix}/${this.getRoutePrefixNoPrePostSlash(server)}`
         return fullRoute
     }

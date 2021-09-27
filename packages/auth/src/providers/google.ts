@@ -113,7 +113,12 @@ export class GoogleProvider extends BaseProvider {
                 const id = providerAndId.replace(`${that.providerName}-`, '')
                 const userRepo = instance.orm.getRepository(that.modelName)
                 const fullUser = await userRepo.findOne({ [`${that.providerName}Id`]: id })
-                return fullUser
+                if(fullUser) {
+                    return fullUser
+                } else {
+                    //Logout the user if correct provider prefix but not in DB
+                    return null
+                }
             } else {
                 throw 'pass'
             }

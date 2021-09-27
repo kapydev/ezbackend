@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# Auto Generated APIs
+# Generated APIs
 
 EzBackend automatically generates API routes from schemas defined by the user
 

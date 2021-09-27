@@ -177,6 +177,17 @@ export class App {
 
         const appFunc: PluginType = async (instance, opts) => {
             this[lifecycle].forEach(async pluginFunc => {
+                /*
+                Take note he who dares venture here:
+                The base code compiles into js, so everything is Function there
+                However when the user writes his own code, the functions can be AsyncFunction
+                So the prototype may be empty
+                Which is why we need to define it if necessary
+                TODO: Add test case for above edge case
+                */
+                if (pluginFunc.prototype === undefined) {
+                    pluginFunc.prototype = {}
+                }
                 //Make sure plugins run on the parent scope
                 pluginFunc.prototype[kScope] = PluginScope.PARENT
                 //TODO: Test case/throw error to ensure that kApp is set for ALL plugins

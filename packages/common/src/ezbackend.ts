@@ -1,9 +1,11 @@
 import { EzApp } from "./ezapp";
-import fastify, {FastifyInstance} from "fastify";
+import fastify, { FastifyInstance } from "fastify";
 import fastifyBoom from 'fastify-boom'
 import { createConnection } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
-
+import _ from 'lodash'
+import path from 'path'
+import dotenv from 'dotenv'
 
 //TODO: Check if emojis will break instance names
 //URGENT TODO: Strict types for instance, opts
@@ -17,6 +19,38 @@ async function addErrorSchema(instance, opts) {
             message: { type: 'string' }
         }
     })
+}
+
+//URGENT TODO: Make running this optional in the default config
+dotenv.config()
+
+const defaultConfig = {
+    port: 8000,
+    server: {
+        logger: {
+          prettyPrint: {
+            translateTime: "SYS:HH:MM:ss",
+            ignore: "pid,hostname,reqId,responseTime,req,res",
+            messageFormat: "[{req.method} {req.url}] {msg}",
+          },
+        },
+      },
+    orm: {
+        type: "sqlite",
+        database: ":memory:",
+        synchronize: true
+    },
+    auth: {
+        secretKeyPath: path.join(process.cwd(), 'secret-key'),
+        google: {
+            googleClientId: process.env.GOOGLE_CLIENT_ID,
+            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            backendURL: process.env.BACKEND_URL,
+            scope: ['profile'],
+            successRedirectURL: "http://localhost:8000/docs",
+            failureRedirectURL: "http://localhost:8000/docs"
+        }
+    }
 }
 
 export class EzBackend extends EzApp {
@@ -57,18 +91,37 @@ export class EzBackend extends EzApp {
 
     }
 
-    async inject(injectOpts) {
+    getInternalInstance() {
         //TODO: Figure if there is a better way of getting this data
         //@ts-ignore
-        if (this.instance._lastUsed === null) {
+        const lastPlugin = this.instance._lastUsed
+        if (lastPlugin === null) {
             throw "Server is still undefined, have you called app.start() yet?"
         }
-        //@ts-ignore
-        const internalInstance = this.instance._lastUsed.server
-        const server = internalInstance._server
+        return lastPlugin.server
+    }
 
+    getInternalServer() {
+        return this.getInternalInstance()._server
+    }
+
+    async inject(injectOpts) {
+        const server = this.getInternalServer()
         return await server.inject(injectOpts)
+    }
 
+    printRoutes() {
+        return this.getInternalServer().printRoutes()
+    }
+
+    printPlugins() {
+        return this.getInternalServer().printPlugins()
+    }
+
+    //URGENT TODO: Typescript opts
+    async start(opts?:any) {
+        opts = _.merge(defaultConfig,opts)
+        await super.start(opts)
     }
 
 }

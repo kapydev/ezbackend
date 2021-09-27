@@ -8,7 +8,6 @@ import { commandLog } from "./helpers";
 import path from 'path'
 import fs from 'fs'
 import defaultGenerator from './generators/DEFAULT'
-import {EzError} from '@ezbackend/utils'
 import { EEXIST } from "constants";
 
 
@@ -39,9 +38,9 @@ export default function initiate(dir: string, options: initiateOptions, pkg: any
       fs.mkdirSync(dir)
     } catch (e) {
       if (e.code === 'EEXIST') {
-        throw new EzError(
-          `Folder "${dir}" already exists`,
-          `The directory "${dir}" needs to be non-existent for ezbackend to create a project there`,
+        throw new Error(
+          `Folder "${dir}" already exists.` +
+          `The directory "${dir}" needs to be non-existent for ezbackend to create a project there.` +
           `Use with caution: rmdir ${dir}`
         )
       }
