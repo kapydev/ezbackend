@@ -20,6 +20,9 @@ function createServer(parent:EzApp) {
     }
 }
 
+/**
+ * Parent of App class - acquires all the properties of the App class
+ */
 export class EzApp extends App {
 
     protected _functions: Array<Function> = []
@@ -37,6 +40,11 @@ export class EzApp extends App {
 
     }
 
+    /**
+     * Registers all fastify plugins to server instance of ezbackend application
+     * @param server Server instance
+     * @param parent EzBackend Object
+     */
     registerFastifyPlugins(server,parent) {
 
         server.register(async (server, opts) => {

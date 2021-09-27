@@ -18,10 +18,12 @@ async function addErrorSchema(instance, opts) {
     })
 }
 
+/**
+ * Parent of EzApp class - acquires all the properties of the EzApp class
+ */
 export class EzBackend extends EzApp {
     constructor() {
         super()
-        
         
         this.setInit('Create Entities Container', async (instance, opts) => {
             instance.entities = []

@@ -44,6 +44,36 @@ export type Overrides = {[name:string]: Avvio<unknown>['override']}
 
 //URGENT TODO: Add types
 //TODO: Added safety for overriding instance variables?
+
+/**
+ * The root sever appplication - contains all core and lifecycle methods for server app
+ * 
+ * Each lifecycle method set's it's argument function as a hook wihtin the lifecycle
+ * 
+ * @param funcName Name of function to be called
+ * @param plugin Plugin where function is located
+ * 
+ * **App Lifecycle**
+ * `
+ * setPreInit
+ * ↓
+ * setInit
+ * ↓
+ * setPostInit
+ * ↓
+ * setPreHandler
+ * ↓
+ * setHandler
+ * ↓
+ * setPostHandler
+ * ↓
+ * setPreRun
+ * ↓
+ * setRun
+ * ↓
+ * setPostRun
+ * `
+ */
 export class App {
     protected _parent: App | undefined
     protected _apps: Map<string, App>
@@ -104,7 +134,6 @@ export class App {
     set scope(newScope: PluginScope) {
         this._scope = newScope
     }
-
     setPreInit(funcName: string, plugin: Plugin<any, any>) { this.setHook('_preInit', funcName, plugin) }
     setInit(funcName: string, plugin: Plugin<any, any>) { this.setHook('_init', funcName, plugin) }
     setPostInit(funcName: string, plugin: Plugin<any, any>) { this.setHook('_postInit', funcName, plugin) }
@@ -115,7 +144,11 @@ export class App {
     setRun(funcName: string, plugin: Plugin<any, any>) { this.setHook('_run', funcName, plugin) }
     setPostRun(funcName: string, plugin: Plugin<any, any>) { this.setHook('_postRun', funcName, plugin) }
 
-
+    /**
+     * Removes a previously added function from lifecycle methods
+     * @param lifecycle Lifecycle where function was added
+     * @param funcName Name of function that was added
+     */
     removeHook(lifecycle: Lifecycle, funcName: string) {
         if (!this[lifecycle].has(funcName)) {
             throw `${funcName} does not exist in ${lifecycle}`
@@ -125,6 +158,12 @@ export class App {
 
     }
 
+    /**
+     * Helper function for each lifecycle method to set it's argument functions as hooks in the lifecycle
+     * @param lifecycle Point in the lifecycle to place the function
+     * @param funcName Name of function to be placed
+     * @param plugin Plugin where function is located in
+     */
     setHook(lifecycle: Lifecycle, funcName: string, plugin: Plugin<any, any>) {
         if (this[lifecycle].has(funcName)) {
             throw `${funcName} already declared for ${lifecycle}`
