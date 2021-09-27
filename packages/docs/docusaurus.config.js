@@ -104,13 +104,10 @@ module.exports = {
           label: 'Docs',
         },
         {
-          type: 'localeDropdown',
-          position: 'right',
-        },
-        {
-          href: 'https://github.com/kapydev/ezbackend',
           label: 'GitHub',
+          href: 'https://github.com/kapydev/ezbackend',
           position: 'right',
+          
         },
       ],
     },
