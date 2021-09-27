@@ -65,6 +65,8 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
         return 'number'
       case 'date':
         return 'string'
+      case 'boolean':
+        return 'boolean'
     }
   }
   throw `Unable to determine the Json Schema type for col type ${colType}`

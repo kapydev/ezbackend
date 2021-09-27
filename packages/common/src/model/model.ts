@@ -13,6 +13,7 @@ enum NormalType {
     REAL = 'REAL',
     DATE = 'DATE',
     JSON = 'JSON',
+    BOOL = 'BOOL'
 }
 
 enum RelationType {
@@ -41,6 +42,7 @@ export type ModelSchema = {
 
 export type RepoOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
 
+//TODO: Allow array?
 //URGENT TODO: Allow normal typeorm types?
 function normalTypeToTypeORMtype(type:NormalType):ColumnType {
     switch (type) {
@@ -56,6 +58,8 @@ function normalTypeToTypeORMtype(type:NormalType):ColumnType {
         return 'real'
     case NormalType.DATE:
         return 'date'
+    case NormalType.BOOL:
+        return 'boolean'
     case NormalType.JSON:
         //URGENT TODO: Switch between simple json and normal json depending on postgres column?
         return 'simple-json'
@@ -75,19 +79,19 @@ function relationTypeToTypeORMrelation(type:RelationType):TypeORMRelationType {
         }
 }
 
-function isRelation(type:FullType): type is RelationType {
+export function isRelation(type:FullType): type is RelationType {
     return Object.values(RelationType).includes(type as RelationType)
 }
 
-function isNestedRelation(type:FullType): type is NestedRelationType {
+export function isNestedRelation(type:FullType): type is NestedRelationType {
     return Object.values(RelationType).includes((type as NestedRelationType).type)
 }
 
-function isNormalType(type:FullType): type is NormalType {
+export function isNormalType(type:FullType): type is NormalType {
     return Object.values(NormalType).includes(type as NormalType)
 }
 
-function isNestedNormalType(type:FullType): type is NestedNormalType {
+export function isNestedNormalType(type:FullType): type is NestedNormalType {
     return Object.values(NormalType).includes((type as NestedNormalType).type)
 }
 

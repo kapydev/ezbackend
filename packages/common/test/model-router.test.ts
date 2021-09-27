@@ -1,5 +1,4 @@
 import { EzBackend, EzModel, Type } from "../src";
-import { kRoutePrefix } from "fastify/lib/symbols"
 
 //TODO: Figure if there is a better way of getting this data
 function getInternalInstance(ezb: EzBackend) {

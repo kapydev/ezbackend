@@ -1,4 +1,4 @@
-import { EzModel, ModelSchema, ModelOpts, Type } from '@ezbackend/common'
+import { EzModel, ModelSchema, ModelOpts, Type, isRelation, isNestedRelation, isNormalType, isNestedNormalType } from '@ezbackend/common'
 import providers from './providers'
 
 export type Providers = Array<'google'>
@@ -17,9 +17,22 @@ function addProviderToSchema(providerName: string, schema: ModelSchema) {
     return schema
 }
 
+function checkGeneratable(modelSchema: ModelSchema) {
+    Object.values(modelSchema).forEach(col => {
+        if (isRelation(col) || isNormalType(col)) {
+            throw "Columns of EzUser need to either have a default value or be nullable"
+        } else if (col.default === undefined && (col.nullable === false || col.nullable === undefined)) {
+            throw "Columns of EzUser need to either have a default value or be nullable"
+        }
+    })
+}
+
 export class EzUser extends EzModel {
 
     constructor(modelName: string, providerNames: Providers, modelSchema: ModelSchema = {}, modelOptions: ModelOpts = {}) {
+
+        //Check that all schemas within the model either have default or are nullable
+        checkGeneratable(modelSchema)
 
         //Modify the schema to introduce things required by the providers
         providerNames.forEach(providerName => {
@@ -32,7 +45,7 @@ export class EzUser extends EzModel {
         providerNames.forEach(providerName => {
             const Provider = providers[providerName]
             const provider = new Provider(modelName)
-            this.addApp(`${providerName} auth`,provider)
+            this.addApp(`${providerName} auth`, provider)
 
         })
     }

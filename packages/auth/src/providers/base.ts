@@ -47,7 +47,7 @@ export abstract class BaseProvider extends EzApp {
     }
 
     getRoutePrefixNoPrePostSlash(server: FastifyInstance) {
-        const fullRoute = `${this.modelName}/auth/${this.providerName}`
+        const fullRoute = `auth/${this.providerName}`
         return fullRoute
     }
 
