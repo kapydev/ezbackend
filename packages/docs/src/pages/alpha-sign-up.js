@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { TextField, Button } from "@material-ui/core"
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
-import { createTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import styles from './index.module.css';
 
 const backendURL = "https://kapydev.com"
 
@@ -43,8 +40,8 @@ function SignUpPage() {
           <label>
             <input type="text" name="name" {...register("email", { required: true, pattern: /^\S+@\S+$/i })} />
           </label>
-          <br/>
-          <sub style={{fontFamily:"monospace"}}>
+          <br />
+          <sub style={{ fontFamily: "monospace" }}>
             Powered by EzBackend
           </sub>
           <br />

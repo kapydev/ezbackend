@@ -87,10 +87,8 @@ module.exports = {
       disableSwitch: true
     },
     gtag: {
-      // You can also use your "G-" Measurement ID here.
       trackingID: 'G-NYKC5QB870',
-      // Optional fields.
-      anonymizeIP: true, // Should IPs be anonymized?
+      anonymizeIP: true,
     },
     navbar: {
       title: 'EzBackend',
@@ -105,7 +103,10 @@ module.exports = {
           position: 'left',
           label: 'Docs',
         },
-        // {to: '/blog', label: 'Blog', position: 'left'},
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
         {
           href: 'https://github.com/kapydev/ezbackend',
           label: 'GitHub',
@@ -128,27 +129,15 @@ module.exports = {
         {
           title: 'Community',
           items: [
-            // {
-            //   label: 'Stack Overflow',
-            //   href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            // },
             {
               label: 'Discord',
               href: 'https://discord.gg/sFUVA3Ku5E',
             },
-            // {
-            //   label: 'Twitter',
-            //   href: 'https://twitter.com/docusaurus',
-            // },
           ],
         },
         {
           title: 'More',
           items: [
-            // {
-            //   label: 'Blog',
-            //   to: '/blog',
-            // },
             {
               label: 'GitHub',
               href: 'https://github.com/kapydev/ezbackend',
@@ -156,7 +145,6 @@ module.exports = {
           ],
         },
       ],
-      // copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
     prism: {
       theme: lightCodeTheme,

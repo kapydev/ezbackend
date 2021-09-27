@@ -1,74 +1,41 @@
 import React from 'react';
-import { useState } from 'react';
-import clsx from 'clsx';
 import Layout from '@theme/Layout';
-import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import styles from './index.module.css';
-import HomepageFeatures from '../components/HomepageFeatures';
-import clickhere from './clickhere.png'
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import ReactPlayer from 'react-player/youtube'
-import Hidden from '@material-ui/core/Hidden'
-
-function HomepageHeader() {
-
-  const [raise, setRaise] = useState(false);
-
-  const { siteConfig } = useDocusaurusContext();
-  return (
-    <Grid container justifyContent="center" alignItems="flex-start" style={{ padding: 48 }} spacing={8}>
-      <Grid item>
-        <h1 className="hero__title" style={{ fontSize: '80', fontFamily: "monospace", textAlign: "start", maxWidth: 450 }}>
-          Create a <span style={{ color: "#5396CE" }}>fully extensible</span> backend in<span style={{ color: "#5396CE" }}> 2 lines</span> of code
-        </h1>
-        {/* <p style={{fontSize:23}}>
-          Scalable, Safe, and Secure
-        </p> */}
-        <br/>
-        <Link to="/alpha-sign-up">
-          <Button
-            variant="contained"
-            size="large"
-            onMouseOver={() => setRaise(true)}
-            onMouseOut={() => setRaise(false)}
-            style={{
-              padding: 10,
-              backgroundColor: (!raise) ? "#5396CE" : "#fff",
-              color: (!raise) ? "#003A2D" : "#5396CE",
-              fontSize: 22,
-              fontFamily: "monospace",
-              fontWeight: "bold",
-              width: 200,
-            }}>
-            Alpha Signup
-          </Button>
-        </Link>
-      </Grid>
-      <Grid item>
-        <ReactPlayer url='https://youtu.be/rA8_m0UQ-O0' maxWidth="600px" />
-      </Grid>
-    </Grid>
-  );
-}
+import '../assets/main.css';
 
 export default function Home() {
+
   const { siteConfig } = useDocusaurusContext();
+
   return (
     <Layout
       title={`${siteConfig.title}`}
       description="Backend made easy">
-      <br />
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-        <br />
-        <br />
-        <br />
-        <br />
-      </main>
+      <div className='flex-1 text-center pt-16 pb-12 px-12'>
+        <p className='text-5xl sm:text-6xl font-bold font-mono'>
+          Simple, Scalable, Secure
+        </p>
+        <p className='text-xl font-mono pt-6'>
+          Backend Setup in 2 lines of code
+        </p>
+      </div>
+      <div className='flex flex-row justify-center align-center'>
+        <button className="bg-transparent rounded-lg font-medium p-3 shadow-lg border-2 border-white mx-3 hover:bg-blue-5 00">
+          Documentation
+        </button>
+        <button className="bg-transparent rounded-lg font-medium p-3 shadow-lg border-2 border-white mx-3 hover:bg-blue-5 00">
+          Watch Demo
+        </button>
+      </div>
     </Layout >
   );
 }
+
+function CtaButton(props) {
+  return (
+    <button className="bg-transparent rounded-lg font-medium p-3 shadow-lg border-2 border-white mx-3 hover:bg-blue-5 00">
+      {props.text}
+    </button>
+  )
+}
+
