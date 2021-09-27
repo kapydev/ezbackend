@@ -25,7 +25,7 @@ EzApp.constructor
 
 #### Defined in
 
-[packages/auth/src/auth.ts:9](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/auth/src/auth.ts#L9)
+[packages/auth/src/auth.ts:9](https://github.com/kapydev/ezbackend/blob/345dd45/packages/auth/src/auth.ts#L9)
 
 ## Properties
 

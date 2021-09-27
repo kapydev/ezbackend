@@ -15,4 +15,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/common/src/model/generators/default-generators.ts:29](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/default-generators.ts#L29)
+[packages/common/src/model/generators/default-generators.ts:29](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/default-generators.ts#L29)

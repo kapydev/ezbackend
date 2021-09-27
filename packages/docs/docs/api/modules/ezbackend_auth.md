@@ -19,4 +19,4 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/auth/src/ez-user.ts:4](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/auth/src/ez-user.ts#L4)
+[packages/auth/src/ez-user.ts:4](https://github.com/kapydev/ezbackend/blob/345dd45/packages/auth/src/ez-user.ts#L4)

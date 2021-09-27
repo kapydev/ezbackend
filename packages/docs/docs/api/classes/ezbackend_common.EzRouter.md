@@ -35,7 +35,7 @@ Creates a fastify instance
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:94](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L94)
+[packages/common/src/model/generators/api-generator.ts:94](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L94)
 
 ## Properties
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:53](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L53)
+[packages/common/src/ezapp.ts:53](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L53)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:92](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L92)
+[packages/common/src/model/generators/api-generator.ts:92](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L92)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:91](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L91)
+[packages/common/src/model/generators/api-generator.ts:91](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L91)
 
 ___
 
@@ -311,7 +311,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:87](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L87)
+[packages/common/src/ezapp.ts:87](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L87)
 
 ___
 
@@ -339,7 +339,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:83](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L83)
+[packages/common/src/ezapp.ts:83](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L83)
 
 ___
 
@@ -367,7 +367,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:84](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L84)
+[packages/common/src/ezapp.ts:84](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L84)
 
 ___
 
@@ -395,7 +395,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:80](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L80)
+[packages/common/src/ezapp.ts:80](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L80)
 
 ___
 
@@ -423,7 +423,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:89](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L89)
+[packages/common/src/ezapp.ts:89](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L89)
 
 ___
 
@@ -451,7 +451,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:90](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L90)
+[packages/common/src/ezapp.ts:90](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L90)
 
 ___
 
@@ -479,7 +479,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:91](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L91)
+[packages/common/src/ezapp.ts:91](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L91)
 
 ___
 
@@ -507,7 +507,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:73](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L73)
+[packages/common/src/ezapp.ts:73](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L73)
 
 ___
 
@@ -535,7 +535,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:74](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L74)
+[packages/common/src/ezapp.ts:74](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L74)
 
 ___
 
@@ -563,7 +563,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:75](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L75)
+[packages/common/src/ezapp.ts:75](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L75)
 
 ___
 
@@ -591,7 +591,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:79](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L79)
+[packages/common/src/ezapp.ts:79](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L79)
 
 ___
 
@@ -663,7 +663,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:76](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L76)
+[packages/common/src/ezapp.ts:76](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L76)
 
 ___
 
@@ -691,7 +691,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:77](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L77)
+[packages/common/src/ezapp.ts:77](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L77)
 
 ___
 
@@ -719,7 +719,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:78](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L78)
+[packages/common/src/ezapp.ts:78](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L78)
 
 ___
 
@@ -747,7 +747,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:94](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L94)
+[packages/common/src/ezapp.ts:94](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L94)
 
 ___
 
@@ -775,7 +775,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:81](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L81)
+[packages/common/src/ezapp.ts:81](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L81)
 
 ___
 
@@ -803,7 +803,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:97](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L97)
+[packages/common/src/ezapp.ts:97](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L97)
 
 ___
 
@@ -831,7 +831,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:96](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L96)
+[packages/common/src/ezapp.ts:96](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L96)
 
 ___
 
@@ -859,7 +859,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:86](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L86)
+[packages/common/src/ezapp.ts:86](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L86)
 
 ## Accessors
 
@@ -887,7 +887,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:55](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L55)
+[packages/common/src/ezapp.ts:55](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L55)
 
 ___
 
@@ -1070,7 +1070,7 @@ packages/core/dist/app.d.ts:57
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:136](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L136)
+[packages/common/src/model/generators/api-generator.ts:136](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L136)
 
 ___
 
@@ -1150,7 +1150,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:123](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L123)
+[packages/common/src/model/generators/api-generator.ts:123](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L123)
 
 ___
 
@@ -1195,7 +1195,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:147](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L147)
+[packages/common/src/model/generators/api-generator.ts:147](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L147)
 
 ___
 
@@ -1272,7 +1272,7 @@ Registers all fastify plugins to server instance of ezbackend application
 
 #### Defined in
 
-[packages/common/src/ezapp.ts:104](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/ezapp.ts#L104)
+[packages/common/src/ezapp.ts:104](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/ezapp.ts#L104)
 
 ___
 

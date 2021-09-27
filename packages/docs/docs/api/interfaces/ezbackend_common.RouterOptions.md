@@ -19,7 +19,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:11](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L11)
+[packages/common/src/model/generators/api-generator.ts:11](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L11)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:10](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L10)
+[packages/common/src/model/generators/api-generator.ts:10](https://github.com/kapydev/ezbackend/blob/345dd45/packages/common/src/model/generators/api-generator.ts#L10)

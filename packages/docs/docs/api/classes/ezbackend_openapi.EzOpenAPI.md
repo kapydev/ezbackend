@@ -25,7 +25,7 @@ App.constructor
 
 #### Defined in
 
-[packages/openapi/src/openapi.ts:31](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/openapi/src/openapi.ts#L31)
+[packages/openapi/src/openapi.ts:31](https://github.com/kapydev/ezbackend/blob/345dd45/packages/openapi/src/openapi.ts#L31)
 
 ## Properties
 

@@ -25,7 +25,7 @@ An App is the basic building block for a plugin system, it contains all core and
 
 #### Defined in
 
-[packages/core/src/app.ts:84](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L84)
+[packages/core/src/app.ts:84](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L84)
 
 ## Properties
 
@@ -35,7 +35,7 @@ An App is the basic building block for a plugin system, it contains all core and
 
 #### Defined in
 
-[packages/core/src/app.ts:62](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L62)
+[packages/core/src/app.ts:62](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L62)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:67](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L67)
+[packages/core/src/app.ts:67](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L67)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:64](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L64)
+[packages/core/src/app.ts:64](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L64)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:72](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L72)
+[packages/core/src/app.ts:72](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L72)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:73](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L73)
+[packages/core/src/app.ts:73](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L73)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:75](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L75)
+[packages/core/src/app.ts:75](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L75)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:61](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L61)
+[packages/core/src/app.ts:61](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L61)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:68](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L68)
+[packages/core/src/app.ts:68](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L68)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:65](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L65)
+[packages/core/src/app.ts:65](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L65)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:71](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L71)
+[packages/core/src/app.ts:71](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L71)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:66](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L66)
+[packages/core/src/app.ts:66](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L66)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:63](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L63)
+[packages/core/src/app.ts:63](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L63)
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:69](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L69)
+[packages/core/src/app.ts:69](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L69)
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:70](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L70)
+[packages/core/src/app.ts:70](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L70)
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:74](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L74)
+[packages/core/src/app.ts:74](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L74)
 
 ___
 
@@ -185,7 +185,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:78](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L78)
+[packages/core/src/app.ts:78](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L78)
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:347](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L347)
+[packages/core/src/app.ts:347](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L347)
 
 ## Accessors
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:102](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L102)
+[packages/core/src/app.ts:102](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L102)
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:104](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L104)
+[packages/core/src/app.ts:104](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L104)
 
 ___
 
@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:103](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L103)
+[packages/core/src/app.ts:103](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L103)
 
 ___
 
@@ -267,7 +267,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:106](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L106)
+[packages/core/src/app.ts:106](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L106)
 
 ___
 
@@ -281,7 +281,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:107](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L107)
+[packages/core/src/app.ts:107](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L107)
 
 • `set` **name**(`newName`): `void`
 
@@ -297,7 +297,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:112](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L112)
+[packages/core/src/app.ts:112](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L112)
 
 ___
 
@@ -311,7 +311,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:110](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L110)
+[packages/core/src/app.ts:110](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L110)
 
 ___
 
@@ -325,7 +325,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:109](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L109)
+[packages/core/src/app.ts:109](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L109)
 
 ___
 
@@ -339,7 +339,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:105](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L105)
+[packages/core/src/app.ts:105](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L105)
 
 ___
 
@@ -353,7 +353,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:108](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L108)
+[packages/core/src/app.ts:108](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L108)
 
 • `set` **scope**(`newScope`): `void`
 
@@ -369,7 +369,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:117](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L117)
+[packages/core/src/app.ts:117](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L117)
 
 ## Methods
 
@@ -393,7 +393,7 @@ EzBackend follows Fastify's encapsulation system. Click [here](https://www.fasti
 
 #### Defined in
 
-[packages/core/src/app.ts:227](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L227)
+[packages/core/src/app.ts:227](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L227)
 
 ___
 
@@ -418,7 +418,7 @@ Note! You cannot have an app with the same name
 
 #### Defined in
 
-[packages/core/src/app.ts:242](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L242)
+[packages/core/src/app.ts:242](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L242)
 
 ___
 
@@ -438,7 +438,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:252](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L252)
+[packages/core/src/app.ts:252](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L252)
 
 ___
 
@@ -460,7 +460,7 @@ Retrieves the function assigned to the lifecycle method for the current app
 
 #### Defined in
 
-[packages/core/src/app.ts:261](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L261)
+[packages/core/src/app.ts:261](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L261)
 
 ___
 
@@ -483,7 +483,7 @@ Removes a previously added function from a lifecycle method
 
 #### Defined in
 
-[packages/core/src/app.ts:198](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L198)
+[packages/core/src/app.ts:198](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L198)
 
 ___
 
@@ -504,7 +504,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:336](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L336)
+[packages/core/src/app.ts:336](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L336)
 
 ___
 
@@ -527,7 +527,7 @@ Set's it's argument function as a hook during the [setHandler](_ezbackend_auth.E
 
 #### Defined in
 
-[packages/core/src/app.ts:157](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L157)
+[packages/core/src/app.ts:157](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L157)
 
 ___
 
@@ -551,7 +551,7 @@ Helper function for each lifecycle method to set it's argument functions as hook
 
 #### Defined in
 
-[packages/core/src/app.ts:212](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L212)
+[packages/core/src/app.ts:212](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L212)
 
 ___
 
@@ -574,7 +574,7 @@ Set's it's argument function as a hook during the [setInit](_ezbackend_auth.EzAu
 
 #### Defined in
 
-[packages/core/src/app.ts:133](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L133)
+[packages/core/src/app.ts:133](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L133)
 
 ___
 
@@ -597,7 +597,7 @@ Set's it's argument function as a hook during the [setPostHandler](_ezbackend_au
 
 #### Defined in
 
-[packages/core/src/app.ts:165](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L165)
+[packages/core/src/app.ts:165](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L165)
 
 ___
 
@@ -620,7 +620,7 @@ Set's it's argument function as a hook during the [setPostInit](_ezbackend_auth.
 
 #### Defined in
 
-[packages/core/src/app.ts:141](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L141)
+[packages/core/src/app.ts:141](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L141)
 
 ___
 
@@ -643,7 +643,7 @@ Set's it's argument function as a hook during the [setPostRun](_ezbackend_auth.E
 
 #### Defined in
 
-[packages/core/src/app.ts:189](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L189)
+[packages/core/src/app.ts:189](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L189)
 
 ___
 
@@ -666,7 +666,7 @@ Set's it's argument function as a hook during the [setPreHandler](_ezbackend_aut
 
 #### Defined in
 
-[packages/core/src/app.ts:149](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L149)
+[packages/core/src/app.ts:149](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L149)
 
 ___
 
@@ -689,7 +689,7 @@ Set's it's argument function as a hook during the [setPreInit](_ezbackend_auth.E
 
 #### Defined in
 
-[packages/core/src/app.ts:125](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L125)
+[packages/core/src/app.ts:125](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L125)
 
 ___
 
@@ -712,7 +712,7 @@ Set's it's argument function as a hook during the [setPreRun](_ezbackend_auth.Ez
 
 #### Defined in
 
-[packages/core/src/app.ts:173](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L173)
+[packages/core/src/app.ts:173](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L173)
 
 ___
 
@@ -735,7 +735,7 @@ Set's it's argument function as a hook during the [setRun](_ezbackend_auth.EzAut
 
 #### Defined in
 
-[packages/core/src/app.ts:181](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L181)
+[packages/core/src/app.ts:181](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L181)
 
 ___
 
@@ -757,4 +757,4 @@ Starts the app running. You can pass in app options to configure how the app sho
 
 #### Defined in
 
-[packages/core/src/app.ts:312](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L312)
+[packages/core/src/app.ts:312](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L312)

@@ -15,7 +15,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/src/app.ts:22](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L22)
+[packages/core/src/app.ts:22](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L22)
 
 ___
 
@@ -25,4 +25,4 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:21](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L21)
+[packages/core/src/app.ts:21](https://github.com/kapydev/ezbackend/blob/345dd45/packages/core/src/app.ts#L21)

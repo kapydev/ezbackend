@@ -25,7 +25,7 @@ App.constructor
 
 #### Defined in
 
-[packages/db-ui/src/db-ui.ts:87](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/db-ui/src/db-ui.ts#L87)
+[packages/db-ui/src/db-ui.ts:87](https://github.com/kapydev/ezbackend/blob/345dd45/packages/db-ui/src/db-ui.ts#L87)
 
 ## Properties
 
