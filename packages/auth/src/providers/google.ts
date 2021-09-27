@@ -5,7 +5,6 @@ import { AnyStrategy } from 'fastify-passport/dist/strategies'
 import { RouteOptions } from 'fastify'
 import { DeserializeFunction, SerializeFunction } from 'fastify-passport/dist/Authenticator'
 import {OpenAPIV3} from 'openapi-types'
-import '@ezbackend/common'
 
 interface IGoogleProviderOptions {
     googleClientId: string
@@ -23,7 +22,7 @@ export class GoogleProvider extends BaseProvider {
         super('google', modelName)
     }
 
-    addStrategy(instance,opts): [name: string, Strategy: AnyStrategy] {
+    addStrategy(instance,server,opts): [name: string, Strategy: AnyStrategy] {
 
         const that = this
 
@@ -31,7 +30,7 @@ export class GoogleProvider extends BaseProvider {
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
             //LEFT OFF: Need to redesign the callback URL to properly support route prefixing
-            callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash()}`
+            callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash(server)}`
         }, function (accessToken, refreshToken, profile, cb) {
             const repo = instance.orm.getRepository(that.modelName)
             const model = {}
@@ -46,18 +45,18 @@ export class GoogleProvider extends BaseProvider {
         })]
     }
 
-    getLoginRoute(instance,opts): RouteOptions {
+    getLoginRoute(server,opts): RouteOptions {
         return {
             method: 'GET',
-            url: `/${this.getRoutePrefixNoPrePostSlash()}/login`,
+            url: `/${this.getRoutePrefixNoPrePostSlash(server)}/login`,
             // preValidation: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
             handler: fastifyPassport.authenticate('google', { scope: opts.scope }),
             schema: {
                 //TODO: Figure out how to import types for summary
+                //TODO: Add documentation on setting up callback URL
                 //@ts-ignore
                 summary: `Login for model '${this.modelName}' with provider ${this.providerName}`,
-                //@ts-ignore
-                description: `# 🔑 Visit the URL with this extension to login
+                description: `# 🔑 [CLICK HERE](${process.env.BACKEND_URL}/${this.getFullRoutePrefixNoPrePostSlash(server)}/login) or visit the URL with this extension to login
                 1. Creates/Updates '${this.modelName}' on login
                 2. Provider ${this.providerName}
                 3. Scopes: ${opts.scope.toString()}` 
@@ -65,10 +64,10 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    getLogoutRoute(instance,opts): RouteOptions {
+    getLogoutRoute(server,opts): RouteOptions {
         return {
             method: 'GET',
-            url: `/${this.getRoutePrefixNoPrePostSlash()}/logout`,
+            url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
             handler: async function (req, res) {
                 req.logout()
                 return { loggedIn: false }
@@ -77,16 +76,15 @@ export class GoogleProvider extends BaseProvider {
                 //TODO: Figure out how to import types for summary
                 //@ts-ignore
                 summary: `Logout for model '${this.modelName}' with provider ${this.providerName}`,
-                //@ts-ignore
-                description: `# 🔑 Visit the URL with this extension to logout`
+                description: `# 🔑 [CLICK HERE](${process.env.BACKEND_URL}/${this.getFullRoutePrefixNoPrePostSlash(server)}/logout) or visit the URL with this extension to logout`
             }
         }
     }
 
-    getCallbackRoute(instance,opts): RouteOptions {
+    getCallbackRoute(server,opts): RouteOptions {
         return {
             method: 'GET',
-            url: `/${this.getCallbackURLNoPreSlash()}`,
+            url: `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`,
             preValidation: fastifyPassport.authenticate('google', {
                 scope: opts.scope,
                 successRedirect: opts.successRedirectURL,
@@ -123,23 +121,23 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    getSecurityScheme() {
-        const that = this
-        const securityScheme: OpenAPIV3.SecuritySchemeObject = {
-            type: "oauth2",
-            //@ts-ignore
-            description: "## ⚠️Do not fill client id, just click __'Authorize'__ [(explanation)](http://google.com)",
-            flows:
-            {
-                implicit: {
-                    authorizationUrl: `/${that.getRoutePrefixNoPrePostSlash()}/login`,
-                    scopes: {
-                    }
-                }
-            }
-        }
-        return {
-            [`${that.modelName}-${that.providerName}`]: securityScheme
-        }
-    }
+    // getSecurityScheme() {
+    //     const that = this
+    //     const securityScheme: OpenAPIV3.SecuritySchemeObject = {
+    //         type: "oauth2",
+    //         //@ts-ignore
+    //         description: "## ⚠️Do not fill client id, just click __'Authorize'__ [(explanation)](http://google.com)",
+    //         flows:
+    //         {
+    //             implicit: {
+    //                 authorizationUrl: `/${that.getRoutePrefixNoPrePostSlash(server)}/login`,
+    //                 scopes: {
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return {
+    //         [`${that.modelName}-${that.providerName}`]: securityScheme
+    //     }
+    // }
 }

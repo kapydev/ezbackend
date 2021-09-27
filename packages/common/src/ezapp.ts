@@ -51,6 +51,7 @@ export class EzApp extends App {
             })
         }
 
+        //TODO: Add test case that tests encapsulation requirements for plugins when parent.scope == PluginScope.PARENT
         const scopedChildFunc = (parent.scope === PluginScope.PARENT) ? fp(childFunc) : childFunc
 
         server.register(scopedChildFunc, parent.opts)
