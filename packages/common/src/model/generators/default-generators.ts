@@ -3,6 +3,11 @@ import Boom from '@hapi/boom'
 import { EntityMetadata, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 
+/**
+ * Returns the primary column name from given metadata
+ * @param meta 
+ * @returns 
+ */
 export function getPrimaryColName(meta: EntityMetadata) {
     const primaryColumns = meta.primaryColumns
     if (primaryColumns.length > 1) {
@@ -20,7 +25,6 @@ const removeNestedNulls = (obj) => {
     return obj;
 };
 
-//URGENT TODO: Neaten this up, we can't have opts everywhere
 export interface GenerateOpts {
     schemaPrefix?: string
 }
@@ -28,6 +32,17 @@ export interface GenerateOpts {
 //TODO: Remove trailing slash from path names
 //TODO: Make function to get generated Cols
 //URGENT TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
+/**
+ * Generates API Documentation for the current model
+ * {@link createOne} - Generates API docs for a POST request for one entity
+ * {@link getOne} - Generates API docs for a GET request for one entity
+ * {@link getAll} - Generates API docs for a GET request for all entities the model
+ * {@link udpateOne} - Generates API docs for a PATCH request to one entity
+ * {@link deleteOne} - Generates API docs for a DELETE request for one entity
+ * 
+ * 
+ * @returns 
+ */
 export const getDefaultGenerators = () => {
     return {
         createOne: (repo: Repository<unknown>, opts?: GenerateOpts) => {
@@ -50,7 +65,7 @@ export const getDefaultGenerators = () => {
                 },
                 handler: async (req, res) => {
                     try {
-                        const newObj = await repo.save(req.body);         
+                        const newObj = await repo.save(req.body);
                         return removeNestedNulls(newObj);
                     } catch (e) {
                         //Assumption: If it fails, it is because of a bad request, not the code breaking

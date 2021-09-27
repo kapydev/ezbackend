@@ -53,10 +53,13 @@ const defaultConfig = {
     }
 }
 
+/**
+ * Child of EzApp. This is where you set up your backend setup tasks.
+ */
 export class EzBackend extends EzApp {
+
     constructor() {
         super()
-
 
         this.setInit('Create Entities Container', async (instance, opts) => {
             instance.entities = []

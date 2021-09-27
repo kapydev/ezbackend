@@ -44,6 +44,7 @@ export type RepoOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'r
 
 //URGENT TODO: Allow array? 
 //URGENT TODO: Allow normal typeorm types?
+
 function normalTypeToTypeORMtype(type:NormalType):ColumnType {
     switch (type) {
     case NormalType.VARCHAR:
@@ -178,6 +179,9 @@ export type ModelOpts = {
     routerOpts?: RouterOptions
 }
 
+/**
+ * Child of EzApp. This is your data model.
+ */
 export class EzModel extends EzModelRepo {
 
     //TODO: Figure out automatic typings

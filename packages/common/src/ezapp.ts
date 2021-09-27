@@ -44,12 +44,19 @@ function createServer(parent: EzApp) {
     }
 }
 
+/**
+ * Building block to build a plugin system
+ * Child of {@link App}  {@link App} class
+ */
 export class EzApp extends App {
 
     protected _functions: Array<Function> = []
 
     get functions() { return this._functions }
 
+    /**
+     * Creates a fastify instance
+     */
     constructor() {
         super()
         this.setHandler("Create Server Stub", async (instance, opts) => {
@@ -58,7 +65,6 @@ export class EzApp extends App {
         this.setPostHandler("Remove Server Stub", async (instance, opts) => {
             delete instance.server
         })
-
     }
 
     //Make routing with apps easy 
@@ -90,6 +96,11 @@ export class EzApp extends App {
     setNotFoundHandler = generateFastifyFuncWrapper(this, 'setNotFoundHandler')
     setErrorHandler = generateFastifyFuncWrapper(this, 'setErrorHandler')
 
+    /**
+     * Registers all fastify plugins to server instance of ezbackend application
+     * @param server Server instance
+     * @param parent EzBackend Object
+     */
     registerFastifyPlugins(server, parent) {
 
         const childFunc = async (server, opts) => {

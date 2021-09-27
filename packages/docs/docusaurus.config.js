@@ -13,7 +13,7 @@ module.exports = {
   organizationName: 'kapydev', // Usually your GitHub org/user name.
   projectName: 'ezbackend', // Usually your repo name.
   trailingSlash: 'false',
-  plugins: [ // URGENT TODO: THIS CURRENTLY NAMES FILES MANUALLY CAN WE DO IT PROPERLY WITH DOCUSAURUS
+  plugins: [
     function renameMarkdown(context, options) {
       return {
         name: 'markdown-renamer',
@@ -66,8 +66,6 @@ module.exports = {
         "githubPages": false,
         "readme": "none",
         "tsconfig": "../../tsconfig.json",
-        "hideInPageTOC": true,
-        "hideBreadcrumbs": true,
         "entryPointStrategy": "packages",
         "cleanOutputDir": false,
         "entryPoints": [
@@ -169,6 +167,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          sidebarCollapsed: false,
           // Please change this to your repo.
           editUrl:
             'https://github.com/facebook/docusaurus/edit/master/website/',
