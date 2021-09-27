@@ -23,7 +23,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/core/src/app.ts:9](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/app.ts#L9)
+[packages/core/src/app.ts:9](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L9)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:41](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/app.ts#L41)
+[packages/core/src/app.ts:41](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L41)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:43](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/app.ts#L43)
+[packages/core/src/app.ts:43](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L43)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:8](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/app.ts#L8)
+[packages/core/src/app.ts:8](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L8)
 
 ## Variables
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/app.ts:25](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/app.ts#L25)
+[packages/core/src/app.ts:25](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/app.ts#L25)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/symbols.ts:1](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/symbols.ts#L1)
+[packages/core/src/symbols.ts:1](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/symbols.ts#L1)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/core/src/symbols.ts:2](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/symbols.ts#L2)
+[packages/core/src/symbols.ts:2](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/symbols.ts#L2)
 
 ___
 
@@ -97,4 +97,4 @@ ___
 
 #### Defined in
 
-[packages/core/src/symbols.ts:3](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/core/src/symbols.ts#L3)
+[packages/core/src/symbols.ts:3](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/core/src/symbols.ts#L3)

@@ -25,7 +25,7 @@ EzApp.constructor
 
 #### Defined in
 
-[packages/auth/src/auth.ts:9](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/auth/src/auth.ts#L9)
+[packages/auth/src/auth.ts:9](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/auth/src/auth.ts#L9)
 
 ## Properties
 
@@ -39,7 +39,7 @@ EzApp.\_apps
 
 #### Defined in
 
-packages/core/dist/app.d.ts:19
+packages/core/dist/app.d.ts:31
 
 ___
 
@@ -53,7 +53,7 @@ EzApp.\_functions
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:3
+packages/common/dist/ezapp.d.ts:7
 
 ___
 
@@ -67,7 +67,7 @@ EzApp.\_handler
 
 #### Defined in
 
-packages/core/dist/app.d.ts:24
+packages/core/dist/app.d.ts:36
 
 ___
 
@@ -81,7 +81,7 @@ EzApp.\_init
 
 #### Defined in
 
-packages/core/dist/app.d.ts:21
+packages/core/dist/app.d.ts:33
 
 ___
 
@@ -95,7 +95,7 @@ EzApp.\_instance
 
 #### Defined in
 
-packages/core/dist/app.d.ts:29
+packages/core/dist/app.d.ts:41
 
 ___
 
@@ -109,7 +109,7 @@ EzApp.\_name
 
 #### Defined in
 
-packages/core/dist/app.d.ts:30
+packages/core/dist/app.d.ts:42
 
 ___
 
@@ -123,7 +123,7 @@ EzApp.\_overrides
 
 #### Defined in
 
-packages/core/dist/app.d.ts:32
+packages/core/dist/app.d.ts:44
 
 ___
 
@@ -137,7 +137,7 @@ EzApp.\_parent
 
 #### Defined in
 
-packages/core/dist/app.d.ts:18
+packages/core/dist/app.d.ts:30
 
 ___
 
@@ -151,7 +151,7 @@ EzApp.\_postHandler
 
 #### Defined in
 
-packages/core/dist/app.d.ts:25
+packages/core/dist/app.d.ts:37
 
 ___
 
@@ -165,7 +165,7 @@ EzApp.\_postInit
 
 #### Defined in
 
-packages/core/dist/app.d.ts:22
+packages/core/dist/app.d.ts:34
 
 ___
 
@@ -179,7 +179,7 @@ EzApp.\_postRun
 
 #### Defined in
 
-packages/core/dist/app.d.ts:28
+packages/core/dist/app.d.ts:40
 
 ___
 
@@ -193,7 +193,7 @@ EzApp.\_preHandler
 
 #### Defined in
 
-packages/core/dist/app.d.ts:23
+packages/core/dist/app.d.ts:35
 
 ___
 
@@ -207,7 +207,7 @@ EzApp.\_preInit
 
 #### Defined in
 
-packages/core/dist/app.d.ts:20
+packages/core/dist/app.d.ts:32
 
 ___
 
@@ -221,7 +221,7 @@ EzApp.\_preRun
 
 #### Defined in
 
-packages/core/dist/app.d.ts:26
+packages/core/dist/app.d.ts:38
 
 ___
 
@@ -235,7 +235,7 @@ EzApp.\_run
 
 #### Defined in
 
-packages/core/dist/app.d.ts:27
+packages/core/dist/app.d.ts:39
 
 ___
 
@@ -249,7 +249,7 @@ EzApp.\_scope
 
 #### Defined in
 
-packages/core/dist/app.d.ts:31
+packages/core/dist/app.d.ts:43
 
 ___
 
@@ -277,7 +277,7 @@ EzApp.addContentTypeParser
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:18
+packages/common/dist/ezapp.d.ts:25
 
 ___
 
@@ -305,7 +305,7 @@ EzApp.addHook
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:15
+packages/common/dist/ezapp.d.ts:22
 
 ___
 
@@ -333,7 +333,7 @@ EzApp.addSchema
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:16
+packages/common/dist/ezapp.d.ts:23
 
 ___
 
@@ -361,7 +361,7 @@ EzApp.all
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:13
+packages/common/dist/ezapp.d.ts:20
 
 ___
 
@@ -389,7 +389,7 @@ EzApp.decorate
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:19
+packages/common/dist/ezapp.d.ts:26
 
 ___
 
@@ -417,7 +417,7 @@ EzApp.decorateReply
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:20
+packages/common/dist/ezapp.d.ts:27
 
 ___
 
@@ -445,7 +445,7 @@ EzApp.decorateRequest
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:21
+packages/common/dist/ezapp.d.ts:28
 
 ___
 
@@ -473,7 +473,7 @@ EzApp.delete
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:6
+packages/common/dist/ezapp.d.ts:13
 
 ___
 
@@ -501,7 +501,7 @@ EzApp.get
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:7
+packages/common/dist/ezapp.d.ts:14
 
 ___
 
@@ -529,7 +529,7 @@ EzApp.head
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:8
+packages/common/dist/ezapp.d.ts:15
 
 ___
 
@@ -557,7 +557,7 @@ EzApp.options
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:12
+packages/common/dist/ezapp.d.ts:19
 
 ___
 
@@ -571,7 +571,7 @@ EzApp.opts
 
 #### Defined in
 
-packages/core/dist/app.d.ts:33
+packages/core/dist/app.d.ts:45
 
 ___
 
@@ -601,7 +601,7 @@ EzApp.override
 
 #### Defined in
 
-packages/core/dist/app.d.ts:63
+packages/core/dist/app.d.ts:165
 
 ___
 
@@ -629,7 +629,7 @@ EzApp.patch
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:9
+packages/common/dist/ezapp.d.ts:16
 
 ___
 
@@ -657,7 +657,7 @@ EzApp.post
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:10
+packages/common/dist/ezapp.d.ts:17
 
 ___
 
@@ -685,7 +685,7 @@ EzApp.put
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:11
+packages/common/dist/ezapp.d.ts:18
 
 ___
 
@@ -713,7 +713,7 @@ EzApp.register
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:22
+packages/common/dist/ezapp.d.ts:29
 
 ___
 
@@ -741,7 +741,7 @@ EzApp.route
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:14
+packages/common/dist/ezapp.d.ts:21
 
 ___
 
@@ -769,7 +769,7 @@ EzApp.setErrorHandler
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:24
+packages/common/dist/ezapp.d.ts:31
 
 ___
 
@@ -797,7 +797,7 @@ EzApp.setNotFoundHandler
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:23
+packages/common/dist/ezapp.d.ts:30
 
 ___
 
@@ -825,7 +825,7 @@ EzApp.setSerializerCompiler
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:17
+packages/common/dist/ezapp.d.ts:24
 
 ## Accessors
 
@@ -839,7 +839,7 @@ packages/common/dist/ezapp.d.ts:17
 
 #### Defined in
 
-packages/core/dist/app.d.ts:35
+packages/core/dist/app.d.ts:47
 
 ___
 
@@ -853,7 +853,7 @@ ___
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:4
+packages/common/dist/ezapp.d.ts:8
 
 ___
 
@@ -867,7 +867,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:37
+packages/core/dist/app.d.ts:49
 
 ___
 
@@ -881,7 +881,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:36
+packages/core/dist/app.d.ts:48
 
 ___
 
@@ -895,7 +895,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:39
+packages/core/dist/app.d.ts:51
 
 ___
 
@@ -909,7 +909,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:40
+packages/core/dist/app.d.ts:52
 
 • `set` **name**(`newName`): `void`
 
@@ -925,7 +925,7 @@ packages/core/dist/app.d.ts:40
 
 #### Defined in
 
-packages/core/dist/app.d.ts:44
+packages/core/dist/app.d.ts:56
 
 ___
 
@@ -939,7 +939,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:43
+packages/core/dist/app.d.ts:55
 
 ___
 
@@ -953,7 +953,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:42
+packages/core/dist/app.d.ts:54
 
 ___
 
@@ -967,7 +967,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:38
+packages/core/dist/app.d.ts:50
 
 ___
 
@@ -981,7 +981,7 @@ ___
 
 #### Defined in
 
-packages/core/dist/app.d.ts:41
+packages/core/dist/app.d.ts:53
 
 • `set` **scope**(`newScope`): `void`
 
@@ -997,13 +997,17 @@ packages/core/dist/app.d.ts:41
 
 #### Defined in
 
-packages/core/dist/app.d.ts:45
+packages/core/dist/app.d.ts:57
 
 ## Methods
 
 ### \_setParent
 
 ▸ **_setParent**(`app`): `void`
+
+Assigns current app to a parent app.
+Note! You can only have a maximum of 1 parent.
+EzBackend follows Fastify's encapsulation system. Click [here](https://www.fastify.io/docs/latest/Encapsulation/) for more information on Fastify's encapsulation
 
 #### Parameters
 
@@ -1021,7 +1025,7 @@ EzApp.\_setParent
 
 #### Defined in
 
-packages/core/dist/app.d.ts:57
+packages/core/dist/app.d.ts:131
 
 ___
 
@@ -1029,13 +1033,16 @@ ___
 
 ▸ **addApp**(`name`, `newApp`, `opts?`): `void`
 
+Creates a new app
+Note! You cannot have an app with the same name
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `newApp` | `App` |
-| `opts?` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `name` | `string` |  |
+| `newApp` | `App` |  |
+| `opts?` | `any` | options |
 
 #### Returns
 
@@ -1047,7 +1054,7 @@ EzApp.addApp
 
 #### Defined in
 
-packages/core/dist/app.d.ts:58
+packages/core/dist/app.d.ts:139
 
 ___
 
@@ -1071,13 +1078,15 @@ EzApp.getApp
 
 #### Defined in
 
-packages/core/dist/app.d.ts:59
+packages/core/dist/app.d.ts:140
 
 ___
 
 ### getHookPlugin
 
 ▸ **getHookPlugin**(`lifecycle`): `PluginType`
+
+Retrieves the function assigned to the lifecycle method for the current app
 
 #### Parameters
 
@@ -1095,7 +1104,7 @@ EzApp.getHookPlugin
 
 #### Defined in
 
-packages/core/dist/app.d.ts:60
+packages/core/dist/app.d.ts:146
 
 ___
 
@@ -1103,12 +1112,14 @@ ___
 
 ▸ **registerFastifyPlugins**(`server`, `parent`): `void`
 
+Registers all fastify plugins to server instance of ezbackend application
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `server` | `any` |
-| `parent` | `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `server` | `any` | Server instance |
+| `parent` | `any` | EzBackend Object |
 
 #### Returns
 
@@ -1120,7 +1131,7 @@ EzApp.registerFastifyPlugins
 
 #### Defined in
 
-packages/common/dist/ezapp.d.ts:25
+packages/common/dist/ezapp.d.ts:37
 
 ___
 
@@ -1128,12 +1139,14 @@ ___
 
 ▸ **removeHook**(`lifecycle`, `funcName`): `void`
 
+Removes a previously added function from a lifecycle method
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `lifecycle` | `Lifecycle` |
-| `funcName` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `lifecycle` | `Lifecycle` | Lifecycle where function was added |
+| `funcName` | `string` | Name of function that was added |
 
 #### Returns
 
@@ -1145,7 +1158,7 @@ EzApp.removeHook
 
 #### Defined in
 
-packages/core/dist/app.d.ts:55
+packages/core/dist/app.d.ts:117
 
 ___
 
@@ -1170,7 +1183,7 @@ EzApp.setCustomOverride
 
 #### Defined in
 
-packages/core/dist/app.d.ts:62
+packages/core/dist/app.d.ts:157
 
 ___
 
@@ -1178,12 +1191,14 @@ ___
 
 ▸ **setHandler**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setHandler](_ezbackend_auth.EzAuth#sethandler) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1195,7 +1210,7 @@ EzApp.setHandler
 
 #### Defined in
 
-packages/core/dist/app.d.ts:50
+packages/core/dist/app.d.ts:87
 
 ___
 
@@ -1203,13 +1218,15 @@ ___
 
 ▸ **setHook**(`lifecycle`, `funcName`, `plugin`): `void`
 
+Helper function for each lifecycle method to set it's argument functions as hooks in the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `lifecycle` | `Lifecycle` |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `lifecycle` | `Lifecycle` | Point in the lifecycle to place the function |
+| `funcName` | `string` | Name of function to be placed |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located in |
 
 #### Returns
 
@@ -1221,7 +1238,7 @@ EzApp.setHook
 
 #### Defined in
 
-packages/core/dist/app.d.ts:56
+packages/core/dist/app.d.ts:124
 
 ___
 
@@ -1229,12 +1246,14 @@ ___
 
 ▸ **setInit**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setInit](_ezbackend_auth.EzAuth#setinit) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1246,7 +1265,7 @@ EzApp.setInit
 
 #### Defined in
 
-packages/core/dist/app.d.ts:47
+packages/core/dist/app.d.ts:69
 
 ___
 
@@ -1254,12 +1273,14 @@ ___
 
 ▸ **setPostHandler**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setPostHandler](_ezbackend_auth.EzAuth#setposthandler) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1271,7 +1292,7 @@ EzApp.setPostHandler
 
 #### Defined in
 
-packages/core/dist/app.d.ts:51
+packages/core/dist/app.d.ts:93
 
 ___
 
@@ -1279,12 +1300,14 @@ ___
 
 ▸ **setPostInit**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setPostInit](_ezbackend_auth.EzAuth#setpostinit) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1296,7 +1319,7 @@ EzApp.setPostInit
 
 #### Defined in
 
-packages/core/dist/app.d.ts:48
+packages/core/dist/app.d.ts:75
 
 ___
 
@@ -1304,12 +1327,14 @@ ___
 
 ▸ **setPostRun**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setPostRun](_ezbackend_auth.EzAuth#setpostrun) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1321,7 +1346,7 @@ EzApp.setPostRun
 
 #### Defined in
 
-packages/core/dist/app.d.ts:54
+packages/core/dist/app.d.ts:111
 
 ___
 
@@ -1329,12 +1354,14 @@ ___
 
 ▸ **setPreHandler**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setPreHandler](_ezbackend_auth.EzAuth#setprehandler) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1346,7 +1373,7 @@ EzApp.setPreHandler
 
 #### Defined in
 
-packages/core/dist/app.d.ts:49
+packages/core/dist/app.d.ts:81
 
 ___
 
@@ -1354,12 +1381,14 @@ ___
 
 ▸ **setPreInit**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setPreInit](_ezbackend_auth.EzAuth#setpreinit) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1371,7 +1400,7 @@ EzApp.setPreInit
 
 #### Defined in
 
-packages/core/dist/app.d.ts:46
+packages/core/dist/app.d.ts:63
 
 ___
 
@@ -1379,12 +1408,14 @@ ___
 
 ▸ **setPreRun**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setPreRun](_ezbackend_auth.EzAuth#setprerun) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1396,7 +1427,7 @@ EzApp.setPreRun
 
 #### Defined in
 
-packages/core/dist/app.d.ts:52
+packages/core/dist/app.d.ts:99
 
 ___
 
@@ -1404,12 +1435,14 @@ ___
 
 ▸ **setRun**(`funcName`, `plugin`): `void`
 
+Set's it's argument function as a hook during the [setRun](_ezbackend_auth.EzAuth#setrun) point of the lifecycle
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `funcName` | `string` |
-| `plugin` | `Plugin`<`any`, `any`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `funcName` | `string` | Name of function to be called |
+| `plugin` | `Plugin`<`any`, `any`\> | Plugin where function is located |
 
 #### Returns
 
@@ -1421,13 +1454,15 @@ EzApp.setRun
 
 #### Defined in
 
-packages/core/dist/app.d.ts:53
+packages/core/dist/app.d.ts:105
 
 ___
 
 ### start
 
 ▸ **start**(`opts?`): `Promise`<`void`\>
+
+Starts the app running. You can pass in app options to configure how the app should run
 
 #### Parameters
 
@@ -1445,4 +1480,4 @@ EzApp.start
 
 #### Defined in
 
-packages/core/dist/app.d.ts:61
+packages/core/dist/app.d.ts:151

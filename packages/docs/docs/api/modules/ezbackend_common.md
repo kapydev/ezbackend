@@ -17,6 +17,7 @@ custom_edit_url: null
 ## Interfaces
 
 - [GenerateOpts](../interfaces/_ezbackend_common.GenerateOpts)
+- [RouterOptions](../interfaces/_ezbackend_common.RouterOptions)
 
 ## Type aliases
 
@@ -26,7 +27,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[packages/common/src/model/model.ts:32](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L32)
+[packages/common/src/model/model.ts:32](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L32)
 
 ___
 
@@ -50,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:35](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/generators/api-generator.ts#L35)
+[packages/common/src/model/generators/api-generator.ts:48](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L48)
 
 ___
 
@@ -63,10 +64,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `repoOpts?` | [`RepoOptions`](_ezbackend_common#repooptions) |
+| `routerOpts?` | [`RouterOptions`](../interfaces/_ezbackend_common.RouterOptions) |
 
 #### Defined in
 
-[packages/common/src/model/model.ts:176](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L176)
+[packages/common/src/model/model.ts:177](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L177)
 
 ___
 
@@ -80,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/model.ts:38](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L38)
+[packages/common/src/model/model.ts:38](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L38)
 
 ___
 
@@ -90,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/model.ts:43](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L43)
+[packages/common/src/model/model.ts:43](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L43)
 
 ___
 
@@ -100,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/model.ts:26](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L26)
+[packages/common/src/model/model.ts:26](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L26)
 
 ## Variables
 
@@ -127,13 +129,16 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/model.ts:27](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L27)
+[packages/common/src/model/model.ts:27](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L27)
 
 ## Functions
 
 ### buildRoutePrefix
 
 ▸ **buildRoutePrefix**(`instancePrefix`, `pluginPrefix`): `string`
+
+Use this for building route prefixes.
+Pass in the instance and plugin prefix to generate a proper route prefix.
 
 #### Parameters
 
@@ -148,13 +153,15 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:15](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/generators/api-generator.ts#L15)
+[packages/common/src/model/generators/api-generator.ts:24](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L24)
 
 ___
 
 ### convert
 
 ▸ **convert**(`meta`, `prefix?`): `Object`
+
+Top-level function to convert {@link EntityMetaData} from typeOrm to {@link jsonSchema} format to return the {@link createSchema}, {@link createSchema}, and {@link fullSchema}
 
 #### Parameters
 
@@ -184,13 +191,15 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/typeorm-json-schema/index.ts:260](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/typeorm-json-schema/index.ts#L260)
+[packages/common/src/model/typeorm-json-schema/index.ts:290](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/typeorm-json-schema/index.ts#L290)
 
 ___
 
 ### generateRouteFactory
 
 ▸ **generateRouteFactory**(`genOpts`, `generator`, `middlewares?`): (`instance`: `any`, `opts`: `any`) => `Promise`<`void`\>
+
+Factory function for generating routes.
 
 #### Parameters
 
@@ -219,13 +228,15 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:38](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/generators/api-generator.ts#L38)
+[packages/common/src/model/generators/api-generator.ts:58](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L58)
 
 ___
 
 ### getCreateSchema
 
 ▸ **getCreateSchema**(`meta`, `prefix?`): `Object`
+
+ Retrives JSON Schema for POST requests for given metadata and prefix
 
 #### Parameters
 
@@ -246,13 +257,20 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/typeorm-json-schema/index.ts:131](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/typeorm-json-schema/index.ts#L131)
+[packages/common/src/model/typeorm-json-schema/index.ts:148](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/typeorm-json-schema/index.ts#L148)
 
 ___
 
 ### getDefaultGenerators
 
 ▸ `Const` **getDefaultGenerators**(): `Object`
+
+Generates API Documentation for the current model
+{@link createOne} - Generates API docs for a POST request for one entity
+{@link getOne} - Generates API docs for a GET request for one entity
+{@link getAll} - Generates API docs for a GET request for all entities the model
+{@link udpateOne} - Generates API docs for a PATCH request to one entity
+{@link deleteOne} - Generates API docs for a DELETE request for one entity
 
 #### Returns
 
@@ -268,13 +286,16 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/default-generators.ts:31](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/generators/default-generators.ts#L31)
+[packages/common/src/model/generators/default-generators.ts:46](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/default-generators.ts#L46)
 
 ___
 
 ### getFullSchema
 
 ▸ **getFullSchema**(`meta`, `prefix?`): `Object`
+
+Retrives full JSON Schema for PATCH requests for given metadata and prefix.
+Note: This also the schema used for the database ui.
 
 #### Parameters
 
@@ -295,13 +316,15 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/typeorm-json-schema/index.ts:191](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/typeorm-json-schema/index.ts#L191)
+[packages/common/src/model/typeorm-json-schema/index.ts:215](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/typeorm-json-schema/index.ts#L215)
 
 ___
 
 ### getPrimaryColName
 
 ▸ **getPrimaryColName**(`meta`): `string`
+
+Returns the primary column name from given metadata
 
 #### Parameters
 
@@ -315,13 +338,15 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/default-generators.ts:6](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/generators/default-generators.ts#L6)
+[packages/common/src/model/generators/default-generators.ts:11](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/default-generators.ts#L11)
 
 ___
 
 ### getRoutePrefix
 
 ▸ **getRoutePrefix**(`prefixes`): `string`
+
+getRoutePrefix
 
 #### Parameters
 
@@ -335,13 +360,15 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:31](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/generators/api-generator.ts#L31)
+[packages/common/src/model/generators/api-generator.ts:44](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L44)
 
 ___
 
 ### getSchemaName
 
 ▸ **getSchemaName**(`meta`, `type`, `prefix?`): `string`
+
+Retrieves the schema name for given metadata, type, and prefix
 
 #### Parameters
 
@@ -357,13 +384,15 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/typeorm-json-schema/index.ts:7](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/typeorm-json-schema/index.ts#L7)
+[packages/common/src/model/typeorm-json-schema/index.ts:13](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/typeorm-json-schema/index.ts#L13)
 
 ___
 
 ### getUpdateSchema
 
 ▸ **getUpdateSchema**(`meta`, `prefix?`): `Object`
+
+Retrives JSON Schema for PATCH requests for given metadata and prefix
 
 #### Parameters
 
@@ -384,7 +413,7 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/typeorm-json-schema/index.ts:87](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/typeorm-json-schema/index.ts#L87)
+[packages/common/src/model/typeorm-json-schema/index.ts:98](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/typeorm-json-schema/index.ts#L98)
 
 ___
 
@@ -404,7 +433,7 @@ type is NestedNormalType
 
 #### Defined in
 
-[packages/common/src/model/model.ts:94](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L94)
+[packages/common/src/model/model.ts:95](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L95)
 
 ___
 
@@ -424,7 +453,7 @@ type is NestedRelationType
 
 #### Defined in
 
-[packages/common/src/model/model.ts:86](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L86)
+[packages/common/src/model/model.ts:87](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L87)
 
 ___
 
@@ -444,7 +473,7 @@ type is NormalType
 
 #### Defined in
 
-[packages/common/src/model/model.ts:90](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L90)
+[packages/common/src/model/model.ts:91](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L91)
 
 ___
 
@@ -464,7 +493,7 @@ type is RelationType
 
 #### Defined in
 
-[packages/common/src/model/model.ts:82](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/model.ts#L82)
+[packages/common/src/model/model.ts:83](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/model.ts#L83)
 
 ___
 
@@ -485,4 +514,4 @@ ___
 
 #### Defined in
 
-[packages/common/src/model/generators/api-generator.ts:52](https://github.com/kapydev/ezbackend/blob/dbd1712/packages/common/src/model/generators/api-generator.ts#L52)
+[packages/common/src/model/generators/api-generator.ts:72](https://github.com/kapydev/ezbackend/blob/15c3f57/packages/common/src/model/generators/api-generator.ts#L72)
