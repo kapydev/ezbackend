@@ -19,12 +19,12 @@ async function addErrorSchema(instance, opts) {
 }
 
 /**
- * Parent of EzApp class - acquires all the properties of the EzApp class
+ * Child of EzApp. This is where you set up your backend setup tasks.
  */
 export class EzBackend extends EzApp {
+
     constructor() {
         super()
-        
         this.setInit('Create Entities Container', async (instance, opts) => {
             instance.entities = []
         })
@@ -46,7 +46,7 @@ export class EzBackend extends EzApp {
             instance._server = fastify(opts.server)
         })
 
-        this.setPostHandler('Register Fastify Plugins', async (instance,opts) => {
+        this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
             this.registerFastifyPlugins(instance._server, this)
         })
 

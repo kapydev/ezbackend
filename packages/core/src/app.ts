@@ -40,39 +40,22 @@ export class AppInstance {
 
 export type Override = Avvio<AppInstance>['override']
 
-export type Overrides = {[name:string]: Avvio<unknown>['override']}
+export type Overrides = { [name: string]: Avvio<unknown>['override'] }
 
 //URGENT TODO: Add types
 //TODO: Added safety for overriding instance variables?
 
 /**
- * The root sever appplication - contains all core and lifecycle methods for server app
- * 
- * Each lifecycle method set's it's argument function as a hook wihtin the lifecycle
- * 
- * @param funcName Name of function to be called
- * @param plugin Plugin where function is located
+ * An App is the basic building block for a plugin system, it contains all core and lifecycle methods.
  * 
  * **App Lifecycle**
- * `
- * setPreInit
- * ↓
- * setInit
- * ↓
- * setPostInit
- * ↓
- * setPreHandler
- * ↓
- * setHandler
- * ↓
- * setPostHandler
- * ↓
- * setPreRun
- * ↓
- * setRun
- * ↓
- * setPostRun
- * `
+ * 
+ * {@link setPreInit} → {@link setInit} → {@link setPostInit}
+ * 
+ * → {@link setPreHandler} → {@link setHandler} → {@link setPostHandler} 
+ * 
+ * → {@link setPreRun} → {@link setRun} → {@link setPostRun}
+ * 
  */
 export class App {
     protected _parent: App | undefined
@@ -124,7 +107,7 @@ export class App {
     get name() { return this._name }
     get scope() { return this._scope }
     get parent() { return this._parent }
-    get overrides() {return this._overrides}
+    get overrides() { return this._overrides }
 
     set name(newName: string) {
         //Should we prevent setting the name more than once?
@@ -134,18 +117,81 @@ export class App {
     set scope(newScope: PluginScope) {
         this._scope = newScope
     }
-    setPreInit(funcName: string, plugin: Plugin<any, any>) { this.setHook('_preInit', funcName, plugin) }
-    setInit(funcName: string, plugin: Plugin<any, any>) { this.setHook('_init', funcName, plugin) }
-    setPostInit(funcName: string, plugin: Plugin<any, any>) { this.setHook('_postInit', funcName, plugin) }
-    setPreHandler(funcName: string, plugin: Plugin<any, any>) { this.setHook('_preHandler', funcName, plugin) }
-    setHandler(funcName: string, plugin: Plugin<any, any>) { this.setHook('_handler', funcName, plugin) }
-    setPostHandler(funcName: string, plugin: Plugin<any, any>) { this.setHook('_postHandler', funcName, plugin) }
-    setPreRun(funcName: string, plugin: Plugin<any, any>) { this.setHook('_preRun', funcName, plugin) }
-    setRun(funcName: string, plugin: Plugin<any, any>) { this.setHook('_run', funcName, plugin) }
-    setPostRun(funcName: string, plugin: Plugin<any, any>) { this.setHook('_postRun', funcName, plugin) }
+    /**
+     * Set's it's argument function as a hook during the {@link setPreInit} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setPreInit(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_preInit', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setInit} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setInit(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_init', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setPostInit} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setPostInit(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_postInit', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setPreHandler} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setPreHandler(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_preHandler', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setHandler} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setHandler(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_handler', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setPostHandler} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setPostHandler(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_postHandler', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setPreRun} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setPreRun(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_preRun', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setRun} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setRun(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_run', funcName, plugin)
+    }
+    /**
+     * Set's it's argument function as a hook during the {@link setPostRun} point of the lifecycle
+     * @param funcName Name of function to be called
+     * @param plugin Plugin where function is located
+     */
+    setPostRun(funcName: string, plugin: Plugin<any, any>) {
+        this.setHook('_postRun', funcName, plugin)
+    }
 
     /**
-     * Removes a previously added function from lifecycle methods
+     * Removes a previously added function from a lifecycle method
      * @param lifecycle Lifecycle where function was added
      * @param funcName Name of function that was added
      */
@@ -155,7 +201,6 @@ export class App {
         }
         //Override the plugin name
         this[lifecycle].delete(funcName)
-
     }
 
     /**
@@ -171,9 +216,14 @@ export class App {
         //Override the plugin name
         Object.defineProperty(plugin, 'name', { value: funcName })
         this[lifecycle].set(funcName, plugin)
-
     }
 
+    /**
+     * Assigns current app to a parent app.
+     * Note! You can only have a maximum of 1 parent.
+     * EzBackend follows Fastify's encapsulation system. Click [here](https://www.fastify.io/docs/latest/Encapsulation/) for more information on Fastify's encapsulation
+     * @param app 
+     */
     _setParent(app: App) {
         if (this._parent === undefined) {
             this._parent = app
@@ -182,8 +232,14 @@ export class App {
         }
     }
 
-
-
+    /**
+     * Creates a new app
+     * Note! You cannot have an app with the same name
+     * @param name 
+     * @param newApp 
+     * @param opts options
+     * @param scope 
+     */
     addApp(name: string, newApp: App, opts: any = {}, scope: PluginScope = PluginScope.DEFAULT) {
         if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
             throw (`Child app ${name} already exists`)
@@ -193,9 +249,13 @@ export class App {
         newApp.opts = opts
         newApp._setParent(this)
         this._apps.set(name, newApp)
-        
     }
 
+    /**
+     * Retrieves the function assigned to the lifecycle method for the current app
+     * @param lifecycle
+     * @returns 
+     */
     getHookPlugin(lifecycle: Lifecycle): undefined | PluginType {
 
         //URGENT TODO: Plugin edge test case where child has hook but parent does not
@@ -232,6 +292,10 @@ export class App {
         return appFunc
     }
 
+    /**
+     * Starts the app running. You can pass in app options to configure how the app should run
+     * @param opts 
+     */
     async start(opts?: any) {
         if (this._instance.started) {
             throw `App has been started already!`
@@ -251,10 +315,22 @@ export class App {
         await this._instance.ready()
     }
 
-    setCustomOverride(varName:string, override: Avvio<unknown>['override']) {
+    /**
+     * 
+     * @param varName 
+     * @param override 
+     */
+    setCustomOverride(varName: string, override: Avvio<unknown>['override']) {
         this._overrides[varName] = override
     }
 
+    /**
+     * 
+     * @param old 
+     * @param fn 
+     * @param opts 
+     * @returns 
+     */
     protected override: Override = (old, fn, opts) => {
         let newInstance: mixedInstance<AppInstance>
         const parentApp = fn.prototype[kApp] ?? this
@@ -263,14 +339,14 @@ export class App {
             //Uses new scope
             if (parentApp[kInstance] === undefined) {
                 parentApp[kInstance] = Object.create(old)
-                Object.entries(this.overrides).forEach(([varName,override]) => {
+                Object.entries(this.overrides).forEach(([varName, override]) => {
                     if (parentApp[kInstance][varName] === undefined) {
                         //Don't do anything if variable has not been defined yet
                         return
                     }
                     parentApp[kInstance][varName] = override(
                         parentApp[kInstance][varName],
-                        async (instance,opts) => {},
+                        async (instance, opts) => { },
                         parentApp.opts
                     )
                 })

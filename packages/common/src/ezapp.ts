@@ -21,7 +21,8 @@ function createServer(parent:EzApp) {
 }
 
 /**
- * Parent of App class - acquires all the properties of the App class
+ * Building block to build a plugin system
+ * Child of {@link App}  {@link App} class
  */
 export class EzApp extends App {
 
@@ -29,6 +30,9 @@ export class EzApp extends App {
 
     get functions() { return this._functions }
 
+    /**
+     * Creates a fastify instance
+     */
     constructor() {
         super()
         this.setHandler("Create Server Stub", async (instance, opts) => {
@@ -37,7 +41,6 @@ export class EzApp extends App {
         this.setPostHandler("Remove Server Stub", async (instance, opts) => {
             delete instance.server
         })
-
     }
 
     /**

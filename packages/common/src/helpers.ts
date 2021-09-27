@@ -1,7 +1,7 @@
 /**
- * converts to lowercase kebabcase
+ * Converts a string to lowercase kebabcase (e.g. Kebab Case → kebab-case)
  * @param str 
- * @returns 
+ * @returns lowecase kebabcase
  */
 export const kebabCase = (str: string) => {
   return str

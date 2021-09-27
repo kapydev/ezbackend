@@ -13,7 +13,7 @@ module.exports = {
   organizationName: 'kapydev', // Usually your GitHub org/user name.
   projectName: 'ezbackend', // Usually your repo name.
   trailingSlash: 'false',
-  plugins: [ // URGENT TODO: THIS CURRENTLY NAMES FILES MANUALLY CAN WE DO IT PROPERLY WITH DOCUSAURUS
+  plugins: [
     function renameMarkdown(context, options) {
       return {
         name: 'markdown-renamer',
