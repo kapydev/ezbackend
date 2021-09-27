@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/utils",
-  "version": "0.0.79",
+  "version": "0.0.80",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/kapydev/ezbackend#readme",
@@ -13,6 +13,9 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kapydev/ezbackend.git"
@@ -25,5 +28,6 @@
   },
   "dependencies": {
     "pretty-error": "^3.0.4"
-  }
+  },
+  "gitHead": "49f390ab4e0b6e88499624d7ba876ef15859f7b3"
 }

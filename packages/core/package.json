@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/core",
-  "version": "0.0.79",
+  "version": "0.0.80",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -28,5 +28,5 @@
     "avvio": "^7.2.2",
     "commander": "^8.1.0"
   },
-  "gitHead": "2f0daeaa2176f8908e4ae59effe90ef1251e3134"
+  "gitHead": "49f390ab4e0b6e88499624d7ba876ef15859f7b3"
 }
