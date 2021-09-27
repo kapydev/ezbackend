@@ -42,6 +42,7 @@ export type ModelSchema = {
 export type ModelOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
 
 //URGENT TODO: Allow normal typeorm types?
+
 function normalTypeToTypeORMtype(type:NormalType):ColumnType {
     switch (type) {
     case NormalType.VARCHAR:
@@ -158,6 +159,9 @@ function entityGeneratorFactory (modelName: string, modelSchema: ModelSchema, mo
     return entityGenerator
 }
 
+/**
+ * Child of EzApp. This is your data model.
+ */
 export class EzModel extends EzApp {
     constructor(modelName: string, modelSchema: ModelSchema, modelOptions: ModelOptions = {}) {
         super()

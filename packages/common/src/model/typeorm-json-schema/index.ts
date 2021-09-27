@@ -3,7 +3,13 @@ import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 
 //URGENT TODO: See if there is a json schema library that can help with this... (fluent schema?)
-
+/**
+ * Retrieves the schema name for given metadata, type, and prefix
+ * @param meta 
+ * @param type 
+ * @param prefix 
+ * @returns 
+ */
 export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema', prefix?: string) {
   let baseName
   if (meta instanceof RelationMetadata) {
@@ -31,6 +37,7 @@ function colMetaToSchemaProps(colMeta: ColumnMetadata) {
   };
 
 }
+
 
 //NOTE: This relation col basically means that the column is a true relation, like program => <Object>
 //Not applicable to programId => <Number>
@@ -79,9 +86,13 @@ function checkColIsGenerated(col: ColumnMetadata) {
   )
 }
 
-
-
 //TODO: Combine schemas if possible
+/**
+ * Retrives JSON Schema for PATCH requests for given metadata and prefix
+ * @param meta 
+ * @param prefix 
+ * @returns 
+ */
 export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
 
   const nonGeneratedColumns = meta.columns.filter(col => !checkColIsGenerated(col));
@@ -126,6 +137,12 @@ export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
   return updateSchema
 }
 
+/**
+ *  Retrives JSON Schema for POST requests for given metadata and prefix
+ * @param meta 
+ * @param prefix 
+ * @returns 
+ */
 export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
   const nonGeneratedColumns = meta.columns.filter(col => !checkColIsGenerated(col));
 
@@ -186,6 +203,13 @@ function makeArray(schema: any) {
   }
 }
 
+/**
+ * Retrives full JSON Schema for PATCH requests for given metadata and prefix.
+ * Note: This also the schema used for the database ui.
+ * @param meta 
+ * @param prefix 
+ * @returns 
+ */
 export function getFullSchema(meta: EntityMetadata, prefix?: string) {
   let fullSchema = Object.entries(meta.columns)
     //Remove all relations
@@ -255,6 +279,12 @@ function getNestedMetadata(meta: EntityMetadata, type: 'create' | 'update' | 're
   })
 }
 
+/**
+ * Top-level function to convert {@link EntityMetaData} from typeOrm to {@link jsonSchema} format to return the {@link createSchema}, {@link createSchema}, and {@link fullSchema}
+ * @param meta 
+ * @param prefix 
+ * @returns 
+ */
 export function convert(meta: EntityMetadata, prefix?: string) {
   const updateSchema = getUpdateSchema(meta, prefix)
   const createSchema = getCreateSchema(meta, prefix)

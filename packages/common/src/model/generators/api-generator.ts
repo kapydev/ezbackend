@@ -12,6 +12,13 @@ interface IAPIGeneratorOpts {
 type IGenerator = (repo: Repository<unknown>, opts?: GenerateOpts) => RouteOptions | Array<RouteOptions>;
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
+/**
+ * Use this for building route prefixes. 
+ * Pass in the instance and plugin prefix to generate a proper route prefix.
+ * @param instancePrefix 
+ * @param pluginPrefix 
+ * @returns 
+ */
 export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
     if (!pluginPrefix) {
         return instancePrefix
@@ -27,12 +34,22 @@ export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
 
     return instancePrefix + pluginPrefix
 }
-
+/**
+ * getRoutePrefix
+ * @param prefixes 
+ * @returns 
+ */
 export function getRoutePrefix(prefixes: Array<string>) {
     return prefixes.reduceRight(buildRoutePrefix)
 }
 
 //TODO: Custom routes involving apps?
+/**
+ * Factory function for generating routes. 
+ * @param genOpts 
+ * @param generator 
+ * @returns 
+ */
 export function generateRouteFactory(genOpts, generator) {
     return async (instance, opts) => {
         const routes: Array<RouteOptions> = [].concat(generator(instance.repo, genOpts))
@@ -45,6 +62,9 @@ export function generateRouteFactory(genOpts, generator) {
 
 //TODO: Think about function naming
 //TODO: Figure out what the heck this genOpts done and if its useless remove it
+/**
+ * Child of EzApp. Handles route generation for 
+ */
 export class EzRouter extends EzApp {
     constructor(opts: IAPIGeneratorOpts = { prefix: '' }, generators = getDefaultGenerators()) {
         super()
