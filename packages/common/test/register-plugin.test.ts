@@ -1,8 +1,6 @@
 import { EzBackend } from "../src";
 import { kRoutePrefix } from "fastify/lib/symbols"
 import { FastifyInstance } from 'fastify'
-import fp from 'fastify-plugin'
-import { App } from "@ezbackend/core";
 
 //TODO: Figure if there is a better way of getting this data
 function getInternalInstance(ezb: EzBackend) {

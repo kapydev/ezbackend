@@ -1,5 +1,5 @@
 import { EzApp } from "./ezapp";
-import fastify from "fastify";
+import fastify, {FastifyInstance} from "fastify";
 import fastifyBoom from 'fastify-boom'
 import { createConnection } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
@@ -22,8 +22,8 @@ async function addErrorSchema(instance, opts) {
 export class EzBackend extends EzApp {
     constructor() {
         super()
-        
-        
+
+
         this.setInit('Create Entities Container', async (instance, opts) => {
             instance.entities = []
         })
@@ -45,7 +45,7 @@ export class EzBackend extends EzApp {
             instance._server = fastify(opts.server)
         })
 
-        this.setPostHandler('Register Fastify Plugins', async (instance,opts) => {
+        this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
             this.registerFastifyPlugins(instance._server, this)
         })
 
@@ -54,6 +54,20 @@ export class EzBackend extends EzApp {
         })
 
         this.scope = PluginScope.PARENT
+
+    }
+
+    async inject(injectOpts) {
+        //TODO: Figure if there is a better way of getting this data
+        //@ts-ignore
+        if (this.instance._lastUsed === null) {
+            throw "Server is still undefined, have you called app.start() yet?"
+        }
+        //@ts-ignore
+        const internalInstance = this.instance._lastUsed.server
+        const server = internalInstance._server
+
+        return await server.inject(injectOpts)
 
     }
 

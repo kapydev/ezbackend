@@ -156,6 +156,10 @@ export class App {
         
     }
 
+    getApp(name) {
+        return this.apps.get(name)
+    }
+
     getHookPlugin(lifecycle: Lifecycle): undefined | PluginType {
 
         //URGENT TODO: Plugin edge test case where child has hook but parent does not

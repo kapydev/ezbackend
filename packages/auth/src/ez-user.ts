@@ -1,4 +1,4 @@
-import { EzModel, ModelSchema, ModelOptions, Type } from '@ezbackend/common'
+import { EzModel, ModelSchema, ModelOpts, Type } from '@ezbackend/common'
 import providers from './providers'
 
 export type Providers = Array<'google'>
@@ -19,7 +19,7 @@ function addProviderToSchema(providerName: string, schema: ModelSchema) {
 
 export class EzUser extends EzModel {
 
-    constructor(modelName: string, providerNames: Providers, modelSchema: ModelSchema = {}, modelOptions: ModelOptions = {}) {
+    constructor(modelName: string, providerNames: Providers, modelSchema: ModelSchema = {}, modelOptions: ModelOpts = {}) {
 
         //Modify the schema to introduce things required by the providers
         providerNames.forEach(providerName => {

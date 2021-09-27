@@ -10,14 +10,37 @@ function generateFastifyFuncWrapper(parent,funcName:string) {
     }
 }
 
+//TODO: Add types based on fastify instance
+//TODO: Tests for all stubbing performed
 function createServer(parent:EzApp) {
     return {
+        //Routes
+        delete: generateFastifyFuncWrapper(parent,'delete'),
+        get: generateFastifyFuncWrapper(parent,'get'),
+        head: generateFastifyFuncWrapper(parent,'head'),
+        patch: generateFastifyFuncWrapper(parent,'patch'),
+        post: generateFastifyFuncWrapper(parent,'post'),
+        put: generateFastifyFuncWrapper(parent,'put'),
+        options: generateFastifyFuncWrapper(parent,'options'),
+        all: generateFastifyFuncWrapper(parent,'all'),
         route: generateFastifyFuncWrapper(parent,'route'),
-        register: generateFastifyFuncWrapper(parent,'register'),
-        addSchema: generateFastifyFuncWrapper(parent,'addSchema'),
-        decorateReply: generateFastifyFuncWrapper(parent,'decorateReply'),
-        inject: generateFastifyFuncWrapper(parent,'inject'),
+
         addHook: generateFastifyFuncWrapper(parent,'addHook'),
+        addSchema: generateFastifyFuncWrapper(parent,'addSchema'),
+
+        setSerializerCompiler: generateFastifyFuncWrapper(parent,'setSerializerCompiler'),
+        addContentTypeParser: generateFastifyFuncWrapper(parent,'addContentTypeParser'),
+
+        decorate: generateFastifyFuncWrapper(parent,'decorate'),
+        decorateReply: generateFastifyFuncWrapper(parent,'decorateReply'),
+        decorateRequest: generateFastifyFuncWrapper(parent,'decorateRequest'),
+
+        inject: generateFastifyFuncWrapper(parent,'inject'),
+        register: generateFastifyFuncWrapper(parent,'register'),
+
+        setNotFoundHandler: generateFastifyFuncWrapper(parent,'setNotFoundHandler'),
+        setErrorHandler: generateFastifyFuncWrapper(parent,'setErrorHandler'),
+
     }
 }
 

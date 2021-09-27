@@ -39,7 +39,7 @@ export type ModelSchema = {
 
 }
 
-export type ModelOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
+export type RepoOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
 
 //URGENT TODO: Allow normal typeorm types?
 function normalTypeToTypeORMtype(type:NormalType):ColumnType {
@@ -144,33 +144,49 @@ function schemaToEntityOptions(schema: ModelSchema) {
 }
 
 //TODO: Think about function naming
-function entityGeneratorFactory (modelName: string, modelSchema: ModelSchema, modelOptions: ModelOptions) {
+function entityGeneratorFactory (modelName: string, modelSchema: ModelSchema, repoOpts: RepoOptions) {
     const entityGenerator: Plugin<any, any> = async (instance, opts) => {
         const {columns,relations} = schemaToEntityOptions(modelSchema)
         const newEntity = new EntitySchema({
             name: modelName,
             columns,
             relations,
-            ...modelOptions
+            ...repoOpts
         })
         instance.entities.push(newEntity)
     }
     return entityGenerator
 }
 
-export class EzModel extends EzApp {
-    constructor(modelName: string, modelSchema: ModelSchema, modelOptions: ModelOptions = {}) {
+export class EzModelRepo extends EzApp {
+    constructor(modelName: string, modelSchema: ModelSchema, repoOpts: RepoOptions = {}) {
         super()
-        this.setInit(`Create "${modelName}" Entity`, entityGeneratorFactory(modelName, modelSchema, modelOptions))
+        this.setInit(`Create "${modelName}" Entity`, entityGeneratorFactory(modelName, modelSchema, repoOpts))
 
         this.setPostInit(`Obtain ${modelName} Repository`, async(instance,opts) => {
             instance.repo = instance.orm.getRepository(modelName)
         })
+    }
+}
+
+export type ModelOpts = {
+    repoOpts?: RepoOptions
+}
+
+export class EzModel extends EzModelRepo {
+
+    //TODO: Figure out automatic typings
+    get router():EzRouter {
+        return this.getApp('router') as EzRouter
+    }
+
+    constructor(modelName: string, modelSchema: ModelSchema, opts: ModelOpts = {}) {
+        super(modelName, modelSchema, opts.repoOpts ?? {})
 
         const router = new EzRouter()
 
         //TODO: Think about customisability of EzRouter
-        this.addApp("Router", router)
+        this.addApp("router", router)
     }
 
 }
