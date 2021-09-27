@@ -1,12 +1,11 @@
 {
   "name": "@ezbackend/cli",
-  "version": "0.0.78",
+  "version": "0.0.79",
   "description": "",
   "main": "./bin/index.js",
   "bin": {
     "ezb": "./bin/index.js"
   },
-  "main": "./bin/index.js",
   "scripts": {
     "test": "echo \"Testing server with version: $npm_package_version",
     "build": "tsc",
