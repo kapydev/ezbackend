@@ -6443,9 +6443,10 @@ fastify-static@^4.0.0, fastify-static@^4.2.3:
     readable-stream "^3.4.0"
     send "^0.17.1"
 
-"fastify-swagger@git+https://github.com/fastify/fastify-swagger.git#a2c210d6a4ae8c251a52e2c75a2a644caa435f94":
-  version "4.9.0"
-  resolved "git+https://github.com/fastify/fastify-swagger.git#a2c210d6a4ae8c251a52e2c75a2a644caa435f94"
+fastify-swagger@^4.12.1:
+  version "4.12.1"
+  resolved "https://registry.yarnpkg.com/fastify-swagger/-/fastify-swagger-4.12.1.tgz#4c5c7fa5546a4ed3a67ff8c57657ca5b66725e39"
+  integrity sha512-QlEIS+gKPRdU1QBtfhF1buptJkQf1k/KmEHueQo2lw2M9q3vJr0VgjDHao4Kf5wcjy6QF0vSq/MFCicSy20M8Q==
   dependencies:
     fastify-plugin "^3.0.0"
     fastify-static "^4.0.0"
@@ -10417,9 +10418,9 @@ open@^8.2.1:
     is-wsl "^2.2.0"
 
 openapi-types@^9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/openapi-types/-/openapi-types-9.1.0.tgz#a2ab0acc5198c1725f83d7cbe063efd1bcd0479e"
-  integrity sha512-mhXh8QN8sbErlxfxBeZ/pzgvmDn443p8CXlxwGSi2bWANZAFvjLPI0PoGjqHW+JdBbXg6uvmvM81WXaweh/SVA==
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/openapi-types/-/openapi-types-9.3.0.tgz#2d90549edb928cf06cf83018485a1a5961fbd2b9"
+  integrity sha512-sR23YjmuwDSMsQVZDHbV9mPgi0RyniQlqR0AQxTC2/F3cpSjRFMH3CFPjoWvNqhC4OxPkDYNb2l8Mc1Me6D/KQ==
 
 opener@^1.5.2:
   version "1.5.2"

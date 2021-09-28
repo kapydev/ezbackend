@@ -34,7 +34,7 @@ export class EzOpenAPI extends App {
         this.setHandler('Add Swagger Plugin', addSwaggerPlugin)
 
         this.setPostRun('Display OpenAPI URL', async (instance, opts) => {
-            if (opts.port) {
+            if (opts.port && process.env.NODE_ENV != 'test') {
                 console.log(chalk.greenBright(`View your auto-generated Documentation at `) + chalk.yellow.underline(`http://localhost:${opts.port}/docs`))
             }
         })

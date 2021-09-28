@@ -18,6 +18,7 @@ describe("Plugin Registering", () => {
     const defaultConfig = {
         port: 3000,
         server: {
+            logger:false
         },
         orm: {
             type: "sqlite",

@@ -99,7 +99,7 @@ export class EzDbUI extends App {
         })
 
         this.setPostRun("Display DB UI URL", async (instance, opts) => {
-            if (opts.port) {
+            if (opts.port && process.env.NODE_ENV != 'test') {
                 console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui/`))
             }
         })

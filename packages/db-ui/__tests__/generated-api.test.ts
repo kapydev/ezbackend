@@ -39,6 +39,7 @@ beforeAll(async () => {
     await app.start({
         port: 3000,
         server: {
+            logger:false
         },
         orm: {
             type: "sqlite",
