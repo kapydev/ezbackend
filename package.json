@@ -21,5 +21,8 @@
   },
   "dependencies": {
     "typescript": "^4.3.5"
+  },
+  "resolutions": {
+    "tar": "6.1.11"
   }
 }
