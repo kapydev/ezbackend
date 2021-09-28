@@ -18,9 +18,9 @@ By default, EzBackend generates the following routes:
 | updateOne  | PATCH  | `/:id` | Update a single entry in the database |
 | deleteOne  | DELETE | `/:id` | Delete a single entry in the database |
 
-All the routes support nested functionality, and you can see more details [here](/docs/tutorial-basics/relations#nested-functionality)
+All the routes support nested functionality, and you can see more details [here](relations#nested-functionality)
 
-## Removing Default Routes
+<!-- ## Removing Default Routes
 
 You can include only specific routes, or exclude specific routes easily by specifying the routes required in `@EzModel`
 
@@ -50,7 +50,6 @@ Making a custom endpoint for your model is one of the many things you can custom
 
 Assuming we want a 'getAll' API, we can do so like this
 
-<!-- TODO: Break down this extremely chonky code for the user -->
 
 :::info
 Right now its pretty complicated, but we will be expanding the EzBackend API soon to make this more seamless
@@ -79,5 +78,5 @@ APIGenerator.setGenerator("getAll", (repo) => {
 
 :::info
 Coming soon
-:::
+::: -->
 

@@ -4,6 +4,12 @@ sidebar_position: 1
 
 # Lifecycle and Hooks
 
+:::warning
+
+This page is currently being updated and not fully up to date
+
+:::
+
 EzBackend allows you to create custom plugins by hooking your plugins into any part of the EzBackend lifecycle as you so wish
 
 <!-- TODO: Make hooks into functions instead of replacing properties because thats kinda weird -->
@@ -46,14 +52,14 @@ postRun
 
 All of the `pre` and `post` parts of the lifecycles are arrays, whereas everything else is a single function
 
-When you run `import EzBackend from '@ezbackend/core`, there are no functions in the lifecycle
+When you run `import {App} from '@ezbackend/core`, there are no functions in the lifecycle
 
-Then when you add `@ezbackend/common` as a plugin, the below happens:
+However, when you use `import {EzBackend} from '@ezbackend/common` as a plugin, It comes with some lifecycle hooks
 
 ```
 .
 |
-init[🎣Create sequelize and fastify instance]
+init[🎣Create typeorm connection and fastify instance]
 |
 .
 |
@@ -68,24 +74,29 @@ run[🎣Sync DB tables and start server]
 
 As you can see we have 🎣hooked🎣 onto the lifecycle the commands to automatically start a server based on just a provided schema!
 
-Let's look at an actual example from how `init` in `@ezbackend/common` is implemented
+Let's look at an actual example from how `postInit` in `EzBackend` is implemented
 <!-- TODO: Keep this updated from the code -->
 
 ```ts
-const ezb = EzBackend.app() as EzBackend;
+export class EzBackend extends EzApp {
 
-
-//Configure defaults
-ezb.plugins.init = (ezb, opts, cb) => {
-  ezb.sequelize = new Sequelize("sqlite::memory", opts.orm);
-  ezb.server = fastify(opts.server);
-  cb();
-};
+    constructor() {
+        super()
+        .
+        .
+        this.setPostInit('Create Database Connection', async (instance, opts) => {
+            instance.orm = await createConnection(
+                {
+                    ...opts.orm,
+                    entities: instance.entities
+                }
+            )
+        })
+        .
+        .
+    }
+}
 ```
-
-:::caution
-Editing the `init`, `handler` and `run` functions directly may cause future problems, because these functions will probably be edited by our one click deploy in the future
-:::
 
 This system uses [avvio by fastify](https://github.com/fastify/avvio) to declare every function at each step as a plugin, so that regardless of whether plugins are asynchronous or not they will still load in the same order
 
@@ -101,7 +112,7 @@ init[Create sequelize and fastify instance]
 postInit
 |_[🎣register swagger]
 |
-handler[Import models from index.ts and register routes]
+handler[🎣register swagger]
 |
 .
 |
