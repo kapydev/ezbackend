@@ -1,8 +1,55 @@
-# EzBackend
+<p align="center">
+    <img src="favicon.png" width="200">
+</p>
+<p align="center">Simple. Scalable. Secure.</p>
+<p align="center">Backend Setup in <b>two lines of code</b></p>
 
-Simple. Scalable. Secure.
+</br>
 
-Backend Setup in **two lines of code**
+<p align="center">
+    <a href="https://snyk.io/advisor/npm-package/ezbackend"> 
+        <img src="https://snyk.io/advisor/npm-package/ezbackend/badge.svg"/>
+    </a>
+    <a href="https://codecov.io/gh/PhilipWee/ezbackend"> 
+        <img src="https://codecov.io/gh/PhilipWee/ezbackend/branch/master/graph/badge.svg?token=YZX7TT9XBQ"/>
+    </a>
+    <br/>
+    <a href="https://www.codefactor.io/repository/github/kapydev/ezbackend"> 
+        <img src="https://www.codefactor.io/repository/github/kapydev/ezbackend/badge"/>
+    </a>
+    <a> 
+        <img src="https://img.shields.io/github/workflow/status/kapydev/ezbackend/Calculate%20Coverage"/>
+    </a>
+    <a> 
+        <img src="https://img.shields.io/npms-io/maintenance-score/ezbackend"/>
+    </a>
+    <a> 
+        <img src="https://img.shields.io/github/commit-activity/m/kapydev/ezbackend"/>
+    </a>
+    <br/>
+    <a"> 
+        <img src="https://img.shields.io/david/kapydev/ezbackend"/>
+    </a>
+    <a> 
+        <img src="https://img.shields.io/npm/dw/ezbackend"/>
+    </a>
+    <a> 
+        <img src="https://img.shields.io/github/issues/kapydev/ezbackend"/>
+    </a>
+    <a> 
+        <img src="https://img.shields.io/github/license/kapydev/ezbackend"/>
+    </a>
+    <br/>
+    <a href="https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ"> 
+        <img src="https://img.shields.io/youtube/channel/views/UCXFyio7c5EWBGLknUJZjIzQ?style=social"/>
+    </a>
+    <a href="https://discord.gg/S4gTjYjkuG"> 
+        <img src="https://img.shields.io/discord/882956870527098910?label=Discord&logo=discord&style=social"/>
+    </a>
+    
+</p>
+
+
 
 ## Installation
 
