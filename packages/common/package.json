@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.85",
+  "version": "0.0.86",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -32,6 +32,9 @@
     "pino-pretty": "^5.1.2",
     "sqlite3": "^5.0.2",
     "typeorm": "^0.2.37"
+  },
+  "resolutions": {
+    "tar": "^6.1.9"
   },
   "gitHead": "49f390ab4e0b6e88499624d7ba876ef15859f7b3"
 }
