@@ -16,11 +16,6 @@ beforeAll(async () => {
     server: {
       logger:false
     },
-    orm: {
-      type: "sqlite",
-      database: ":memory:",
-      synchronize: true
-    }
   })
 });
 

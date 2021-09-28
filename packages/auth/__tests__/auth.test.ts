@@ -20,11 +20,6 @@ describe("Plugin Registering", () => {
         server: {
             logger:false
         },
-        orm: {
-            type: "sqlite",
-            database: ":memory:",
-            synchronize: true
-        },
         auth: {
             secretKeyPath: path.resolve(__dirname, "./testing-not-secret-key"),
             google: {

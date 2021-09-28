@@ -9,11 +9,6 @@ beforeAll(async () => {
     port: 3000,
     server: {
       logger:false
-    },
-    orm: {
-      type: "sqlite",
-      database: ":memory:",
-      synchronize: true
     }
   })
 });
