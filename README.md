@@ -14,8 +14,8 @@
         <img src="https://codecov.io/gh/PhilipWee/ezbackend/branch/master/graph/badge.svg?token=YZX7TT9XBQ"/>
     </a>
     <br/>
-    <a href="https://www.codefactor.io/repository/github/kapydev/ezbackend"> 
-        <img src="https://www.codefactor.io/repository/github/kapydev/ezbackend/badge"/>
+    <a href="https://www.codefactor.io/repository/github/kapydev/ezbackend">
+        <img src="https://www.codefactor.io/repository/github/kapydev/ezbackend/badge" alt="CodeFactor" />
     </a>
     <a> 
         <img src="https://img.shields.io/github/workflow/status/kapydev/ezbackend/Calculate%20Coverage"/>
