@@ -1,10 +1,23 @@
-function TechStack() {
-    const classes = useStyles();
-    return (
-        <div>
+import React from 'react';
+import Layout from '@theme/Layout';
 
-        </div>
-    )
+function TechStack() {
+  return (
+    <Layout title="Tech Stack">
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50vh',
+          fontSize: '20px',
+        }}>
+        <p>
+
+        </p>
+      </div>
+    </Layout>
+  );
 }
 
-export default TechStack
+export default TechStack;

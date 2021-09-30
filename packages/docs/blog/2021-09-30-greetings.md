@@ -1,0 +1,14 @@
+---
+slug: launch
+title: We're Ready to Use!
+author: Philip Wee
+author_title: EzBackend
+author_url: https://github.com/PhilipWee?tab=repositories
+author_image_url: https://media-exp1.licdn.com/dms/image/C5603AQFFKqMaY0AuIw/profile-displayphoto-shrink_400_400/0/1553178335843?e=1638403200&v=beta&t=rNiF6XA4e4eF1GRIR7uTDHiEUI2XTRFdoioNktgcAQ4
+---
+
+Welcome to EzBackend. My name is Philip Wee. My co-founder Stephen and I built this package because we felt that backend setup takes too long. We made ezbackend to solve this problem, and the idea behind it is that devs like you and me should focus on what's important, like planning the data models and relations (which is all you should have to put in effort for when you use our package)
+
+Our mission for you developers is to make backend setup as easy as possible, and we believe that every function should take up more than 1 line of code. We really hope you enjoy using this package! 
+
+You can join our discord community here: https://discord.gg/kA8ZNwqR

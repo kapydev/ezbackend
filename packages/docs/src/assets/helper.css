@@ -1,7 +1,5 @@
 .pushable {
   position: relative;
-  margin-right: 20px;
-  margin-top: 16px;
   border: none;
   background: transparent;
   padding: 0;
@@ -9,68 +7,85 @@
   outline-offset: 4px;
   transition: filter 250ms;
 }
-
 .shadow {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 8px;
-  background: hsl(0deg 100% 100% / 0.8);
+  border-radius: 12px;
+  background: hsl(0deg 0% 0% / 0.25);
   will-change: transform;
   transform: translateY(2px);
-  transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
 }
-
 .edge {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 8px;
-  background: linear-gradient( to left, hsl(207deg 56% 16%) 0%, hsl(207deg 56% 32%) 8%, hsl(207deg 56% 32%) 92%, hsl(207deg 56% 16%) 100%);
+  border-radius: 12px;
+  background: linear-gradient(
+    to left,
+    hsl(340deg 100% 16%) 0%,
+    hsl(340deg 100% 32%) 8%,
+    hsl(340deg 100% 32%) 92%,
+    hsl(340deg 100% 16%) 100%
+  );
 }
-
 .front {
   display: block;
   position: relative;
   padding: 12px 32px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: monospace;
+  border-radius: 12px;
+  font-size: 1.25rem;
   color: white;
-  background: hsl(207deg 56% 57%);
+  background: hsl(345deg 100% 47%);
   will-change: transform;
   transform: translateY(-4px);
-  transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
 }
-
 .pushable:hover {
   filter: brightness(110%);
 }
-
 .pushable:hover .front {
   transform: translateY(-6px);
-  transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
 }
-
 .pushable:active .front {
   transform: translateY(-2px);
   transition: transform 34ms;
 }
-
 .pushable:hover .shadow {
   transform: translateY(4px);
-  transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
 }
-
 .pushable:active .shadow {
   transform: translateY(1px);
   transition: transform 34ms;
 }
-
 .pushable:focus:not(:focus-visible) {
   outline: none;
+}
+
+.light-shadow {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.07), 
+              0 2px 4px rgba(0,0,0,0.07), 
+              0 4px 8px rgba(0,0,0,0.07), 
+              0 8px 16px rgba(0,0,0,0.07),
+              0 16px 32px rgba(0,0,0,0.07), 
+              0 32px 64px rgba(0,0,0,0.07);
 }
