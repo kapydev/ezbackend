@@ -69,7 +69,10 @@ export default function Home() {
             <li>API Documentation</li>
             <li>Database Management</li>
             <li>File Storage (WIP)</li>
-            <li>OAuth</li>
+            <li>OAuth (Google Sign-In)</li>
+            <li><span className='font-semibold'>One-Click Cloud Hosting</span></li>
+            <li>Horizontal Scalibility</li>
+
           </div>
         </div>
 

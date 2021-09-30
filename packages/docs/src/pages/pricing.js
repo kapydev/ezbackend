@@ -30,7 +30,7 @@ function FeatureLight(props) {
 
 function PricingCardFree() {
   return (
-    <div className="w-full lg:w-auto p-8 bg-gray-200 text-center rounded-3xl shadow-xl">
+    <div className="col-span-1 lg:w-auto p-8 bg-gray-200 text-center rounded-3xl shadow-xl">
       <h1 className="text-black font-semibold text-3xl font-mono">
         Basic
       </h1>
@@ -66,7 +66,7 @@ function PricingCardFree() {
 
 function PricingCardPaid() {
   return (
-    <div className="w-full lg:w-auto p-8 bg-gray-800 text-center rounded-3xl text-white border-4 shadow-xl border-gray-400 lg:transform lg:scale-125">
+    <div className=" col-span-1 lg:w-auto p-8 bg-gray-800 text-center rounded-3xl text-white border-4 shadow-xl border-gray-400 lg:transform lg:scale-125">
       <h1 className="text-white font-semibold text-3xl font-mono">Enterprise</h1>
       <hr className="mt-4 border-1 border-gray-600" />
 
@@ -101,15 +101,15 @@ function PricingCardPaid() {
 
 function Header() {
   return (
-    <div className="text-left font-semibold m-6">
-      <h1 className="text-5xl">
+    <div className="text-left font-semibold m-6 col-span-1 sm:col-span-2 lg:col-span-1">
+      <div className="text-5xl">
         <span className="text-blue-300 tracking-wide font-mono">Flexible </span>
         <span>Plans</span>
-      </h1>
-      <p className="pt-6 text-xl text-gray-400 font-normal" style={{ fontFamily: 'montserrat' }}>
+      </div>
+      <div className="pt-6 text-xl text-gray-400 font-normal" style={{ fontFamily: 'montserrat' }}>
         Building with our open-source package.
         One-Click Deploy with EzBackend
-      </p>
+      </div>
     </div>
   )
 }
@@ -117,7 +117,30 @@ function Header() {
 function Pricing() {
   return (
     <Layout title="Pricing">
-      <div className="grid gap-6 m-8 lg:gap-0 grid-flow-col lg:grid-flow-row grid-cols-1 grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 place-items-center lg:m-20 lg:mx-40">
+      <div className="
+
+      grid
+
+      grid-flow-row
+
+      grid-cols-1 
+      gap-6
+      m-8
+
+      sm:grid-cols-2 
+      sm:gap-6
+      sm:m-12 
+      sm:mx-18
+
+      lg:grid-cols-3 
+      lg:gap-0
+      lg:m-20 
+      lg:mx-24
+      lg:transform
+      lg:scale-90
+      
+      "
+      >
         <Header />
         <PricingCardFree />
         <PricingCardPaid />
