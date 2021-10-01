@@ -8,7 +8,7 @@ function FeatureDark(props) {
       <span className="material-icons align-middle">
         {props.icon}
       </span>
-      <span className="pl-2" style={{ fontFamily: 'montserrat' }}>
+      <span className="pl-2 font-medium" style={{ fontFamily: 'montserrat' }}>
         {props.children}
       </span>
     </p>
@@ -21,7 +21,7 @@ function FeatureLight(props) {
       <span className="material-icons align-middle">
         {props.icon}
       </span>
-      <span className="pl-2" style={{ fontFamily: 'montserrat' }}>
+      <span className="pl-2 font-medium" style={{ fontFamily: 'montserrat' }}>
         {props.children}
       </span>
     </p>
@@ -30,13 +30,13 @@ function FeatureLight(props) {
 
 function PricingCardFree() {
   return (
-    <div className="col-span-1 lg:w-auto p-8 bg-gray-200 text-center rounded-3xl shadow-xl">
+    <div className="p-8 bg-gray-200 text-center rounded-3xl shadow-xl">
       <h1 className="text-black font-semibold text-3xl font-mono">
-        Basic
+        Free
       </h1>
-      <p class="pt-2 tracking-wide">
+      {/* <p class="pt-2 tracking-wide">
         <span class="text-xl font-semibold text-gray-700">Free</span>
-      </p>
+      </p> */}
       <hr className="mt-4 border-1" />
       <div>
         <FeatureLight icon='✔'>
@@ -66,7 +66,7 @@ function PricingCardFree() {
 
 function PricingCardPaid() {
   return (
-    <div className=" col-span-1 lg:w-auto p-8 bg-gray-800 text-center rounded-3xl text-white border-4 shadow-xl border-gray-400 lg:transform lg:scale-125">
+    <div className="p-8 bg-gray-800 text-center rounded-3xl text-white border-4 shadow-xl border-gray-400">
       <h1 className="text-white font-semibold text-3xl font-mono">Enterprise</h1>
       <hr className="mt-4 border-1 border-gray-600" />
 
@@ -79,9 +79,6 @@ function PricingCardPaid() {
         </FeatureDark>
         <FeatureDark icon='✔'>
           <span className="text-white">Security</span> - Wrapper
-        </FeatureDark>
-        <FeatureDark icon='✔'>
-          All featureDarks in <span className="text-white">Basic</span>
         </FeatureDark>
         <FeatureDark icon='✔'>
           All features in <span className="text-white">Basic</span>
@@ -101,7 +98,7 @@ function PricingCardPaid() {
 
 function Header() {
   return (
-    <div className="text-left font-semibold m-6 col-span-1 sm:col-span-2 lg:col-span-1">
+    <div className="text-left font-semibold col-span-1 sm:col-span-2 lg:col-span-1">
       <div className="text-5xl">
         <span className="text-blue-300 tracking-wide font-mono">Flexible </span>
         <span>Plans</span>
@@ -117,34 +114,34 @@ function Header() {
 function Pricing() {
   return (
     <Layout title="Pricing">
-      <div className="
+      <div className='grid place-items-center'>
+        <div className="
 
       grid
 
-      grid-flow-row
-
       grid-cols-1 
-      gap-6
+      gap-11
       m-8
 
       sm:grid-cols-2 
       sm:gap-6
       sm:m-12 
-      sm:mx-18
+      sm:mx-16
 
       lg:grid-cols-3 
-      lg:gap-0
+      lg:gap-14
       lg:m-20 
       lg:mx-24
       lg:transform
       lg:scale-90
-      
+      lg:max-w-7xl      
       "
-      >
-        <Header />
-        <PricingCardFree />
-        <PricingCardPaid />
-        <br />
+        >
+          <Header />
+          <PricingCardFree />
+          <PricingCardPaid />
+          <br />
+        </div>
       </div>
     </Layout>
   );
