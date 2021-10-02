@@ -9,6 +9,7 @@ import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
 import { LiveProvider, LiveEditor } from 'react-live'
 import TechStackImage from '../assets/tech-stack.svg'
+import SignUpForm from '../helper-components/signUpForm';
 
 
 //TODO add order to the page
@@ -88,7 +89,7 @@ export default function Home() {
           </div>
 
           <div className='grid self-start'>
-            <div className='font-bold font-mono text-2xl mb-1'>
+            <div className='font-bold font-mono text-3xl mb-1'>
               Step 3: Plan your Model
             </div>
             <div className='w-auto md:w-96' style={{ fontFamily: "montserrat" }}>
@@ -113,13 +114,17 @@ export default function Home() {
             <TechStackImage />
           </div>
 
-          <div col-span->
-            <div className='text-3xl font-mono mb-12 font-bold text-center'>
-              Beta Sign Ups
+          <div className='col-span-full'>
+            <div className='text-3xl text-center font-mono mb-6 font-bold self-center'>
+              Beta Sign Up
+            </div>
+            <div className='grid place-items-center mb-4'>
+              <SignUpForm />
+            </div>
+            <div className='grid place-items-center font-mono'>
+              Powered by EzBackend
             </div>
           </div>
-
-
         </div>
       </div>
 
