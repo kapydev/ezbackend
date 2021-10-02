@@ -52,7 +52,7 @@ function PricingCardFree() {
           <span className="text-black">File Storage</span> (Multer)
         </FeatureLight>
 
-        <a href="#" className="">
+        <a href="docs/intro">
           <p className="py-4 bg-blue-600 mt-8 rounded-xl text-white">
             <span className="font-medium">
               Try Now
@@ -81,7 +81,7 @@ function PricingCardPaid() {
           <span className="text-white">Security</span> - Wrapper
         </FeatureDark>
         <FeatureDark icon='✔'>
-          All features in <span className="text-white">Basic</span>
+          All features in <span className="text-white">Free</span>
         </FeatureDark>
 
         <a href="#" className="">

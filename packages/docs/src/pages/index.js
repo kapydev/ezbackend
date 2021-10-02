@@ -101,17 +101,24 @@ export default function Home() {
               <li>File Storage (WIP)</li>
               <li>OAuth (Google Sign-In)</li>
               <li><span className='font-semibold'>One-Click Cloud Hosting</span></li>
-              <li>Horizontal Scalibility</li>
+              <li>Horizontal Scaling</li>
 
             </div>
           </div>
 
-          <div className='col-span-1 md:col-span-2 md:px-12'>
+          <div className='col-span-1 md:col-span-full md:px-12'>
             <div className='text-3xl font-mono mb-12 font-bold text-center'>
               How we do it:
             </div>
             <TechStackImage />
           </div>
+
+          <div col-span->
+            <div className='text-3xl font-mono mb-12 font-bold text-center'>
+              Beta Sign Ups
+            </div>
+          </div>
+
 
         </div>
       </div>
