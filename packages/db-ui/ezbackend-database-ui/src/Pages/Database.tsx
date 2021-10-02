@@ -113,7 +113,11 @@ function Database() {
     }
 
     function handleOpenPostRequestDialog() {
-        setOpenPostRequestDialog(true)
+        console.log('hi')
+        if (getCreateSchema()) {
+            //Only if the schema exists
+            setOpenPostRequestDialog(true)
+        }
     }
 
     function handleClosePostRequestDialog() {
@@ -156,6 +160,15 @@ function Database() {
     function getCreateSchema() {
         let createschemas: IJsonSchema[] = [...createSchemas]
         let c = createschemas?.filter(createschema => { return createschema.title === selectedItem })[0]
+        if (createSchemas.length === 0) {
+            //TODO: @Stephen Any Idea why its rendering twice?
+            // toast.error("No schemas have been created yet, add an EzModel to your database")
+            return null
+        }
+        if (c === undefined) {
+            // toast.error("The selected schema is invalid")
+            return null
+        }
         return c
     }
 
@@ -203,7 +216,7 @@ function Database() {
                                     <Grid item xs>
                                         <Grid container justifyContent="flex-end">
                                             <Grid item>
-                                                <IconButton color="primary" onMouseDown={handleOpenPostRequestDialog}>
+                                                <IconButton color="primary" onClick={handleOpenPostRequestDialog}>
                                                     <AddIcon />
                                                 </IconButton>
                                             </Grid>
@@ -255,7 +268,7 @@ function Database() {
                 </Grid>
                 <PostRequestDialog
                     open={openPostRequestDialog}
-                    createSchema={getCreateSchema()}
+                    getCreateSchema={getCreateSchema}
                     handleGetRowData={() => handleGetRowData(selectedItem)}
                     selectedItem={selectedItem}
                     handleCloseDialog={handleClosePostRequestDialog}

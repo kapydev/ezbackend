@@ -2,7 +2,7 @@ import { App, PluginScope, kApp } from '@ezbackend/core'
 import { convert, getDefaultGenerators, generateRouteFactory } from '@ezbackend/common'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
-import { RouteOptions } from 'fastify'
+import { RouteOptions, FastifyInstance } from 'fastify'
 import chalk from 'chalk'
 import { buildRoutePrefix } from '@ezbackend/common'
 
@@ -83,6 +83,20 @@ class DBEndpointRouter extends App {
     }
 }
 
+const BUILD_DIR = path.join(__dirname, "../ezbackend-database-ui/build")
+
+async function dbUIFastifyPlugin(server:FastifyInstance,opts) {
+    server.register(fastifyStatic,{
+        root: BUILD_DIR,
+        wildcard: false
+    })
+
+    server.setNotFoundHandler((req,res) => {
+        //TODO: Make this not have to go back to db-ui on refresh
+        res.redirect("/db-ui")
+    })
+}
+
 export class EzDbUI extends App {
     constructor() {
         super()
@@ -91,11 +105,8 @@ export class EzDbUI extends App {
         this.addApp("DB-UI Endpoint Router", new DBEndpointRouter())
 
         this.setHandler("Serve UI Interface", async (instance, opts) => {
-            instance.server.register(fastifyStatic, {
-                root: path.join(__dirname, "../ezbackend-database-ui/build"),
-                prefix: "/db-ui",
-                prefixAvoidTrailingSlash: true
-            })
+
+            instance.server.register(dbUIFastifyPlugin, {prefix:"db-ui"})
         })
 
         this.setPostRun("Display DB UI URL", async (instance, opts) => {

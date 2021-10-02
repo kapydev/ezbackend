@@ -26,7 +26,7 @@ function Layout(props: ILayout) {
 
     return (
         <Box bgcolor="eee" minHeight="100vh">
-            <Router>
+            <Router basename="/db-ui">
                 <Grid container direction="column" style={{ backgroundColor: "#eee", minHeight: "100vh" }}>
                     <Grid item>
                         <AppBar position="relative" elevation={0} style={{ backgroundColor: '#3B3228' }}>
