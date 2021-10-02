@@ -8,6 +8,10 @@ import '../assets/helper.css';
 import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
 import { LiveProvider, LiveEditor } from 'react-live'
+import TechStackImage from '../assets/tech-stack.svg'
+
+
+//TODO add order to the page
 
 const notify = () => toast('Copied!', { duration: 800, icon: '✔' });
 
@@ -19,64 +23,99 @@ export default function Home() {
     <Layout
       title={`${siteConfig.title}`}
       description="Backend made easy">
+      <div className='grid place-content-center'>
 
-      <div className='grid grid-flow-row grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2 gap-16 mt-12 mx-12 md:mx-60 place-items-center'>
+        <div className='
 
-        <div>
-          <p className='text-4xl sm:text-5xl font-bold font-mono'>
+        grid 
+        grid-flow-row 
+        
+        grid-cols-1 
+        mx-12
+        my-8
+        gap-16
+
+        md:grid-cols-2 
+        md:m-32
+        md:mx-24
+        md:my-14
+        md:gap-20
+
+         
+        place-content-center
+        '>
+
+          <div className='place-self-start text-5xl font-bold font-mono'>
             Simple Scalable <br /> & Secure
-          </p>
-          <p className='text-xl font-mono mt-5'>
-            Over-simplified backend setup
-          </p>
-          <div className='flex-row justify-start pt-6'>
-            <CtaButton link="/docs/intro">
-              Documentation
-            </CtaButton>
-          </div>
-        </div>
-
-        <div>
-          <div className='py-3 md:my-0 font-monts font-semibold' style={{ fontFamily: 'montserrat' }}>
-            Step 1: Install
-          </div>
-          <CodeLine copyText="npx ezbackend init" onClick={notify}>
-            npx <span className='text-blue-300'>ezbackend</span> init
-          </CodeLine >
-          <div className='py-4 md:my-0 font-semibold' style={{ fontFamily: 'montserrat' }}>
-            Step 2: Run
-          </div>
-          <CodeLine copyText="npm run ezb" onClick={notify}>
-            npm run <span className='text-blue-300'>ezb</span>
-          </CodeLine>
-        </div>
-
-        <div>
-          <LiveProvider disabled={true} code={code} theme={theme} >
-            <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
-          </LiveProvider>
-        </div>
-
-        <div className='grid self-start'>
-          <div className='font-bold font-mono text-2xl mb-1'>
-            Step 3: Plan your Model
-          </div>
-          <div className='w-auto md:w-96' style={{ fontFamily: "montserrat" }}>
-            <div>
-              Focus on planning your database structure. We'll generate the rest for you.
+            <p className='text-xl font-mono mt-5'>
+              Simplified backend setup
+            </p>
+            <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4 pt-6'>
+              <div>
+                <CtaButton link="/docs/intro">
+                  Documentation
+                </CtaButton>
+              </div>
+              <div>
+                <a href='https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts' target='_blank'>
+                  <CtaButton>
+                    Live Demo
+                  </CtaButton>
+                </a>
+              </div>
             </div>
-            <br />
-            <li>API Documentation</li>
-            <li>Database Management</li>
-            <li>File Storage (WIP)</li>
-            <li>OAuth (Google Sign-In)</li>
-            <li><span className='font-semibold'>One-Click Cloud Hosting</span></li>
-            <li>Horizontal Scalibility</li>
-
           </div>
-        </div>
 
+          <div className='place-self-start'>
+            <div className='py-3 font-monts font-semibold' style={{ fontFamily: 'montserrat' }}>
+              Step 1: Install
+            </div>
+            <CodeLine copyText="npx ezbackend init" onClick={notify}>
+              npx <span className='text-blue-300'>ezbackend</span> init
+            </CodeLine >
+            <div className='py-4 md:my-0 font-semibold' style={{ fontFamily: 'montserrat' }}>
+              Step 2: Run
+            </div>
+            <CodeLine copyText="npm run ezb" onClick={notify}>
+              npm run <span className='text-blue-300'>ezb</span>
+            </CodeLine>
+          </div>
+
+          <div className='place-self-start'>
+            <LiveProvider disabled={true} code={code} theme={theme} >
+              <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
+            </LiveProvider>
+          </div>
+
+          <div className='grid self-start'>
+            <div className='font-bold font-mono text-2xl mb-1'>
+              Step 3: Plan your Model
+            </div>
+            <div className='w-auto md:w-96' style={{ fontFamily: "montserrat" }}>
+              <div>
+                Focus on planning your database structure. We'll generate the rest for you.
+              </div>
+              <br />
+              <li>API Documentation</li>
+              <li>Database Management</li>
+              <li>File Storage (WIP)</li>
+              <li>OAuth (Google Sign-In)</li>
+              <li><span className='font-semibold'>One-Click Cloud Hosting</span></li>
+              <li>Horizontal Scalibility</li>
+
+            </div>
+          </div>
+
+          <div className='col-span-1 md:col-span-2 md:px-12'>
+            <div className='text-3xl font-mono mb-12 font-bold text-center'>
+              How we do it:
+            </div>
+            <TechStackImage />
+          </div>
+
+        </div>
       </div>
+
 
       <br />
       <br />

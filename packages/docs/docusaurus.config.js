@@ -44,20 +44,31 @@ module.exports = {
         },
         {
           type: 'dropdown',
+          label: 'Product',
+          position: 'left',
+          items: [
+            {
+              to: 'features',
+              label: '🎁 Features',
+            },
+            {
+              to: 'pricing',
+              label: '🤝 Pricing',
+            }
+          ],
+        },
+        {
+          type: 'dropdown',
           label: 'Developers',
           position: 'left',
           items: [
             {
-              to: 'tech-stack',
-              label: 'Tech Stack',
+              label: 'NPM',
+              href: 'https://www.npmjs.com/package/ezbackend',
             },
             {
               label: 'Github',
               href: 'https://github.com/kapydev/ezbackend'
-            },
-            {
-              label: 'Youtube',
-              href: 'https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ',
             },
             {
               label: 'CodeSandbox Demo',
@@ -66,15 +77,24 @@ module.exports = {
           ],
         },
         {
-          to: 'pricing',
-          label: 'Pricing',
-          position: 'left'
+          type: 'dropdown',
+          label: 'Community',
+          position: 'left',
+          items: [
+            {
+              to: 'blog',
+              label: 'Blog',
+            },
+            {
+              label: 'Discord',
+              href: 'https://discord.gg/RwgdruFJHc'
+            },
+            {
+              label: 'Youtube',
+              href: 'https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ',
+            }
+          ],
         },
-        {
-          to: 'blog',
-          label: 'Blog',
-          position: 'left'
-        }
       ],
     },
     footer: {
