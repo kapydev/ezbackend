@@ -28,7 +28,7 @@ function HomepageHeader() {
           Scalable, Safe, and Secure
         </p> */}
         <br/>
-        <Link to="/alpha-sign-up">
+        <Link to="/docs/intro">
           <Button
             variant="contained"
             size="large"
@@ -43,7 +43,7 @@ function HomepageHeader() {
               fontWeight: "bold",
               width: 200,
             }}>
-            Alpha Signup
+            Documentation
           </Button>
         </Link>
       </Grid>
