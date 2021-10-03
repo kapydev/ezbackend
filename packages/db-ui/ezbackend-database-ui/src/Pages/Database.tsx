@@ -113,7 +113,6 @@ function Database() {
     }
 
     function handleOpenPostRequestDialog() {
-        console.log('hi')
         if (getCreateSchema()) {
             //Only if the schema exists
             setOpenPostRequestDialog(true)
