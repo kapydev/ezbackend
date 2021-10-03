@@ -84,7 +84,7 @@ function PricingCardPaid() {
           All features in <span className="text-white">Free</span>
         </FeatureDark>
 
-        <a href="#" className="">
+        <a href="https://calendly.com/ezbackend/30min" target='_blank'>
           <p className="py-4 bg-blue-600 mt-8 rounded-xl text-white">
             <span className="font-medium">
               Contact Us

@@ -14,7 +14,7 @@ function Features() {
             API Documentation
           </CtaButton>
           <CtaButton>
-            Database Management
+            Database
           </CtaButton>
           <CtaButton>
             File Storage

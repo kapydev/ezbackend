@@ -47,10 +47,10 @@ module.exports = {
           label: 'Product',
           position: 'left',
           items: [
-            {
-              to: 'features',
-              label: '🎁 Features',
-            },
+            // {
+            //   to: 'features',
+            //   label: '🎁 Features',
+            // },
             {
               to: 'pricing',
               label: '🤝 Pricing',
@@ -94,7 +94,7 @@ module.exports = {
               href: 'https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ',
             }
           ],
-        },
+        }
       ],
     },
     footer: {

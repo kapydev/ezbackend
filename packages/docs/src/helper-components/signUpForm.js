@@ -23,6 +23,8 @@ function SignUpForm() {
 
   };
   return (
+    //TODO MAKE THE SUBMIT BUTTON
+    //WRAP IN CARD
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>

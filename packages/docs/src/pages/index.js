@@ -47,9 +47,9 @@ export default function Home() {
         '>
 
           <div className='place-self-start text-5xl font-bold font-mono'>
-            Simple Scalable <br /> & Secure
+            Your Tech Stack <br/> in One Package
             <p className='text-xl font-mono mt-5'>
-              Simplified backend setup
+              Simplified Backend Setup <br/>
             </p>
             <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4 pt-6'>
               <div>
@@ -99,10 +99,10 @@ export default function Home() {
               <br />
               <li>API Documentation</li>
               <li>Database Management</li>
+              <li>OAuth Sign In</li>
               <li>File Storage (WIP)</li>
-              <li>OAuth (Google Sign-In)</li>
-              <li><span className='font-semibold'>One-Click Cloud Hosting</span></li>
-              <li>Horizontal Scaling</li>
+              <li>One-Click Cloud Hosting (WIP)</li>
+              <li>Horizontal Scaling (WIP) </li>
 
             </div>
           </div>
@@ -114,9 +114,9 @@ export default function Home() {
             <TechStackImage />
           </div>
 
-          <div className='col-span-full'>
+          {/* <div className='col-span-full'>
             <div className='text-3xl text-center font-mono mb-6 font-bold self-center'>
-              Beta Sign Up
+              Alpha Sign Up
             </div>
             <div className='grid place-items-center mb-4'>
               <SignUpForm />
@@ -124,7 +124,8 @@ export default function Home() {
             <div className='grid place-items-center font-mono'>
               Powered by EzBackend
             </div>
-          </div>
+          </div> */}
+          
         </div>
       </div>
 
