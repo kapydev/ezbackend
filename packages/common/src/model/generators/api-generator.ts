@@ -1,9 +1,11 @@
-import { Repository } from "typeorm";
+import { ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import { EzApp } from "../../ezapp"
 import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-json-schema";
 import { getDefaultGenerators, GenerateOpts } from "./default-generators"
-import merge from 'lodash.merge'
+import { EzBackendOpts } from "../..";
+//TODO: Consider if we should remove the cyclic importing
+import type {EzBackendInstance} from '../../ezbackend'
 
 
 export interface RouterOptions {
@@ -11,7 +13,7 @@ export interface RouterOptions {
     generators?: { [name: string]: IGenerator }
 }
 
-type IGenerator = (repo: Repository<unknown>, opts?: GenerateOpts) => RouteOptions | Array<RouteOptions>;
+type IGenerator = (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => RouteOptions | Array<RouteOptions>;
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
 /**
@@ -55,9 +57,9 @@ export type Middleware = (oldRoute: RouteOptions) => RouteOptions
  * @param middlewares 
  * @returns 
  */
-export function generateRouteFactory(genOpts, generator, middlewares: Array<Middleware> = []) {
-    return async (instance, opts) => {
-        const routes: Array<RouteOptions> = [].concat(generator(instance.repo, genOpts))
+export function generateRouteFactory(genOpts:GenerateOpts, generator: IGenerator, middlewares: Array<Middleware> = []) {
+    return async (instance: EzBackendInstance, opts: EzBackendOpts) => {
+        const routes = ([] as Array<RouteOptions>).concat(generator(instance.repo, genOpts))
         routes.forEach((route) => {
             let modifiedRoute = route
             middlewares.forEach(middleware => {

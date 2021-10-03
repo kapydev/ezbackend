@@ -249,7 +249,7 @@ export class App {
         this._apps.set(name, newApp)
     }
 
-    getApp(name) {
+    getApp(name:string) {
         return this.apps.get(name)
     }
 
@@ -267,7 +267,7 @@ export class App {
                 previousPlugins.push(childPlugin)
             }
             return previousPlugins
-        }, [])
+        }, [] as Array<PluginType>)
 
         if (this[lifecycle].size === 0 && childPlugins.length === 0) {
             return undefined

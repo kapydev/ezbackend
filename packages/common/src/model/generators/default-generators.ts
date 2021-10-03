@@ -1,6 +1,6 @@
 import { getSchemaName } from "../typeorm-json-schema";
 import Boom from '@hapi/boom'
-import { EntityMetadata, Repository } from "typeorm";
+import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 
 /**
@@ -17,7 +17,8 @@ export function getPrimaryColName(meta: EntityMetadata) {
 }
 
 //TODO: Check if this function is efficient
-const removeNestedNulls = (obj) => {
+//URGENT URGENT TODO: This function is probably removing zeros by detecting them as nulls, this needs to be fixed
+const removeNestedNulls = (obj: any) => {
     Object.keys(obj).forEach(k =>
         (obj[k] && typeof obj[k] === 'object') && removeNestedNulls(obj[k]) ||
         (!obj[k] && obj[k] !== undefined) && delete obj[k]
@@ -45,7 +46,7 @@ export interface GenerateOpts {
  */
 export const getDefaultGenerators = () => {
     return {
-        createOne: (repo: Repository<unknown>, opts?: GenerateOpts) => {
+        createOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
             const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             const routeDetails: RouteOptions = {
                 method: "POST",
@@ -65,9 +66,10 @@ export const getDefaultGenerators = () => {
                 },
                 handler: async (req, res) => {
                     try {
-                        const newObj = await repo.save(req.body);
+                        const data = req.body as DeepPartial<ObjectLiteral>
+                        const newObj = await repo.save(data);
                         return removeNestedNulls(newObj);
-                    } catch (e) {
+                    } catch (e: any) {
                         //Assumption: If it fails, it is because of a bad request, not the code breaking
                         throw Boom.badRequest(e)
                     }
@@ -75,7 +77,7 @@ export const getDefaultGenerators = () => {
             };
             return routeDetails;
         },
-        getOne: (repo: Repository<unknown>, opts?: GenerateOpts) => {
+        getOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
             const primaryCol = getPrimaryColName(repo.metadata)
             const routeDetails: RouteOptions = {
                 method: "GET",
@@ -98,16 +100,18 @@ export const getDefaultGenerators = () => {
                 },
                 handler: async (req, res) => {
                     try {
-                        const newObj = await repo.findOneOrFail(req.params[primaryCol]);
+                        //@ts-ignore
+                        const id = req.params[primaryCol]
+                        const newObj = await repo.findOneOrFail(id);
                         return removeNestedNulls(newObj);
-                    } catch (e) {
+                    } catch (e: any) {
                         throw Boom.notFound(e)
                     }
                 },
             };
             return routeDetails;
         },
-        getAll: (repo: Repository<unknown>, opts?: GenerateOpts) => {
+        getAll: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
             const routeDetails: RouteOptions = {
                 method: "GET",
                 url: "/",
@@ -130,7 +134,7 @@ export const getDefaultGenerators = () => {
             };
             return routeDetails;
         },
-        updateOne: (repo: Repository<unknown>, opts?: GenerateOpts) => {
+        updateOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
             const primaryCol = getPrimaryColName(repo.metadata)
             const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             const routeDetails: RouteOptions = {
@@ -156,28 +160,32 @@ export const getDefaultGenerators = () => {
                     },
                 },
                 handler: async (req, res) => {
+                    //@ts-ignore
+                    const id = req.params[primaryCol]
                     try {
-                        await repo.findOneOrFail(req.params[primaryCol]);
-                    } catch (e) {
+                        await repo.findOneOrFail(id);
+                    } catch (e: any) {
                         throw Boom.notFound(e)
                     }
                     //URGENT TODO: Right now typeorm sqlite does NOT throw an error, even if you save a string in an integer column!!!
+                    //URGENT TODO: Currently this causes race conditions, need to do within one request
 
                     try {
                         const updatedObj = await repo.save({
-                            id: req.params[primaryCol],
+                            //@ts-ignore
+                            id: id,
                             //@ts-ignore
                             ...req.body,
                         });
                         return updatedObj;
-                    } catch (e) {
+                    } catch (e: any) {
                         throw Boom.badRequest(e)
                     }
                 },
             };
             return routeDetails;
         },
-        deleteOne: (repo: Repository<unknown>, opts?: GenerateOpts) => {
+        deleteOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
             const primaryCol = getPrimaryColName(repo.metadata)
             const routeDetails: RouteOptions = {
                 method: "DELETE",
@@ -212,18 +220,20 @@ export const getDefaultGenerators = () => {
                     },
                 },
                 handler: async (req, res) => {
+                    //@ts-ignore
+                    const id = req.params[primaryCol]
                     try {
-                        await repo.findOneOrFail(req.params[primaryCol]);
+                        await repo.findOneOrFail(id);
                     } catch (e) {
                         res.status(404).send(e);
                     }
                     try {
-                        await repo.delete(req.params[primaryCol]);
+                        await repo.delete(id);
                         return {
                             success: true,
-                            id: req.params[primaryCol],
+                            id: id,
                         }
-                    } catch (e) {
+                    } catch (e: any) {
                         throw Boom.badRequest(e)
                     }
                 },
