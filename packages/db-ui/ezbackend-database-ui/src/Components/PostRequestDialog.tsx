@@ -10,7 +10,7 @@ const URL = getBaseURL()
 
 interface IPostRequestDialog {
     open: boolean
-    createSchema?: any
+    getCreateSchema?: any
     selectedItem: string
     handleGetRowData(): void
     handleCloseDialog(): void
@@ -39,7 +39,7 @@ export default function PostRequestDialog(props: IPostRequestDialog) {
             <Dialog open={props.open} onClose={props.handleCloseDialog} maxWidth="xs" >
                 <Box padding={4} marginBottom={0}>
                     <Form
-                        schema={props.createSchema}
+                        schema={props.getCreateSchema()}
                         onSubmit={handlePost}
                     />
                 </Box>
