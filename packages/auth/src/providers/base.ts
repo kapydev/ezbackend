@@ -1,9 +1,9 @@
 import { SerializeFunction } from "fastify-passport/dist/Authenticator"
 import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
 import { AnyStrategy } from "fastify-passport/dist/strategies"
-import { RouteOptions, FastifyInstance } from "fastify"
+import type { RouteOptions, FastifyInstance } from "fastify"
 import fastifyPassport from 'fastify-passport'
-import { EzApp, EzBackendInstance, EzBackendServer, EzBackendOpts } from '@ezbackend/common'
+import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
 
 declare module '@ezbackend/common' {
     interface EzBackendOpts {
