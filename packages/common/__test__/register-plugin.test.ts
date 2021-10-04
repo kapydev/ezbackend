@@ -1,8 +1,4 @@
 import { EzBackend } from "../src";
-import fastify, { FastifyInstance } from 'fastify'
-
-const s = fastify()
-s.register
 
 //TODO: Figure if there is a better way of getting this data
 function getInternalInstance(ezb: EzBackend) {

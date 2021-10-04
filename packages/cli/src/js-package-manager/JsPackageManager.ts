@@ -126,7 +126,7 @@ export abstract class JsPackageManager {
     } else {
       try {
         this.runAddDeps(dependencies, options.installAsDevDependencies ?? true);
-      } catch (e) {
+      } catch (e: any) {
         logger.error("An error occurred while installing dependencies.");
         logger.log(e.message);
         process.exit(1);
