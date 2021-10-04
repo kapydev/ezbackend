@@ -86,7 +86,7 @@ class DBEndpointRouter extends App {
 
 const BUILD_DIR = path.join(__dirname, "../ezbackend-database-ui/build")
 
-async function dbUIFastifyPlugin(server:FastifyInstance,opts) {
+async function dbUIFastifyPlugin(server:FastifyInstance) {
     server.register(fastifyStatic,{
         root: BUILD_DIR,
         wildcard: false
