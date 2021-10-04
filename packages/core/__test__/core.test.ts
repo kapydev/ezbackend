@@ -4,7 +4,7 @@ import { App } from "../src";
 describe("Default Behaviour", () => {
   it("Plugins run in order", async () => {
     const app = new App()
-    const arr = [];
+    const arr: Array<number> = [];
     app.setInit('init', async (instance, opts) => {
       arr.push(1);
     })
@@ -22,7 +22,7 @@ describe("Default Behaviour", () => {
   it("Plugins in sub app run in order", async () => {
     const app = new App()
     const subApp = new App()
-    const arr = [];
+    const arr: Array<number> = [];
     app.setInit('init', async (instance, opts) => {
       arr.push(1);
     })

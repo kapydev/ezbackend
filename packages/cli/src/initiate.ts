@@ -36,7 +36,7 @@ export default function initiate(dir: string, options: initiateOptions, pkg: any
   if (installPath !== process.cwd()) {
     try {
       fs.mkdirSync(dir)
-    } catch (e) {
+    } catch (e: any) {
       if (e.code === 'EEXIST') {
         throw new Error(
           `Folder "${dir}" already exists.` +

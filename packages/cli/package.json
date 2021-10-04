@@ -29,6 +29,8 @@
     "read-pkg-up": "7.0.1"
   },
   "devDependencies": {
+    "@types/cross-spawn": "^6.0.2",
+    "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.0.0",
     "@types/node": "^16.4.13",
     "jest": "^27.0.6",

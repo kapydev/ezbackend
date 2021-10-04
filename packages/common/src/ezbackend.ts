@@ -1,15 +1,30 @@
-import { EzApp } from "./ezapp";
+import { EzApp, EzBackendServer } from "./ezapp";
 import fastify, { FastifyInstance } from "fastify";
 import fastifyBoom from 'fastify-boom'
-import { createConnection } from "typeorm";
+import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
 import _ from 'lodash'
 import path from 'path'
 import dotenv from 'dotenv'
+import { InjectOptions } from "light-my-request";
+
+export interface EzBackendInstance {
+    entities: Array<EntitySchema>
+    server: EzBackendServer
+    _server: FastifyInstance
+    repo: Repository<ObjectLiteral>
+    orm: Connection
+}
+
+export interface EzBackendOpts {
+    port: number
+    orm: Parameters<typeof createConnection>[0]
+    server: Parameters<typeof fastify>[0]
+}
 
 //TODO: Check if emojis will break instance names
 //URGENT TODO: Strict types for instance, opts
-async function addErrorSchema(instance, opts) {
+async function addErrorSchema(instance: EzBackendInstance, opts: EzBackendOpts) {
     instance.server.addSchema({
         "$id": "ErrorResponse",
         type: 'object',
@@ -28,13 +43,13 @@ const defaultConfig = {
     port: 8000,
     server: {
         logger: {
-          prettyPrint: {
-            translateTime: "SYS:HH:MM:ss",
-            ignore: "pid,hostname,reqId,responseTime,req,res",
-            messageFormat: "[{req.method} {req.url}] {msg}",
-          },
+            prettyPrint: {
+                translateTime: "SYS:HH:MM:ss",
+                ignore: "pid,hostname,reqId,responseTime,req,res",
+                messageFormat: "[{req.method} {req.url}] {msg}",
+            },
         },
-      },
+    },
     orm: {
         type: "better-sqlite3",
         database: ":memory:",
@@ -101,14 +116,14 @@ export class EzBackend extends EzApp {
         if (lastPlugin === null) {
             throw "Server is still undefined, have you called app.start() yet?"
         }
-        return lastPlugin.server
+        return lastPlugin.server as EzBackendInstance
     }
 
     getInternalServer() {
         return this.getInternalInstance()._server
     }
 
-    async inject(injectOpts) {
+    async inject(injectOpts: string | InjectOptions) {
         const server = this.getInternalServer()
         return await server.inject(injectOpts)
     }
@@ -122,8 +137,8 @@ export class EzBackend extends EzApp {
     }
 
     //URGENT TODO: Typescript opts
-    async start(opts?:any) {
-        opts = _.merge(defaultConfig,opts)
+    async start(opts?: any) {
+        opts = _.merge(defaultConfig, opts)
         await super.start(opts)
     }
 
