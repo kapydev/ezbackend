@@ -1,3 +1,5 @@
+//@ts-nocheck
+//We use nocheck here because its too troublesome to create all the types for the test cases
 import { describe, it, expect } from "@jest/globals";
 import { App } from "../src";
 import fastify from 'fastify'

@@ -1,6 +1,7 @@
 import { ColumnType, EntityMetadata } from 'typeorm'
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
+import fastify, {FastifyInstance} from 'fastify'
 
 //URGENT TODO: See if there is a json schema library that can help with this... (fluent schema?)
 /**
@@ -13,10 +14,15 @@ import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema', prefix?: string) {
   let baseName
   if (meta instanceof RelationMetadata) {
-    baseName = `${meta.type['name'] ?? meta.type}`
+
+    if (typeof meta.type === 'string') {
+      baseName = meta.type
+    } else {
+      baseName = meta.type['name']
+    }
 
   } else {
-    baseName = `${meta.name}`
+    baseName = meta.name
   }
   const resolvedPrefix = prefix ? prefix + '/' : ''
   return `${resolvedPrefix}${type}-${baseName}`
@@ -159,12 +165,14 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
             ...jsonSchema.properties,
             [value.propertyName]: colMetaToSchemaProps(value),
           },
+          required: jsonSchema.required
         };
       },
       {
         "$id": getSchemaName(meta, 'createSchema', prefix),
         type: "object",
         properties: {},
+        required: [] as Array<string>
       }
     );
   //Add cascade created columns
@@ -184,6 +192,7 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
             //URGENT TODO: Make this work with ref schemas PLEASE
             [meta.propertyName]: meta.isMany ? makeArray(nestedSchema) : nestedSchema,
           },
+          required: jsonSchema.required
         };
       },
       createSchema
@@ -192,6 +201,7 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
   const requiredPropertyNames = meta.columns
     .filter(col => !col.isNullable && !col.isGenerated)
     .map(col => col.propertyName)
+
   createSchema['required'] = requiredPropertyNames
 
   return createSchema
@@ -256,8 +266,11 @@ export function getFullSchema(meta: EntityMetadata, prefix?: string) {
   return fullSchema
 }
 
-function removeId(object) {
-  delete object['$id']
+//TODO: See if there is a way to not use any and instead ensure the obejct has '$id'
+function removeId(object: any) {
+  if ("$id" in Object.keys(object)) {
+    delete object['$id']
+  }
   return object
 }
 

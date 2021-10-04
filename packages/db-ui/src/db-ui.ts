@@ -1,5 +1,5 @@
-import { App, PluginScope, kApp } from '@ezbackend/core'
-import { convert, getDefaultGenerators, generateRouteFactory } from '@ezbackend/common'
+import { App, PluginScope } from '@ezbackend/core'
+import { convert, getDefaultGenerators, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 import { RouteOptions, FastifyInstance } from 'fastify'
@@ -9,9 +9,9 @@ import { buildRoutePrefix } from '@ezbackend/common'
 //TODO: Source maps for debugging?
 function getDbUIGenerators() {
     const generators = getDefaultGenerators()
-    Object.keys(generators).forEach(key => {
-        const oldGenerator = generators[key]
-        generators[key] = (repo, opts) => {
+    type GeneratorKey = keyof typeof generators
+    Object.entries(generators).forEach(([key,oldGenerator]) => {
+        generators[key as GeneratorKey] = (repo, opts) => {
             const routeDetails = oldGenerator(repo, opts)
             return {
                 ...routeDetails,
@@ -27,7 +27,7 @@ function getDbUIGenerators() {
     return generators
 }
 
-async function addDBSchemas(instance, opts) {
+async function addDBSchemas(instance: EzBackendInstance, opts: EzBackendOpts) {
     instance.entities.forEach(entity => {
         const repo = instance.orm.getRepository(entity)
         const { createSchema, updateSchema, fullSchema } = convert(repo.metadata, 'db-ui')
@@ -39,7 +39,7 @@ async function addDBSchemas(instance, opts) {
 
 //TODO: Make generator more robust? Like add prefix options for example
 
-async function addDbUIEndpoints(instance, opts) {
+async function addDbUIEndpoints(instance: EzBackendInstance, opts: EzBackendOpts) {
     const generators = getDbUIGenerators()
 
     //LEFT OFF: Schemas not showing on API documentation!!! Why you gotta be like this fastify!?!?!
@@ -47,11 +47,12 @@ async function addDbUIEndpoints(instance, opts) {
     instance.entities.forEach(entity => {
     const repo = instance.orm.getRepository(entity)
         Object.values(generators).forEach(generator => {
-            const routes: Array<RouteOptions> = [].concat(generator(repo,{schemaPrefix:"db-ui"}))
+            const routes = ([] as Array<RouteOptions>).concat(generator(repo,{schemaPrefix:"db-ui"}))
             routes.forEach((route) => {
                 //Update the route prefix manually here
                 route.url = buildRoutePrefix(`/db-ui/${repo.metadata.name}`,route.url)
-                instance.server.route(route)
+                //TODO: Figure out why types don't match
+                instance.server.route(route as Parameters<typeof instance['server']['route']>[0])
             })
         })
     })
@@ -85,7 +86,7 @@ class DBEndpointRouter extends App {
 
 const BUILD_DIR = path.join(__dirname, "../ezbackend-database-ui/build")
 
-async function dbUIFastifyPlugin(server:FastifyInstance,opts) {
+async function dbUIFastifyPlugin(server:FastifyInstance) {
     server.register(fastifyStatic,{
         root: BUILD_DIR,
         wildcard: false
