@@ -1,19 +1,26 @@
 import { EzApp, EzBackendServer } from "./ezapp";
 import fastify, { FastifyInstance } from "fastify";
 import fastifyBoom from 'fastify-boom'
-import { createConnection } from "typeorm";
+import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
 import _ from 'lodash'
 import path from 'path'
 import dotenv from 'dotenv'
 import { InjectOptions } from "light-my-request";
 
-export type EzBackendInstance = {
+export interface EzBackendInstance {
+    entities: Array<EntitySchema>
     server: EzBackendServer
     _server: FastifyInstance
+    repo: Repository<ObjectLiteral>
+    orm: Connection
 }
 
-export type EzBackendOpts = {}
+export interface EzBackendOpts {
+    port: number
+    orm: Parameters<typeof createConnection>[0]
+    server: Parameters<typeof fastify>[0]
+}
 
 //TODO: Check if emojis will break instance names
 //URGENT TODO: Strict types for instance, opts

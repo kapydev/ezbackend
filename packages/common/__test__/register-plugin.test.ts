@@ -1,6 +1,8 @@
 import { EzBackend } from "../src";
-import { kRoutePrefix } from "fastify/lib/symbols"
-import { FastifyInstance } from 'fastify'
+import fastify, { FastifyInstance } from 'fastify'
+
+const s = fastify()
+s.register
 
 //TODO: Figure if there is a better way of getting this data
 function getInternalInstance(ezb: EzBackend) {
@@ -34,7 +36,7 @@ describe("Plugin Registering", () => {
     it("Top level plugin should be properly prefixed", async () => {
         app.setHandler("Register plugin", async (instance, opts) => {
             instance.server.register(async (server, opts) => {
-                expect(server[kRoutePrefix]).toBe("/prefix")
+                expect(server.prefix).toBe("/prefix")
             }, { prefix: "prefix" })
         })
         await app.start(defaultConfig)
@@ -45,7 +47,7 @@ describe("Plugin Registering", () => {
             instance.server.decorateReply('decorator1', "test")
             // expect(instance.server.hasReplyDecorator('decorator1')).toBe(true)
 
-            instance.server.register(async (server: FastifyInstance, opts) => {
+            instance.server.register(async (server, opts) => {
                 server.decorateReply('decorator2', "test")
                 expect(server.hasReplyDecorator('decorator1')).toBe(true)
 

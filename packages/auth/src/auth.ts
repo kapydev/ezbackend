@@ -10,6 +10,7 @@ export class EzAuth extends EzApp {
         super()
         this.setHandler("Add Fastify Secure Session", async (instance, opts) => {
             //TODO: Create key if no key
+            //@ts-ignore
             instance.server.register(fastifySecureSession, {
                 key: fs.readFileSync(opts.auth.secretKeyPath),
                 cookie: {
@@ -21,7 +22,9 @@ export class EzAuth extends EzApp {
         this.setHandler("Add Fastify Passport", async (instance, opts) => {
 
             //TODO: Create key if no key
+            //@ts-ignore
             instance.server.register(fastifyPassport.initialize())
+            //@ts-ignore
             instance.server.register(fastifyPassport.secureSession())
         })
 

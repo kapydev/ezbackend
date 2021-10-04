@@ -1,6 +1,8 @@
 import { App, PluginScope } from "@ezbackend/core"
-import { FastifyInstance, FastifyServerOptions } from "fastify"
+import { FastifyInstance, FastifyRegister } from "fastify"
 import fp from 'fastify-plugin'
+import {Plugin} from 'avvio'
+import { EzBackendInstance, EzBackendOpts } from "."
 
 type CallableKeysOf<Type> = {
     [Key in keyof Type]: Type[Key] extends Function ? Key : never
@@ -40,7 +42,8 @@ function createServer(parent: EzApp) {
         decorateReply: generateFastifyFuncWrapper<FastifyInstance['decorateReply']>(parent, 'decorateReply'),
         decorateRequest: generateFastifyFuncWrapper<FastifyInstance['decorateRequest']>(parent, 'decorateRequest'),
         inject: generateFastifyFuncWrapper<FastifyInstance['inject']>(parent, 'inject'),
-        register: generateFastifyFuncWrapper<FastifyInstance['register']>(parent, 'register'),
+        //TODO: Figure out why the type inference cannot handle async/callback styles
+        register: generateFastifyFuncWrapper<FastifyInstance['register']>(parent, 'register') as FastifyRegister,
         setNotFoundHandler: generateFastifyFuncWrapper<FastifyInstance['setNotFoundHandler']>(parent, 'setNotFoundHandler'),
         setErrorHandler: generateFastifyFuncWrapper<FastifyInstance['setErrorHandler']>(parent, 'setErrorHandler'),
 
@@ -68,6 +71,8 @@ export class EzApp extends App {
             instance.server = createServer(this)
         })
         this.setPostHandler("Remove Server Stub", async (instance, opts) => {
+            //URGENT TODO: Make sure that error message when trying to get decorators that are not present is clear
+            //@ts-ignore
             delete instance.server
         })
     }
@@ -90,11 +95,22 @@ export class EzApp extends App {
     decorate = generateFastifyFuncWrapper<FastifyInstance['decorate']>(this, 'decorate')
     decorateReply = generateFastifyFuncWrapper<FastifyInstance['decorateReply']>(this, 'decorateReply')
     decorateRequest = generateFastifyFuncWrapper<FastifyInstance['decorateRequest']>(this, 'decorateRequest')
-    register = generateFastifyFuncWrapper<FastifyInstance['register']>(this, 'register')
+
+    register = generateFastifyFuncWrapper<FastifyInstance['register']>(this, 'register') //TODO: Why is the async one not working?
     setNotFoundHandler = generateFastifyFuncWrapper<FastifyInstance['setNotFoundHandler']>(this, 'setNotFoundHandler')
     setErrorHandler = generateFastifyFuncWrapper<FastifyInstance['setErrorHandler']>(this, 'setErrorHandler')
     //NOTE: Inject is being used by EzBackend which is why we remove it
     // inject = generateFastifyFuncWrapper(this, 'inject')
+
+    setPreInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreInit(funcName,plugin)}
+    setInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setInit(funcName,plugin)}
+    setPostInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostInit(funcName,plugin)}
+    setPreHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreHandler(funcName,plugin)}
+    setHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setHandler(funcName,plugin)}
+    setPostHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostHandler(funcName,plugin)}
+    setPreRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreRun(funcName,plugin)}
+    setRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setRun(funcName,plugin)}
+    setPostRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostRun(funcName,plugin)}
 
     /**
      * Registers all fastify plugins to server instance of ezbackend application

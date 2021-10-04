@@ -2,6 +2,7 @@ import { getSchemaName } from "../typeorm-json-schema";
 import Boom from '@hapi/boom'
 import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
+import type {RouterOptions} from './api-generator'
 
 /**
  * Returns the primary column name from given metadata
@@ -26,10 +27,6 @@ const removeNestedNulls = (obj: any) => {
     return obj;
 };
 
-export interface GenerateOpts {
-    schemaPrefix?: string
-}
-
 //TODO: Remove trailing slash from path names
 //TODO: Make function to get generated Cols
 //URGENT TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
@@ -46,7 +43,7 @@ export interface GenerateOpts {
  */
 export const getDefaultGenerators = () => {
     return {
-        createOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
+        createOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
             const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             const routeDetails: RouteOptions = {
                 method: "POST",
@@ -77,7 +74,7 @@ export const getDefaultGenerators = () => {
             };
             return routeDetails;
         },
-        getOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
+        getOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
             const primaryCol = getPrimaryColName(repo.metadata)
             const routeDetails: RouteOptions = {
                 method: "GET",
@@ -111,7 +108,7 @@ export const getDefaultGenerators = () => {
             };
             return routeDetails;
         },
-        getAll: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
+        getAll: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
             const routeDetails: RouteOptions = {
                 method: "GET",
                 url: "/",
@@ -134,7 +131,7 @@ export const getDefaultGenerators = () => {
             };
             return routeDetails;
         },
-        updateOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
+        updateOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
             const primaryCol = getPrimaryColName(repo.metadata)
             const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
             const routeDetails: RouteOptions = {
@@ -185,7 +182,7 @@ export const getDefaultGenerators = () => {
             };
             return routeDetails;
         },
-        deleteOne: (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => {
+        deleteOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
             const primaryCol = getPrimaryColName(repo.metadata)
             const routeDetails: RouteOptions = {
                 method: "DELETE",

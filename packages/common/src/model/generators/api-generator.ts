@@ -2,18 +2,19 @@ import { ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import { EzApp } from "../../ezapp"
 import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-json-schema";
-import { getDefaultGenerators, GenerateOpts } from "./default-generators"
+import { getDefaultGenerators } from "./default-generators"
 import { EzBackendOpts } from "../..";
 //TODO: Consider if we should remove the cyclic importing
 import type {EzBackendInstance} from '../../ezbackend'
 
 
 export interface RouterOptions {
+    schemaPrefix?: string
     prefix?: string
     generators?: { [name: string]: IGenerator }
 }
 
-type IGenerator = (repo: Repository<ObjectLiteral>, opts?: GenerateOpts) => RouteOptions | Array<RouteOptions>;
+type IGenerator = (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => RouteOptions | Array<RouteOptions>;
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
 /**
@@ -57,7 +58,7 @@ export type Middleware = (oldRoute: RouteOptions) => RouteOptions
  * @param middlewares 
  * @returns 
  */
-export function generateRouteFactory(genOpts:GenerateOpts, generator: IGenerator, middlewares: Array<Middleware> = []) {
+export function generateRouteFactory(genOpts:RouterOptions, generator: IGenerator, middlewares: Array<Middleware> = []) {
     return async (instance: EzBackendInstance, opts: EzBackendOpts) => {
         const routes = ([] as Array<RouteOptions>).concat(generator(instance.repo, genOpts))
         routes.forEach((route) => {
@@ -65,16 +66,18 @@ export function generateRouteFactory(genOpts:GenerateOpts, generator: IGenerator
             middlewares.forEach(middleware => {
                 modifiedRoute = middleware(modifiedRoute)
             })
-            instance.server.route(modifiedRoute)
+            //TODO: Figure out why types don't match
+            instance.server.route(modifiedRoute as Parameters<typeof instance['server']['route']>[0])
         })
 
     }
 }
 
-export function middlewareFactory(optName: string, newValue: any): Middleware {
+export function middlewareFactory(optName:string, newValue: any): Middleware {
 
     const newMiddleware: Middleware = (oldRoute) => {
         const newRoute = oldRoute
+        //@ts-ignore
         newRoute[optName] = newValue
         return newRoute
     }
@@ -96,7 +99,7 @@ export class EzRouter extends EzApp {
     constructor(opts: RouterOptions = { prefix: '', generators: getDefaultGenerators() }) {
         super()
         this._genOpts = opts
-        this._generators = opts.generators
+        this._generators = opts.generators ?? {}
 
         this.setHandler(`Add Create Schema`, async (instance, opts) => {
 

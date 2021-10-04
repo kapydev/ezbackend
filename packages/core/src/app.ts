@@ -5,7 +5,7 @@ import {
 } from './symbols'
 import avvio, { Avvio, mixedInstance, Plugin } from 'avvio'
 
-export type PluginType = Plugin<unknown, AppInstance>
+export type PluginType = Plugin<AppInstanceOpts, AppInstance>
 export type Lifecycle =
     '_preInit' |
     '_init' |
@@ -38,6 +38,10 @@ export class AppInstance {
     [kApp]: App
 }
 
+export class AppInstanceOpts {
+
+}
+
 export type Override = Avvio<AppInstance>['override']
 
 export type Overrides = { [name: string]: Avvio<unknown>['override'] }
@@ -60,15 +64,15 @@ export type Overrides = { [name: string]: Avvio<unknown>['override'] }
 export class App {
     protected _parent: App | undefined
     protected _apps: Map<string, App>
-    protected _preInit: Map<string, Plugin<any, any>>
-    protected _init: Map<string, Plugin<any, any>>
-    protected _postInit: Map<string, Plugin<any, any>>
-    protected _preHandler: Map<string, Plugin<any, any>>
-    protected _handler: Map<string, Plugin<any, any>>
-    protected _postHandler: Map<string, Plugin<any, any>>
-    protected _preRun: Map<string, Plugin<any, any>>
-    protected _run: Map<string, Plugin<any, any>>
-    protected _postRun: Map<string, Plugin<any, any>>
+    protected _preInit: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _init: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _postInit: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _preHandler: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _handler: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _postHandler: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _preRun: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _run: Map<string, Plugin<AppInstanceOpts, AppInstance>>
+    protected _postRun: Map<string, Plugin<AppInstanceOpts, AppInstance>>
     protected _instance: Avvio<AppInstance>
     protected _name: string
     protected _scope: PluginScope

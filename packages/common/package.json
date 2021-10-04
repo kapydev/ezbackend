@@ -21,6 +21,7 @@
     "@types/jest": "^27.0.0",
     "@types/lodash": "^4.14.175",
     "@types/node": "^16.4.13",
+    "@types/passport-google-oauth20": "^2.0.10",
     "jest": "^27.0.6",
     "lodash": "^4.17.21",
     "ts-jest": "^27.0.4"
@@ -28,7 +29,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.4",
     "better-sqlite3": "^7.4.3",
-    "fastify": "^3.20.1",
+    "fastify": "^3.20.2",
     "fastify-boom": "^1.0.0",
     "lodash": "^4.17.21",
     "pino-pretty": "^5.1.2",

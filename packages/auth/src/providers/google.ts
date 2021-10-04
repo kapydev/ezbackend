@@ -2,9 +2,9 @@ import { BaseProvider } from './base'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import fastifyPassport from 'fastify-passport'
 import { AnyStrategy } from 'fastify-passport/dist/strategies'
-import { RouteOptions } from 'fastify'
+import { RouteOptions, FastifyInstance } from 'fastify'
 import { DeserializeFunction, SerializeFunction } from 'fastify-passport/dist/Authenticator'
-import {OpenAPIV3} from 'openapi-types'
+import { EzBackendInstance, EzBackendServer } from '@ezbackend/common'
 
 interface IGoogleProviderOptions {
     googleClientId: string
@@ -18,11 +18,12 @@ interface IGoogleProviderOptions {
 
 export class GoogleProvider extends BaseProvider {
 
-    constructor(modelName:string) {
+    constructor(modelName: string) {
         super('google', modelName)
     }
 
-    addStrategy(instance,server,opts): [name: string, Strategy: AnyStrategy] {
+    //TODO: Figure out why its not getting the types from the abstract class
+    addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: any): [name: string, Strategy: AnyStrategy] {
 
         const that = this
 
@@ -33,9 +34,10 @@ export class GoogleProvider extends BaseProvider {
             callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash(server)}`
         }, function (accessToken, refreshToken, profile, cb) {
             const repo = instance.orm.getRepository(that.modelName)
-            const model = {}
-            model[`${that.providerName}Id`] = profile.id
-            model[`${that.providerName}Data`] = profile
+            const model = {
+                [`${that.providerName}Id`]: profile.id,
+                [`${that.providerName}Data`]: profile
+            }
             repo.save(model).then(
                 () => {
                     cb(undefined, profile.id)
@@ -45,7 +47,7 @@ export class GoogleProvider extends BaseProvider {
         })]
     }
 
-    getLoginRoute(server,opts): RouteOptions {
+    getLoginRoute(server: FastifyInstance, opts:any): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/login`,
@@ -59,12 +61,12 @@ export class GoogleProvider extends BaseProvider {
                 description: `# 🔑 [CLICK HERE](${process.env.BACKEND_URL}/${this.getFullRoutePrefixNoPrePostSlash(server)}/login) or visit the URL with this extension to login
                 1. Creates/Updates '${this.modelName}' on login
                 2. Provider ${this.providerName}
-                3. Scopes: ${opts.scope.toString()}` 
+                3. Scopes: ${opts.scope.toString()}`
             }
         }
     }
 
-    getLogoutRoute(server,opts): RouteOptions {
+    getLogoutRoute(server: FastifyInstance, opts:any): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
@@ -81,7 +83,7 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    getCallbackRoute(server,opts): RouteOptions {
+    getCallbackRoute(server: FastifyInstance, opts:any): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`,
@@ -96,7 +98,7 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    registerUserSerializer(instance,opts): SerializeFunction<unknown, unknown> {
+    registerUserSerializer(instance:EzBackendInstance, opts:any): SerializeFunction<unknown, unknown> {
         const that = this
         return async function serializer(id, req) {
             //@ts-ignore
@@ -105,7 +107,7 @@ export class GoogleProvider extends BaseProvider {
     }
 
     //URGENT TODO: When failed to deserialize user because of database reset, think about logging the user out
-    registerUserDeserializer(instance,opts): DeserializeFunction<any, any> {
+    registerUserDeserializer(instance:EzBackendInstance, opts:any): DeserializeFunction<any, any> {
         const that = this
         return async function deserializer(providerAndId: string, req) {
             if (providerAndId.startsWith(`${that.providerName}-`)) {
@@ -113,7 +115,7 @@ export class GoogleProvider extends BaseProvider {
                 const id = providerAndId.replace(`${that.providerName}-`, '')
                 const userRepo = instance.orm.getRepository(that.modelName)
                 const fullUser = await userRepo.findOne({ [`${that.providerName}Id`]: id })
-                if(fullUser) {
+                if (fullUser) {
                     return fullUser
                 } else {
                     //Logout the user if correct provider prefix but not in DB

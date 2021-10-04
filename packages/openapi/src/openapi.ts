@@ -1,11 +1,11 @@
 import { App, PluginScope } from "@ezbackend/core"
 import { fastifySwagger } from 'fastify-swagger'
 import chalk from 'chalk'
-import { getPrimaryColName } from "@ezbackend/common"
+import { EzBackendInstance, EzBackendOpts, getPrimaryColName } from "@ezbackend/common"
 import { RouteOptions } from "fastify"
 
 //TODO: Allow configuration editing
-async function addSwaggerPlugin(instance, opts) {
+async function addSwaggerPlugin(instance: EzBackendInstance, opts: EzBackendOpts) {
     instance.server.register(fastifySwagger, {
         prefix: "/docs",
         routePrefix: "/docs",

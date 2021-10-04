@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-function lineFactory(prefix, msg) {
+function lineFactory(prefix:string, msg:string|undefined) {
     if (msg === undefined) {
         return ''
     }
