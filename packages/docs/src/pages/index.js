@@ -46,29 +46,31 @@ export default function Home() {
         place-content-center
         '>
 
-          <div className='place-self-start text-5xl font-bold font-mono'>
-            Your Tech Stack <br/> in One Package
-            <p className='text-xl font-mono mt-5'>
-              Simplified Backend Setup <br/>
-            </p>
-            <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4 pt-6'>
-              <div>
-                <CtaButton link="/docs/intro">
-                  Documentation
-                </CtaButton>
-              </div>
-              <div>
-                <a href='https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts' target='_blank'>
-                  <CtaButton>
-                    Live Demo
+          <div className='order-1 place-self-start'>
+            <div className='text-5xl font-bold font-mono'>
+              Your Tech Stack <br /> in One Package
+              <p className='text-xl font-mono mt-5'>
+                Simplified Backend Setup <br />
+              </p>
+              <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4 pt-6'>
+                <div>
+                  <CtaButton link="/docs/intro">
+                    Documentation
                   </CtaButton>
-                </a>
+                </div>
+                <div>
+                  <a href='https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts' target='_blank'>
+                    <CtaButton>
+                      Live Demo
+                    </CtaButton>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className='place-self-start'>
-            <div className='py-3 font-monts font-semibold' style={{ fontFamily: 'montserrat' }}>
+          <div className='order-2 place-self-start'>
+            <div className='pb-3 font-monts font-semibold' style={{ fontFamily: 'montserrat' }}>
               Step 1: Install
             </div>
             <CodeLine copyText="npx ezbackend init" onClick={notify}>
@@ -82,13 +84,13 @@ export default function Home() {
             </CodeLine>
           </div>
 
-          <div className='place-self-start'>
+          <div className='order-4 md:order-3 place-self-start'>
             <LiveProvider disabled={true} code={code} theme={theme} >
               <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
             </LiveProvider>
           </div>
 
-          <div className='grid self-start'>
+          <div className='order-3 md:order-4 grid self-start'>
             <div className='font-bold font-mono text-3xl mb-1'>
               Step 3: Plan your Model
             </div>
@@ -107,11 +109,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className='col-span-1 md:col-span-full md:px-12'>
+          <div className='order-5 md:col-span-full md:px-12'>
             <div className='text-3xl font-mono mb-12 font-bold text-center'>
               How we do it:
             </div>
-            <TechStackImage />
+            <div className='md:px-12'>
+              <TechStackImage />
+            </div>
           </div>
 
           {/* <div className='col-span-full'>
@@ -125,7 +129,7 @@ export default function Home() {
               Powered by EzBackend
             </div>
           </div> */}
-          
+
         </div>
       </div>
 
