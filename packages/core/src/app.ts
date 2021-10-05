@@ -51,15 +51,15 @@ export type Overrides = { [name: string]: Avvio<unknown>['override'] }
 
 /**
  * An App is the basic building block for a plugin system, it contains all core and lifecycle methods.
- * 
+ *
  * **App Lifecycle**
- * 
+ *
  * {@link setPreInit} → {@link setInit} → {@link setPostInit}
- * 
- * → {@link setPreHandler} → {@link setHandler} → {@link setPostHandler} 
- * 
+ *
+ * → {@link setPreHandler} → {@link setHandler} → {@link setPostHandler}
+ *
  * → {@link setPreRun} → {@link setRun} → {@link setPostRun}
- * 
+ *
  */
 export class App {
     protected _parent: App | undefined
@@ -201,7 +201,7 @@ export class App {
      */
     removeHook(lifecycle: Lifecycle, funcName: string) {
         if (!this[lifecycle].has(funcName)) {
-            throw `${funcName} does not exist in ${lifecycle}`
+            throw new Error(`${funcName} does not exist in ${lifecycle}`)
         }
         //Override the plugin name
         this[lifecycle].delete(funcName)
@@ -215,7 +215,7 @@ export class App {
      */
     setHook(lifecycle: Lifecycle, funcName: string, plugin: Plugin<any, any>) {
         if (this[lifecycle].has(funcName)) {
-            throw `${funcName} already declared for ${lifecycle}`
+            throw new Error(`${funcName} already declared for ${lifecycle}`)
         }
         //Override the plugin name
         Object.defineProperty(plugin, 'name', { value: funcName })
@@ -226,27 +226,27 @@ export class App {
      * Assigns current app to a parent app.
      * Note! You can only have a maximum of 1 parent.
      * EzBackend follows Fastify's encapsulation system. Click [here](https://www.fastify.io/docs/latest/Encapsulation/) for more information on Fastify's encapsulation
-     * @param app 
+     * @param app
      */
     _setParent(app: App) {
         if (this._parent === undefined) {
             this._parent = app
         } else {
-            throw `App's parent has already been set, parents can only be set once`
+            throw new Error(`App's parent has already been set, parents can only be set once`)
         }
     }
 
     /**
      * Creates a new app
      * Note! You cannot have an app with the same name
-     * @param name 
-     * @param newApp 
+     * @param name
+     * @param newApp
      * @param opts options
      */
     //URGENT TODO: it does not seem to detect when child apps have the same name
     addApp(name: string, newApp: App, opts: any = {}) {
         if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
-            throw (`Child app ${name} already exists`)
+            throw new Error((`Child app ${name} already exists`))
         }
         newApp.name = name
         newApp.opts = opts
@@ -261,7 +261,7 @@ export class App {
     /**
      * Retrieves the function assigned to the lifecycle method for the current app
      * @param lifecycle
-     * @returns 
+     * @returns
      */
     getHookPlugin(lifecycle: Lifecycle): undefined | PluginType {
 
@@ -312,11 +312,11 @@ export class App {
 
     /**
      * Starts the app running. You can pass in app options to configure how the app should run
-     * @param opts 
+     * @param opts
      */
     async start(opts?: any) {
         if (this._instance.started) {
-            throw `App has been started already!`
+            throw new Error(`App has been started already!`)
         }
         //Configure encapsulation
         this._instance.override = this.override
@@ -334,20 +334,20 @@ export class App {
     }
 
     /**
-     * 
-     * @param varName 
-     * @param override 
+     *
+     * @param varName
+     * @param override
      */
     setCustomOverride(varName: string, override: Avvio<unknown>['override']) {
         this._overrides[varName] = override
     }
 
     /**
-     * 
-     * @param old 
-     * @param fn 
-     * @param opts 
-     * @returns 
+     *
+     * @param old
+     * @param fn
+     * @param opts
+     * @returns
      */
     protected override: Override = (old, fn, opts) => {
         let newInstance: mixedInstance<AppInstance>
@@ -374,7 +374,7 @@ export class App {
             //Uses old scope
             newInstance = old
         } else {
-            throw `Function scope is not defined for ${fn}`
+            throw new Error(`Function scope is not defined for ${fn}`)
         }
         newInstance[kApp] = parentApp
         return newInstance
