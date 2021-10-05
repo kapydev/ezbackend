@@ -18,11 +18,11 @@ type IGenerator = (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => Rou
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
 /**
- * Use this for building route prefixes. 
+ * Use this for building route prefixes.
  * Pass in the instance and plugin prefix to generate a proper route prefix.
- * @param instancePrefix 
- * @param pluginPrefix 
- * @returns 
+ * @param instancePrefix
+ * @param pluginPrefix
+ * @returns
  */
 export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
     if (!pluginPrefix) {
@@ -41,8 +41,8 @@ export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
 }
 /**
  * getRoutePrefix
- * @param prefixes 
- * @returns 
+ * @param prefixes
+ * @returns
  */
 export function getRoutePrefix(prefixes: Array<string>) {
     return prefixes.reduceRight(buildRoutePrefix)
@@ -52,11 +52,11 @@ export type Middleware = (oldRoute: RouteOptions) => RouteOptions
 
 //TODO: Custom routes involving apps?
 /**
- * Factory function for generating routes. 
- * @param genOpts 
- * @param generator 
- * @param middlewares 
- * @returns 
+ * Factory function for generating routes.
+ * @param genOpts
+ * @param generator
+ * @param middlewares
+ * @returns
  */
 export function generateRouteFactory(genOpts:RouterOptions, generator: IGenerator, middlewares: Array<Middleware> = []) {
     return async (instance: EzBackendInstance, opts: EzBackendOpts) => {
@@ -89,7 +89,7 @@ export function middlewareFactory(optName:string, newValue: any): Middleware {
 //TODO: Think about function naming
 //TODO: Figure out what the heck this genOpts done and if its useless remove it
 /**
- * Child of EzApp. Handles route generation for 
+ * Child of EzApp. Handles route generation for
  */
 export class EzRouter extends EzApp {
 

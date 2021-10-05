@@ -122,7 +122,7 @@ export class GoogleProvider extends BaseProvider {
                     return null
                 }
             } else {
-                throw 'pass'
+                throw new Error('pass')
             }
 
         }

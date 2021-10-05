@@ -6,13 +6,13 @@ import type {RouterOptions} from './api-generator'
 
 /**
  * Returns the primary column name from given metadata
- * @param meta 
- * @returns 
+ * @param meta
+ * @returns
  */
 export function getPrimaryColName(meta: EntityMetadata) {
     const primaryColumns = meta.primaryColumns
     if (primaryColumns.length > 1) {
-        throw "EzBackend currently only supports one Primary Column per entity. Raise an issue on github with your use case if you need more than one primary column in your entity"
+        throw new Error("EzBackend currently only supports one Primary Column per entity. Raise an issue on github with your use case if you need more than one primary column in your entity")
     }
     return primaryColumns[0].propertyName
 }
@@ -37,9 +37,9 @@ const removeNestedNulls = (obj: any) => {
  * {@link getAll} - Generates API docs for a GET request for all entities the model
  * {@link udpateOne} - Generates API docs for a PATCH request to one entity
  * {@link deleteOne} - Generates API docs for a DELETE request for one entity
- * 
- * 
- * @returns 
+ *
+ *
+ * @returns
  */
 export const getDefaultGenerators = () => {
     return {

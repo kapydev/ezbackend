@@ -33,7 +33,7 @@ export type FullType =
     NormalType |
     RelationType |
     NestedNormalType|
-    NestedRelationType 
+    NestedRelationType
 
 export type ModelSchema = {
     [index: string]: FullType
@@ -42,7 +42,7 @@ export type ModelSchema = {
 
 export type RepoOptions = Omit<EntitySchemaOptions<any>, 'name' | 'columns' | 'relations'>
 
-//URGENT TODO: Allow array? 
+//URGENT TODO: Allow array?
 //URGENT TODO: Allow normal typeorm types?
 
 function normalTypeToTypeORMtype(type:NormalType):ColumnType {
