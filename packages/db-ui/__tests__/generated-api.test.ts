@@ -13,35 +13,6 @@ let app: EzBackend
 
 beforeAll(async () => {
     app = new EzBackend()
-
-    const myFirstModel = new EzModel('firstModel', {
-        var1: Type.FLOAT
-    })
-
-    //TODO: Make them non colliding with the same name if in different scopes? (How tho, background decollision stuff? What about existing db tables?) Can reference how typeorm does it I guess
-    const mySecondModel = new EzModel('secondModel', {
-        var2: Type.VARCHAR
-    })
-
-    const namespace1 = new App()
-
-    namespace1.addApp('First Model', myFirstModel, { prefix: "first-model" })
-
-    app.addApp("Namespace 1", namespace1, { prefix: 'ns1' })
-    app.addApp("Second Model", mySecondModel, { prefix: 'second-model' })
-
-    //Remove the run server hook so we don't start an actual server
-    app.removeHook("_run", "Run Fastify Server")
-
-    //Add the db-ui app
-    app.addApp('db-ui', new EzDbUI())
-
-    await app.start({
-        port: 3000,
-        server: {
-            logger:false
-        }
-    })
 })
 
 afterAll(async () => {
@@ -51,6 +22,60 @@ afterAll(async () => {
 });
 
 describe("DB UI Endpoints", () => {
+    it("Should run even with nested instances", async () => {
+        //---Plugins---
+        app.addApp('db-ui', new EzDbUI())
+        //---Plugins---
+
+        const userDetails = new EzModel('UserDetails', {
+            company: Type.VARCHAR,
+            age: Type.INT,
+            score: Type.FLOAT
+        })
+
+        const session = new EzModel('Session', {
+            name: Type.VARCHAR,
+            users: {
+                type: Type.ONE_TO_MANY,
+                target: 'User',
+                inverseSide: 'session',
+                eager: true
+            }
+        })
+
+        const user = new EzModel('User', {
+            name: Type.VARCHAR,
+            age: Type.INT,
+            userDetails: {
+                type: Type.ONE_TO_ONE,
+                joinColumn: true,
+                cascade: true,
+                eager: true,
+                target: 'UserDetails'
+            },
+            session: {
+                type: Type.MANY_TO_ONE,
+                target: 'Session',
+                inverseSide: 'users'
+            }
+        })
+
+        app.addApp('User', user, { prefix: 'user' })
+        app.addApp('Session', session, { prefix: 'session' })
+        app.addApp('UserDetails', userDetails, { prefix: 'user-details' })
+
+        app.removeHook('_run',"Run Fastify Server")
+
+        async function run() {
+            await app.start()
+            await app.getInternalServer().inject({
+                method: 'get',
+                url: '/'
+            })
+        }
+
+        await run()
+    })
     it.skip("Should have the required schemas", async () => {
 
     })
@@ -60,6 +85,6 @@ describe("DB UI Endpoints", () => {
     })
 
     it.skip("Should render the DB-UI", async () => {
-        
+
     })
 })

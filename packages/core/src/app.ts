@@ -243,6 +243,7 @@ export class App {
      * @param newApp 
      * @param opts options
      */
+    //URGENT TODO: it does not seem to detect when child apps have the same name
     addApp(name: string, newApp: App, opts: any = {}) {
         if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
             throw (`Child app ${name} already exists`)

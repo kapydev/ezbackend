@@ -42,8 +42,6 @@ async function addDBSchemas(instance: EzBackendInstance, opts: EzBackendOpts) {
 async function addDbUIEndpoints(instance: EzBackendInstance, opts: EzBackendOpts) {
     const generators = getDbUIGenerators()
 
-    //LEFT OFF: Schemas not showing on API documentation!!! Why you gotta be like this fastify!?!?!
-
     instance.entities.forEach(entity => {
     const repo = instance.orm.getRepository(entity)
         Object.values(generators).forEach(generator => {
