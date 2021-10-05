@@ -1,9 +1,10 @@
 import { EzApp } from '../ezapp'
 import { Plugin } from 'avvio'
-import { ColumnType, EntitySchema, EntitySchemaColumnOptions, EntitySchemaRelationOptions } from 'typeorm'
+import { ColumnType, EntitySchema, EntitySchemaColumnOptions, EntitySchemaRelationOptions, ObjectLiteral, Repository } from 'typeorm'
 import { EntitySchemaOptions,  } from 'typeorm/entity-schema/EntitySchemaOptions'
 import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes'
 import { EzRouter, RouterOptions } from './generators/api-generator'
+import { EzError } from '@ezbackend/utils'
 
 enum NormalType {
     VARCHAR = 'VARCHAR',
@@ -164,13 +165,31 @@ function entityGeneratorFactory (modelName: string, modelSchema: ModelSchema, re
 }
 
 export class EzModelRepo extends EzApp {
+
+    _repo: Repository<ObjectLiteral> | undefined
+
     constructor(modelName: string, modelSchema: ModelSchema, repoOpts: RepoOptions = {}) {
         super()
         this.setInit(`Create "${modelName}" Entity`, entityGeneratorFactory(modelName, modelSchema, repoOpts))
 
         this.setPostInit(`Obtain ${modelName} Repository`, async(instance,opts) => {
             instance.repo = instance.orm.getRepository(modelName)
+            this._repo = instance.repo
         })
+    }
+
+    getRepo() : Repository<ObjectLiteral> {
+        if (this._repo === undefined) {
+            throw new EzError(
+"Can only call getRepo() in lifecyle preHandler to postRun",
+"The repo is only defined in the postInit lifecycle, so it can only be referenced after that",
+`model.setHandler("Handle Repo", async (instance, opts) => {
+    const repo = model.getRepo()
+    //Do stuff with repo
+})`
+            )
+        }
+        return this._repo
     }
 }
 
