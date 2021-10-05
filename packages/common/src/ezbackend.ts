@@ -114,7 +114,7 @@ export class EzBackend extends EzApp {
         //@ts-ignore
         const lastPlugin = this.instance._lastUsed
         if (lastPlugin === null) {
-            throw "Server is still undefined, have you called app.start() yet?"
+            throw new Error("Server is still undefined, have you called app.start() yet?")
         }
         return lastPlugin.server as EzBackendInstance
     }
@@ -125,7 +125,7 @@ export class EzBackend extends EzApp {
 
     async inject(injectOpts: string | InjectOptions) {
         const server = this.getInternalServer()
-        return await server.inject(injectOpts)
+        return server.inject(injectOpts)
     }
 
     printRoutes() {

@@ -7,10 +7,10 @@ function addProviderToSchema(providerName: string, schema: ModelSchema) {
     const idCol = `${providerName}Id`
     const dataCol = `${providerName}Data`
     if (idCol in schema) {
-        throw `${idCol} is automatically generated for the user model and cannot be specified`
+        throw new Error(`${idCol} is automatically generated for the user model and cannot be specified`)
     }
     if (dataCol in schema) {
-        throw `${dataCol} is automatically generated for the user model and cannot be specified`
+        throw new Error(`${dataCol} is automatically generated for the user model and cannot be specified`)
     }
     schema[idCol] = Type.VARCHAR //TODO: Confirm this is always varchar or coeracable to varchar
     schema[dataCol] = Type.JSON
@@ -20,9 +20,9 @@ function addProviderToSchema(providerName: string, schema: ModelSchema) {
 function checkGeneratable(modelSchema: ModelSchema) {
     Object.values(modelSchema).forEach(col => {
         if (isRelation(col) || isNormalType(col)) {
-            throw "Columns of EzUser need to either have a default value or be nullable"
+            throw new Error("Columns of EzUser need to either have a default value or be nullable")
         } else if (col.default === undefined && (col.nullable === false || col.nullable === undefined)) {
-            throw "Columns of EzUser need to either have a default value or be nullable"
+            throw new Error("Columns of EzUser need to either have a default value or be nullable")
         }
     })
 }

@@ -81,7 +81,7 @@ export class EzApp extends App {
         })
     }
 
-    //Make routing with apps easy 
+    //Make routing with apps easy
     //URGENT TODO: Should we do this within the handler to be part of the plugin tree?
     delete = generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['delete']>>(this, 'delete')
     get = generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['get']>>(this, 'get')

@@ -51,7 +51,7 @@ beforeEach(() => {
                     cb(null, null)
                     return
                 }
-                throw "All possible cases should be reached by here"
+                throw new Error("All possible cases should be reached by here")
 
             }
 
