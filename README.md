@@ -1,19 +1,20 @@
 <p align="center">
     <img src="favicon.png" width="200">
 </p>
-<p align="center">Simple. Scalable. Secure.</p>
-<p align="center">Backend Setup in <b>two lines of code</b></p>
+<h2 align="center">Your tech stack in <b>one package</b></h2>
+<p align="center">Simplified Backend Setup</p>
+
 
 </br>
 
 <p align="center">
-    <a href="https://snyk.io/advisor/npm-package/ezbackend"> 
+    <!-- <a href="https://snyk.io/advisor/npm-package/ezbackend"> 
         <img src="https://snyk.io/advisor/npm-package/ezbackend/badge.svg"/>
     </a>
     <a href="https://codecov.io/gh/PhilipWee/ezbackend"> 
         <img src="https://codecov.io/gh/PhilipWee/ezbackend/branch/master/graph/badge.svg?token=YZX7TT9XBQ"/>
     </a>
-    <br/>
+    <br/> -->
     <a href="https://www.codefactor.io/repository/github/kapydev/ezbackend">
         <img src="https://www.codefactor.io/repository/github/kapydev/ezbackend/badge" alt="CodeFactor" />
     </a>
@@ -27,9 +28,9 @@
         <img src="https://img.shields.io/github/commit-activity/m/kapydev/ezbackend"/>
     </a>
     <br/>
-    <a"> 
+    <!-- <a> 
         <img src="https://img.shields.io/david/kapydev/ezbackend"/>
-    </a>
+    </a> -->
     <a> 
         <img src="https://img.shields.io/npm/dw/ezbackend"/>
     </a>
