@@ -42,12 +42,22 @@ export function copyBoilerPlate() {
     return defaultPath;
   };
 
-  const targetPath = () => {
+  const rootBoilerPlatePath = () => {
+    const defaultPath = path.resolve(__dirname, '../../', `frameworks/root-files`);
+    return defaultPath;
+  }
+
+  const getTargetPath = () => {
     return "./src";
   };
 
-  const destinationPath = targetPath();
-  fse.copySync(boilerPlatePath(), destinationPath, { overwrite: true });
+  const getTargetRootPath = () => {
+    return '.'
+  }
+
+  fse.copySync(boilerPlatePath(), getTargetPath(), { overwrite: true });
+  fse.copySync(rootBoilerPlatePath(), getTargetRootPath(), { overwrite: false });
+
 }
 
 //URGENT TODO: Move env sample and tsconfig outside of src directory
