@@ -52,11 +52,13 @@ export function copyBoilerPlate() {
   };
 
   const getTargetRootPath = () => {
-    return '.'
+    return `.`
   }
 
   fse.copySync(boilerPlatePath(), getTargetPath(), { overwrite: true });
+
   fse.copySync(rootBoilerPlatePath(), getTargetRootPath(), { overwrite: false });
+
 
 }
 
