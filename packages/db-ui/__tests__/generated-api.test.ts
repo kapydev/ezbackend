@@ -67,7 +67,11 @@ describe("DB UI Endpoints", () => {
         app.removeHook('_run',"Run Fastify Server")
 
         async function run() {
-            await app.start()
+            await app.start({
+                server: {
+                    logger: false
+                }
+            })
             await app.getInternalServer().inject({
                 method: 'get',
                 url: '/'
