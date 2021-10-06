@@ -26,9 +26,9 @@ describe("Plugin Registering", () => {
         auth: {
             secretKeyPath: path.resolve(__dirname, "./testing-not-secret-key"),
             google: {
-                googleClientId: process.env.GOOGLE_CLIENT_ID,
-                googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                backendURL: process.env.BACKEND_URL,
+                googleClientId: process.env.GOOGLE_CLIENT_ID!,
+                googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+                backendURL: process.env.BACKEND_URL!,
                 scope: ['profile'],
                 successRedirectURL: "http://localhost:8888/docs",
                 failureRedirectURL: "http://localhost:8888/docs"
