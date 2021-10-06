@@ -42,7 +42,6 @@ The second requirement needs us to check if users are logged in
 import Boom from '@hapi/boom' //Library used for throwing HTTP errors
 
 post.router.for('createOne').preHandler(async(req,res) => {
-    //@ts-ignore
     if (!req.user) {
         throw Boom.unauthorized()
     }
@@ -157,14 +156,12 @@ user.router.addHook('preHandler', async (req, res) => {
 })
 
 post.router.for('createOne').preHandler(async (req, res) => {
-    //@ts-ignore
     if (!req.user) {
         throw Boom.unauthorized()
     }
 })
 
 post.router.for('updateOne', 'deleteOne').preHandler(async (req, res) => {
-    //@ts-ignore
     if (!req.user || !req.user.isAdmin) {
         throw Boom.unauthorized()
     }

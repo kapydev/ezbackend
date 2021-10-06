@@ -21,6 +21,13 @@ declare module '@ezbackend/common' {
     }
 }
 
+//TODO: Generate this type more programatically to only have types introduced by user
+declare module 'fastify' {
+    interface PassportUser {
+        [index: string]: any
+    }
+}
+
 type ProviderName = Exclude<keyof EzBackendOpts['auth'],'secretKeyPath'>
 
 export abstract class BaseProvider extends EzApp {

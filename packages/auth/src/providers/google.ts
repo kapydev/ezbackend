@@ -4,7 +4,9 @@ import fastifyPassport from 'fastify-passport'
 import { AnyStrategy } from 'fastify-passport/dist/strategies'
 import { RouteOptions, FastifyInstance } from 'fastify'
 import { DeserializeFunction, SerializeFunction } from 'fastify-passport/dist/Authenticator'
-import { EzBackendInstance, EzBackendServer } from '@ezbackend/common'
+import type { EzBackendInstance } from '@ezbackend/common'
+import { EzError } from "@ezbackend/utils"
+
 
 interface IGoogleProviderOptions {
     googleClientId: string
@@ -27,6 +29,15 @@ export class GoogleProvider extends BaseProvider {
 
         const that = this
 
+        if (opts.googleClientId === undefined || opts.googleClientSecret === undefined) {
+            throw new EzError(
+                "Google Client ID and Client Secret not found",
+                "The Google Client ID and Client Secret are used to authenticate EzBackend to provide the google login",
+                "Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your .env file in the root (Same folder as package.json), or specify the option in app.start({...})",
+                "https://www.ezbackend.io/docs/auth/user-auth#creating-the-user"
+            )
+        }
+
         return [this.providerName, new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
@@ -47,7 +58,7 @@ export class GoogleProvider extends BaseProvider {
         })]
     }
 
-    getLoginRoute(server: FastifyInstance, opts:any): RouteOptions {
+    getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/login`,
@@ -66,13 +77,13 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    getLogoutRoute(server: FastifyInstance, opts:any): RouteOptions {
+    //TODO: Mock and test these logout routes
+    getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
-            handler: async function (req, res) {
-                req.logout()
-                return { loggedIn: false }
+            handler: function (req, res) {
+                res.redirect(opts.successRedirectURL)
             },
             schema: {
                 //TODO: Figure out how to import types for summary
@@ -83,7 +94,7 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    getCallbackRoute(server: FastifyInstance, opts:any): RouteOptions {
+    getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`,
@@ -98,16 +109,15 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    registerUserSerializer(instance:EzBackendInstance, opts:any): SerializeFunction<unknown, unknown> {
+    registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown> {
         const that = this
         return async function serializer(id, req) {
-            //@ts-ignore
             return `${that.providerName}-${id}`
         }
     }
 
     //URGENT TODO: When failed to deserialize user because of database reset, think about logging the user out
-    registerUserDeserializer(instance:EzBackendInstance, opts:any): DeserializeFunction<any, any> {
+    registerUserDeserializer(instance: EzBackendInstance, opts: any): DeserializeFunction<any, any> {
         const that = this
         return async function deserializer(providerAndId: string, req) {
             if (providerAndId.startsWith(`${that.providerName}-`)) {

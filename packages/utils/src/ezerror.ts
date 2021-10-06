@@ -9,7 +9,7 @@ function lineFactory(prefix:string, msg:string|undefined) {
 
 export class EzError extends Error {
     constructor(msg: string, desc: string, oneLiner?: string, docs?: string) {
-        const errMsg = '\n' +
+        const errMsg = '\n\n' +
             lineFactory("Err", msg) +
             lineFactory("Desc", desc) +
             lineFactory("Fix", oneLiner) +

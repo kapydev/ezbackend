@@ -27,6 +27,9 @@
     <a> 
         <img src="https://img.shields.io/github/commit-activity/m/kapydev/ezbackend"/>
     </a>
+    <!-- <a>
+        <img src="https://snyk.io/test/github/kapydev/ezbackend/badge.svg">
+    </a> -->
     <br/>
     <!-- <a> 
         <img src="https://img.shields.io/david/kapydev/ezbackend"/>

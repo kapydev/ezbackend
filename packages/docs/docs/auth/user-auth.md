@@ -15,6 +15,8 @@ EzBackend automatically provides the following:
 in `2 lines` of code
 
 ```ts {5-7}
+import {EzUser, EzAuth} from '@ezbackend/auth'
+
 const app = new EzBackend()
 
 app.addApp('ez-auth', new EzAuth())
