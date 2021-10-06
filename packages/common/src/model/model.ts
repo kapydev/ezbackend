@@ -183,7 +183,8 @@ export class EzModelRepo extends EzApp {
             throw new EzError(
 "Can only call getRepo() in lifecyle preHandler to postRun",
 "The repo is only defined in the postInit lifecycle, so it can only be referenced after that",
-`model.setHandler("Handle Repo", async (instance, opts) => {
+`
+model.setHandler("Handle Repo", async (instance, opts) => {
     const repo = model.getRepo()
     //Do stuff with repo
 })`

@@ -65,7 +65,6 @@ APIGenerator.setGenerator("getAll", (repo) => {
     schema: {
     },
     handler: async(req,res) => {
-      //@ts-ignore
       const newObj = await repo.find(req.params.id);
       res.send(newObj);
     }

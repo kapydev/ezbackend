@@ -62,8 +62,8 @@ const defaultConfig = {
             googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
             backendURL: process.env.BACKEND_URL,
             scope: ['profile'],
-            successRedirectURL: "http://localhost:8000/docs",
-            failureRedirectURL: "http://localhost:8000/docs"
+            successRedirectURL: "http://localhost:8000/db-ui",
+            failureRedirectURL: "http://localhost:8000/db-ui"
         }
     }
 }

@@ -64,7 +64,7 @@ describe("Default Behaviour", () => {
       expect(instance.rootVar).toEqual('rootVar')
       expect(instance.subApp1Var).toEqual(undefined)
     })
-    
+
     await app.start()
   })
 
@@ -95,5 +95,16 @@ describe("Default Behaviour", () => {
     await app.start()
   })
 
+  test('Running app.start() twice should error', async () => {
+    const app = new App()
+    await app.start()
+    let errored = false
+    try {
+      await app.start()
+    } catch (e) {
+      errored = true
+    }
+    expect(errored).toBe(true)
+  })
 
 });
