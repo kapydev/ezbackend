@@ -136,8 +136,7 @@ export class EzBackend extends EzApp {
         return this.getInternalServer().printPlugins()
     }
 
-    //URGENT TODO: Typescript opts
-    async start(opts?: any) {
+    async start(opts?: Partial<EzBackendOpts>) {
         opts = _.merge(defaultConfig, opts)
         await super.start(opts)
     }

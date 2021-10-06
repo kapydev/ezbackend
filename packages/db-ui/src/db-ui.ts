@@ -1,10 +1,10 @@
-import { App, PluginScope } from '@ezbackend/core'
+import { PluginScope } from '@ezbackend/core'
 import { convert, getDefaultGenerators, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 import { RouteOptions, FastifyInstance } from 'fastify'
 import chalk from 'chalk'
-import { buildRoutePrefix } from '@ezbackend/common'
+import { EzApp, buildRoutePrefix } from '@ezbackend/common'
 
 //TODO: Source maps for debugging?
 function getDbUIGenerators() {
@@ -19,7 +19,7 @@ function getDbUIGenerators() {
                     ...routeDetails.schema,
                     summary: `Used internally by database UI`,
                     tags: ['db-ui'],
-                    deprecated: true
+                    hide:true
                 }
             }
         }
@@ -74,7 +74,7 @@ async function addDbUIEndpoints(instance: EzBackendInstance, opts: EzBackendOpts
     // })
 }
 
-class DBEndpointRouter extends App {
+class DBEndpointRouter extends EzApp {
     constructor() {
         super()
         this.setHandler("Add DB-UI endpoints", addDbUIEndpoints)
@@ -96,7 +96,7 @@ async function dbUIFastifyPlugin(server:FastifyInstance) {
     })
 }
 
-export class EzDbUI extends App {
+export class EzDbUI extends EzApp {
     constructor() {
         super()
         this.setHandler("Add DB-UI endpoint schemas", addDBSchemas)

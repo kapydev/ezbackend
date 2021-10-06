@@ -41,7 +41,6 @@ export class GoogleProvider extends BaseProvider {
         return [this.providerName, new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
-            //LEFT OFF: Need to redesign the callback URL to properly support route prefixing
             callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash(server)}`
         }, function (accessToken, refreshToken, profile, cb) {
             const repo = instance.orm.getRepository(that.modelName)
@@ -54,7 +53,6 @@ export class GoogleProvider extends BaseProvider {
                     cb(undefined, profile.id)
                 }
             )
-            //URGENT TODO: Make it such that I don't need to make my fields allow null, and so that it doesnt throw an error
         })]
     }
 
@@ -66,7 +64,8 @@ export class GoogleProvider extends BaseProvider {
             handler: fastifyPassport.authenticate('google', { scope: opts.scope }),
             schema: {
                 //TODO: Figure out how to import types for summary
-                //TODO: Add documentation on setting up callback URL
+                //@ts-ignore
+                tags: ['Google Auth'],
                 //@ts-ignore
                 summary: `Login for model '${this.modelName}' with provider ${this.providerName}`,
                 description: `# 🔑 [CLICK HERE](${process.env.BACKEND_URL}/${this.getFullRoutePrefixNoPrePostSlash(server)}/login) or visit the URL with this extension to login
@@ -88,6 +87,8 @@ export class GoogleProvider extends BaseProvider {
             schema: {
                 //TODO: Figure out how to import types for summary
                 //@ts-ignore
+                tags: ['Google Auth'],
+                //@ts-ignore
                 summary: `Logout for model '${this.modelName}' with provider ${this.providerName}`,
                 description: `# 🔑 [CLICK HERE](${process.env.BACKEND_URL}/${this.getFullRoutePrefixNoPrePostSlash(server)}/logout) or visit the URL with this extension to logout`
             }
@@ -105,6 +106,13 @@ export class GoogleProvider extends BaseProvider {
             }),
             handler: async function (req, res) {
                 res.redirect(opts.successRedirectURL)
+            },
+            schema: {
+                //@ts-ignore
+                tags: ['Google Auth'],
+                //@ts-ignore
+                summary: `Callback Route for model '${this.modelName}' with provider ${this.providerName}`,
+                description: `Google redirects to this URL with the user's details. This route must be specified in the google callback URLs`
             }
         }
     }

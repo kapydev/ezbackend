@@ -12,6 +12,7 @@ export async function baseGenerator(packageManager: JsPackageManager) {
     "@ezbackend/core",
     "@ezbackend/common",
     "@ezbackend/cors",
+    "@ezbackend/utils",
 
   ]
   //LEFT OFF
