@@ -108,7 +108,8 @@ export class EzDbUI extends EzApp {
             instance.server.register(dbUIFastifyPlugin, {prefix:"db-ui"})
         })
 
-        this.setPostRun("Display DB UI URL", async (instance, opts) => {
+        //TODO: Remove temporary opts any fix
+        this.setPostRun("Display DB UI URL", async (instance, opts:any) => {
             if (opts.port && process.env.NODE_ENV != 'test') {
                 console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui/`))
             }

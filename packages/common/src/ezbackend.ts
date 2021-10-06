@@ -136,8 +136,8 @@ export class EzBackend extends EzApp {
         return this.getInternalServer().printPlugins()
     }
 
-    //TODO: Remove temporary any fix
-    async start(opts?: Partial<EzBackendOpts>|any) {
+    //URGENT TODO: Remove temporary any fix
+    async start(opts?: any) {
         opts = _.merge(defaultConfig, opts)
         await super.start(opts)
     }
