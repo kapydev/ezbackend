@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.0.101",
+  "version": "0.0.102",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "ts-jest": "^27.0.4"
   },
   "dependencies": {
+    "@ezbackend/core": "^0.0.0",
     "@hapi/boom": "^9.1.4",
     "better-sqlite3": "^7.4.3",
     "fastify": "^3.20.2",
