@@ -15,7 +15,7 @@ export class EzAuth extends EzApp {
                 //TODO: I think this command may fail intermittently producing the wrong output strangely enough
                 throw new EzError(
                     `Secret key not found at path ${opts.auth.secretKeyPath}`,
-                    "A secret must be provided to hash the user's session details",
+                    "The file 'secret-key' is used to hash the user's session (Seperate from google credentials)",
 `
 Run command in root of project (Same folder as package.json)
 
