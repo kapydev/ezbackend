@@ -173,24 +173,24 @@ function Database() {
 
     return (
         <Fade in={true} timeout={600}>
-            <Box bgcolor="eee" minHeight="100vh" padding={4}>
+            <Box bgcolor="#EEEEEE" minHeight="100vh" padding={4}>
                 <Grid
                     container
                     direction="row"
                     justifyContent="center"
                     spacing={5}
                 >
-                    <Grid item sm={12} md={3}>
+                    <Grid item xs={12} md={3}>
                         <Grid container direction="column" spacing={5}>
-                            <Grid item xs>
+                            <Grid item>
                                 <Box style={{ borderRadius: 10, backgroundColor: "white", padding: 24, overflow: "hidden" }}>
                                     <Scrollbars autoHide autoHideTimeout={100} style={{ width: "100%", minHeight: "200px" }}>
                                         {modelNameCustomRemover(modelNames).map((s) => <SchemaListItem text={s} key={s} selectedItem={selectedItem} handleListItemClick={handleListItemClick} />)}
                                     </Scrollbars>
                                 </Box>
                             </Grid>
-                            <Grid item xs>
-                                <Scrollbars style={{ width: "100%", minHeight: "200px", borderRadius: 10 }}>
+                            <Grid item>
+                                <Scrollbars style={{ width: "100%", minHeight: "60px", borderRadius: 10 }}>
                                     <ReactJson //@ts-ignore
                                         src={cellDataValue}
                                         style={{ padding: 18, borderRadius: 10 }}
@@ -201,7 +201,7 @@ function Database() {
                         </Grid>
                     </Grid>
 
-                    <Grid item sm={12} md={9}>
+                    <Grid item xs={12} md={9}>
                         <Grid container direction="column" spacing={2}>
                             <Grid item>
                                 <Grid container direction="row" alignItems="flex-end">
