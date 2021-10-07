@@ -92,7 +92,6 @@ export class EzApp extends App {
     options = generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['options']>>(this, 'options')
     all = generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['all']>>(this, 'all')
     route = generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['route']>>(this, 'route')
-    //URGENT URGENT TODO: Figure out why request.user is non existent
     addHook = generateFastifyFuncWrapper<any>(this, 'addHook') as FastifyInstance['addHook']
     addSchema = generateFastifyFuncWrapper<OverloadParameters<FastifyInstance['addSchema']>>(this, 'addSchema')
     setSerializerCompiler = generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['setSerializerCompiler']>>(this, 'setSerializerCompiler')

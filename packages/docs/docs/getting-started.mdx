@@ -1,0 +1,45 @@
+---
+sidebar_label: "Getting Started"
+sidebar_position: 2
+---
+
+# Getting Started
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+## Installation
+
+```bash
+npx ezbackend init my-ezbackend
+```
+
+Replace `my-ezbackend` with `your-folder-name` or `.` for current dir
+
+## Running your backend
+
+<Tabs
+  defaultValue="npm"
+  values={[
+    { label: "npm", value: "npm" },
+    { label: "yarn", value: "yarn" },
+  ]}
+>
+  <TabItem value="npm">
+    <CodeBlock className="language-bash">npm run ezb</CodeBlock>
+  </TabItem>
+  <TabItem value="yarn">
+    <CodeBlock className="language-bash">yarn ezb</CodeBlock>
+  </TabItem>
+</Tabs>
+
+You're done! The [following routes](tutorial-basics/auto-generated-routes) for your schemas will be generated
+
+You'll have a working backend running on:
+
+**[localhost:8000](http://localhost:8000)**.
+
+**A User Interface** will also be generated at:
+
+**[localhost:8000/db-ui](http://localhost:8000/db-ui)**

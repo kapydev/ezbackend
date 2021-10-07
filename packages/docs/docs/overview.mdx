@@ -1,0 +1,50 @@
+---
+sidebar_label: "Overview"
+sidebar_position: 3
+---
+
+# Overview
+
+<!-- URGENT TODO: Make all code snippets long and short version -->
+
+
+The basic building block of EzBackend is the EzApp
+
+![EzApp](./assets/ez-app.png)
+
+```ts
+const app = new EzApp()
+```
+
+The EzApp can have child EzApps, and any options specified on an EzApp will propagate to all its children.
+
+![EzApp Prefix Example](./assets/app-prefix-example.png)
+
+```ts
+const leftApp = new EzApp()
+const userApp = new EzApp()
+app.addApp("Left App", leftApp)
+app.addApp("Right App", userApp, {prefix:'users'})
+```
+
+In the above example, the EzApp has no route prefix, so all http routes on it will have the prefix `/`
+
+However, the EzApp on the right was added to the parent with the route prefix `users`, so all its children will have the prefix `/users/`
+
+![EzBackend as Parent](./assets/ezbackend-as-parent.png)
+
+```ts
+const ezb = new EzBackend()
+
+const app = new EzApp()
+
+ezb.addApp("Version 1", app, {prefix: 'v1'})
+.
+.
+app.addApp(...)
+.
+.
+ezb.start()
+```
+
+The topmost parent of an EzBackend must be a `EzBackend`, as the parent EzBackend runs the initialization code in its lifecycle for all child apps to work.
