@@ -5,16 +5,27 @@ import theme from "prism-react-renderer/themes/dracula";
 import toast, { Toaster } from 'react-hot-toast';
 import '../assets/main.css';
 import '../assets/helper.css';
+import TechStackImage from '../assets/tech-stack.svg'
 import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
 import { LiveProvider, LiveEditor } from 'react-live'
-import TechStackImage from '../assets/tech-stack.svg'
-import SignUpForm from '../helper-components/signUpForm';
 
 
-//TODO add order to the page
+const code = `
+const app = new EzBackend()
 
-const notify = () => toast('Copied!', { duration: 800, icon: '✔' });
+const pets = new EzModel('Pets', {
+    name: Type.VARCHAR,
+    species: Type.VARCHAR,
+    age: Type.INT
+  })
+
+app.addApp("pets", pets, { prefix: "pets" })    
+
+app.start()
+`
+
+const notify = () => toast('Copied!', { duration: 800, icon: '✔️' });
 
 export default function Home() {
 
@@ -22,14 +33,15 @@ export default function Home() {
 
   return (
     <Layout
-      title={`${siteConfig.title}`}
+      title={siteConfig.title}
       description="Backend made easy">
-      <div className='grid place-content-center'>
+      <div className='grid place-items-center'>
 
         <div className='
 
         grid 
         grid-flow-row 
+        place-content-center
         
         grid-cols-1 
         mx-12
@@ -41,16 +53,15 @@ export default function Home() {
         md:mx-24
         md:my-14
         md:gap-20
-
+        md:w-3/5
          
-        place-content-center
         '>
 
           <div className='order-1 place-self-start'>
             <div className='text-5xl font-bold font-mono'>
               Your Tech Stack <br /> in One Package
               <p className='text-xl font-mono mt-5'>
-                Simplified Backend Setup <br />
+                You just have to plan the models <br />
               </p>
               <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4 pt-6'>
                 <div>
@@ -70,7 +81,7 @@ export default function Home() {
           </div>
 
           <div className='order-2 place-self-start'>
-            <div className='pb-3 font-monts font-semibold' style={{ fontFamily: 'montserrat' }}>
+            <div className='pb-3 font-semibold' style={{ fontFamily: 'montserrat' }}>
               Step 1: Install
             </div>
             <CodeLine copyText="npx ezbackend init" onClick={notify}>
@@ -91,34 +102,31 @@ export default function Home() {
           </div>
 
           <div className='order-3 md:order-4 grid self-start'>
-            <div className='font-bold font-mono text-3xl mb-1'>
+            <div className='font-bold font-mono text-xl mb-1'>
               Step 3: Plan your Model
             </div>
             <div className='w-auto md:w-96' style={{ fontFamily: "montserrat" }}>
               <div>
-                Focus on planning your database structure. We'll generate the rest for you.
+                Plan your database structure in <span className='underline'>one file</span>. EzBackend will automatically generate everything else for you.
               </div>
               <br />
               <li>API Documentation</li>
               <li>Database Management</li>
-              <li>OAuth Sign In</li>
-              <li>File Storage (WIP)</li>
-              <li>One-Click Cloud Hosting (WIP)</li>
-              <li>Horizontal Scaling (WIP) </li>
-
+              <li>Google Sign In</li>
+              <li className='text-gray-500'>File Storage (WIP)</li>
+              <li className='text-gray-500'>One-Click Cloud Hosting (WIP)</li>
+              <li className='text-gray-500'>Horizontal Scaling (WIP) </li>
             </div>
           </div>
-
-          <div className='order-5 md:col-span-full md:px-12'>
+          <div className='order-5 col-span-full md:mx-10'>
             <div className='text-3xl font-mono mb-12 font-bold text-center'>
-              How we do it:
+              Under the Hood
             </div>
-            <div className='md:px-12'>
-              <TechStackImage />
-            </div>
+            <TechStackImage />
           </div>
 
-          {/* <div className='col-span-full'>
+          {/* 
+          <div className='order-6 col-span- full'>
             <div className='text-3xl text-center font-mono mb-6 font-bold self-center'>
               Alpha Sign Up
             </div>
@@ -133,7 +141,6 @@ export default function Home() {
         </div>
       </div>
 
-
       <br />
       <br />
       <br />
@@ -144,19 +151,3 @@ export default function Home() {
     </Layout >
   );
 }
-
-
-
-const code = `
-const app = new EzBackend()
-
-const pets = new EzModel('Pets', {
-    name: Type.VARCHAR,
-    species: Type.VARCHAR,
-    age: Type.INT
-  })
-
-app.addApp("pets", pets, { prefix: "pets" })    
-
-app.start()
-`
