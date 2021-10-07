@@ -3,13 +3,11 @@ import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import theme from "prism-react-renderer/themes/dracula";
 import toast, { Toaster } from 'react-hot-toast';
-import '../assets/main.css';
-import '../assets/helper.css';
 import TechStackImage from '../assets/tech-stack.svg'
 import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
 import { LiveProvider, LiveEditor } from 'react-live'
-
+import "tailwindcss/tailwind.css"
 
 const code = `
 const app = new EzBackend()
@@ -34,98 +32,98 @@ export default function Home() {
   return (
     <Layout
       title={siteConfig.title}
-      description="Backend made easy">
-      <div className='grid place-items-center'>
+      description="Simplified Backend Setup">
 
-        <div className='
+      <div id="tailwind">
+        <div className='grid place-items-center'>
+          <div className='
 
-        grid 
-        grid-flow-row 
-        place-content-center
-        
-        grid-cols-1 
-        mx-12
-        my-8
-        gap-16
+            grid 
+            grid-flow-row 
+            place-content-center
+            
+            grid-cols-1 
+            mx-12
+            my-8
+            gap-16
 
-        md:grid-cols-2 
-        md:m-32
-        md:mx-24
-        md:my-14
-        md:gap-20
-        md:w-3/5
-         
-        '>
+            md:grid-cols-2 
+            md:m-32
+            md:mx-24
+            md:my-14
+            md:gap-20
+            
+            '>
 
-          <div className='order-1 place-self-start'>
-            <div className='text-5xl font-bold font-mono'>
-              Your Tech Stack <br /> in One Package
-              <p className='text-xl font-mono mt-5'>
-                You just have to plan the models <br />
-              </p>
-              <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4 pt-6'>
-                <div>
-                  <CtaButton link="/docs/intro">
-                    Documentation
-                  </CtaButton>
-                </div>
-                <div>
-                  <a href='https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts' target='_blank'>
-                    <CtaButton>
-                      Live Demo
+            <div className='order-1 place-self-start'>
+              <div className='text-5xl font-bold font-mono'>
+                Your Tech Stack <br /> in One Package
+                <p className='text-xl font-mono mt-5'>
+                  You just have to plan the models <br />
+                </p>
+                <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4'>
+                  <div>
+                    <CtaButton link="/docs/intro">
+                      Documentation
                     </CtaButton>
-                  </a>
+                  </div>
+                  <div>
+                    <a href='https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts' target='_blank'>
+                      <CtaButton>
+                        Live Demo
+                      </CtaButton>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className='order-2 place-self-start'>
-            <div className='pb-3 font-semibold' style={{ fontFamily: 'montserrat' }}>
-              Step 1: Install
-            </div>
-            <CodeLine copyText="npx ezbackend init" onClick={notify}>
-              npx <span className='text-blue-300'>ezbackend</span> init
-            </CodeLine >
-            <div className='py-4 md:my-0 font-semibold' style={{ fontFamily: 'montserrat' }}>
-              Step 2: Run
-            </div>
-            <CodeLine copyText="npm run ezb" onClick={notify}>
-              npm run <span className='text-blue-300'>ezb</span>
-            </CodeLine>
-          </div>
-
-          <div className='order-4 md:order-3 place-self-start'>
-            <LiveProvider disabled={true} code={code} theme={theme} >
-              <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
-            </LiveProvider>
-          </div>
-
-          <div className='order-3 md:order-4 grid self-start'>
-            <div className='font-bold font-mono text-xl mb-1'>
-              Step 3: Plan your Model
-            </div>
-            <div className='w-auto md:w-96' style={{ fontFamily: "montserrat" }}>
-              <div>
-                Plan your database structure in <span className='underline'>one file</span>. EzBackend will automatically generate everything else for you.
+            <div className='order-2 place-self-start'>
+              <div className='pb-3 font-semibold font-monts'>
+                Step 1: Install
               </div>
-              <br />
-              <li>API Documentation</li>
-              <li>Database Management</li>
-              <li>Google Sign In</li>
-              <li className='text-gray-500'>File Storage (WIP)</li>
-              <li className='text-gray-500'>One-Click Cloud Hosting (WIP)</li>
-              <li className='text-gray-500'>Horizontal Scaling (WIP) </li>
+              <CodeLine copyText="npx ezbackend init" onClick={notify}>
+                npx <span className='text-blue-300'>ezbackend</span> init
+              </CodeLine >
+              <div className='py-4 md:my-0 font-semibold font-monts'>
+                Step 2: Run
+              </div>
+              <CodeLine copyText="npm run ezb" onClick={notify}>
+                npm run <span className='text-blue-300'>ezb</span>
+              </CodeLine>
             </div>
-          </div>
-          <div className='order-5 col-span-full md:mx-10'>
-            <div className='text-3xl font-mono mb-12 font-bold text-center'>
-              Under the Hood
-            </div>
-            <TechStackImage />
-          </div>
 
-          {/* 
+            <div className='order-4 md:order-3 place-self-start'>
+              <LiveProvider disabled={true} code={code} theme={theme} >
+                <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
+              </LiveProvider>
+            </div>
+
+            <div className='order-3 md:order-4 grid self-start'>
+              <div className='font-bold font-mono text-xl mb-1'>
+                Step 3: Plan your Model
+              </div>
+              <div className='w-auto md:w-96 font-monts'>
+                <div>
+                  Plan your database structure in <span className='underline'>one file</span>. EzBackend will automatically generate everything else for you.
+                </div>
+                <br />
+                <li>API Documentation</li>
+                <li>Database Management</li>
+                <li>Google Sign In</li>
+                <li className='text-gray-500'>File Storage (WIP)</li>
+                <li className='text-gray-500'>One-Click Cloud Hosting (WIP)</li>
+                <li className='text-gray-500'>Horizontal Scaling (WIP) </li>
+              </div>
+            </div>
+            <div className='order-5 col-span-full md:mx-10'>
+              <div className='text-3xl font-mono mb-12 font-bold text-center'>
+                Under the Hood
+              </div>
+              <TechStackImage />
+            </div>
+
+            {/* 
           <div className='order-6 col-span- full'>
             <div className='text-3xl text-center font-mono mb-6 font-bold self-center'>
               Alpha Sign Up
@@ -138,15 +136,17 @@ export default function Home() {
             </div>
           </div> */}
 
+          </div>
         </div>
+
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <Toaster />
+
       </div>
-
-      <br />
-      <br />
-      <br />
-      <br />
-
-      <Toaster />
 
     </Layout >
   );

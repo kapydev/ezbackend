@@ -15,76 +15,8 @@ module.exports = {
   organizationName: 'kapydev', // Usually your GitHub org/user name.
   projectName: 'ezbackend', // Usually your repo name.
   trailingSlash: 'false',
-  plugins: [
-    // function renameMarkdown(context, options) {
-    //   return {
-    //     name: 'markdown-renamer',
-    //     async loadContent() {
-
-    //     },
-    //     async contentLoaded({ content, actions }) {
-
-    //       const fs = require('fs')
-    //       const path = require('path')
-
-    //       const listDir = (dir, pattern, replace, fileList = []) => {
-
-    //         let files = fs.readdirSync(dir);
-
-    //         files.forEach(file => {
-    //           if (fs.statSync(path.join(dir, file)).isDirectory()) {
-    //             fileList = listDir(path.join(dir, file), pattern, replace, fileList);
-    //           } else {
-    //             if (pattern.test(file)) {
-    //               let name = file.replace(pattern, replace)
-    //               let src = path.join(dir, file);
-    //               let newSrc = path.join(dir, name);
-    //               fileList.push({
-    //                 oldSrc: src,
-    //                 newSrc: newSrc
-    //               });
-    //             }
-    //           }
-    //         });
-
-    //         return fileList;
-    //       };
-
-    //       const renameFiles = (foundFiles) => {
-    //         foundFiles.forEach(f => {
-    //           fs.renameSync(f.oldSrc, f.newSrc)
-    //         })
-    //       }
-
-    //       const foundFiles = listDir(path.resolve(__dirname, 'docs/api'), /_ezbackend/, "ezbackend")
-    //       renameFiles(foundFiles)
-    //       console.log("loading has finished")
-    //     }
-    //   }
-    // },
-    // [
-    //   'docusaurus-plugin-typedoc',
-    //   {
-    //     "githubPages": false,
-    //     "readme": "none",
-    //     "tsconfig": "../../tsconfig.json",
-    //     "entryPointStrategy": "packages",
-    //     "cleanOutputDir": false,
-    //     "entryPoints": [
-    //       "../auth",
-    //       "../common",
-    //       "../common-sequelize-fastify",
-    //       "../core",
-    //       "../db-ui",
-    //       "../openapi"
-    //     ]
-    //   }
-    // ]
-  ],
   stylesheets: [
-    {
-      href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap'
-    }
+    'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap',
   ],
   themeConfig: {
     colorMode: {
@@ -116,6 +48,10 @@ module.exports = {
             {
               to: 'pricing',
               label: '🤝 Pricing',
+            },
+            {
+              to: 'features',
+              label: '🎁 Features',
             }
           ],
         },
@@ -220,6 +156,7 @@ module.exports = {
     ],
   ],
   plugins: [ // URGENT TODO: THIS CURRENTLY NAMES FILES MANUALLY CAN WE DO IT PROPERLY WITH DOCUSAURUS
+
     // function renameMarkdown(context, options) {
     //   return {
     //     name: 'markdown-renamer',

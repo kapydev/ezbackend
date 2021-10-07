@@ -1,10 +1,8 @@
-import '../assets/helper.css'
-import '../assets/main.css';
 import React from 'react';
 
 export function Feature(props) {
   return (
-    <div className=''>
+    <div id="tailwind">
 
       <div className='flex'>
 
@@ -18,7 +16,7 @@ export function Feature(props) {
 
       </div>
 
-      <div className='m-2' style={{ fontFamily: 'montserrat' }}>
+      <div className='m-2 font-monts'>
         <div className='max-w-full'>
           {props.info}
         </div>

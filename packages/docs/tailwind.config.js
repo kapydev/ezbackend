@@ -1,14 +1,15 @@
 module.exports = {
-  purge: [],
+  corePlugins: { preflight: false },
+  important: '#tailwind',
+  purge: [
+    // './src/**/*.html',
+    // './src/**/*.js',
+  ],
   theme: {
     fontFamily: {
-      'monts': ['Montserrat']
+      'monts': ['Montserrat'],
+      'mono' : ['monospace']
     },
-    // extend: {
-    //   fontFamily: {
-    //     'monts': ['montserrat']
-    //   },
-    // },
   },
   variants: {},
   plugins: [],
