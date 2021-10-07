@@ -35,7 +35,7 @@ export default function Home() {
       description="Simplified Backend Setup">
 
       <div id="tailwind">
-        <div className='grid place-items-center'>
+        <div className='grid place-items-center md: ml-12'>
           <div className='
 
             grid 
@@ -116,11 +116,11 @@ export default function Home() {
                 <li className='text-gray-500'>Horizontal Scaling (WIP) </li>
               </div>
             </div>
-            <div className='order-5 col-span-full md:mx-10'>
-              <div className='text-3xl font-mono mb-12 font-bold text-center'>
+            <div className='order-5 col-span-full md:mx-10 md:mr-16'>
+              <div className='text-2xl md:text-3xl font-mono mb-12 font-bold text-center'>
                 Under the Hood
               </div>
-              <TechStackImage />
+              <TechStackImage className='md:mx-8' />
             </div>
 
             {/* 

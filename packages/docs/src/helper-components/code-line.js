@@ -1,5 +1,5 @@
-import { DuplicateIcon } from '@heroicons/react/outline'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import DuplicateIcon from '../assets/icon-duplicate.svg'
 import React from 'react';
 
 export function CodeLine(props) {

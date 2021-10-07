@@ -5,6 +5,10 @@ import IconApiDocs from '../assets/icon-api-docs.svg'
 import IconDatabase from '../assets/icon-database.svg'
 import IconSecurity from '../assets/icon-security.svg'
 import IconWorld from '../assets/icon-world.svg'
+import IconFileStorage from '../assets/icon-download-file.svg'
+import IconDeploy from '../assets/icon-upload-cloud.svg'
+import IconScaling from '../assets/icon-increase.svg'
+
 
 function Features() {
   return (
@@ -58,21 +62,21 @@ function Features() {
             </div>
 
             <Feature
-              icon={<IconWorld className='w-12 h-12' />}
+              icon={<IconFileStorage className='w-12 h-12' />}
               title='File Storage'
-              info='Unlmited File storage for '
+              info='Store and serve files in any format.'
             />
 
             <Feature
-              icon={<IconApiDocs className='w-12 h-12' />}
+              icon={<IconDeploy className='w-12 h-12' />}
               title='One Click Deploy'
-              info='Automatically generate Swagger documentation for your APIs from the models you plan'
+              info='Skip the hassle of navigating through the UI of traditional hosting services.'
             />
 
             <Feature
-              icon={<IconApiDocs className='w-12 h-12' />}
-              title='Horizontal Scaling Wrapper'
-              info='Automatically generate Swagger documentation for your APIs from the models you plan'
+              icon={<IconScaling className='w-12 h-12' />}
+              title='Scaling'
+              info='Ensure your server will never crash from overloading'
             />
 
           </div>
