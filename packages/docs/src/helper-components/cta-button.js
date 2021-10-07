@@ -1,5 +1,4 @@
-import '../assets/helper.css'
-import '../assets/main.css';
+import '../css/helper.css'
 import React from 'react';
 import { useHistory } from "react-router-dom";
 
@@ -16,8 +15,10 @@ export function CtaButton(props) {
   return (
     <button className="pushable" onClick={routeChange}>
       <span className="edge"></span>
-      <span className="front" style={{ fontFamily: 'montserrat', fontWeight: 'bold' }}>
-        {props.children}
+      <span className="front">
+        <div className='font-monts font-bold'>
+          {props.children}
+        </div>
       </span>
     </button>
   )

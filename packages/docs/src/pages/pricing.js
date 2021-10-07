@@ -1,6 +1,5 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import '../assets/helper.css';
 import { CtaButton } from '../helper-components/cta-button';
 
 function FeatureDark(props) {
@@ -9,7 +8,7 @@ function FeatureDark(props) {
       <span className="material-icons align-middle">
         {props.icon}
       </span>
-      <span className="pl-2 font-medium" style={{ fontFamily: 'montserrat' }}>
+      <span className="pl-2 font-medium font-monts">
         {props.children}
       </span>
     </p>
@@ -22,7 +21,7 @@ function FeatureLight(props) {
       <span className="material-icons align-middle">
         {props.icon}
       </span>
-      <span className="pl-2 font-medium" style={{ fontFamily: 'montserrat' }}>
+      <span className="pl-2 font-medium font-monts">
         {props.children}
       </span>
     </p>
@@ -104,7 +103,7 @@ function Header() {
         <span className="text-blue-300 tracking-wide font-mono">Flexible </span>
         <span>Plans</span>
       </div>
-      <div className="pt-6 text-xl text-gray-400 font-normal" style={{ fontFamily: 'montserrat' }}>
+      <div className="pt-6 text-xl text-gray-400 font-normal font-monts">
         Building with our open-source package.
         One-Click Deploy with EzBackend
       </div>
@@ -115,33 +114,36 @@ function Header() {
 function Pricing() {
   return (
     <Layout title="Pricing">
-      <div className='grid place-items-center'>
-        <div className="
+      <div id="tailwind">
+        <div className='grid place-items-center'>
+          <div className="
 
-      grid
+          grid
 
-      grid-cols-1 
-      gap-11
-      m-8
+          grid-cols-1 
+          gap-11
+          m-8
 
-      sm:grid-cols-2 
-      sm:gap-6
-      sm:m-12 
-      sm:mx-16
+          sm:grid-cols-2 
+          sm:gap-6
+          sm:m-12 
+          sm:mx-16
 
-      lg:grid-cols-3 
-      lg:gap-14
-      lg:m-20 
-      lg:mx-24
-      lg:transform
-      lg:scale-90
-      lg:max-w-7xl      
-      "
-        >
-          <Header />
-          <PricingCardFree />
-          <PricingCardPaid />
-          <br />
+          lg:grid-cols-3 
+          lg:gap-14
+          lg:m-20 
+          lg:mx-24
+          lg:transform
+          lg:scale-90
+          lg:max-w-7xl      
+          "
+
+          >
+            <Header />
+            <PricingCardFree />
+            <PricingCardPaid />
+            <br />
+          </div>
         </div>
       </div>
     </Layout>
