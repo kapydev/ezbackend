@@ -180,8 +180,6 @@ function Database() {
                     justifyContent="center"
                     spacing={5}
                 >
-
-                    {/* Changes Made Here */}
                     <Grid item xs={12} md={3}>
                         <Grid container direction="column" spacing={5}>
                             <Grid item>
@@ -273,7 +271,6 @@ function Database() {
                     handleGetRowData={() => handleGetRowData(selectedItem)}
                     selectedItem={selectedItem}
                     handleCloseDialog={handleClosePostRequestDialog}
-
                 />
                 <Toaster
                     position="bottom-left"
