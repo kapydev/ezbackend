@@ -1,58 +1,76 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import { CtaButton } from '../helper-components/cta-button';
+import { Feature } from '../helper-components/feature';
+import IconApiDocs from '../assets/icon-api-docs.svg'
+import IconDatabase from '../assets/icon-database.svg'
+import IconSecurity from '../assets/icon-security.svg'
+import IconWorld from '../assets/icon-world.svg'
 
 function Features() {
   return (
     <Layout title="Features">
-      <div className='grid place-content-center my-12 p-6'>
-        <div className='grid grid-flow-row grid-cols-1 md:grid-cols-3 place-items-center gap-12'>
-          <div className='col-span-full text-3xl font-mono text-center'>
-            Vote your favorite features!
+
+      <div className='grid place-items-center my-16'>
+        <div className='
+        
+        grid 
+        grid-flow-row 
+        gap-12
+        mx-12
+        grid-cols-1
+
+        md:grid-cols-3 
+        md:w-3/5'
+
+        >
+
+          <div className='col-span-full font-bold font-mono text-4xl mb-1 text-center'>
+            Features
           </div>
-          <CtaButton>
-            API Documentation
-          </CtaButton>
-          <CtaButton>
-            Database
-          </CtaButton>
-          <CtaButton>
-            File Storage
-          </CtaButton>
-          <CtaButton>
-            OAuth Sign In<br />(Google, FB, etc.)
-          </CtaButton>
-          <CtaButton>
-            One-Click Deploy
-          </CtaButton>
-          <CtaButton>
-            Horizontal<br />Scaling Wrapper
-          </CtaButton>
-          <div className='col-span-full text-3xl font-mono text-center'>
-            Or suggest a new feature...
+
+          <Feature
+            icon={<IconWorld className='w-12 h-12' />}
+            title='API'
+            info='Instant API endpoints generation with customization capabilities'
+          />
+
+          <Feature
+            icon={<IconApiDocs className='w-12 h-12' />}
+            title='Documentation'
+            info='Automatically generate documentation for your APIs from the models you plan'
+          />
+
+          <Feature
+            icon={<IconDatabase className='w-12 h-12' />}
+            title='Database'
+            info='Choose from mutiple industry standard databases: Postgres, MySQL, MongoDB, & more'
+          />
+
+          <Feature
+            icon={<IconSecurity className='w-12 h-12' />}
+            title='Authentication'
+            info='Add user sign ups and logins and permission layering with Google.'
+          />
+
+          <div className='col-span-full font-bold font-mono text-4xl mb-1 text-center'>
+            Planned Features
           </div>
-          <div className='col-span-full'>
-            <div className='
-                p-4 
-                border-4 
-                border-gray-400
-                bg-gray-800
-                rounded-xl 
-                text-2xl 
-                font-mono 
-                '>
-              <form >
-                <input
-                  className='bg-transparent outline-none'
-                  type="text"
-                  name="name"
-                  placeholder="e.g. Analytics"
-                />
-              </form>
-            </div>
-          </div>
+
+          <Feature
+            icon={<IconWorld className='w-12 h-12' />}
+            title='API'
+            info='Instant API endpoints generation with customization capabilities'
+          />
+
+          <Feature
+            icon={<IconApiDocs className='w-12 h-12' />}
+            title='Documentation'
+            info='Automatically generate Swagger documentation for your APIs from the models you plan'
+          />
+
         </div>
       </div>
+
     </Layout>
   );
 }

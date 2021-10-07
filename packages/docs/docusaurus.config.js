@@ -113,10 +113,6 @@ module.exports = {
           label: 'Product',
           position: 'left',
           items: [
-            // {
-            //   to: 'features',
-            //   label: '🎁 Features',
-            // },
             {
               to: 'pricing',
               label: '🤝 Pricing',

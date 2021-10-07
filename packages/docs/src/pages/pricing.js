@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import '../assets/helper.css';
+import { CtaButton } from '../helper-components/cta-button';
 
 function FeatureDark(props) {
   return (
