@@ -1,55 +1,24 @@
 ---
-sidebar_label: 'Introduction'
+sidebar_label: "Introduction"
 sidebar_position: 1
 ---
 
 # Introduction
 
-### Create a *fully extensible* backend in *two lines* of code
+EzBackend lets you develop your idea, **less lines of code**.
 
-## Installation
+## Philosophy
 
-**In a new folder/your frontend repository**
+1. The developer is always right
 
-<!-- TODO Add tabs for yarn -->
+- Whatever the developer thinks is the right code, should be the right code.
+- A developer's first guess on how to make a `get` request should work.
 
-```
-npx ezbackend init <dir>
-```
+2. Error messages should be stack overflow worthy
 
-`dir` - Directory name for new dir or `.` for current dir
+- Errors shouldn't result in a trip to stack overflow
+- Our EzError template literally has a `copy and paste` section.
 
-## Running your backend
-```
-npm run ezb
-```
+3. Simplicity at its core
 
-![drawing](thats-it.jpg)
-
-
-You're done! The [following routes](tutorial-basics/auto-generated-routes) for your schemas will be generated
-
-
-You'll have a working backend running on:
-
-**[localhost:8000](http://localhost:8000)**. 
-
-**A User Interface** will also be generated at:
-
-**[localhost:8000/db-ui](http://localhost:8000/db-ui)**
-
-
-<!-- ## How It Works
-
-Ezbackend uses [fastify](https://www.fastify.io/) and [sequelize](https://sequelize.org/master/) under the hood, so once you specify your database schema, you will have:
-1. CRUD REST Endpoints
-1. Automatic API documentation
-1. Nested CRUD Endpoints - *Work In Progress*
-1. [json-server](https://github.com/typicode/json-server) style queries - *Future Work* -->
-
-<!-- <br/> 
-
--->
-
-
-
+- If something can be implemented with less code, it shall be.

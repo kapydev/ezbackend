@@ -1,0 +1,23 @@
+---
+sidebar_label: "Overview"
+sidebar_position: 3
+---
+
+# Overview
+
+The basic building block of EzBackend is the EzApp
+
+![EzApp](./assets/ez-app.png)
+
+The EzApp can have child EzApps, and any options specified on an EzApp will propagate to all its children.
+
+![EzApp Prefix Example](./assets/app-prefix-example.png)
+
+In the above example, the EzApp has no route prefix, so all http routes on it will have the prefix `/`
+
+However, the EzApp on the right was added to the parent with the route prefix `users`, so all its children will have the prefix `/users/`
+
+![EzBackend as Parent](./assets/ezbackend-as-parent.png)
+
+The topmost parent of an EzBackend must be a `EzBackend`, as the parent EzBackend runs the initialization code in its lifecycle for all child apps to work.
+
