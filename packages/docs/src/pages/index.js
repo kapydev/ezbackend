@@ -35,7 +35,7 @@ export default function Home() {
       description="Simplified Backend Setup">
 
       <div id="tailwind">
-        <div className='grid place-items-center md: ml-12'>
+        <div className='grid place-items-center md:ml-12'>
           <div className='
 
             grid 
