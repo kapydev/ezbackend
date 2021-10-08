@@ -61,7 +61,7 @@ export default function Home() {
                 <p className='text-xl font-mono mt-5'>
                   You just have to plan the models <br />
                 </p>
-                <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 place-content-start'>
+                <div className='flex flex-col sm:flex-row sm:gap-3'>
                   <div className=''>
                     <CtaButton link="/docs/intro">
                       Get Started
@@ -76,7 +76,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='order-2 place-self-start'>
+            <div className='order-2 grid place-items-start place-self-start'>
               <div className='pb-3 font-semibold font-monts'>
                 Step 1: Install
               </div>
@@ -91,7 +91,7 @@ export default function Home() {
               </CodeLine>
             </div>
 
-            <div className='order-4 md:order-3 place-self-center'>
+            <div className='order-4 md:order-3 place-self-start self-center'>
               <LiveProvider disabled={true} code={code} theme={theme} >
                 <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
               </LiveProvider>
