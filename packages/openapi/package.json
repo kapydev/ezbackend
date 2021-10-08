@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/openapi",
-  "version": "0.0.110",
+  "version": "0.0.111",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
