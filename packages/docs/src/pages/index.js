@@ -61,19 +61,17 @@ export default function Home() {
                 <p className='text-xl font-mono mt-5'>
                   You just have to plan the models <br />
                 </p>
-                <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4'>
-                  <div>
+                <div className='grid grid-cols-1 xl:grid-cols-2 gap-1 place-content-start'>
+                  <div className=''>
                     <CtaButton link="/docs/intro">
                       Get Started
                     </CtaButton>
                   </div>
-                  <div>
-                    <a href='https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts' target='_blank'>
-                      <CtaButton>
-                        Live Demo
-                      </CtaButton>
-                    </a>
-                  </div>
+                  <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' target='_blank'>
+                    <CtaButton>
+                      Live Demo
+                    </CtaButton>
+                  </a>
                 </div>
               </div>
             </div>
