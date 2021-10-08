@@ -79,7 +79,6 @@ beforeEach(() => {
 
         }
         //URGENT TODO: Check if after, ready, listen work
-        //URGENT TODO: Any issues with fastify plugin?
         //Maybe we can run the tests with the fastify test suite?
         return newObj
     })
@@ -326,7 +325,6 @@ describe("test with fastify", () => {
                 preHandlerSchema = instance.server.getSchemas()
             })
 
-            //URGENT TODO: Make important disclaimer regarding encapsulation vs fastify encapsulation
             //URGENT TODO: Make important Error message regarding encapsulation vs fastify encapsulation (override register function)
             v1.setHandler("Print some server instance to see difference", async (instance, opts) => {
                 // console.dir(instance.server,{depth:4})

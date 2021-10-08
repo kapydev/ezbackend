@@ -107,4 +107,64 @@ describe("Default Behaviour", () => {
     expect(errored).toBe(true)
   })
 
+  describe("addApp overloads should function as expected", () => {
+    it("Just app", async () => {
+      const app = new App()
+      const subApp = new App()
+      const arr: Array<number> = [];
+      app.setInit('init', async (instance, opts) => {
+        arr.push(1);
+      })
+      app.addApp(subApp)
+      await app.start()
+
+      expect(arr).toEqual([1]);
+    })
+
+    it("Just app and Opts", async () => {
+      const opts = {opts:"my custom option"}
+      const app = new App()
+      const subApp = new App()
+      const arr: Array<number> = [];
+      app.setInit('init', async (instance, opts) => {
+        arr.push(1);
+      })
+      app.addApp(subApp, opts)
+      await app.start()
+
+      expect(arr).toEqual([1]);
+      expect(subApp.opts).toEqual(opts)
+    })
+
+    it("Just name and app", async() => {
+      const app = new App()
+      const subApp = new App()
+      const arr: Array<number> = [];
+      app.setInit('init', async (instance, opts) => {
+        arr.push(1);
+      })
+      app.addApp("subApp",subApp)
+      await app.start()
+
+      expect(arr).toEqual([1]);
+    })
+
+    it("Name, App and Opts", async() => {
+      const opts = {opts:"my custom option"}
+      const app = new App()
+      const subApp = new App()
+      const arr: Array<number> = [];
+      app.setInit('init', async (instance, opts) => {
+        arr.push(1);
+      })
+      app.addApp("subApp",subApp,opts)
+      await app.start()
+
+      expect(arr).toEqual([1]);
+      expect(subApp.opts).toEqual(opts)
+
+    })
+  })
+
+
 });

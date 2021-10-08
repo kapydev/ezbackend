@@ -2,7 +2,7 @@ import { ColumnType, EntityMetadata } from 'typeorm'
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
 import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 
-//URGENT TODO: See if there is a json schema library that can help with this... (fluent schema?)
+//TODO: See if there is a json schema library that can help with this... (fluent schema?)
 /**
  * Retrieves the schema name for given metadata, type, and prefix
  * @param meta
@@ -135,7 +135,7 @@ export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
           type: jsonSchema.type,
           properties: {
             ...jsonSchema.properties,
-            //URGENT TODO: Make this work with ref schemas PLEASE
+            //TODO: Make this work with ref schemas PLEASE
             [meta.propertyName]: meta.isMany ? makeArray(nestedSchema) : nestedSchema,
           },
         };
@@ -189,7 +189,7 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
           type: jsonSchema.type,
           properties: {
             ...jsonSchema.properties,
-            //URGENT TODO: Make this work with ref schemas PLEASE
+            //TODO: Make this work with ref schemas PLEASE
             [meta.propertyName]: meta.isMany ? makeArray(nestedSchema) : nestedSchema,
           },
           required: jsonSchema.required
@@ -255,7 +255,7 @@ export function getFullSchema(meta: EntityMetadata, prefix?: string) {
           type: jsonSchema.type,
           properties: {
             ...jsonSchema.properties,
-            //URGENT TODO: Make this work with ref schemas PLEASE
+            //TODO: Make this work with ref schemas PLEASE
             [meta.propertyName]: meta.isMany ? makeArray(nestedSchema) : nestedSchema,
           },
         };

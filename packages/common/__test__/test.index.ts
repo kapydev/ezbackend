@@ -66,9 +66,26 @@ const user = new EzModel('user', {
     },
 })
 
+const sampleNullable = new EzModel('SampleNullable', {
+    varchar: {
+        type: Type.VARCHAR,
+        nullable: true
+    },
+    int: {
+        type: Type.INT,
+        nullable: true
+    },
+    boolean: {
+        type: Type.BOOL,
+        nullable: true
+    }
+
+})
+
 const ezb = new EzBackend()
 
 //Register models
+ezb.addApp('SampleNullable', sampleNullable, { prefix: 'SampleNullable' })
 ezb.addApp('User', user, { prefix: 'User' })
 ezb.addApp('noCascadeUser', noCascadeUser, { prefix: 'NoCascadeUser' })
 ezb.addApp('detail', detail, { prefix: 'Detail' })
