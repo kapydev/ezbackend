@@ -135,7 +135,7 @@ describe("Basic CRUD", () => {
       expect(JSON.parse(response.body)).toMatchObject(expectedResponse);
       expect(JSON.parse(response.body)).toHaveProperty("message");
     });
-    test.skip("Basic invalid input", async () => {
+    test("Basic invalid input", async () => {
       //TODO: Think if it is good that it accepts coercable strings
       const instance = getInternalInstance(ezb)
       const updatedData = { ...sampleData };
@@ -192,4 +192,30 @@ describe("Basic CRUD", () => {
       expect(JSON.parse(response.body)).toHaveProperty("message");
     });
   });
+
+  const sampleNullableInput = {
+    varchar: "",
+    int: 0,
+    boolean: false
+  }
+  describe("Creation Edge Case", () => {
+    test("Creating an object with nullish values should return the nullish values", async() => {
+      const result = await ezb.inject({
+        method: 'POST',
+        url: '/SampleNullable',
+        payload: sampleNullableInput
+      })
+      expect(JSON.parse(result.body)).toMatchObject(sampleNullableInput)
+    })
+    test("Creating a object with null values should return null values", async() => {
+      const result = await ezb.inject({
+        method: 'POST',
+        url: '/SampleNullable',
+        payload: {}
+      })
+      expect(JSON.parse(result.body)).not.toHaveProperty('varchar')
+      expect(JSON.parse(result.body)).not.toHaveProperty('boolean')
+      expect(JSON.parse(result.body)).not.toHaveProperty('int')
+    })
+  })
 });

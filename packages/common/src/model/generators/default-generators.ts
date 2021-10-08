@@ -2,7 +2,7 @@ import { getSchemaName } from "../typeorm-json-schema";
 import Boom from '@hapi/boom'
 import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
-import type {RouterOptions} from './api-generator'
+import type { RouterOptions } from './api-generator'
 
 /**
  * Returns the primary column name from given metadata
@@ -18,18 +18,21 @@ export function getPrimaryColName(meta: EntityMetadata) {
 }
 
 //TODO: Check if this function is efficient
-//URGENT URGENT TODO: This function is probably removing zeros by detecting them as nulls, this needs to be fixed
 const removeNestedNulls = (obj: any) => {
-    Object.keys(obj).forEach(k =>
-        (obj[k] && typeof obj[k] === 'object') && removeNestedNulls(obj[k]) ||
-        (!obj[k] && obj[k] !== undefined) && delete obj[k]
+    Object.keys(obj).forEach(k => {
+        if (obj[k] && typeof obj[k] === 'object') {
+            removeNestedNulls(obj[k])
+        }  else if (obj[k] === null) {
+            delete obj[k]
+        }
+    }
     );
     return obj;
 };
 
 //TODO: Remove trailing slash from path names
 //TODO: Make function to get generated Cols
-//URGENT TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
+//TODO: We need a query builder so that we can add stuff like tags and summary in the openapi functionality
 /**
  * Generates API Documentation for the current model
  * {@link createOne} - Generates API docs for a POST request for one entity
@@ -164,7 +167,6 @@ export const getDefaultGenerators = () => {
                     } catch (e: any) {
                         throw Boom.notFound(e)
                     }
-                    //URGENT TODO: Right now typeorm sqlite does NOT throw an error, even if you save a string in an integer column!!!
                     //URGENT TODO: Currently this causes race conditions, need to do within one request
 
                     try {

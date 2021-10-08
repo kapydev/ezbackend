@@ -46,7 +46,6 @@ export type Override = Avvio<AppInstance>['override']
 
 export type Overrides = { [name: string]: Avvio<unknown>['override'] }
 
-//URGENT TODO: Add types
 //TODO: Added safety for overriding instance variables?
 
 /**
@@ -77,6 +76,7 @@ export class App {
     protected _name: string
     protected _scope: PluginScope
     protected _overrides: Overrides
+    protected _unnamedCounter: number
 
     //TODO: Make this follow the convention I guess
     opts: any
@@ -101,6 +101,7 @@ export class App {
         this._scope = PluginScope.DEFAULT
         this._overrides = {}
         this.opts = {}
+        this._unnamedCounter = 1
     }
 
     get apps() { return this._apps }
@@ -243,9 +244,31 @@ export class App {
      * @param newApp
      * @param opts options
      */
-    //URGENT TODO: it does not seem to detect when child apps have the same name
-    //URGENT URGENT TODO: Add easy overload
-    addApp(name: string, newApp: App, opts: any = {}) {
+    addApp(childApp:App,opts?:Object): undefined
+    addApp(name:string,childApp:App,opts?:Object): undefined
+    addApp(arg1: string | App, arg2?: App | Object | undefined, arg3: Object = {}) {
+
+        let name: string
+        let newApp: App
+        let opts: Object
+
+        if (typeof arg1 === 'string') {
+            name = arg1
+        } else {
+            name = `UnnamedApp${this._unnamedCounter}`
+            this._unnamedCounter += 1
+        }
+
+        if (arg1 instanceof App) {
+            newApp = arg1
+            opts = arg2 ?? arg3
+        } else if (arg2 instanceof App) {
+            newApp = arg2 as App
+            opts = arg3
+        } else {
+            throw new Error("Either arg1 or arg2 must be an App!")
+        }
+
         if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
             throw new Error((`Child app ${name} already exists`))
         }
@@ -255,7 +278,7 @@ export class App {
         this._apps.set(name, newApp)
     }
 
-    getApp(name:string) {
+    getApp(name: string) {
         return this.apps.get(name)
     }
 

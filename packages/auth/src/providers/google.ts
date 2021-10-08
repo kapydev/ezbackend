@@ -124,7 +124,6 @@ export class GoogleProvider extends BaseProvider {
         }
     }
 
-    //URGENT TODO: When failed to deserialize user because of database reset, think about logging the user out
     registerUserDeserializer(instance: EzBackendInstance, opts: any): DeserializeFunction<any, any> {
         const that = this
         return async function deserializer(providerAndId: string, req) {

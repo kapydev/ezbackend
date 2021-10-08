@@ -62,5 +62,3 @@ export function copyBoilerPlate() {
 
 
 }
-
-//URGENT TODO: Move env sample and tsconfig outside of src directory
