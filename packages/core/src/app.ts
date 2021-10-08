@@ -245,8 +245,7 @@ export class App {
      * @param opts options
      */
     addApp(childApp:App,opts?:Object): undefined
-    addApp(name:string,childApp:App): undefined
-    addApp(name:string,childApp:App,opts:Object): undefined
+    addApp(name:string,childApp:App,opts?:Object): undefined
     addApp(arg1: string | App, arg2?: App | Object | undefined, arg3: Object = {}) {
 
         let name: string
