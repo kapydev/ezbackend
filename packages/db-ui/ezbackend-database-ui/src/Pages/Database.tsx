@@ -1,5 +1,5 @@
 import { DataGrid, GridColDef, GridCellEditCommitParams, GridCellValue } from '@mui/x-data-grid';
-import { Fade, IconButton, Typography, Box, Grid } from '@material-ui/core';
+import { Fade, IconButton, Typography, Box, Grid, Hidden } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
@@ -189,15 +189,17 @@ function Database() {
                                     </Scrollbars>
                                 </Box>
                             </Grid>
-                            <Grid item>
-                                <Scrollbars style={{ width: "100%", minHeight: "60px", borderRadius: 10 }}>
-                                    <ReactJson //@ts-ignore
-                                        src={cellDataValue}
-                                        style={{ padding: 18, borderRadius: 10 }}
-                                        theme="mocha"
-                                    />
-                                </Scrollbars>
-                            </Grid>
+                            <Hidden smDown>
+                                <Grid item>
+                                    <Scrollbars style={{ width: "100%", minHeight: "300px", borderRadius: 10 }}>
+                                        <ReactJson //@ts-ignore
+                                            src={cellDataValue}
+                                            style={{ padding: 18, borderRadius: 10 }}
+                                            theme="mocha"
+                                        />
+                                    </Scrollbars>
+                                </Grid>
+                            </Hidden>
                         </Grid>
                     </Grid>
 
@@ -258,6 +260,18 @@ function Database() {
                             </Grid>
                         </Grid>
                     </Grid>
+
+                    <Hidden mdUp>
+                        <Grid item xs={12}>
+                            <Scrollbars style={{ width: "100%", height: "300px", borderRadius: 10 }}>
+                                <ReactJson //@ts-ignore
+                                    src={cellDataValue}
+                                    style={{ padding: 18, borderRadius: 10 }}
+                                    theme="mocha"
+                                />
+                            </Scrollbars>
+                        </Grid>
+                    </Hidden>
 
                     <Typography variant="body1" align="center">
                         <Box fontFamily="monospace">
