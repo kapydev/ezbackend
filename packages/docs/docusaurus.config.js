@@ -132,6 +132,11 @@ module.exports = {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
     },
+    algolia: {
+      apiKey: 'd5ba2a84a8031e71d0e4c31a01dd41d4',
+      indexName: 'ezbackend',
+      contextualSearch: false,
+    },
   },
   presets: [
     [
