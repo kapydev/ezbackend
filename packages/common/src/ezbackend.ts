@@ -66,18 +66,17 @@ const defaultConfig = {
             failureRedirectURL: "http://localhost:8000/db-ui"
         }
     },
-    cors: {
-        origin: (origin: string, cb: Function) => {
-            if (/localhost/.test(origin)) {
-                //  Request from localhost will pass
-                cb(null, true)
-                return
-            }
-            // Generate an error on other origins, disabling access
-            cb(new Error("Not allowed"))
-        }
-    }
-
+    // cors: {
+    //     origin: (origin: string, cb: Function) => {
+    //         if (/localhost/.test(origin)) {
+    //             //  Request from localhost will pass
+    //             cb(null, true)
+    //             return
+    //         }
+    //         // Generate an error on other origins, disabling access
+    //         cb(new Error("Not allowed"))
+    //     }
+    // }
 }
 
 /**
