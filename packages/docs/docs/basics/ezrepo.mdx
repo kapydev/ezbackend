@@ -2,7 +2,7 @@
 sidebar_position: 1.1
 ---
 
-# EzModelRepo
+# Database - EzRepo
 
 ## Overview
 
@@ -10,12 +10,12 @@ The EzModel Repo decorates the instance with the `instance.repo`, which is a [Ty
 
 ## Use Case
 
-If you want to create a model in the database, but do not wish to have auto generated routes for it you can use the EzModelRepo
+If you want to create a model in the database, but do not wish to have auto generated routes for it you can use the EzRepo
 
 Example:
 
 ```ts
-const privateModel = new EzModelRepo('PrivateModel', {
+const privateModel = new EzRepo('PrivateModel', {
   var1: Type.VARCHAR,
   var2: Type.VARCHAR
 })
@@ -25,7 +25,7 @@ app.addApp('PrivateModel', privateModel, { prefix: 'private-model' })
 
 ## Adding routes
 
-You can add routes to a EzModelRepo
+You can add routes to a EzRepo
 
 Example:
 ```ts

@@ -164,7 +164,7 @@ function entityGeneratorFactory (modelName: string, modelSchema: ModelSchema, re
     return entityGenerator
 }
 
-export class EzModelRepo extends EzApp {
+export class EzRepo extends EzApp {
 
     _repo: Repository<ObjectLiteral> | undefined
 
@@ -202,7 +202,7 @@ export type ModelOpts = {
 /**
  * Child of EzApp. This is your data model.
  */
-export class EzModel extends EzModelRepo {
+export class EzModel extends EzRepo {
 
     //TODO: Figure out automatic typings
     get router():EzRouter {

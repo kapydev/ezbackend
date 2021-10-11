@@ -39,12 +39,12 @@ Now that we have the TypeORM connection, we can solve all our problems by asking
 
 ## Accessing the TypeORM Repo
 
-Both the classes `EzModel` and `EzModelRepo` decorate the instance with a repository directly linked to the model created. The repository is a TypeORM Repository
+Both the classes `EzModel` and `EzRepo` decorate the instance with a repository directly linked to the model created. The repository is a TypeORM Repository
 
 ```ts
 const app = new EzBackend()
 
-const model = new EzModel('Model',{ //Or EzModelRepo
+const model = new EzModel('Model',{ //Or EzRepo
     var1: Type.VARCHAR,
     var2: Type.DATE
 })
