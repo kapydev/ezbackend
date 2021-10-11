@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-## Additional Routing Methods
+# Additional Routing Methods
 
 There are two main methods of creating routes (And a third method advanced method discussed [here](using-fastify#from-registered-plugin-with-instance-and-fastify-instance))
 
