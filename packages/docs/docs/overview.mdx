@@ -5,27 +5,36 @@ sidebar_position: 3
 
 # Overview
 
-<!-- URGENT TODO: Make all code snippets long and short version -->
-
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import CodeSnippet from "./CodeSnippet.jsx";
 
 The basic building block of EzBackend is the EzApp
 
 ![EzApp](./assets/ez-app.png)
 
-```ts
-const app = new EzApp()
-```
+<CodeSnippet
+  sample={`const app = new EzApp();`}
+  fullCode={`import {EzApp} from "@ezbackend/common" \n
+const app = new EzApp();`}
+/>
 
 The EzApp can have child EzApps, and any options specified on an EzApp will propagate to all its children.
 
 ![EzApp Prefix Example](./assets/app-prefix-example.png)
 
-```ts
-const leftApp = new EzApp()
-const userApp = new EzApp()
-app.addApp("Left App", leftApp)
-app.addApp("Right App", userApp, {prefix:'users'})
-```
+<CodeSnippet
+  sample={`const leftApp = new EzApp();
+const userApp = new EzApp();
+app.addApp(leftApp);
+app.addApp(userApp, { prefix: "users" });`}
+  fullCode={`import {EzApp} from "@ezbackend/common" \n
+const leftApp = new EzApp();
+const userApp = new EzApp();
+app.addApp(leftApp);
+app.addApp(userApp, { prefix: "users" });`}
+/>
 
 In the above example, the EzApp has no route prefix, so all http routes on it will have the prefix `/`
 
@@ -33,18 +42,25 @@ However, the EzApp on the right was added to the parent with the route prefix `u
 
 ![EzBackend as Parent](./assets/ezbackend-as-parent.png)
 
-```ts
-const ezb = new EzBackend()
-
-const app = new EzApp()
-
-ezb.addApp("Version 1", app, {prefix: 'v1'})
+<CodeSnippet
+  sample={`const ezb = new EzBackend()\n
+const v1 = new EzApp()\n
+ezb.addApp(app, {prefix: 'v1'})
 .
 .
-app.addApp(...)
+v1.addApp(...)
 .
 .
-ezb.start()
-```
+ezb.start()`}
+  fullCode={`import { EzBackend, EzApp } from "@ezbackend/common";
+const ezb = new EzBackend();\n
+const v1 = new EzApp();\n
+const leftApp = new EzApp();
+const userApp = new EzApp();
+v1.addApp(leftApp);
+v1.addApp(userApp, { prefix: "users" });\n
+ezb.addApp(v1, { prefix: "v1" });\n
+ezb.start();`}
+/>
 
 The topmost parent of an EzBackend must be a `EzBackend`, as the parent EzBackend runs the initialization code in its lifecycle for all child apps to work.
