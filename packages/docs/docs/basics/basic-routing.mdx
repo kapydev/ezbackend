@@ -2,108 +2,284 @@
 sidebar_position: 0.9
 ---
 
+# EzApp - Basic Routing
 
-# Basic Routing - EzApp
+import CodeSnippet from "../CodeSnippet";
 
-The EzApp is the building block of an EzBackend, and you can create routes on them as you wish
+![ez-app](../assets/ez-app.png)
 
-Lets say we have the following app
+The EzApp is the `building block` of an EzBackend, and you can create routes on them as you wish.
 
-![time-example](../assets/time-example.png)
+EzApps can have children which inherit options from the parent
 
-```ts
-const app = new EzBackend();
+- If a parent has a route-prefix 'user'
+- All child app routes with have route prefix 'user'
 
-const timeApp = new EzApp();
+Everything in EzBackend is derived from EzApp
 
-app.addApp("time", timeApp, { prefix: "time" });
-
-app.start();
-```
+- All Plugins are EzApps
+- EzBackend is an EzApp
+- EzModel is an EzApp
+- EzRepo is an EzApp
 
 :::info
-We highly recommend using the [recommended plugins](./running-the-server) to make development easier
+If all you need are Create, Read, Update, Delete (CRUD) endpoints for your database, refer to the [EzModel](./create-a-schema) docs instead
 :::
+
+## Sample structure
+
+The sample below creates a get, post, patch and delete request at the url `/v1/users/details`
+
+![ez-app-prefixing](../assets/ez-app-prefixing.png)
+
+<CodeSnippet
+  sample={`const app = new EzBackend()
+const v1 = new EzApp()
+const users = new EzApp()
+const details = new EzApp()\n
+app.addApp(v1,{prefix:'v1'})
+v1.addApp(users,{prefix:'users'})
+users.addApp(details,{prefix:'details'})\n
+details.get(...)
+details.post(...)
+details.patch(...)
+details.delete(...)\n
+app.start()`}
+  fullCode={`import {EzApp, EzBackend} from "@ezbackend/common"
+import { EzOpenAPI } from "@ezbackend/openapi";
+import { EzDbUI } from "@ezbackend/db-ui";
+import { EzCors } from "@ezbackend/cors";\n
+const app = new EzBackend();\n
+//---Plugins---
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+//---Plugins---\n
+const v1 = new EzApp()
+const users = new EzApp()
+const details = new EzApp()\n
+app.addApp(v1,{prefix:'v1'})
+v1.addApp(users,{prefix:'users'})
+users.addApp(details,{prefix:'details'})\n
+details.get('/',async (req,res) => {
+  return {name: "Robert"}
+})\n
+details.post('/',async (req,res) => {
+  return {created: true}
+})\n
+details.patch('/',async (req,res) => {
+  return {updated: true}
+})\n
+details.delete('/',async (req,res) => {
+  return {deleted: true}
+})\n
+app.start()`}
+/>
+
+## Viewing Available Routes
+
+All created routes are automatically documented and displayed in the db-ui
+
+You can access the db-ui at [http://localhost:8000/db-ui/](http://localhost:8000/db-ui/api-documentation) (Assuming port 8000)
+
+![db-ui-sample](../assets/sample-db-ui.png)
 
 ## Creating routes
 
-Creating a route in ezbackend can be done similarly to express or fastify
+Creating a route in ezbackend can be done similarly to express or fastify.
 
-### Sync
+There are three ways each route can be created:
 
-```ts
-timeApp.get("/", function (req, res) {
-  const timeString = new Date().toLocaleTimeString();
-  res.send({ time: timeString });
-});
-```
+1. Async shorthand
+2. Sync shorthand
+3. Full Declaration
 
-### Async
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
 
-```ts
-timeApp.get("/", async (req, res) => {
-  const timeString = new Date().toLocaleTimeString();
-  return { time: timeString };
-});
-```
+export const ShowAllWays = ({ method, options, contents, returns, url }) => (
+  <Tabs
+    defaultValue="async"
+    values={[
+      { label: "Async", value: "async" },
+      { label: "Sync", value: "sync" },
+      { label: "Full", value: "full" },
+    ]}
+  >
+    <TabItem value="async">
+      <CodeBlock className="language-ts">
+        {`app.${method.toLowerCase()}("${url ?? "/"}",${
+          options
+            ? `{
+${options.replace(/^/gm, "    ")}
+  },`
+            : ""
+        } async (req,res) => {\n`}
+        {contents.replace(/^/gm, "  ")}
+        {contents != "" ? "\n  " : ""}
+        {`return ${returns}`}
+        {`\n});`}
+      </CodeBlock>
+    </TabItem>
+    <TabItem value="sync">
+      <CodeBlock className="language-ts">
+        {`app.${method.toLowerCase()}("${url ?? "/"}",${
+          options
+            ? `{
+${options.replace(/^/gm, "    ")}
+  },`
+            : ""
+        } function (req,res) {\n`}
+        {contents.replace(/^/gm, "  ")}
+        {contents != "" ? "\n  " : ""}
+        {`res.send(${returns})`}
+        {`\n});`}
+      </CodeBlock>
+    </TabItem>
+    <TabItem value="full">
+      <CodeBlock className="language-ts">
+        {`app.route({
+  method: ${method.toUpperCase()}, //Can be array of methods
+  url: '${url ?? "/"}',
+  handler: async => (req, res) { //sync version works too
+    ${
+      contents.replace(/^/gm, "") + (contents != "" ? "\n    " : "")
+    }return ${returns}
+  }${options ? `,\n${options.replace(/^/gm, "  ")}` : ""}
+})`}
+      </CodeBlock>
+    </TabItem>
+  </Tabs>
+);
 
-You can view the results of these at http://localhost:8000/time
+### Get
 
-## Other HTTP Methods
+Create an endpoint on the app which returns a json when a `GET` request is performed
 
-You can define any HTTP Route you need with these shorthand methods
+<ShowAllWays method="get" contents="" returns={`{data: "data"}`} />
 
-![base-example](../assets/multiple-methods-example.png)
+### Post
 
-<!-- URGENT TODO: Fix bug where defining routes on EzBackend itself does not appear on openapi -->
-```ts
-const app = new EzBackend()
-const base = new EzApp()
+Create an endpoint on the app which returns a json when a `POST` request is performed
 
-base.get('/', async(req,res) => {
-  return {hello:'world'}
-})
+<ShowAllWays method="post" contents="" returns={`{data: req.body}`} />
 
-base.post('/', async(req,res) => {
-  return req.body
-})
+### Put
 
-base.patch('/', async(req,res) => {
-  return req.body
-})
+Create an endpoint on the app which returns a json when a `PUT` request is performed
 
-base.delete('/', async(req,res) => {
-  return req.body
-})
+<ShowAllWays method="put" contents="" returns={`{data: req.body}`} />
 
-base.get('/some-random-route-name', async(req,res) => {
-    return {hello:'world'}
-})
+### Patch
 
-base.get('/:someValue', async (req,res) => {
-    return {value:req.params['someValue']}
-})
+Create an endpoint on the app which returns a json when a `PATCH` request is performed
 
-app.addApp('base',base)
-app.start()
-```
+<ShowAllWays method="patch" contents="" returns={`{data: req.body}`} />
+
+### Delete
+
+Create an endpoint on the app which returns a json when a `DELETE` request is performed
+
+<ShowAllWays method="delete" contents="" returns={`{data: req.body}`} />
+
+## Route options
+
+Route options can be used to add additional functionality to your routes
+
+### schema
+
+The schema ensures that input and output data is of the correct format.
+
+The schemas provided must be in [JSON Schema](https://json-schema.org/) format.
+
+`body` - Validates the request body for `POST`,`PUT` and `PATCH` methods
+
+`query` - Validates the request query string (e.g api.your-app.com?name=bob&age=25)
+
+`params` - Validates the params (e.g api.your-app.com/user/:userId)
+
+`response` - Filters the output, according to status code (e.g if the status is 200 OK, it will follow the 200 schema)
+
+Defining these values will also populate the documentation automatically
+
+<ShowAllWays
+  method="post"
+  contents=""
+  options={`schema:{
+  body: <YOUR JSON SCHEMA>,
+  query: <YOUR JSON SCHEMA>,
+  params: <YOUR JSON SCHEMA>,
+  response:
+    200: <YOUR JSON SCHEMA>
+}`}
+  returns={`{data: req.body}`}
+/>
+
+### prefixTrailingSlash
+
+prefixTrailingSlash: string used to determine how to handle passing / as a route with a prefix.
+
+`both (default)`: Will register both /prefix and /prefix/.
+
+`slash`: Will register only /prefix/.
+
+`no-slash`: Will register only /prefix.
+
+<ShowAllWays
+  url="/prefix"
+  method="post"
+  contents=""
+  options={`prefixTrailingSlash:'both' //'both'|'slash'|'no-slash'`}
+  returns={`{data: req.body}`}
+/>
+
+## Documenting Routes
+
+### Summary
+
+You can provide a summary of what your route does under schema, which will be reflected in the `Db-UI`
+
+![summary](../assets/summary.png)
+
+<ShowAllWays
+  method="get"
+  contents="const time = new Date().toLocaleTimeString()"
+  options={`schema:{
+  summary: "Server Time"
+}`}
+  returns={`{time: time}`}
+/>
+
+### Description
+
+You can provide a detailed description of what your route does under schema, which will be reflected in the `Db-UI`
+
+![description](../assets/description.png)
+
+<ShowAllWays
+  method="get"
+  contents="const time = new Date().toLocaleTimeString()"
+  options={`schema:{
+  summary: "Server Time",
+  description: "This method returns the current server time"
+}`}
+  returns={`{time: time}`}
+/>
 
 ## Route Prefixing
-EzApps are the core of EzBackend, and they power the entire encapsulation system. When adding apps to apps, you can specify the prefix in the options in order to prefix all the routes in the app and all children apps
 
-```ts {8}
-const app = new EzBackend()
-const base = new EzApp()
+When adding apps to apps, you can specify the prefix in the options in order to prefix all the routes in the app and all children apps
 
-base.get('/', async(req,res) => {
-  return {hello:'world'}
-})
-
-app.addApp('base',base, {prefix:'base'}) //PREFIX HERE
-app.start()
-```
-
+<CodeSnippet sample={`app.addApp(childApp, { prefix: "hello-world" });`} fullCode={`import { EzBackend, EzApp } from "@ezbackend/common";\n
+const app = new EzBackend();
+const childApp = new EzApp();\n
+childApp.get("/", async (req, res) => {
+  return { hello: "world" };
+});\n
+app.addApp(childApp, { prefix: "hello-world" }); //PREFIX HERE
+app.start();`} />
 
 ## Additional Functionality
 
-EzApps are expost the functionality of fastify objects, so anything that would [work in fastify](https://www.fastify.io/docs/latest/Routes/) would also work here.
+EzApps are expose the functionality of fastify objects, so anything that would [work in fastify](https://www.fastify.io/docs/latest/Routes/) would also work here.

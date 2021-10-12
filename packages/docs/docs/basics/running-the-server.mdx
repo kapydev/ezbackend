@@ -2,7 +2,15 @@
 sidebar_position: 0.8
 ---
 
-# Running the server
+# EzBackend - Running the server
+
+import CodeSnippet from '../CodeSnippet'
+
+![EzBackend](../assets/ez-backend.png)
+
+The EzBackend is the root [EzApp](./basic-routing). All other EzApps should be children of the EzBackend, and there should be only one EzBackend per application. A sample meetup app may look something like:
+
+![Sample-Meetup-App](../assets/meetup-example.png)
 
 ## Recommended Setup
 
@@ -12,22 +20,27 @@ Which creates the following boilerplate
 
 ![default-plugins](../assets/default-plugins.png)
 
-```ts
-import { EzBackend } from "@ezbackend/common";
+<CodeSnippet
+  sample={`const app = new EzBackend();\n
+//---Plugins---
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+//---Plugins---\n
+app.start();`}
+  fullCode={`import { EzBackend } from "@ezbackend/common";
 import { EzOpenAPI } from "@ezbackend/openapi";
 import { EzDbUI } from "@ezbackend/db-ui";
-import { EzCors } from "@ezbackend/cors";
-
-const app = new EzBackend();
-
+import { EzCors } from "@ezbackend/cors";\n
+const app = new EzBackend();\n
 //---Plugins---
-app.addApp("openapi", new EzOpenAPI());
-app.addApp("db-ui", new EzDbUI());
-app.addApp("cors", new EzCors());
-//---Plugins---
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+//---Plugins---\n
+app.start();`}
+/>
 
-app.start();
-```
 This basic boilerplate comes with three plugins to aid development
 
 |Plugin|Description|Notes|

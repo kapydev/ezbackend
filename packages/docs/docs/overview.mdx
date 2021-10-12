@@ -43,24 +43,24 @@ However, the EzApp on the right was added to the parent with the route prefix `u
 ![EzBackend as Parent](./assets/ezbackend-as-parent.png)
 
 <CodeSnippet
-  sample={`const ezb = new EzBackend()\n
+  sample={`const app = new EzBackend()\n
 const v1 = new EzApp()\n
-ezb.addApp(app, {prefix: 'v1'})
+app.addApp(v1, {prefix: 'v1'})
 .
 .
 v1.addApp(...)
 .
 .
-ezb.start()`}
+app.start()`}
   fullCode={`import { EzBackend, EzApp } from "@ezbackend/common";
-const ezb = new EzBackend();\n
+const app = new EzBackend();\n
 const v1 = new EzApp();\n
 const leftApp = new EzApp();
 const userApp = new EzApp();
 v1.addApp(leftApp);
 v1.addApp(userApp, { prefix: "users" });\n
-ezb.addApp(v1, { prefix: "v1" });\n
-ezb.start();`}
+app.addApp(v1, { prefix: "v1" });\n
+app.start();`}
 />
 
 The topmost parent of an EzBackend must be a `EzBackend`, as the parent EzBackend runs the initialization code in its lifecycle for all child apps to work.
