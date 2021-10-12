@@ -4,8 +4,19 @@ sidebar_position: 1
 
 # EzModel - CRUD Generation
 
+import CodeSnippet from "../CodeSnippet";
+import CodeBlock from "@theme/CodeBlock";
+
+## Overview
+
 ![ezmodel](../assets/ez-model.png)
 
+The EzModel is a combination of two EzApps, namely the EzRepo and the EzRouter
+
+| EzApp    | Description                                                                                                                  |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| EzRepo   | 1. Creates a **Table** in your **Database** of choice <br/> 2. Creates a **Repository** that you can use to access the table |
+| EzRouter | From a Repository, automatically generate Create, Read, Update and Delete (`CRUD`) endpoints                                 |
 
 ## Simple Explanation
 
@@ -19,23 +30,38 @@ You can imagine this by comparing it to excel,
 
 ## Create your first EzModel
 
-For example, if we want a pet, add the following to `.ezb/index.ts`
+If we want a `Table` to store information for `Pets`
 
-```ts title=".ezb/index.ts"
-import { EzModel, Type } from "@ezbackend/common";
+Table Name - Pets
 
-const pets = new EzModel('Pets', {
-    name: Type.VARCHAR, //String
-    species: Type.VARCHAR,
-    age: Type.INT //Integer
-})
-```
+| Property | JS Type   |
+| -------- | --------- |
+| name     | `string`  |
+| species  | `string`  |
+| age      | `integer` |
 
-### Breaking it down
+<CodeSnippet
+  sample={`const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+app.addApp(pets,{prefix:'pets'})`}
+  fullCode={`import { EzBackend, EzModel, Type } from "@ezbackend/common";\n
+const app = new EzBackend()\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+app.addApp(pets,{prefix:'pets'})\n
+app.start()`}
+/>
 
 ```ts
 const pets = new EzModel('Pets',{...})
 ```
+
 We make a new model using the `new EzModel()`. It will be stored with the name `Pets` in the database
 
 ```ts
@@ -52,19 +78,312 @@ You can view all of the available types [here](types)
 EzBackend automatically generates default CRUD routes for each of your defined models
 :::
 
-## Accessing your database
+## Database Access
 
-Once you run
+You may want to access the database directly in your code. You can obtain the `Repository` directly from the EzModel
 
-```
-npm run ezb
+### Understanding the Repository
 
-or
+With the repo, some of the actions you can perform on your database are
 
-yarn ezb
-```
+1. `create`
+2. `update`
+3. `find`
+4. `delete`
+5. `count`
+6. ...and many more
 
-Your backend will start, as well as a window with a complete reference of how exactly to connect to your backend and manipulate your database, generated automatically with [fastify-swagger](https://github.com/fastify/fastify-swagger)
+For example, if you want to create a route to get the count of pets:
 
+<CodeSnippet
+  sample={`const pets = new EzModel("Pets", {...});\n
+pets.get('/count', async (req,res) => {
+    const petRepo = pets.getRepo()
+    const petCount = petRepo.count()
+    return {"petCount": petCount}
+})`}
+  fullCode={`import { EzBackend, EzModel, Type } from "@ezbackend/common";\n
+const app = new EzBackend()\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.get('/count', async (req,res) => {
+    const petRepo = pets.getRepo()
+    const petCount = petRepo.count()
+    return {"petCount": petCount}
+})\n
+app.addApp(pets,{prefix:'pets'})\n
+app.start()`}
+/>
 
-<!-- TODO: Insert image of swagger CRUD -->
+:::caution
+You can only access the Repository within `endpoints` or [handlers after the postInit lifecycle](../extras/lifecycle-and-hooks).
+
+<details>
+  <summary>Bad Examples</summary>
+  <CodeBlock className="language-ts">
+    {`const petRepo = pets.getRepo() //BAD\n
+pets.setInit(() => {
+    const petRepo = pets.getRepo() //BAD
+})`}
+  </CodeBlock>
+</details>
+
+<details>
+  <summary>Good Examples</summary>
+  <CodeBlock className="language-ts">
+    {`pets.get('/count', async (req,res) => {
+    const petRepo = pets.getRepo() //GOOD
+})\n
+pets.setHandler(() => {
+    const petRepo = pets.getRepo() //GOOD
+}))
+`}
+  </CodeBlock>
+</details>
+:::
+
+### Create
+
+Create a row in the database with the specified data
+
+When creating an entry, it must match the schema specified, otherwise an error will be thrown.
+
+`returns` newly created object
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo()
+const newPet = await repo.create({
+    name: "Mr Woof",
+    species: "Poodle",
+    age: 5
+})`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/create", async (req, res) => {
+  const repo = pets.getRepo();
+  const newPet = await repo.create({
+    name: "Mr Woof",
+    species: "Poodle",
+    age: 5,
+  });
+  return newPet;
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start()`}
+/>
+
+### Insert
+
+Insert one or more rows into the database.
+
+When creating an entry, it must match the schema specified, otherwise an error will be thrown.
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo();
+await repo.insert([
+    {
+        name: "Mr Doof",
+        species: "Labrador",
+        age: 7,
+    },
+    {
+        name: "Mr Hoof",
+        species: "Horse",
+        age: 13,
+    },
+]);`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/insert", async (req, res) => {
+  const repo = pets.getRepo();
+  await repo.insert({
+    name: "Mr Woof",
+    species: "Poodle",
+    age: 5,
+  });\n
+  await repo.insert([
+    {
+      name: "Mr Doof",
+      species: "Labrador",
+      age: 7,
+    },
+    {
+      name: "Mr Hoof",
+      species: "Horse",
+      age: 13,
+    },
+  ]);
+  return {inserted: true}
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start();`}
+/>
+
+### Update
+
+Update an object in the database by search term or id
+
+When updating an entry, it must match the schema specified, otherwise an error will be thrown.
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo();\n
+await repo.update(1, { name: "Mr Cuddles" });
+//Update the pet with ID 1 with the name "Mr Cuddles"\n
+await repo.update({ name: "Mr Woof" }, { name: "Mr Cuddles" });
+//Update the pet with current name "Mr Woof" with the name "Mr Cuddles"`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/update", async (req, res) => {
+  const repo = pets.getRepo();
+  await repo.update(1, { name: "Mr Cuddles" });
+  //Update the pet with ID 1 with the name "Mr Cuddles"\n
+  await repo.update({ name: "Mr Woof" }, { name: "Mr Cuddles" });
+  //Update the pet with current name "Mr Woof" with the name "Mr Cuddles"\n
+  return {updated: true}
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start();`}
+/>
+
+### Delete
+
+Delete an object in the database by search term, id, or array of ids
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo();
+await repo.delete(1);\n
+await repo.delete([1,2,3]);\n
+await repo.delete({ name: "Mr Woof" });`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/delete", async (req, res) => {
+  const repo = pets.getRepo();
+  await repo.delete(1);\n
+  await repo.delete([1,2,3]);\n
+  await repo.delete({ name: "Mr Woof" });\n
+  return {deleted: true}
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start();`}
+/>
+
+### Count
+
+Count the number of object in the database by search term or id
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo();\n
+const numPets = await repo.count();\n
+const numHorses = await repo.count({species: "horse"})`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/count", async (req, res) => {
+  const repo = pets.getRepo();\n
+  const numPets = await repo.count();\n
+  const numHorses = await repo.count({species: "horse"})\n
+  return {
+      numPets: numPets,
+      numHorses: numHorses
+  };
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start();`}
+/>
+
+### Find
+
+Find an object in the database by search term
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo();\n
+const horses = await repo.find({species: "horse"})`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/find", async (req, res) => {
+  const repo = pets.getRepo();\n
+  const horses = await repo.find({species: "horse"})\n
+  return horses;
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start();`}
+/>
+
+### Find By Ids
+
+Find an object in the database by multiple ids
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo();\n
+const horses = await repo.find([1,2,3])`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/find-by-id", async (req, res) => {
+  const repo = pets.getRepo();\n
+  const horses = await repo.find([1,2,3])\n
+  return horses;
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start();`}
+/>
+
+### Find One
+
+Find an object in the database by single id
+
+<CodeSnippet
+  sample={`const repo = pets.getRepo();\n
+const horses = await repo.findOne(1)`}
+  fullCode={`import { EzModel, EzBackend } from "@ezbackend/common";\n
+const app = new EzBackend();\n
+const pets = new EzModel("Pets", {
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});\n
+pets.post("/find-one", async (req, res) => {
+  const repo = pets.getRepo();\n
+  const horses = await repo.findOne(1)\n
+  return horses;
+});\n
+app.addApp(pets, { prefix: "pets" });\n
+app.start();`}
+/>
+
