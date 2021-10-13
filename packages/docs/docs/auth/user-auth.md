@@ -74,7 +74,6 @@ app.addApp('User',user,{prefix:'user'})
 
 ### Testing
 
-<!-- URGENT TODO: Change link to db-ui link once bug is fixed -->
 You can test the login from the automatically [generated documentation](http://localhost:8000/docs/static/index.html#/default/get_user_auth_google_login)
 
 In the generated documentation, you should see something like

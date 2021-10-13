@@ -37,7 +37,6 @@ The first requirement is the default functionality, so no changes are required.
 
 The second requirement needs us to check if users are logged in
 
-<!-- URGENT URGENT TODO: Figure out why req.user type is being rejected -->
 ```ts
 import Boom from '@hapi/boom' //Library used for throwing HTTP errors
 
@@ -121,7 +120,6 @@ user.addHook('preHandler', async(req,res) => {
 
 Note: This requires that you have set up your environment as specified in [authenticating users](user-auth)
 
-<!-- URGENT TODO: Remove ts-ignores -->
 ```ts
 import { EzBackend, EzModel, Type } from "@ezbackend/common";
 import { EzOpenAPI } from "@ezbackend/openapi";

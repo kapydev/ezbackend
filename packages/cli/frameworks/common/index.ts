@@ -6,16 +6,18 @@ import { EzCors } from "@ezbackend/cors";
 const app = new EzBackend()
 
 //---Plugins---
-//Everything is an app in EzBackend
-app.addApp('openapi', new EzOpenAPI())
-app.addApp('db-ui', new EzDbUI())
-app.addApp('cors', new EzCors())
+//Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI())
+app.addApp(new EzDbUI())
+app.addApp(new EzCors())
 //---Plugins---
 
+//Models are also ezapps in ezbackend
 const model = new EzModel('ModelName', {
   var1: Type.VARCHAR, //string
   var2: Type.INT, //integer
 })
 
 app.addApp(model, { prefix: 'model-route-prefix' })
+
 app.start()
