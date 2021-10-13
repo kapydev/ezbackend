@@ -28,7 +28,7 @@
     "url": "https://github.com/kapydev/ezbackend/issues"
   },
   "dependencies": {
-    "fastify-static": "^4.2.4"
+    "fastify-static": "^4.4.1"
   },
   "gitHead": "49f390ab4e0b6e88499624d7ba876ef15859f7b3"
 }
