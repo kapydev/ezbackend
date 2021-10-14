@@ -9,6 +9,13 @@ import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
 import { Feature } from '../helper-components/feature';
 import { LiveProvider, LiveEditor } from 'react-live'
+import IconApiDocs from '../assets/icon-api-docs.svg'
+import IconDatabase from '../assets/icon-database.svg'
+import IconSecurity from '../assets/icon-security.svg'
+import IconWorld from '../assets/icon-world.svg'
+import IconFileStorage from '../assets/icon-download-file.svg'
+import IconDeploy from '../assets/icon-upload-cloud.svg'
+import IconScaling from '../assets/icon-increase.svg'
 import "tailwindcss/tailwind.css"
 
 const code = `
@@ -39,6 +46,8 @@ export default function Home() {
       <div id="tailwind">
         <div className='grid place-items-center'>
           <div className='
+
+      w-8/12
 
       grid
       grid-flow-row
@@ -77,11 +86,6 @@ export default function Home() {
                     </CtaButton>
                   </a>
                 </div>
-                {/* <div className='grid place-items-center'>
-                  <CodeLine copyText="npx ezbackend init my-app" onClick={notify}>
-                    npx <span className='text-blue-300'>ezbackend</span> init <span className='text-gray-400'>myapp</span>
-                  </CodeLine >
-                </div> */}
               </div>
             </div>
 
@@ -101,11 +105,41 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full md:mx-10 md:mr-24'>
-              <div className='text-2xl md:text-3xl font-mono mb-12 font-bold text-center'>
-                Your Tech Stack in One Package:
+            <div className='col-span-full'>
+              <div className='grid grid-flow-col gap-12'>
+                <Feature
+                  icon={<IconWorld className='w-12 h-12' />}
+                  title='API'
+                  info='Instant API endpoints generation with customization capabilities'
+                />
+
+                <Feature
+                  icon={<IconApiDocs className='w-12 h-12' />}
+                  title='Documentation'
+                  info='Automatically generate documentation for your APIs from the models you plan'
+                />
+
+                <Feature
+                  icon={<IconDatabase className='w-12 h-12' />}
+                  title='Database'
+                  info='Choose from mutiple industry standards: Postgres, MySQL, MongoDB, & more'
+                />
+
+                <Feature
+                  icon={<IconSecurity className='w-12 h-12' />}
+                  title='Authentication'
+                  info='Add user sign ups and logins and permission layering with Google.'
+                />
               </div>
-              <TechStackImage className='' />
+            </div>
+
+
+
+            <div className='col-span-full md:mx-10'>
+              <div className='text-2xl md:text-3xl font-mono mb-12 font-bold text-center'>
+                Your Tech Stack in <br/> One Package:
+              </div>
+              <TechStackImage className='mx-12' />
             </div>
 
             <div className='col-span-full grid place-items-center'>
