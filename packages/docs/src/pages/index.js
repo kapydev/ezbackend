@@ -7,7 +7,7 @@ import TechStackImage from '../assets/tech-stack.svg'
 import IconTreeDiagram from '../assets/icon-tree-diagram.svg'
 import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
-import { Feature } from '../helper-components/feature';
+import { Feature, MainFeature } from '../helper-components/feature';
 import { LiveProvider, LiveEditor } from 'react-live'
 import IconApiDocs from '../assets/icon-api-docs.svg'
 import IconDatabase from '../assets/icon-database.svg'
@@ -47,31 +47,29 @@ export default function Home() {
         <div className='grid place-items-center'>
           <div className='
 
-      w-8/12
 
-      grid
-      grid-flow-row
-      place-content-center
+            grid
+            grid-flow-row
 
-      grid-cols-1
-      mx-12
-      my-8
-      gap-16
+            w-9/12
+            grid-cols-1
+            my-8
+            gap-16
 
-      md:grid-cols-2
-      md:m-32
-      md:mx-24
-      md:my-14
-      md:gap-20
+            md:w-8/12
+            md:grid-cols-2
+            md:m-32
+            md:my-14
+            md:gap-20
 
-      '>
+            '>
 
-            <div className='place-self-center col-span-2 justify-center'>
+            <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
-                <div className='text-5xl font-bold font-mono md:text-center'>
+                <div className='text-5xl font-bold font-mono sm:text-center'>
                   Build More, Code Less
                 </div>
-                <div className='text-xl font-mono'>
+                <div className='text-xl font-mono sm:text-center'>
                   Simplified Backend Setup without Compromise On Customizability
                 </div>
                 <div className='flex flex-col sm:flex-row justify-center gap-4'>
@@ -89,55 +87,57 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='grid place-items-end self-center'>
+            <div className='grid place-items-center md:place-items-end self-center col-span-full md:col-span-1'>
               <LiveProvider disabled={true} code={code} theme={theme} >
                 <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
               </LiveProvider>
             </div>
 
-            <div className='grid self-center'>
-              <div className='w-auto md:w-96 md:mb-10' >
-                <Feature
-                  icon={<IconTreeDiagram className='w-10 h-10 mr-2' />}
-                  title='Database Planning'
-                  info='Plan your database structure in one file. EzBackend automatically generates everything else for you.'
-                />
-              </div>
+            <div className='col-span-full md:col-span-1 self-center mb-8'>
+              <MainFeature
+                icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
+                title='Plan your Database Structure'
+                info='Plan your database structure in one file. EzBackend automatically generates everything else for you.'
+              />
             </div>
 
-            <div className='col-span-full'>
-              <div className='grid grid-flow-col gap-12'>
+            <div className='overflow-x-auto col-span-full '>
+              <div className='gap-6 grid grid-flow-col'>
+
+
                 <Feature
                   icon={<IconWorld className='w-12 h-12' />}
-                  title='API'
+                  title='Instant APIs'
                   info='Instant API endpoints generation with customization capabilities'
                 />
 
                 <Feature
                   icon={<IconApiDocs className='w-12 h-12' />}
-                  title='Documentation'
+                  title='Automated Documentation'
                   info='Automatically generate documentation for your APIs from the models you plan'
+                />
+                <Feature
+                  icon={<IconSecurity className='w-12 h-12' />}
+                  title='One-Line Authentication'
+                  info='Add user sign ups and logins and permission layering with Google.'
                 />
 
                 <Feature
                   icon={<IconDatabase className='w-12 h-12' />}
-                  title='Database'
-                  info='Choose from mutiple industry standards: Postgres, MySQL, MongoDB, & more'
+                  title='Choice of Database'
+                  info='Pick from mutiple industry standards: Postgres, MySQL, MongoDB, & more'
                 />
 
-                <Feature
-                  icon={<IconSecurity className='w-12 h-12' />}
-                  title='Authentication'
-                  info='Add user sign ups and logins and permission layering with Google.'
-                />
               </div>
             </div>
 
-            <div className='col-span-full place-items-center'>
-              <div className='text-2xl md:text-3xl font-mono mb-12 font-bold text-center'>
-                Your Tech Stack in <br/> One Package:
+            <div className='col-span-full' >
+              <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
+                Your Tech Stack in One Package:
               </div>
-              <TechStackImage className='mx-36' />
+              <div className='grid place-items-center' >
+                <TechStackImage className='lg:w-700px' />
+              </div>
             </div>
 
             <div className='col-span-full grid place-items-center'>

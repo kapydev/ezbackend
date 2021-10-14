@@ -8,8 +8,13 @@ module.exports = {
   theme: {
     fontFamily: {
       'monts': ['Montserrat'],
-      'mono' : ['Roboto Mono']
+      'mono': ['Roboto Mono']
     },
+    extend: {
+      width: {
+        '700px': '700px',
+      }
+    }
   },
   variants: {},
   plugins: [],
