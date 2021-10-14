@@ -89,7 +89,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='place-self-start self-center'>
+            <div className='grid place-items-end self-center'>
               <LiveProvider disabled={true} code={code} theme={theme} >
                 <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
               </LiveProvider>
@@ -133,13 +133,11 @@ export default function Home() {
               </div>
             </div>
 
-
-
-            <div className='col-span-full md:mx-10'>
+            <div className='col-span-full place-items-center'>
               <div className='text-2xl md:text-3xl font-mono mb-12 font-bold text-center'>
                 Your Tech Stack in <br/> One Package:
               </div>
-              <TechStackImage className='mx-12' />
+              <TechStackImage className='mx-36' />
             </div>
 
             <div className='col-span-full grid place-items-center'>
