@@ -4,7 +4,7 @@ export function Feature(props) {
   return (
     <div id="tailwind">
 
-      <div className='flex justify-start'>
+      <div className='flex justify-center'>
 
         <div className='grid place-items-center'>
           {props.icon}
@@ -16,7 +16,7 @@ export function Feature(props) {
 
       </div>
 
-      <div className='mt-4 font-monts text-start  '>
+      <div className='mt-4 font-monts text-center'>
         <div className='max-w-full text-md'>
           {props.info}
         </div>
