@@ -16,7 +16,7 @@ export function Feature(props) {
 
       </div>
 
-      <div className='m-2 font-monts'>
+      <div className='m-2 mt-4 font-monts'>
         <div className='max-w-full'>
           {props.info}
         </div>

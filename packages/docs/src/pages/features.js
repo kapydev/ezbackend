@@ -8,6 +8,7 @@ import IconWorld from '../assets/icon-world.svg'
 import IconFileStorage from '../assets/icon-download-file.svg'
 import IconDeploy from '../assets/icon-upload-cloud.svg'
 import IconScaling from '../assets/icon-increase.svg'
+// /https://heroicons.com/
 
 
 function Features() {

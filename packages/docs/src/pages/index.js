@@ -4,8 +4,10 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import theme from "prism-react-renderer/themes/dracula";
 import toast, { Toaster } from 'react-hot-toast';
 import TechStackImage from '../assets/tech-stack.svg'
+import IconTreeDiagram from '../assets/icon-tree-diagram.svg'
 import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
+import { Feature } from '../helper-components/feature';
 import { LiveProvider, LiveEditor } from 'react-live'
 import "tailwindcss/tailwind.css"
 
@@ -55,15 +57,15 @@ export default function Home() {
 
       '>
 
-            <div className='order-1 place-self-start'>
-              <div className='text-5xl font-bold font-mono'>
-                Your Tech Stack <br /> in One Package
-                <p className='text-xl font-mono mt-5'>
-                  You just have to plan the models <br />
+            <div className='place-self-start col-span-full'>
+              <div className='text-5xl font-bold font-mono '>
+                Build Fast with an Easy Backend
+                <p className='text-xl font-mono mt-5 text-center'>
+                  Simple Database Planning without Comprimising on Full Control
                 </p>
-                <div className='flex flex-col sm:flex-row sm:gap-3'>
+                <div className='flex flex-col sm:flex-row sm:gap-4 md:justify-center'>
                   <div className=''>
-                    <CtaButton link="/docs/intro">
+                    <CtaButton link="/docs/getting-started">
                       Get Started
                     </CtaButton>
                   </div>
@@ -73,15 +75,20 @@ export default function Home() {
                     </CtaButton>
                   </a>
                 </div>
+                <div className='w-32'>
+                  <CodeLine copyText="npx ezbackend init my-app" onClick={notify}>
+                    npx <span className='text-blue-300'>ezbackend</span> init <span className='text-gray-400'>myapp</span>
+                  </CodeLine >
+                </div>
               </div>
             </div>
 
-            <div className='order-2 grid place-items-start place-self-start'>
+            {/* <div className='grid place-items-start place-self-start'>
               <div className='pb-3 font-semibold font-monts'>
                 Step 1: Install
               </div>
-              <CodeLine copyText="npx ezbackend init" onClick={notify}>
-                npx <span className='text-blue-300'>ezbackend</span> init <span className='text-gray-400'>my-app</span>
+              <CodeLine copyText="npx ezbackend init my-app" onClick={notify}>
+                npx <span className='text-blue-300'>ezbackend</span> init <span className='text-gray-400'>myapp</span>
               </CodeLine >
               <div className='py-4 md:my-0 font-semibold font-monts'>
                 Step 2: Run
@@ -89,7 +96,7 @@ export default function Home() {
               <CodeLine copyText="npm run ezb" onClick={notify}>
                 npm run <span className='text-blue-300'>ezb</span>
               </CodeLine>
-            </div>
+            </div> */}
 
             <div className='order-4 md:order-3 place-self-start self-center'>
               <LiveProvider disabled={true} code={code} theme={theme} >
@@ -97,26 +104,18 @@ export default function Home() {
               </LiveProvider>
             </div>
 
-            <div className='order-3 md:order-4 grid self-start'>
-              <div className='font-bold font-mono text-xl mb-1'>
-                Step 3: Plan your Model
-              </div>
-              <div className='w-auto md:w-96 font-monts'>
-                <div>
-                  Plan your database structure in <span className='underline'>one file</span>.EzBackend will automatically generate everything else for you.
-                </div>
-                <br />
-                <li>API Documentation</li>
-                <li>Database Management</li>
-                <li>Google Sign In</li>
-                <li className='text-gray-500'>File Storage (WIP)</li>
-                <li className='text-gray-500'>One-Click Cloud Hosting (WIP)</li>
-                <li className='text-gray-500'>Horizontal Scaling (WIP) </li>
+            <div className='order-3 md:order-4 grid self-center'>
+              <div className='w-auto md:w-96 md:mb-10' >
+                <Feature
+                  icon={<IconTreeDiagram className='w-10 h-10 mr-2' />}
+                  title='Database Planning'
+                  info='Plan your database structure in one file. EzBackend automatically generates everything else for you.'
+                />
               </div>
             </div>
-            <div className='order-5 col-span-full md:mx-10 md:mr-16'>
+            <div className='order-5 col-span-full md:mx-10 md:mr-24'>
               <div className='text-2xl md:text-3xl font-mono mb-12 font-bold text-center'>
-                Under the Hood:
+                Your Tech Stack in One Package:
               </div>
               <TechStackImage className='' />
             </div>
@@ -158,6 +157,6 @@ export default function Home() {
 
       </div>
 
-    </Layout>
+    </Layout >
   );
 }

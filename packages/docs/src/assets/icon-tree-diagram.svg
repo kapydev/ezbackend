@@ -1,0 +1,22 @@
+<svg width="254" height="255" viewBox="0 0 254 255" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-inside-1_103:14" fill="white">
+<rect x="80" width="94" height="94" rx="8"/>
+</mask>
+<rect x="80" width="94" height="94" rx="8" stroke="white" stroke-width="28" mask="url(#path-1-inside-1_103:14)"/>
+<mask id="path-2-inside-2_103:14" fill="white">
+<rect x="90" y="181" width="74" height="74" rx="8"/>
+</mask>
+<rect x="90" y="181" width="74" height="74" rx="8" stroke="white" stroke-width="28" mask="url(#path-2-inside-2_103:14)"/>
+<mask id="path-3-inside-3_103:14" fill="white">
+<rect y="181" width="74" height="74" rx="8"/>
+</mask>
+<rect y="181" width="74" height="74" rx="8" stroke="white" stroke-width="28" mask="url(#path-3-inside-3_103:14)"/>
+<mask id="path-4-inside-4_103:14" fill="white">
+<rect x="180" y="181" width="74" height="74" rx="8"/>
+</mask>
+<rect x="180" y="181" width="74" height="74" rx="8" stroke="white" stroke-width="28" mask="url(#path-4-inside-4_103:14)"/>
+<line x1="127" y1="94" x2="127" y2="181" stroke="white" stroke-width="16"/>
+<line x1="36" y1="133" x2="36" y2="181" stroke="white" stroke-width="16" stroke-linecap="round"/>
+<line x1="217" y1="133" x2="217" y2="181" stroke="white" stroke-width="16" stroke-linecap="round"/>
+<line x1="36" y1="129" x2="217" y2="129" stroke="white" stroke-width="16" stroke-linecap="round"/>
+</svg>
