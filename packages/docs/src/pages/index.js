@@ -57,13 +57,15 @@ export default function Home() {
 
       '>
 
-            <div className='place-self-start col-span-full'>
-              <div className='text-5xl font-bold font-mono '>
-                Build Fast with an Easy Backend
-                <p className='text-xl font-mono mt-5 text-center'>
-                  Simple Database Planning without Comprimising on Full Control
-                </p>
-                <div className='flex flex-col sm:flex-row sm:gap-4 md:justify-center'>
+            <div className='place-self-center col-span-2 justify-center'>
+              <div className='grid grid-flow-row gap-7'>
+                <div className='text-5xl font-bold font-mono md:text-center'>
+                  Build More, Code Less
+                </div>
+                <div className='text-xl font-mono'>
+                  Simplified Backend Setup without Compromise On Customizability
+                </div>
+                <div className='flex flex-col sm:flex-row justify-center gap-4'>
                   <div className=''>
                     <CtaButton link="/docs/getting-started">
                       Get Started
@@ -75,36 +77,21 @@ export default function Home() {
                     </CtaButton>
                   </a>
                 </div>
-                <div className='w-32'>
+                {/* <div className='grid place-items-center'>
                   <CodeLine copyText="npx ezbackend init my-app" onClick={notify}>
                     npx <span className='text-blue-300'>ezbackend</span> init <span className='text-gray-400'>myapp</span>
                   </CodeLine >
-                </div>
+                </div> */}
               </div>
             </div>
 
-            {/* <div className='grid place-items-start place-self-start'>
-              <div className='pb-3 font-semibold font-monts'>
-                Step 1: Install
-              </div>
-              <CodeLine copyText="npx ezbackend init my-app" onClick={notify}>
-                npx <span className='text-blue-300'>ezbackend</span> init <span className='text-gray-400'>myapp</span>
-              </CodeLine >
-              <div className='py-4 md:my-0 font-semibold font-monts'>
-                Step 2: Run
-              </div>
-              <CodeLine copyText="npm run ezb" onClick={notify}>
-                npm run <span className='text-blue-300'>ezb</span>
-              </CodeLine>
-            </div> */}
-
-            <div className='order-4 md:order-3 place-self-start self-center'>
+            <div className='place-self-start self-center'>
               <LiveProvider disabled={true} code={code} theme={theme} >
                 <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
               </LiveProvider>
             </div>
 
-            <div className='order-3 md:order-4 grid self-center'>
+            <div className='grid self-center'>
               <div className='w-auto md:w-96 md:mb-10' >
                 <Feature
                   icon={<IconTreeDiagram className='w-10 h-10 mr-2' />}
@@ -113,14 +100,15 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className='order-5 col-span-full md:mx-10 md:mr-24'>
+
+            <div className='col-span-full md:mx-10 md:mr-24'>
               <div className='text-2xl md:text-3xl font-mono mb-12 font-bold text-center'>
                 Your Tech Stack in One Package:
               </div>
               <TechStackImage className='' />
             </div>
 
-            <div className='order-5 col-span-full grid place-items-center'>
+            <div className='col-span-full grid place-items-center'>
               <div className='font-monts font-bold text-xl mb-7'>
                 Become an Alpha User!
               </div>
@@ -131,19 +119,6 @@ export default function Home() {
               </a>
             </div>
 
-
-            {/*             
-          <div className='order-6 col-span- full'>
-            <div className='text-3xl text-center font-mono mb-6 font-bold self-center'>
-              Alpha Sign Up
-            </div>
-            <div className='grid place-items-center mb-4'>
-              <SignUpForm />
-            </div>
-            <div className='grid place-items-center font-mono'>
-              Powered by EzBackend
-            </div>
-          </div> */}
 
           </div>
         </div>
