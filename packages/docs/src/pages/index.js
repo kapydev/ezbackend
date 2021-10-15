@@ -6,8 +6,8 @@ import theme from "prism-react-renderer/themes/dracula";
 import toast, { Toaster } from 'react-hot-toast';
 import TechStackImage from '../assets/tech-stack.svg'
 import IconTreeDiagram from '../assets/icon-tree-diagram.svg'
-import { CtaButton } from '../helper-components/cta-button';
-import { CodeLine } from '../helper-components/code-line';
+import { CtaButton, SupportButton } from '../helper-components/cta-button';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Feature, MainFeature } from '../helper-components/feature';
 import { LiveProvider, LiveEditor } from 'react-live'
 import IconApiDocs from '../assets/icon-api-docs.svg'
@@ -34,8 +34,7 @@ app.addApp("pets", pets, { prefix: "pets" })
 
 app.start()
 `
-
-const notify = () => toast('Copied!', { duration: 800, icon: '✔️' });
+const copied_email = () => toast('Copied Email', { duration: 800, icon: '✔️' });
 
 function Texty(props) {
   return (
@@ -107,7 +106,7 @@ export default function Home() {
                 icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
                 title='Simplified Backend Development'
               >
-                A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while mantaining the ability to extend and customize
+                A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while keeping the ability to extend and customize
               </MainFeature>
               <div>
 
@@ -170,15 +169,52 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full grid place-items-center'>
-              <div className='font-monts font-bold text-xl mb-7'>
-                Support Us
+            <div className='col-span-full flex flex-wrap justify-center gap-4 place-self-center' style={{ maxWidth: '400px' }}>
+
+              <div className='w-full text-center font-monts font-bold text-xl mb-7' >
+                Support Us:
               </div>
-              <a href='https://forms.gle/38G9jL7bRFi822WTA' target='_blank'>
-                <CtaButton>
-                  Sign Up
-                </CtaButton>
-              </a>
+
+              <div>
+                <CopyToClipboard text='we.are.kapydev@gmail.com'>
+                  <SupportButton onClick={copied_email}>
+                    Email
+                  </SupportButton>
+                </CopyToClipboard>
+              </div>
+
+              <div>
+                <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
+                  <CtaButton>
+                    Discord
+                  </CtaButton>
+                </a>
+              </div>
+
+              <div>
+                <a href='https://github.com/kapydev/ezbackend' target='_blank'>
+                  <CtaButton>
+                    Github
+                  </CtaButton>
+                </a>
+              </div>
+
+              <div>
+                <a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>
+                  <CtaButton>
+                    Product Hunt
+                  </CtaButton>
+                </a>
+              </div>
+
+              <div>
+                <a href='https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ' target='_blank'>
+                  <CtaButton>
+                    YouTube
+                  </CtaButton>
+                </a>
+              </div>
+
             </div>
 
 

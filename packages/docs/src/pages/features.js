@@ -31,7 +31,7 @@ function Features() {
           >
 
             <div className='col-span-full font-bold font-mono text-4xl mb-2 text-center'>
-              Features
+              Current Features
             </div>
 
             <Feature

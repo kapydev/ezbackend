@@ -104,12 +104,12 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Learn',
           items: [
             {
               label: 'Docs',
               to: '/docs/intro',
-            },
+            }
           ],
         },
         {
@@ -119,15 +119,19 @@ module.exports = {
               label: 'Discord',
               href: 'https://discord.gg/sFUVA3Ku5E',
             },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
             {
               label: 'GitHub',
               href: 'https://github.com/kapydev/ezbackend',
             },
+          ],
+        },
+        {
+          title: 'Enterprise',
+          items: [
+            {
+              label: 'Pricing',
+              to: '/pricing',
+            }
           ],
         },
       ],
