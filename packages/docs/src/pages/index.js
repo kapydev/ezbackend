@@ -8,6 +8,7 @@ import TechStackImage from '../assets/tech-stack.svg'
 import IconTreeDiagram from '../assets/icon-tree-diagram.svg'
 import { CtaButton } from '../helper-components/cta-button';
 import { CodeLine } from '../helper-components/code-line';
+import { MovingCode } from '../helper-components/moving-code'
 import { Feature, MainFeature } from '../helper-components/feature';
 import { LiveProvider, LiveEditor } from 'react-live'
 import IconApiDocs from '../assets/icon-api-docs.svg'
@@ -17,6 +18,7 @@ import IconWorld from '../assets/icon-world.svg'
 import IconFileStorage from '../assets/icon-download-file.svg'
 import IconDeploy from '../assets/icon-upload-cloud.svg'
 import IconScaling from '../assets/icon-increase.svg'
+import Delayed from '../helper-components/delayed';
 import "tailwindcss/tailwind.css"
 
 const code = `
@@ -33,11 +35,29 @@ app.addApp("pets", pets, { prefix: "pets" })
 app.start()
 `
 
+const codeText1 = "const app = new EzBackend()"
+const codeText2 = `const pets = new EzModel('Pets', {
+  name: Type.VARCHAR,
+  species: Type.VARCHAR,
+  age: Type.INT
+})`
+const codeText3 = `app.addApp("pets", pets, { prefix: "pets" })`
+const codeText4 = `app.start()`
+
+
 const notify = () => toast('Copied!', { duration: 800, icon: '✔️' });
 
 function Texty(props) {
   return (
     <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
+  )
+}
+
+function StepFeature(props) {
+  return (
+    <Delayed waitBeforeShow={props.delay}>
+      <div className='font-monts my-2'><span className='text-xl mr-2'>✔️ </span>{props.children}</div>
+    </Delayed>
   )
 }
 
@@ -53,8 +73,6 @@ export default function Home() {
       <div id="tailwind">
         <div className='grid place-items-center'>
           <div className='
-
-
             grid
             grid-flow-row
 
@@ -95,84 +113,117 @@ export default function Home() {
             </div>
 
             <div className='grid place-items-center md:place-items-end self-center col-span-full md:col-span-1'>
-              <LiveProvider disabled={true} code={code} theme={theme} >
-                <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
-              </LiveProvider>
+              <div className='bg-gray-800 rounded-lg w-500px h-320px'>
+                <div className='rounded-lg text-sm pointer-events-none font-mono' style={{ padding: 32 }}>
+
+                  <Delayed waitBeforeShow={0}>
+                    <MovingCode text={codeText1} />
+                  </Delayed>
+                  <Delayed waitBeforeShow={3000}>
+                    <MovingCode text={codeText2} />
+                  </Delayed>
+                  <Delayed waitBeforeShow={10000}>
+                    <MovingCode text={codeText3} />
+                  </Delayed>
+                  <Delayed waitBeforeShow={14000}>
+                    <MovingCode text={codeText4} />
+                  </Delayed>
+                </div>
+              </div>
             </div>
 
-            <div className='col-span-full md:col-span-1 self-center mb-8' style={{ maxWidth: "400px" }}>
-              <MainFeature
+            <div className='col-span-full md:col-span-1 self-start' style={{ maxWidth: "400px" }}>
+              {/* <MainFeature
                 icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
                 title='Simplified Backend Development'
               >
                 A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while mantaining the ability to extend and customize
-              </MainFeature>
-              <div>
+              </MainFeature> */}
+              <StepFeature delay={0}>
+                Backend Created
+              </StepFeature>
+              <StepFeature delay={3000}>
+                Database Connection Made
+              </StepFeature>
+              <StepFeature delay={3000}>
+                'Pets' Table Created in Database
+              </StepFeature>
+              <StepFeature delay={3000}>
+                "Name","Species","Age" Columns Added in Table
+              </StepFeature>
+              <StepFeature delay={10000}>
+                CRUD Endpoints Generated
+              </StepFeature>
+              <StepFeature delay={10000}>
+                Documentation Generated
+              </StepFeature>
+              <StepFeature delay={14000}>
+                Running on PORT 8000
+              </StepFeature>
 
-              </div>
             </div>
-
-            <div className='overflow-x-auto col-span-full '>
-              <div className='gap-6 grid grid-flow-col'>
-
-                <Feature
-                  icon={<IconWorld className='w-12 h-12' />}
-                  title='Instant CRUD Generation'
-                  info='Instant CRUD endpoints generation with full customization capabilities'
-                />
-
-                <Feature
-                  icon={<IconApiDocs className='w-12 h-12' />}
-                  title='Automated Documentation'
-                  info='Automatically generate documentation for your APIs from the models you plan'
-                />
-                <Feature
-                  icon={<IconSecurity className='w-12 h-12' />}
-                  title='One-Line Authentication'
-                  info='Add user sign ups and logins and permission layering with Google.'
-                />
-
-                <Feature
-                  icon={<IconDatabase className='w-12 h-12' />}
-                  title='Choice of Database'
-                  info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
-                />
-
-              </div>
-            </div>
-
-            <div className='col-span-full' >
-              <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
-                Under the Hood:
-              </div>
-              <div className='grid place-items-center' >
-                <TechStackImage className='lg:w-700px' />
-              </div>
-            </div>
-
-            <div className='col-span-full grid place-items-center'>
-              <div className='font-monts font-bold text-xl mb-7'>
-                Become an Alpha User!
-              </div>
-              <a href='https://forms.gle/38G9jL7bRFi822WTA' target='_blank'>
-                <CtaButton>
-                  Sign Up
-                </CtaButton>
-              </a>
-            </div>
-
-
           </div>
+
+          <div className='overflow-x-auto col-span-full '>
+            <div className='gap-6 grid grid-flow-col'>
+
+              <Feature
+                icon={<IconWorld className='w-12 h-12' />}
+                title='Instant CRUD Generation'
+                info='Instant CRUD endpoints generation with full customization capabilities'
+              />
+
+              <Feature
+                icon={<IconApiDocs className='w-12 h-12' />}
+                title='Automated Documentation'
+                info='Automatically generate documentation for your APIs from the models you plan'
+              />
+              <Feature
+                icon={<IconSecurity className='w-12 h-12' />}
+                title='One-Line Authentication'
+                info='Add user sign ups and logins and permission layering with Google.'
+              />
+
+              <Feature
+                icon={<IconDatabase className='w-12 h-12' />}
+                title='Choice of Database'
+                info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
+              />
+
+            </div>
+          </div>
+
+          <div className='col-span-full' >
+            <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
+              Under the Hood:
+            </div>
+            <div className='grid place-items-center' >
+              <TechStackImage className='lg:w-700px' />
+            </div>
+          </div>
+
+          <div className='col-span-full grid place-items-center'>
+            <div className='font-monts font-bold text-xl mb-7'>
+              Become an Alpha User!
+            </div>
+            <a href='https://forms.gle/38G9jL7bRFi822WTA' target='_blank'>
+              <CtaButton>
+                Sign Up
+              </CtaButton>
+            </a>
+          </div>
+
+
         </div>
-
-        <br />
-        <br />
-        <br />
-        <br />
-
-        <Toaster />
-
       </div>
+
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <Toaster />
+
 
     </Layout >
   );

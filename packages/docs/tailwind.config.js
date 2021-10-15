@@ -13,7 +13,10 @@ module.exports = {
     extend: {
       width: {
         '700px': '700px',
-        '400px': '400px',
+        '500px': '500px',
+      },
+      height: {
+        '320px': '320px',
       }
     }
   },
