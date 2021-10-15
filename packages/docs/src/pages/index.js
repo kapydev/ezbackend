@@ -58,7 +58,16 @@ function Texty(props) {
 function StepFeature(props) {
   return (
     <Delayed waitBeforeShow={props.delay}>
-      <div className='font-monts my-2'><span className='text-xl mr-2'>✔️ </span>{props.children}</div>
+      <div className='fade-in-text'>
+        <div className='flex flex-wrap'>
+          <div className='text-xl mt-2 mr-2'>
+            ✔️
+          </div>
+          <div className='font-monts my-2'>
+            {props.children}
+          </div>
+        </div>
+      </div>
     </Delayed>
   )
 }
@@ -114,8 +123,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='grid place-items-center md:place-items-end self-center col-span-full md:col-span-1'>
-              <div className='bg-gray-800 rounded-lg w-full md:h-320px' style={{ maxWidth: '500px' }}>
+
+            <div className='grid place-items-center lg:place-items-end self-center col-span-full lg:col-span-1'>
+              <div className='bg-gray-800 rounded-lg w-full lg:h-320px' style={{ maxWidth: '500px' }}>
                 <div className='rounded-lg text-sm pointer-events-none font-mono' style={{ padding: 32 }}>
 
                   <Delayed waitBeforeShow={0}>
@@ -135,32 +145,26 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full md:col-span-1 self-start w-full' >
-              {/* <MainFeature
-                icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
-                title='Simplified Backend Development'
-              >
-                A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while mantaining the ability to extend and customize
-              </MainFeature> */}
-              <StepFeature delay={0}>
+            <div className='col-span-full lg:col-span-1 self-center lg:self-start w-full mt-4' >
+              <StepFeature delay={1700}>
                 Backend Created
               </StepFeature>
-              <StepFeature delay={3000}>
+              <StepFeature delay={2000}>
                 Database Connection Made
               </StepFeature>
-              <StepFeature delay={3000}>
+              <StepFeature delay={4500}>
                 'Pets' Table Created in Database
               </StepFeature>
-              <StepFeature delay={3000}>
-                "Name", "Age" Columns Added in Table
+              <StepFeature delay={9000}>
+                'Name', 'Species', 'Age' Columns Added in Table
               </StepFeature>
-              <StepFeature delay={10000}>
+              <StepFeature delay={12900}>
                 CRUD Endpoints Generated
               </StepFeature>
-              <StepFeature delay={10000}>
+              <StepFeature delay={15000}>
                 Documentation Generated
               </StepFeature>
-              <StepFeature delay={14000}>
+              <StepFeature delay={15300}>
                 Running on PORT 8000
               </StepFeature>
 
