@@ -107,8 +107,8 @@ export default function Home() {
 
                 <Feature
                   icon={<IconWorld className='w-12 h-12' />}
-                  title='Instant APIs'
-                  info='Instant API endpoints generation with customization capabilities'
+                  title='Instant CRUD Generation'
+                  info='Instant CRUD endpoints generation with full customization capabilities'
                 />
 
                 <Feature
