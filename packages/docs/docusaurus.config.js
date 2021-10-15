@@ -6,7 +6,7 @@ const githubLink = 'https://bit.ly/3CMVaNs'
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'EzBackend',
-  tagline: 'Create your backend in two lines of code',
+  tagline: 'Simplified Backend Setup.',
   url: 'https://www.ezbackend.io/',
   baseUrl: '/',
   onBrokenLinks: 'warn', //Not sure if this will break

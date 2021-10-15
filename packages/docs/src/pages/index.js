@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player/youtube'
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import theme from "prism-react-renderer/themes/dracula";
@@ -105,7 +105,7 @@ export default function Home() {
                 icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
                 title='Simplified Backend Development'
               >
-                A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while mantaining the ability to customize however you want
+                A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while mantaining the ability to extend and customize
               </MainFeature>
               <div>
 
