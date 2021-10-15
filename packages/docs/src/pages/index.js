@@ -19,6 +19,8 @@ import IconDeploy from '../assets/icon-upload-cloud.svg'
 import IconScaling from '../assets/icon-increase.svg'
 import "tailwindcss/tailwind.css"
 
+const YT_URL = 'https://youtu.be/kQRRckdEFr8'
+
 const code = `
 const app = new EzBackend()
 
@@ -150,9 +152,27 @@ export default function Home() {
               </div>
             </div>
 
+            <div className='col-span-full'>
+              <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
+                Tutorial Demo:
+              </div>
+              <div className='grid place-items-center md:hidden'>
+                <ReactPlayer
+                  width='100%'
+                  height='240px'
+                  url={YT_URL}
+                />
+              </div>
+              <div className='place-items-center hidden md:grid'>
+                <ReactPlayer
+                  url={YT_URL}
+                />
+              </div>
+            </div>
+
             <div className='col-span-full grid place-items-center'>
               <div className='font-monts font-bold text-xl mb-7'>
-                Become an Alpha User!
+                Support Us
               </div>
               <a href='https://forms.gle/38G9jL7bRFi822WTA' target='_blank'>
                 <CtaButton>
