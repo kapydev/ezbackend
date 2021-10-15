@@ -113,7 +113,7 @@ export default function Home() {
             </div>
 
             <div className='grid place-items-center md:place-items-end self-center col-span-full md:col-span-1'>
-              <div className='bg-gray-800 rounded-lg w-500px h-320px'>
+              <div className='bg-gray-800 rounded-lg w-full md:h-320px' style={{maxWidth:'500px'}}>
                 <div className='rounded-lg text-sm pointer-events-none font-mono' style={{ padding: 32 }}>
 
                   <Delayed waitBeforeShow={0}>
@@ -128,11 +128,12 @@ export default function Home() {
                   <Delayed waitBeforeShow={14000}>
                     <MovingCode text={codeText4} />
                   </Delayed>
+                  
                 </div>
               </div>
             </div>
 
-            <div className='col-span-full md:col-span-1 self-start' style={{ maxWidth: "400px" }}>
+            <div className='col-span-full md:col-span-1 self-start w-full' >
               {/* <MainFeature
                 icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
                 title='Simplified Backend Development'
@@ -149,7 +150,7 @@ export default function Home() {
                 'Pets' Table Created in Database
               </StepFeature>
               <StepFeature delay={3000}>
-                "Name","Species","Age" Columns Added in Table
+                "Name", "Age" Columns Added in Table
               </StepFeature>
               <StepFeature delay={10000}>
                 CRUD Endpoints Generated
@@ -162,56 +163,58 @@ export default function Home() {
               </StepFeature>
 
             </div>
-          </div>
 
-          <div className='overflow-x-auto col-span-full '>
-            <div className='gap-6 grid grid-flow-col'>
 
-              <Feature
-                icon={<IconWorld className='w-12 h-12' />}
-                title='Instant CRUD Generation'
-                info='Instant CRUD endpoints generation with full customization capabilities'
-              />
+            <div className='overflow-x-auto col-span-full '>
+              <div className='gap-6 grid grid-flow-col'>
 
-              <Feature
-                icon={<IconApiDocs className='w-12 h-12' />}
-                title='Automated Documentation'
-                info='Automatically generate documentation for your APIs from the models you plan'
-              />
-              <Feature
-                icon={<IconSecurity className='w-12 h-12' />}
-                title='One-Line Authentication'
-                info='Add user sign ups and logins and permission layering with Google.'
-              />
+                <Feature
+                  icon={<IconWorld className='w-12 h-12' />}
+                  title='Instant CRUD Generation'
+                  info='Instant CRUD endpoints generation with full customization capabilities'
+                />
 
-              <Feature
-                icon={<IconDatabase className='w-12 h-12' />}
-                title='Choice of Database'
-                info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
-              />
+                <Feature
+                  icon={<IconApiDocs className='w-12 h-12' />}
+                  title='Automated Documentation'
+                  info='Automatically generate documentation for your APIs from the models you plan'
+                />
+                <Feature
+                  icon={<IconSecurity className='w-12 h-12' />}
+                  title='One-Line Authentication'
+                  info='Add user sign ups and logins and permission layering with Google.'
+                />
 
+                <Feature
+                  icon={<IconDatabase className='w-12 h-12' />}
+                  title='Choice of Database'
+                  info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
+                />
+
+              </div>
+            </div>
+
+            <div className='col-span-full' >
+              <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
+                Under the Hood:
+              </div>
+              <div className='grid place-items-center' >
+                <TechStackImage className='lg:w-700px lg:h-400px' />
+              </div>
+            </div>
+
+            <div className='col-span-full grid place-items-center'>
+              <div className='font-monts font-bold text-xl mb-7'>
+                Become an Alpha User!
+              </div>
+              <a href='https://forms.gle/38G9jL7bRFi822WTA' target='_blank'>
+                <CtaButton>
+                  Sign Up
+                </CtaButton>
+              </a>
             </div>
           </div>
 
-          <div className='col-span-full' >
-            <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
-              Under the Hood:
-            </div>
-            <div className='grid place-items-center' >
-              <TechStackImage className='lg:w-700px' />
-            </div>
-          </div>
-
-          <div className='col-span-full grid place-items-center'>
-            <div className='font-monts font-bold text-xl mb-7'>
-              Become an Alpha User!
-            </div>
-            <a href='https://forms.gle/38G9jL7bRFi822WTA' target='_blank'>
-              <CtaButton>
-                Sign Up
-              </CtaButton>
-            </a>
-          </div>
 
 
         </div>
