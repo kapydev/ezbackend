@@ -19,6 +19,7 @@ import IconFileStorage from '../assets/icon-download-file.svg'
 import IconDeploy from '../assets/icon-upload-cloud.svg'
 import IconScaling from '../assets/icon-increase.svg'
 import Delayed from '../helper-components/delayed';
+import Expire from '../helper-components/expire';
 import "tailwindcss/tailwind.css"
 
 const YT_URL = 'https://youtu.be/kQRRckdEFr8'
@@ -125,7 +126,7 @@ export default function Home() {
 
 
             <div className='grid place-items-center lg:place-items-end self-center col-span-full lg:col-span-1'>
-              <div className='bg-gray-800 rounded-lg w-full lg:h-320px' style={{ maxWidth: '500px' }}>
+              <div className='bg-dracula rounded-lg w-full lg:h-320px' style={{ maxWidth: '500px' }}>
                 <div className='rounded-lg text-sm pointer-events-none font-mono' style={{ padding: 32 }}>
 
                   <Delayed waitBeforeShow={0}>
@@ -145,7 +146,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full lg:col-span-1 self-center lg:self-start w-full ' >
+            <div className='col-span-full lg:col-span-1 self-center lg:self-start w-full mt-1' >
+
               <StepFeature delay={1700}>
                 Backend Created
               </StepFeature>
@@ -153,20 +155,31 @@ export default function Home() {
                 Database Connection Made
               </StepFeature>
               <StepFeature delay={4500}>
-                'Pets' Table Created in Database
+                <span className='italic'>Pets</span> Table Created in Database
               </StepFeature>
               <StepFeature delay={9000}>
-                'Name', 'Species', 'Age' Columns Added in Table
+                <span className='italic'>Name, Species, Age</span> Columns Added in Table
               </StepFeature>
               <StepFeature delay={12900}>
                 CRUD Endpoints Generated
-              </StepFeature>
+              </StepFeature>  
               <StepFeature delay={15000}>
-                Documentation Generated
+                API Documentation Generated
               </StepFeature>
               <StepFeature delay={15300}>
                 Running on PORT 8000
               </StepFeature>
+
+              {/* <Delayed waitBeforeShow={17000}>
+                <div className='fade-in-text'>
+                  <MainFeature
+                    icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
+                    title='Simplified Backend Development'
+                  >
+                    A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while keeping the ability to extend and customize
+                  </MainFeature>
+                </div>
+              </Delayed> */}
 
             </div>
 
@@ -271,3 +284,4 @@ export default function Home() {
     </Layout >
   );
 }
+
