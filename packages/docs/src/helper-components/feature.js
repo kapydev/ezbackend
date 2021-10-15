@@ -44,7 +44,7 @@ export function MainFeature(props) {
       </div>
       <div className='mt-4 font-monts'>
         <div className='max-w-full text-md'>
-          {props.info}
+          {props.children}
         </div>
       </div>
     </div>

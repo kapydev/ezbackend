@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactPlayer from 'react-player'
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import theme from "prism-react-renderer/themes/dracula";
@@ -34,6 +35,12 @@ app.start()
 
 const notify = () => toast('Copied!', { duration: 800, icon: '✔️' });
 
+function Texty(props) {
+  return (
+    <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
+  )
+}
+
 export default function Home() {
 
   const { siteConfig } = useDocusaurusContext();
@@ -67,13 +74,13 @@ export default function Home() {
             <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
                 <div className='text-5xl font-bold font-mono sm:text-center'>
-                  Build More, Code Less
+                  Build Your MVP Faster
                 </div>
                 <div className='text-xl font-mono sm:text-center'>
-                  Simplified Backend Setup without Compromise On Customizability
+                  Simple to Setup. Fully Customizable
                 </div>
                 <div className='flex flex-col sm:flex-row justify-center gap-4'>
-                  <div className=''>
+                  <div>
                     <CtaButton link="/docs/getting-started">
                       Get Started
                     </CtaButton>
@@ -93,17 +100,20 @@ export default function Home() {
               </LiveProvider>
             </div>
 
-            <div className='col-span-full md:col-span-1 self-center mb-8'>
+            <div className='col-span-full md:col-span-1 self-center mb-8' style={{ maxWidth: "400px" }}>
               <MainFeature
                 icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
-                title='Plan your Database Structure'
-                info='Plan your database structure in one file. EzBackend automatically generates everything else for you.'
-              />
+                title='Simplified Backend Development'
+              >
+                A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while mantaining the ability to customize however you want
+              </MainFeature>
+              <div>
+
+              </div>
             </div>
 
             <div className='overflow-x-auto col-span-full '>
               <div className='gap-6 grid grid-flow-col'>
-
 
                 <Feature
                   icon={<IconWorld className='w-12 h-12' />}
@@ -125,7 +135,7 @@ export default function Home() {
                 <Feature
                   icon={<IconDatabase className='w-12 h-12' />}
                   title='Choice of Database'
-                  info='Pick from mutiple industry standards: Postgres, MySQL, MongoDB, & more'
+                  info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
                 />
 
               </div>
@@ -133,7 +143,7 @@ export default function Home() {
 
             <div className='col-span-full' >
               <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
-                Your Tech Stack in One Package:
+                Under the Hood:
               </div>
               <div className='grid place-items-center' >
                 <TechStackImage className='lg:w-700px' />
