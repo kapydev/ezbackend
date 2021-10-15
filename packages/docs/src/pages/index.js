@@ -21,6 +21,8 @@ import IconScaling from '../assets/icon-increase.svg'
 import Delayed from '../helper-components/delayed';
 import "tailwindcss/tailwind.css"
 
+const YT_URL = 'https://youtu.be/kQRRckdEFr8'
+
 const code = `
 const app = new EzBackend()
 
@@ -113,7 +115,7 @@ export default function Home() {
             </div>
 
             <div className='grid place-items-center md:place-items-end self-center col-span-full md:col-span-1'>
-              <div className='bg-gray-800 rounded-lg w-full md:h-320px' style={{maxWidth:'500px'}}>
+              <div className='bg-gray-800 rounded-lg w-full md:h-320px' style={{ maxWidth: '500px' }}>
                 <div className='rounded-lg text-sm pointer-events-none font-mono' style={{ padding: 32 }}>
 
                   <Delayed waitBeforeShow={0}>
@@ -128,7 +130,7 @@ export default function Home() {
                   <Delayed waitBeforeShow={14000}>
                     <MovingCode text={codeText4} />
                   </Delayed>
-                  
+
                 </div>
               </div>
             </div>
@@ -203,19 +205,53 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full grid place-items-center'>
-              <div className='font-monts font-bold text-xl mb-7'>
-                Become an Alpha User!
+            <div className='col-span-full'>
+              <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
+                Tutorial Demo:
               </div>
-              <a href='https://forms.gle/38G9jL7bRFi822WTA' target='_blank'>
-                <CtaButton>
-                  Sign Up
-                </CtaButton>
-              </a>
+              <div className='grid place-items-center md:hidden'>
+                <ReactPlayer
+                  width='100%'
+                  height='240px'
+                  url={YT_URL}
+                />
+              </div>
+              <div className='place-items-center hidden md:grid'>
+                <ReactPlayer
+                  url={YT_URL}
+                />
+              </div>
             </div>
+
+            <div className='col-span-full grid place-items-center'>
+              <div className='font-monts font-bold text-xl mb-12'>
+                Support Us:
+              </div>
+              <div className='flex flex-wrap gap-4 justify-center' styles={{ maxwidth: 500 }}>
+                <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
+                  <CtaButton>
+                    Discord
+                  </CtaButton>
+                </a>
+                <a href='https://github.com/kapydev/ezbackend' target='_blank'>
+                  <CtaButton>
+                    Github
+                  </CtaButton>
+                </a>
+                <a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>
+                  <CtaButton>
+                    Product Hunt
+                  </CtaButton>
+                </a>
+                <a href='https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ' target='_blank'>
+                  <CtaButton>
+                    YouTube
+                  </CtaButton>
+                </a>
+              </div>
+            </div>
+
           </div>
-
-
 
         </div>
       </div>
