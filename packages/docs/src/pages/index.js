@@ -145,7 +145,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full lg:col-span-1 self-center lg:self-start w-full mt-4' >
+            <div className='col-span-full lg:col-span-1 self-center lg:self-start w-full ' >
               <StepFeature delay={1700}>
                 Backend Created
               </StepFeature>
