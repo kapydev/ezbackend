@@ -10,13 +10,11 @@ import { CtaButton, SupportButton } from '../helper-components/cta-button';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Feature, MainFeature } from '../helper-components/feature';
 import { LiveProvider, LiveEditor } from 'react-live'
+import Delayed from '../helper-components/delay';
 import IconApiDocs from '../assets/icon-api-docs.svg'
 import IconDatabase from '../assets/icon-database.svg'
 import IconSecurity from '../assets/icon-security.svg'
 import IconWorld from '../assets/icon-world.svg'
-import IconFileStorage from '../assets/icon-download-file.svg'
-import IconDeploy from '../assets/icon-upload-cloud.svg'
-import IconScaling from '../assets/icon-increase.svg'
 import "tailwindcss/tailwind.css"
 
 const YT_URL = 'https://youtu.be/kQRRckdEFr8'
@@ -96,21 +94,54 @@ export default function Home() {
             </div>
 
             <div className='grid place-items-center md:place-items-end self-center col-span-full md:col-span-1'>
-              <LiveProvider disabled={true} code={code} theme={theme} >
+              {/* <LiveProvider disabled={true} code={code} theme={theme} >
                 <LiveEditor className='rounded-lg text-sm pointer-events-none' style={{ paddingLeft: 32 }} />
-              </LiveProvider>
+              </LiveProvider> */}
+              <div className='rounded-lg text-sm pointer-events-none bg-gray-800'>
+                test
+              </div>
+              <Delayed waitBeforeShow={1000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={2000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={3000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={4000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={5000}>
+                <div>Some child</div>
+              </Delayed>
             </div>
 
             <div className='col-span-full md:col-span-1 self-center mb-8' style={{ maxWidth: "400px" }}>
-              <MainFeature
+              <Delayed waitBeforeShow={1000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={2000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={3000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={4000}>
+                <div>Some child</div>
+              </Delayed>
+              <Delayed waitBeforeShow={5000}>
+                <div>Some child</div>
+              </Delayed>
+              <div>
+
+              </div>
+              {/* <MainFeature
                 icon={<IconTreeDiagram className='w-14 h-14 mr-2' />}
                 title='Simplified Backend Development'
               >
                 A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use</Texty> while keeping the ability to extend and customize
-              </MainFeature>
-              <div>
-
-              </div>
+              </MainFeature> */}
             </div>
 
             <div className='overflow-x-auto col-span-full '>
