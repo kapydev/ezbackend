@@ -1,7 +1,9 @@
 import { EzModel, ModelSchema, ModelOpts, Type, isRelation, isNestedRelation, isNormalType, isNestedNormalType } from '@ezbackend/common'
-import providers from './providers'
+import providerDict from './providers'
+import { BaseProvider } from '.'
 
-export type Providers = Array<'google'>
+//URGENT TODO: Figure out base provider type from abstract class
+export type Providers = Array<'google'|any>
 
 function addProviderToSchema(providerName: string, schema: ModelSchema) {
     const idCol = `${providerName}Id`
@@ -29,23 +31,39 @@ function checkGeneratable(modelSchema: ModelSchema) {
 
 export class EzUser extends EzModel {
 
-    constructor(modelName: string, providerNames: Providers, modelSchema: ModelSchema = {}, modelOptions: ModelOpts = {}) {
+    constructor(modelName: string, providers: Providers, modelSchema: ModelSchema = {}, modelOptions: ModelOpts = {}) {
 
         //Check that all schemas within the model either have default or are nullable
         checkGeneratable(modelSchema)
 
         //Modify the schema to introduce things required by the providers
-        providerNames.forEach(providerName => {
-            modelSchema = addProviderToSchema(providerName, modelSchema)
+        providers.forEach(providerOrProviderName => {
+            if(typeof providerOrProviderName === 'string') {
+                const providerName = providerOrProviderName
+                modelSchema = addProviderToSchema(providerName, modelSchema)
+            } else {
+                const tempProvider = new providerOrProviderName()
+
+            }
         })
 
         super(modelName, modelSchema, modelOptions)
 
         //Add the providers as child apps
-        providerNames.forEach(providerName => {
-            const Provider = providers[providerName]
-            const provider = new Provider(modelName)
-            this.addApp(`${providerName} auth`, provider)
+        providers.forEach(providerOrProviderName => {
+            if (typeof providerOrProviderName === 'string') {
+                const providerName =providerOrProviderName
+                //URGENT TODO: Get rid of ts-ignore
+                //@ts-ignore
+                const Provider = providerDict[providerName]
+                const provider = new Provider(modelName)
+                this.addApp(`${providerName} auth`, provider)
+            } else {
+                const provider = new providerOrProviderName()
+                const providerName = provider.providerName
+                this.addApp(`${providerName} auth`, provider)
+            }
+
 
         })
     }
