@@ -183,12 +183,12 @@ export default function Home() {
                 <Feature
                   icon={<IconSecurity className='w-12 h-12' />}
                   title='One-Line Authentication'
-                  info='Add user sign ups and logins and permission layering with Google.'
+                  info='Add user sign ups, logins and permission layering with Google'
                 />
 
                 <Feature
                   icon={<IconDatabase className='w-12 h-12' />}
-                  title='Choice of Database'
+                  title='Choose your Database'
                   info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
                 />
 
