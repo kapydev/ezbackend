@@ -21,6 +21,7 @@ module.exports = {
       },
       colors: {
         dracula: '#282A36',
+        purple: '#BD93F9'
       }
     },
 
