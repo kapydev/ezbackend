@@ -23,6 +23,7 @@
     "@mdx-js/react": "^1.6.21",
     "@svgr/webpack": "^5.5.0",
     "@tailwindcss/typography": "^0.4.1",
+    "animate.css": "^4.1.1",
     "axios": "^0.21.3",
     "clsx": "^1.1.1",
     "docusaurus-plugin-typedoc": "^0.16.3",

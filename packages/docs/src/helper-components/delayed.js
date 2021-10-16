@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 
-const Delayed = ({ children, waitBeforeShow = 500 }) => {
+export const Delayed = ({ children, waitBeforeShow = 0 }) => {
   const [isShown, setIsShown] = useState(false);
 
   useEffect(() => {
-    console.log(waitBeforeShow);
     setTimeout(() => {
       setIsShown(true);
     }, waitBeforeShow);
@@ -12,5 +11,3 @@ const Delayed = ({ children, waitBeforeShow = 500 }) => {
 
   return isShown ? children : null;
 };
-
-export default Delayed;

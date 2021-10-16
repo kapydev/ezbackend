@@ -7,12 +7,12 @@ export function Feature(props) {
 
       <div className='grid place-items-center self-center'>
 
-        <div className='flex justify-center mb-2'>
+        <div className='flex justify-center mb-2 mr-2'>
           {props.icon}
         </div>
 
         <div className='flex justify-center'>
-          <div className='ml-2 text-xl font-mono font-bold self-center text-center'>
+          <div className='text-xl font-mono font-bold self-center text-center'>
             {props.title}
           </div>
         </div>
@@ -35,15 +35,15 @@ export function MainFeature(props) {
   return (
     <div id="tailwind">
       <div className='flex justify-start'>
-        <div className='grid place-items-center'>
+        {/* <div className='grid place-items-center mr-2'>
           {props.icon}
-        </div>
-        <div className='ml-2 text-2xl font-mono font-bold self-center w-min-60'>
+        </div> */}
+        <div className='text-3xl font-mono font-bold self-center w-min-60'>
           {props.title}
         </div>
       </div>
       <div className='mt-4 font-monts'>
-        <div className='max-w-full text-md'>
+        <div className='max-w-full text-lg'>
           {props.children}
         </div>
       </div>
