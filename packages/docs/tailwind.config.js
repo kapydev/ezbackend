@@ -18,11 +18,12 @@ module.exports = {
       },
       height: {
         '320px': '320px',
+      },
+      colors: {
+        dracula: '#282A36',
       }
     },
-    colors: {
-      dracula: '#282A36',
-    }
+
   },
   variants: {},
   plugins: [],
