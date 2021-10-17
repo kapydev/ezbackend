@@ -292,11 +292,11 @@ export default function Home() {
                 <a href='https://github.com/kapydev/ezbackend' target='_blank'>
                   <IconGithub className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
                 </a>
-                {/* <a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>
-                  <IconProductHunt className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
-                </a> */}
                 <a href='https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ' target='_blank'>
                   <IconYoutube className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
+                </a>
+                <a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>
+                  <IconProductHunt className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
                 </a>
               </div>
             </div>
