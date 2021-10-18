@@ -7,7 +7,7 @@ const githubLink = 'https://bit.ly/3CMVaNs'
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'EzBackend',
-  tagline: 'Simplified Backend Setup.',
+  tagline: 'Simplified Backend Setup',
   url: 'https://www.ezbackend.io/',
   baseUrl: '/',
   onBrokenLinks: 'warn', //Not sure if this will break
@@ -35,7 +35,7 @@ module.exports = {
     navbar: {
       title: 'EzBackend',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'EzBackend Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -43,28 +43,37 @@ module.exports = {
           type: 'doc',
           docId: 'intro',
           position: 'left',
-          label: 'Docs',
+          label: 'Documentation',
         },
         {
-          type: 'dropdown',
-          label: 'Product',
+          to: 'pricing',
           position: 'left',
-          items: [
-            {
-              to: 'pricing',
-              label: '🤝 Pricing',
-            },
-            {
-              to: 'features',
-              label: '🎁 Features',
-            }
-          ],
+          label: 'Pricing',
         },
+        // {
+        //   type: 'dropdown',
+        //   label: 'Solutions',
+        //   position: 'left',
+        //   items: [
+        //     {
+        //       to: 'features',
+        //       label: 'For Developers',
+        //     },
+        //     {
+        //       to: 'features',
+        //       label: 'For Startups',
+        //     }
+        //   ],
+        // },
         {
           type: 'dropdown',
           label: 'Developers',
           position: 'left',
           items: [
+            {
+              to: 'how-it-works',
+              label: '🛠 How It Works',
+            },
             {
               label: 'NPM',
               href: 'https://www.npmjs.com/package/ezbackend',
@@ -74,7 +83,7 @@ module.exports = {
               href: 'https://github.com/kapydev/ezbackend'
             },
             {
-              label: 'CodeSandbox Demo',
+              label: 'CodeSandbox',
               href: 'https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts',
             }
           ],
@@ -86,7 +95,7 @@ module.exports = {
           items: [
             {
               to: 'blog',
-              label: 'Blog',
+              label: '❤ Blog',
             },
             {
               label: 'Discord',

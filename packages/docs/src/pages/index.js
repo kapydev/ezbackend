@@ -15,7 +15,6 @@ import { MovingCode } from '../helper-components/moving-code'
 import { Feature, MainFeature } from '../helper-components/feature';
 
 //SVG IMPORTS
-import TechStackImage from '../assets/tech-stack.svg'
 import IconApiDocs from '../assets/icon-api-docs.svg'
 import IconDatabase from '../assets/icon-database.svg'
 import IconSecurity from '../assets/icon-security.svg'
@@ -38,7 +37,7 @@ const codeText2 = `const pets = new EzModel('Pets', {
 const codeText3 = `app.addApp("pets", pets, { prefix: "pets" })`
 const codeText4 = `app.start()`
 
-function Texty(props) {
+function Txty(props) {
   return (
     <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
   )
@@ -73,12 +72,8 @@ export default function Home() {
   }, []);
 
 
-  const { siteConfig } = useDocusaurusContext();
-
   return (
-    <Layout
-      title={siteConfig.title}
-      description="Simplified Backend Setup">
+    <Layout>
 
       <div id="tailwind">
         <div className='grid place-items-center'>
@@ -102,7 +97,7 @@ export default function Home() {
             <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
                 <div className='text-5xl font-bold font-mono sm:text-center'>
-                  Build Your MVP Faster
+                  Build Your MVP App Faster
                 </div>
                 <div className='text-xl font-mono sm:text-center'>
                   Simple to Setup. Fully Customizable
@@ -148,48 +143,20 @@ export default function Home() {
 
               {isAnimationOver ?
 
-                <div onMouseEnter={() => setIsVisible(false)} onMouseLeave={() => { setIsVisible(true) }}>
+                <div className='w-full' onMouseEnter={() => setIsVisible(false)} onMouseLeave={() => { setIsVisible(true) }}>
 
-                  {isVisible ?
-
-                    <div className=''>
-                      <div className='fade'>
-                        <MainFeature
-                          title='Simplified Backend Development'
-                        >
-                          A Node framework focused on <Texty>speed</Texty> and <Texty>ease of use,</Texty> while keeping the ability to extend and customize
-                        </MainFeature>
-                      </div>
-                    </div>
-
-                    :
-
-                    <div className='self-center lg:self-start'>
-                      <StepFeature >
-                        Backend Created
-                      </StepFeature>
-                      <StepFeature >
-                        Database Connection Made
-                      </StepFeature>
-                      <StepFeature >
-                        <span className='text-purple'>Pets</span> Table Created in Database
-                      </StepFeature>
-                      <StepFeature >
-                        <span className='text-purple'>Name</span>, <span className='text-purple'>Species</span>, <span className='text-purple'>Age</span>, Columns Added in Table
-                      </StepFeature>
-                      <StepFeature >
-                        CRUD Endpoints Generated
-                      </StepFeature>
-                      <StepFeature >
-                        API Documentation Generated
-                      </StepFeature>
-                      <StepFeature >
-                        Running on PORT 8000
-                      </StepFeature>
-                    </div>
-
-
-                  }
+                  <div className='fade'>
+                    <MainFeature
+                      title={
+                        <div className=''>
+                          <div className='text-5xl mb-2'>Simplified</div>
+                          <div className=''>Backend Development</div>
+                        </div>
+                      }
+                    >
+                      A Node framework focused on <Txty>speed</Txty> and <Txty>ease of use,</Txty> while keeping the ability to <Txty>extend</Txty> and <Txty>customize</Txty>
+                    </MainFeature>
+                  </div>
 
                 </div>
 
@@ -251,14 +218,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full' >
-              <div className='text-2xl md:text-2xl font-mono mb-12 font-bold text-center'>
-                Under the Hood:
-              </div>
-              <div className='grid place-items-center' >
-                <TechStackImage className='lg:w-700px lg:h-400px' />
-              </div>
-            </div>
 
             <div className='col-span-full'>
               <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
@@ -280,12 +239,12 @@ export default function Home() {
 
             <div className='col-span-full grid place-items-center'>
               <div className='font-monts font-bold text-2xl mb-12'>
-                Support Us
+                Join Our Community
               </div>
               <div className='flex flex-wrap mx-4 sm:mx-0 justify-center gap-8'>
-                <a href='mailto:we.are.kapydev@gmail.com' target='_blank'>
+                {/* <a href='mailto:we.are.kapydev@gmail.com' target='_blank'>
                   <IconEmail className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
-                </a>
+                </a> */}
                 <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
                   <IconDiscord className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
                 </a>
