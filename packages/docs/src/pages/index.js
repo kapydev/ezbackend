@@ -149,7 +149,7 @@ export default function Home() {
                     <MainFeature
                       title={
                         <div className=''>
-                          <div className='text-5xl mb-2'>Simplified</div>
+                          <div className='text-4xl mb-2'>Simplified</div>
                           <div className=''>Backend Development</div>
                         </div>
                       }
@@ -218,6 +218,17 @@ export default function Home() {
               </div>
             </div>
 
+            {/* <div className='col-span-full'>
+              <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
+                Why EzBackend
+              </div>
+              <div className='text-lg font-monts flex justify-center'>
+                <p className='max-w-3xl text-center'>
+                  Lorem consequat fugiat velit nisi. Dolore in dolore deserunt est pariatur fugiat. Consectetur proident aute excepteur duis minim qui officia. Irure dolor veniam non duis duis ut ad fugiat sint. Magna cillum ex culpa ut nisi voluptate.
+                </p>
+              </div>
+            </div> */}
+
 
             <div className='col-span-full'>
               <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
@@ -246,7 +257,7 @@ export default function Home() {
                   <IconEmail className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
                 </a> */}
                 <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
-                  <IconDiscord className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
+                  <IconDiscord className='animate-wiggle' />
                 </a>
                 <a href='https://github.com/kapydev/ezbackend' target='_blank'>
                   <IconGithub className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
@@ -254,9 +265,15 @@ export default function Home() {
                 <a href='https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ' target='_blank'>
                   <IconYoutube className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
                 </a>
-                <a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>
+                {/* <a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>
                   <IconProductHunt className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
-                </a>
+                </a> */}
+              </div>
+            </div>
+
+            <div className='col-span-full'>
+              <div className='font-monts text-xl text-center'>
+                Want to be an Early Adopter? Get in <span className='font-semibold'><a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>touch</a></span> with us!
               </div>
             </div>
 

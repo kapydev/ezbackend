@@ -68,7 +68,7 @@
   transition: transform 34ms;
 }
 
-.fade{
+.fade {
   animation: fadeIn linear 1s;
   -webkit-animation: fadeIn linear 1s;
   -moz-animation: fadeIn linear 1s;
