@@ -21,13 +21,11 @@ export class Web3Provider extends BaseProvider {
     addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: any): [name: string, Strategy: any] {
         const that = this
 
-        server.register(fastifyStatic,{
+        server.register(fastifyStatic, {
             //TODO: Make this not relative if possible
             //URGENT TODO: Modify this to prevent conflict with existing routes
-            root: path.join(__dirname,'../../../web3-login-ui/build')
+            root: path.join(__dirname, '../../../web3-login-ui/build')
         })
-
-        console.log(server.prefix)
 
         const EthStrategy = new CustomStrategy(
             async function (req, callback) {
@@ -35,10 +33,10 @@ export class Web3Provider extends BaseProvider {
                     throw Boom.badData()
                 }
 
-                let recoveredAddress:string
+                let recoveredAddress: string
 
                 try {
-                    const {address,body} = await Web3Token.verify(req.query.token)
+                    const { address, body } = await Web3Token.verify(req.query.token)
                     recoveredAddress = address
                 } catch {
                     throw Boom.badData()
@@ -51,14 +49,16 @@ export class Web3Provider extends BaseProvider {
                     [`${that.providerName}Data`]: {}
                 }
 
+                const serializedID = `${that.providerName}-${recoveredAddress}`
+
                 repo.save(model).then(
                     () => {
-                        callback(null, recoveredAddress)
+                        callback(null, serializedID)
                     },
                     (e) => {
                         if (String(e.driverError).toLowerCase().includes('unique')) {
                             //URGENT TODO: Check if this works for all databases
-                            callback(null, recoveredAddress)
+                            callback(null, serializedID)
                         }
                         else {
                             callback(e)
@@ -100,7 +100,12 @@ export class Web3Provider extends BaseProvider {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
             handler: function (req, res) {
-                res.redirect(opts.successRedirectURL)
+                req.logOut().then(
+                    () => {
+                        res.redirect(opts.successRedirectURL)
+                    }
+                )
+
             },
             schema: {
                 //TODO: Figure out how to import types for summary
@@ -135,7 +140,7 @@ export class Web3Provider extends BaseProvider {
     registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown> {
         const that = this
         return async function serializer(id, req) {
-            return `${that.providerName}-${id}`
+            return id
         }
     }
 
@@ -154,7 +159,8 @@ export class Web3Provider extends BaseProvider {
                     return null
                 }
             } else {
-                throw new Error('pass')
+                //THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
+                throw "pass"
             }
 
         }

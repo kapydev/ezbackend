@@ -4,6 +4,27 @@ import Web3 from 'web3'
 //@ts-ignore
 import Web3Token from 'web3-token'
 
+/*
+IMPORTANT NOTICE
+
+This react app is rendered as a single HTML file, because otherwise
+we would have to serve multiple routes for multiple assets (css, js, whatever)
+and that would get messy in terms of the backend
+
+So please don't go whoopdy doo and add multiple pages
+or whatever fancy effects to this page, because all
+additional pages will be served in the same react file
+and multiple pages will be all loaded at the same time
+
+Also the fancy magic to serve it as a single HTML is in the
+webpack config with the addition of inline css and inline 
+js plugins
+
+Also we probably didn't need to eject just to add the webpack plugin,
+so if anyone wants to help us switch to CRA defaults and just add
+the plugins there that would be great
+*/
+
 interface EthereumWindow extends Window {
   ethereum?: any
 }
@@ -39,6 +60,7 @@ function App() {
 
   async function sendSignedMsg(msg: string) {
     //URGENT TODO: Can we send the token outside of the URL so that it doesn't happily print the token server side
+    //URGENT TODO: Can we make the tokens one time use?
     window.location.href = `http://localhost:8000/user/auth/web3/callback?token=${msg}`
   }
 

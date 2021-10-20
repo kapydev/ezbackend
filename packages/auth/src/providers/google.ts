@@ -48,14 +48,15 @@ export class GoogleProvider extends BaseProvider {
                 [`${that.providerName}Id`]: profile.id,
                 [`${that.providerName}Data`]: profile
             }
+            const serializedID = `${that.providerName}-${profile.id}`
             repo.save(model).then(
                 () => {
-                    cb(undefined, profile.id)
+                    cb(undefined, serializedID)
                 },
                 (e) => {
-                    if (String(e.driverError.toLowerCase()).includes('unique')) {
+                    if (String(e.driverError).toLowerCase().includes('unique')) {
                         //URGENT TODO: Check if this works for all databases
-                        cb(undefined, profile.id)
+                        cb(undefined, serializedID)
                     }
                     else {
                         cb(e)
@@ -94,7 +95,11 @@ export class GoogleProvider extends BaseProvider {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
             handler: function (req, res) {
-                res.redirect(opts.successRedirectURL)
+                req.logOut().then(
+                    () => {
+                        res.redirect(opts.successRedirectURL)
+                    }
+                )
             },
             schema: {
                 //TODO: Figure out how to import types for summary
@@ -133,7 +138,7 @@ export class GoogleProvider extends BaseProvider {
         const that = this
         return async function serializer(id, req) {
             //URGENT TODO: Remove prefix from here
-            return `${that.providerName}-${id}`
+            return id
         }
     }
 
@@ -152,7 +157,9 @@ export class GoogleProvider extends BaseProvider {
                     return null
                 }
             } else {
-                throw new Error('pass')
+                //TODO: Create test case for this, it needs to be exactly the string pass, which code factor may randomly decide to change
+                //THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
+                throw "pass"
             }
 
         }

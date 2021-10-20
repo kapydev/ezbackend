@@ -16,9 +16,13 @@ function addProviderToSchema(providerName: string, schema: ModelSchema) {
     }
     schema[idCol] = {
         type: Type.VARCHAR,
-        unique: true
+        unique: true,
+        nullable: true
     } //TODO: Confirm this is always varchar or coeracable to varchar
-    schema[dataCol] = Type.JSON
+    schema[dataCol] = {
+        type: Type.JSON,
+        nullable: true
+    }
     return schema
 }
 
