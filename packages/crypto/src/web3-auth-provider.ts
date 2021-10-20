@@ -160,6 +160,7 @@ export class Web3Provider extends BaseProvider {
                 }
             } else {
                 //THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
+                // tslint:disable-next-line:no-string-throw
                 throw "pass"
             }
 

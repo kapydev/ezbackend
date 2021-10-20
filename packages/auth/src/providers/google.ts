@@ -159,6 +159,7 @@ export class GoogleProvider extends BaseProvider {
             } else {
                 //TODO: Create test case for this, it needs to be exactly the string pass, which code factor may randomly decide to change
                 //THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
+                // tslint:disable-next-line:no-string-throw
                 throw "pass"
             }
 
