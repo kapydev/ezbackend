@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/core",
-  "version": "0.0.119",
+  "version": "0.0.120",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
