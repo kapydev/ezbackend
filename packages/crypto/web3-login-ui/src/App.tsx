@@ -17,7 +17,7 @@ additional pages will be served in the same react file
 and multiple pages will be all loaded at the same time
 
 Also the fancy magic to serve it as a single HTML is in the
-webpack config with the addition of inline css and inline 
+webpack config with the addition of inline css and inline
 js plugins
 
 Also we probably didn't need to eject just to add the webpack plugin,
