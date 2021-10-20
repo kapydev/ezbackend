@@ -80,7 +80,7 @@ export class GoogleProvider extends BaseProvider {
                 tags: ['Google Auth'],
                 //@ts-ignore
                 summary: `Login for model '${this.modelName}' with provider ${this.providerName}`,
-                description: `# 🔑 [CLICK HERE](${process.env.BACKEND_URL}/${this.getFullRoutePrefixNoPrePostSlash(server)}/login) or visit the URL with this extension to login
+                description: `# 🔑 [CLICK HERE](/${this.getFullRoutePrefixNoPrePostSlash(server)}/login) or visit the URL with this extension to login
                 1. Creates/Updates '${this.modelName}' on login
                 2. Provider ${this.providerName}
                 3. Scopes: ${opts.scope.toString()}`
@@ -107,7 +107,7 @@ export class GoogleProvider extends BaseProvider {
                 tags: ['Google Auth'],
                 //@ts-ignore
                 summary: `Logout for model '${this.modelName}' with provider ${this.providerName}`,
-                description: `# 🔑 [CLICK HERE](${process.env.BACKEND_URL}/${this.getFullRoutePrefixNoPrePostSlash(server)}/logout) or visit the URL with this extension to logout`
+                description: `# 🔑 [CLICK HERE](/${this.getFullRoutePrefixNoPrePostSlash(server)}/logout) or visit the URL with this extension to logout`
             }
         }
     }

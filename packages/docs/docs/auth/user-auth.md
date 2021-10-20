@@ -45,7 +45,6 @@ An array of providers that you wish to use. Different providers may require you 
 ```bash
 GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=yyyy-zzzzzzzzzzzzzzz
-BACKEND_URL=http://localhost:8000
 ```
 
 You can get your google client id and secret following the instructions [here](https://developers.google.com/adwords/api/docs/guides/authentication#webapp) (Even though it is the AdWords API the instructions should be the same)
