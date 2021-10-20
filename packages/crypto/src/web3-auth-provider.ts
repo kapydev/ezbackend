@@ -1,4 +1,4 @@
-import { BaseProvider } from "../base"
+import { BaseProvider } from "@ezbackend/auth"
 import { EzBackendInstance } from "@ezbackend/common"
 import { FastifyInstance, RouteOptions } from 'fastify'
 import fastifyPassport from 'fastify-passport'
@@ -24,7 +24,7 @@ export class Web3Provider extends BaseProvider {
         server.register(fastifyStatic, {
             //TODO: Make this not relative if possible
             //URGENT TODO: Modify this to prevent conflict with existing routes
-            root: path.join(__dirname, '../../../web3-login-ui/build')
+            root: path.join(__dirname, '../web3-login-ui/build')
         })
 
         const EthStrategy = new CustomStrategy(

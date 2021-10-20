@@ -48,6 +48,7 @@ describe("Plugin Registering", () => {
     });
 
     //NOTE: These tests are only able to run locally for now
+    //TODO: Make these tests runnable on remote
     it.skip("Should be able to create a user object", async () => {
 
         const v1Namespace = new EzApp()

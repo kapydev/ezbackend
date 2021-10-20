@@ -11,8 +11,7 @@
     "test": "__tests__"
   },
   "files": [
-    "dist/*",
-    "web3-login-ui/build/*"
+    "dist/*"
   ],
   "publishConfig": {
     "access": "public"

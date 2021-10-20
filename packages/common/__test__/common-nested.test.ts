@@ -192,15 +192,11 @@ describe("Nested CRUD", () => {
   })
 
   describe("Delete", () => {
-    test.skip("Cascade Delete", async () => {
-
-    })
+    test.todo("Cascade Delete")
   })
 
   describe("Auto ID Column Generation", () => {
-    test.skip("For all relations, the id column should automatically expose", async () => {
-
-    })
+    test.todo("For all relations, the id column should automatically expose")
   })
 
 });

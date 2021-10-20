@@ -60,8 +60,19 @@ function App() {
 
   async function sendSignedMsg(msg: string) {
     //URGENT TODO: Can we send the token outside of the URL so that it doesn't happily print the token server side
-    //URGENT TODO: Can we make the tokens one time use?
-    window.location.href = `http://localhost:8000/user/auth/web3/callback?token=${msg}`
+    //TODO: Should we make the tokens one time use?
+    //TODO: Is there a better way of not getting the callback URL by relative path
+    
+    if (process.env.NODE_ENV === 'development') {
+      const callbackURL = window.prompt("Please enter the callback URL. The callback URL will be programmatically referenced in production","http://localhost:8000/user/auth/web3/callback")
+      window.location.href = `${callbackURL}?token=${msg}`
+    } else if (process.env.NODE_ENV === 'production') {
+      const slashSeperatedURL = window.location.href.split('/')
+      slashSeperatedURL.pop()
+      const parentURL = slashSeperatedURL
+      const callbackURL = parentURL.join('/') + `/callback`
+      window.location.href = `${callbackURL}?token=${msg}`
+    }
   }
 
   useEffect(() => {

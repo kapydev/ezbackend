@@ -80,15 +80,9 @@ describe("DB UI Endpoints", () => {
 
         await run()
     })
-    it.skip("Should have the required schemas", async () => {
+    it.todo("Should have the required schemas")
 
-    })
+    it.todo("Should have the required APIs exposing the models")
 
-    it.skip("Should have the required APIs exposing the models", async () => {
-
-    })
-
-    it.skip("Should render the DB-UI", async () => {
-
-    })
+    it.todo("Should render the DB-UI")
 })
