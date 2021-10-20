@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/db-ui",
-  "version": "0.0.117",
+  "version": "0.0.118",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/kapydev/ezbackend#readme",
@@ -30,5 +30,5 @@
   "dependencies": {
     "fastify-static": "^4.2.4"
   },
-  "gitHead": "49f390ab4e0b6e88499624d7ba876ef15859f7b3"
+  "gitHead": "1bc8219d759e3b08d348e2ddd7d7d076ff1ba8e9"
 }

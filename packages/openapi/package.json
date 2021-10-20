@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/openapi",
-  "version": "0.0.117",
+  "version": "0.0.118",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -28,5 +28,5 @@
     "fastify-swagger": "^4.12.1",
     "open": "^8.2.1"
   },
-  "gitHead": "49f390ab4e0b6e88499624d7ba876ef15859f7b3"
+  "gitHead": "1bc8219d759e3b08d348e2ddd7d7d076ff1ba8e9"
 }
