@@ -3,7 +3,6 @@ import Web3 from 'web3'
 //TODO: Remove ts-ignore after PR for adding types is approved
 //@ts-ignore
 import Web3Token from 'web3-token'
-
 /*
 IMPORTANT NOTICE
 
@@ -36,6 +35,10 @@ function App() {
   const [accounts, setAccounts] = useState<Array<string> | undefined>(undefined)
 
   async function connectMetamask() {
+    if (!(window as EthereumWindow).ethereum) {
+      window.alert("You must have Meta Mask installed to login!")
+      window.history.back()
+    }
     const accounts = await web3.eth.requestAccounts()
     setAccounts(accounts)
   }
@@ -76,10 +79,11 @@ function App() {
   }
 
   useEffect(() => {
+    connectMetamask()
     registerOnAccountChange()
   }, [])
 
-  const UnconnectedView = <button onClick={connectMetamask}>Connect</button>
+  const UnconnectedView = <div>Connecting...</div>
 
   //URGENT TODO: Update based on hook? right now if the browser changes user this is not updating
   const ConnectedView = <div>
