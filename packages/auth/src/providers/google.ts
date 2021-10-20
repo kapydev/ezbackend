@@ -38,7 +38,7 @@ export class GoogleProvider extends BaseProvider {
             )
         }
 
-        return [this.providerName, new GoogleStrategy({
+        const googleStrategy = new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
             callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash(server)}`
@@ -48,12 +48,24 @@ export class GoogleProvider extends BaseProvider {
                 [`${that.providerName}Id`]: profile.id,
                 [`${that.providerName}Data`]: profile
             }
+            const serializedID = `${that.providerName}-${profile.id}`
             repo.save(model).then(
                 () => {
-                    cb(undefined, profile.id)
+                    cb(undefined, serializedID)
+                },
+                (e) => {
+                    if (String(e.driverError).toLowerCase().includes('unique')) {
+                        //URGENT TODO: Check if this works for all databases
+                        cb(undefined, serializedID)
+                    }
+                    else {
+                        cb(e)
+                    }
                 }
             )
-        })]
+        })
+
+        return [this.providerName, googleStrategy]
     }
 
     getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
@@ -77,12 +89,17 @@ export class GoogleProvider extends BaseProvider {
     }
 
     //TODO: Mock and test these logout routes
+    //URGENT TODO: Why does this logout route not seem to be logging the user out?
     getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
             handler: function (req, res) {
-                res.redirect(opts.successRedirectURL)
+                req.logOut().then(
+                    () => {
+                        res.redirect(opts.successRedirectURL)
+                    }
+                )
             },
             schema: {
                 //TODO: Figure out how to import types for summary
@@ -104,7 +121,7 @@ export class GoogleProvider extends BaseProvider {
                 successRedirect: opts.successRedirectURL,
                 failureRedirect: opts.failureRedirectURL
             }),
-            handler: async function (req, res) {
+            handler: function (req, res) {
                 res.redirect(opts.successRedirectURL)
             },
             schema: {
@@ -120,7 +137,8 @@ export class GoogleProvider extends BaseProvider {
     registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown> {
         const that = this
         return async function serializer(id, req) {
-            return `${that.providerName}-${id}`
+            //URGENT TODO: Remove prefix from here
+            return id
         }
     }
 
@@ -139,7 +157,10 @@ export class GoogleProvider extends BaseProvider {
                     return null
                 }
             } else {
-                throw new Error('pass')
+                //TODO: Create test case for this, it needs to be exactly the string pass, which code factor may randomly decide to change
+                //THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
+                // tslint:disable-next-line:no-string-throw
+                throw "pass"
             }
 
         }

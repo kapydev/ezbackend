@@ -57,13 +57,13 @@ const defaultConfig = {
     },
     auth: {
         secretKeyPath: path.join(process.cwd(), 'secret-key'),
+        backendURL: process.env.BACKEND_URL,
+        successRedirectURL: "http://localhost:8000/db-ui",
+        failureRedirectURL: "http://localhost:8000/db-ui",
         google: {
             googleClientId: process.env.GOOGLE_CLIENT_ID,
             googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            backendURL: process.env.BACKEND_URL,
             scope: ['profile'],
-            successRedirectURL: "http://localhost:8000/db-ui",
-            failureRedirectURL: "http://localhost:8000/db-ui"
         }
     },
     // cors: {

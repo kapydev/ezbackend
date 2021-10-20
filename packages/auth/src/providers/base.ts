@@ -8,7 +8,7 @@ import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
 declare module '@ezbackend/common' {
     interface EzBackendOpts {
         auth: {
-            secretKeyPath:string
+            secretKeyPath: string
             google?: {
                 googleClientId: string,
                 googleClientSecret: string,
@@ -28,7 +28,7 @@ declare module 'fastify' {
     }
 }
 
-type ProviderName = Exclude<keyof EzBackendOpts['auth'],'secretKeyPath'>
+type ProviderName = Exclude<keyof EzBackendOpts['auth'], 'secretKeyPath'>
 
 export abstract class BaseProvider extends EzApp {
 
@@ -46,22 +46,28 @@ export abstract class BaseProvider extends EzApp {
     }
 
     //URGENT TODO: Add type for provider opts
-    abstract addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts:any): [name: string, Strategy: AnyStrategy]
-    abstract registerUserSerializer(instance:EzBackendInstance, opts:any): SerializeFunction<unknown, unknown>
-    abstract registerUserDeserializer(instance:EzBackendInstance, opts:any): DeserializeFunction<any, any>
-    abstract getLoginRoute(server:FastifyInstance, opts:any): RouteOptions
-    abstract getLogoutRoute(server:FastifyInstance, opts:any): RouteOptions
-    abstract getCallbackRoute(server:FastifyInstance, opts:any): RouteOptions
+    abstract addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: any): [name: string, Strategy: AnyStrategy]
+    abstract registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown>
+    abstract registerUserDeserializer(instance: EzBackendInstance, opts: any): DeserializeFunction<any, any>
+    abstract getLoginRoute(server: FastifyInstance, opts: any): RouteOptions
+    abstract getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions
+    abstract getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions
     //TODO: Implement this security scheme in the swagger spec
     // abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
-    addProvider(instance:EzBackendInstance, opts:EzBackendOpts) {
-        const providerOpts = opts.auth[this.providerName]!
+    addProvider(instance: EzBackendInstance, opts: EzBackendOpts) {
+        //TODO: Double check edge cases for this
+        const providerOpts = {
+            ...opts.auth[this.providerName]!,
+            ...opts.auth
+        }
 
         instance.server.register(async (server, opts) => {
-            fastifyPassport.use(...this.addStrategy(instance, server, providerOpts))
+            const [name, Strategy] = this.addStrategy(instance, server, providerOpts)
+            fastifyPassport.use(name, Strategy)
             fastifyPassport.registerUserSerializer(this.registerUserSerializer(instance, providerOpts))
             fastifyPassport.registerUserDeserializer(this.registerUserDeserializer(instance, providerOpts))
+
             //TODO: Fix these typescript errors
             server.route(this.getLoginRoute(server as any, providerOpts) as any)
             server.route(this.getLogoutRoute(server as any, providerOpts) as any)
@@ -75,8 +81,8 @@ export abstract class BaseProvider extends EzApp {
         return fullRoute
     }
 
-    getFullRoutePrefixNoPrePostSlash(server:FastifyInstance) {
-        const encapsulatedPrefix = server.prefix.replace(/^\//,"")
+    getFullRoutePrefixNoPrePostSlash(server: FastifyInstance) {
+        const encapsulatedPrefix = server.prefix.replace(/^\//, "")
         const fullRoute = `${encapsulatedPrefix}/${this.getRoutePrefixNoPrePostSlash(server)}`
         return fullRoute
     }
