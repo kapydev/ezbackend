@@ -38,7 +38,7 @@ export class GoogleProvider extends BaseProvider {
             )
         }
 
-        return [this.providerName, new GoogleStrategy({
+        const googleStrategy = new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
             callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash(server)}`
@@ -51,9 +51,20 @@ export class GoogleProvider extends BaseProvider {
             repo.save(model).then(
                 () => {
                     cb(undefined, profile.id)
+                },
+                (e) => {
+                    if (String(e.driverError.toLowerCase()).includes('unique')) {
+                        //URGENT TODO: Check if this works for all databases
+                        cb(undefined, profile.id)
+                    }
+                    else {
+                        cb(e)
+                    }
                 }
             )
-        })]
+        })
+
+        return [this.providerName, googleStrategy]
     }
 
     getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
@@ -77,6 +88,7 @@ export class GoogleProvider extends BaseProvider {
     }
 
     //TODO: Mock and test these logout routes
+    //URGENT TODO: Why does this logout route not seem to be logging the user out?
     getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
         return {
             method: 'GET',
@@ -104,7 +116,7 @@ export class GoogleProvider extends BaseProvider {
                 successRedirect: opts.successRedirectURL,
                 failureRedirect: opts.failureRedirectURL
             }),
-            handler: async function (req, res) {
+            handler: function (req, res) {
                 res.redirect(opts.successRedirectURL)
             },
             schema: {
@@ -120,6 +132,7 @@ export class GoogleProvider extends BaseProvider {
     registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown> {
         const that = this
         return async function serializer(id, req) {
+            //URGENT TODO: Remove prefix from here
             return `${that.providerName}-${id}`
         }
     }

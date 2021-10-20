@@ -1,11 +1,12 @@
 import { PluginScope, App } from '@ezbackend/core'
+import { EzApp } from '@ezbackend/common'
 import { EzError } from '@ezbackend/utils'
 import fastifySecureSession from 'fastify-secure-session'
 import fastifyPassport from 'fastify-passport'
 import fs from 'fs'
 
 //TODO: Make this of EzApp type instead
-export class EzAuth extends App {
+export class EzAuth extends EzApp {
     constructor() {
         super()
         this.setHandler("Add Fastify Secure Session", (instance, opts, done) => {
