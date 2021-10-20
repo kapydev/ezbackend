@@ -14,7 +14,8 @@
   },
   "scripts": {
     "build": "node ./scripts/build-package.js",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "lerna run prepare"
   },
   "dependencies": {
     "typescript": "^4.3.5"
