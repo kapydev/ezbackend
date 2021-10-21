@@ -244,6 +244,7 @@ export default function Home() {
               <div className='place-items-center hidden lg:grid'>
                 <ReactPlayer
                   url={YT_URL}
+                  controls={true}
                 />
               </div>
             </div>
