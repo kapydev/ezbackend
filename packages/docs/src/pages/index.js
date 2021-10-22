@@ -272,11 +272,29 @@ export default function Home() {
               </div>
             </div>
 
+            <div className='col-span-full flex justify-center align-middle'>
+              <div className='bg-dracula px-16 py-9 rounded-lg flex justify-center gap-10'>
+                <div className='font-monts font-semibold text-xl self-center '>
+                  Keep Me Updated!
+                </div>
+                <input className='border-0 font-monts rounded-lg text-lg p-2 font-semibold' type="text" placeholder='Email' name="email" />
+                <CtaButton>
+                  <div className='text-sm'>
+                    Sign Up
+                  </div>
+                </CtaButton>
+              </div>
+            </div>
+
+
+            {/* 
             <div className='col-span-full'>
               <div className='font-monts text-xl text-center'>
                 Want to be an Early Adopter? Get in <span className='font-semibold'><a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>touch</a></span> with us!
               </div>
-            </div>
+            </div> */}
+
+
 
           </div>
 

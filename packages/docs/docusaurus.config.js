@@ -113,11 +113,16 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Learn',
+          title: 'Contact Us',
           items: [
             {
-              label: 'Docs',
-              to: '/docs/intro',
+              html: 'Email: we.are.kapydev@gmail.com'
+            },
+            {
+              html: "Phone: +65 9650 3241"
+            },
+            {
+              html: 'Telegram: @StepKab00m'
             }
           ],
         },
