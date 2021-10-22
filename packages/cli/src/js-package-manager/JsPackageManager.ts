@@ -28,7 +28,8 @@ export abstract class JsPackageManager {
     //TODO: Programmatically get the file path instead
     const ezbCmd = `npx ts-node-dev src/index.ts`
     this.addScripts({
-      ezb: ezbCmd
+      ezb: ezbCmd,
+      start: ezbCmd
     })
   }
 
