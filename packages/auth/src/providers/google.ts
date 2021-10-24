@@ -41,7 +41,7 @@ export class GoogleProvider extends BaseProvider {
         const googleStrategy = new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
-            callbackURL: `${opts.backendURL}/${this.getCallbackURLNoPreSlash(server)}`
+            callbackURL: `/${this.getCallbackURLNoPreSlash(server)}`
         }, function (accessToken, refreshToken, profile, cb) {
             const repo = instance.orm.getRepository(that.modelName)
             const model = {

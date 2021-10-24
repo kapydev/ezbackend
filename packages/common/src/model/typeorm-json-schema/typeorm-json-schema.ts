@@ -80,6 +80,8 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
         return 'string'
       case 'boolean':
         return 'boolean'
+      case 'simple-enum':
+        return 'string'
     }
   }
   throw new Error(`Unable to determine the Json Schema type for col type ${colType}`)

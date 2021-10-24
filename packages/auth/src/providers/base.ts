@@ -88,6 +88,7 @@ export abstract class BaseProvider extends EzApp {
     }
 
     getCallbackURLNoPreSlash(server: FastifyInstance) {
-        return `${this.getFullRoutePrefixNoPrePostSlash(server)}/callback`
+        const callbackURL = `${this.getFullRoutePrefixNoPrePostSlash(server)}/callback`
+        return callbackURL
     }
 }
