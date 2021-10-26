@@ -201,7 +201,9 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
     );
 
   const requiredPropertyNames = meta.columns
-    .filter(col => !col.isNullable && !col.isGenerated)
+    .filter(col => {
+      return !col.isNullable && !col.isGenerated && col.default === undefined
+    })
     .map(col => col.propertyName)
 
   createSchema['required'] = requiredPropertyNames
