@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/cli",
-  "version": "0.0.129",
+  "version": "0.0.130",
   "description": "",
   "main": "./bin/index.js",
   "bin": {
