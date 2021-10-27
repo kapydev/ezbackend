@@ -98,6 +98,10 @@ module.exports = {
               label: '❤ Blog',
             },
             {
+              to: 'feature-voting',
+              label: '🚗 Feature Roadmap',
+            },
+            {
               label: 'Discord',
               href: 'https://discord.gg/RwgdruFJHc'
             },
