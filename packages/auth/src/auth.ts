@@ -21,7 +21,7 @@ export class EzAuth extends EzApp {
 Run command in root of project (Same folder as package.json)
 
 linux terminal: ./node_modules/.bin/secure-session-gen-key > secret-key
-cmd prompt:     node_modules\.bin\secure-session-gen-key > secret-key
+cmd prompt:     node_modules\\.bin\\secure-session-gen-key > secret-key
 powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath secret-key -Encoding default -NoNewline
 `
                 )

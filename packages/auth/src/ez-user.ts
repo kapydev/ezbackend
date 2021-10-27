@@ -28,11 +28,25 @@ function addProviderToSchema(providerName: string, schema: ModelSchema) {
 }
 
 function checkGeneratable(modelSchema: ModelSchema) {
+    const nullableError = new EzError(
+        "Columns of EzUser need to either have a default value or be nullable",
+        "When a user is created from logging in, ezbackend needs to either fill all columns in the user table with null or a default value",
+`
+const user = new EzUser("User",["google"],{
+    userVariable = {
+        type: Type.VARCHAR,
+        nullable: true,
+        //OR
+        //default: "This is my default value"
+    }
+})
+`
+        )
     Object.values(modelSchema).forEach(col => {
         if (isRelation(col) || isNormalType(col)) {
-            throw new Error("Columns of EzUser need to either have a default value or be nullable")
+            throw nullableError
         } else if (col.default === undefined && (col.nullable === false || col.nullable === undefined)) {
-            throw new Error("Columns of EzUser need to either have a default value or be nullable")
+            throw nullableError
         }
     })
 }

@@ -79,7 +79,6 @@ export class Web3Provider extends BaseProvider {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/login`,
             handler: (req, res) => {
-                //URGENT TODO: How do we ensure that the fastify static plugin is in use? If we double import it does it cause problems?
                 res.sendFile('index.html')
             },
             schema: {

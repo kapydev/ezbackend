@@ -14,7 +14,8 @@ enum NormalType {
     REAL = 'REAL',
     DATE = 'DATE',
     JSON = 'JSON',
-    BOOL = 'BOOL'
+    BOOL = 'BOOL',
+    ENUM = 'ENUM'
 }
 
 enum RelationType {
@@ -65,6 +66,12 @@ function normalTypeToTypeORMtype(type: NormalType | ColumnType): ColumnType {
         case NormalType.JSON:
             //URGENT TODO: Switch between simple json and normal json depending on postgres column?
             return 'simple-json'
+        case NormalType.ENUM:
+            //URGENT URGENT TODO: Test case for this
+            //URGENT URGENT TODO: See if 'enum' instead of simple-enum works
+            //URGENT URGENT TODO: Good error message when enum values are not specified
+            return 'simple-enum'
+
         default:
             return type
     }

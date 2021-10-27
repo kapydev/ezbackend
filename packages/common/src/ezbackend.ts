@@ -1,6 +1,6 @@
 import { EzApp, EzBackendServer } from "./ezapp";
-import fastify, { FastifyInstance } from "fastify";
-import fastifyBoom from 'fastify-boom'
+import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
+import fp from 'fastify-plugin'
 import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
 import _ from 'lodash'
@@ -78,6 +78,34 @@ const defaultConfig = {
     // }
 }
 
+// Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
+// Kudos to him
+const ezbErrorPage: FastifyPluginCallback<{}> = (fastify, options, next) => {
+    //TODO: Strict types for error
+    fastify.setErrorHandler(function errorHandler(error: any, request, reply) {
+        request.log.error(error)
+        if (error && error.query) {
+            //Assumption: It is a typeorm error if it falls here
+            request.log.error(`query: ${error.query}`)
+            request.log.error(`parameters: ${error.parameters}`)
+            request.log.error(`driverError: ${error.driverError}`)
+        }
+        if (error && error.isBoom) {
+            reply
+                .code(error.output.statusCode)
+                .type('application/json')
+                .headers(error.output.headers)
+                .send(error.output.payload)
+
+            return
+        }
+
+        reply.send(error || new Error(`Got non-error: ${error}`))
+    })
+
+    next()
+}
+
 /**
  * Child of EzApp. This is where you set up your backend setup tasks.
  */
@@ -99,7 +127,7 @@ export class EzBackend extends EzApp {
         })
 
         this.setHandler('Add Fastify Boom', async (instance, opts) => {
-            instance.server.register(fastifyBoom)
+            instance.server.register(fp(ezbErrorPage))
         })
         this.setHandler('Add Error Schema', addErrorSchema)
 
