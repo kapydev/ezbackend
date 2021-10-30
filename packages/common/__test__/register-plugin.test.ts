@@ -100,7 +100,6 @@ describe("Plugin Registering", () => {
 
     //     app.addApp("Child Plugin App", childPluginApp)
     //     await app.start(defaultConfig)
-    //     console.log(servers[0])
     //     expect(servers[0]).toBe(servers[1])
 
     // })

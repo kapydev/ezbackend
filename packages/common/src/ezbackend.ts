@@ -17,6 +17,7 @@ export interface EzBackendInstance {
 }
 
 export interface EzBackendOpts {
+    address: string
     port: number
     orm: Parameters<typeof createConnection>[0]
     server: Parameters<typeof fastify>[0]
@@ -40,7 +41,8 @@ async function addErrorSchema(instance: EzBackendInstance, opts: EzBackendOpts) 
 dotenv.config()
 
 const defaultConfig = {
-    port: 8000,
+    port: process.env.PORT || 8000,
+    address: process.env.ADDRESS || "127.0.0.1",
     server: {
         logger: {
             prettyPrint: {
@@ -140,7 +142,7 @@ export class EzBackend extends EzApp {
         })
 
         this.setRun('Run Fastify Server', async (instance, opts) => {
-            await instance._server.listen(opts.port)
+            await instance._server.listen(opts.port, opts.address)
         })
 
         this.scope = PluginScope.PARENT
