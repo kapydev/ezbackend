@@ -1,33 +1,37 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import { CtaButton } from '../helper-components/cta-button';
+import { useEffect, useState } from 'react';
+
 
 function FeatureCard() {
+
+  const [isHoveringHeart, setIsHoveringHeart] = useState(false)
+
   return (
-    <div className='
-    p-6 py-8
-    bg-dracula 
-    border-gray-300 
-    border-3 
-    border-solid
-    rounded-xl
-    text-center
-    grid
-    place-items-center
-    gap-6
-    '>
-      <div className='text-2xl font-bold font-mono'>
-        Lorem Ipsum
-      </div>
-      <div className='font-monts'>
-        Est voluptate sint culpa occaecat est id tempor officia duis Lorem ea nostrud. Nisi elit tempor eiusmod do mollit veniam ullamco mollit voluptate.
-      </div>
-      <a>
-        <div className='font-mono text-2xl font-bold text-blue-300'>
-          Vote
+    <div className='p-0 border-0 bg-transparent w-full'>
+      <div className='
+          p-6 py-8
+          bg-dracula 
+          border-gray-300 
+          border-4 
+          border-solid
+          rounded-xl
+          text-center
+          grid
+          gap-6
+          '>
+        <div className='text-2xl font-bold font-mono'>
+          Lorem Ipsum
         </div>
-      </a>
-    </div>
+        <div className='font-monts leading-snug'>
+          Est voluptate sint culpa occaecat est id tempor officia duis Lorem ea nostrud. Nisi elit tempor eiusmod do mollit veniam ullamco mollit voluptate.
+        </div>
+        <svg className='' onMouseEnter={() => { setIsHoveringHeart(true) }} onMouseLeave={() => { setIsHoveringHeart(false) }} xmlns="http://www.w3.org/2000/svg" className="h-11 w-11" fill={isHoveringHeart ? '#dadde1' : 'none'} viewBox="0 0 24 24" stroke="#dadde1">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      </div>
+    </div >
   )
 }
 
@@ -63,7 +67,7 @@ function FeaturesVoting() {
                 </div>
                 <div className='flex flex-col sm:flex-row justify-center gap-4'>
                   <div>
-                    <CtaButton link="/docs/getting-started">
+                    <CtaButton isLink={false}>
                       Suggest Feature
                     </CtaButton>
                   </div>
@@ -93,6 +97,10 @@ function FeaturesVoting() {
 
           </div>
         </div>
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     </Layout>
   );

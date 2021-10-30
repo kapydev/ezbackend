@@ -2,7 +2,6 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player/youtube'
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -24,44 +23,28 @@ import IconGithub from '../assets/icon-github.svg'
 import IconYoutube from '../assets/icon-youtube.svg'
 import IconProductHunt from '../assets/icon-producthunt.svg'
 import IconDiscord from '../assets/icon-discord.svg'
-import IconEmail from '../assets/icon-mail.svg'
 
+const axios = require('axios').default;
 const YT_URL = 'https://youtu.be/kQRRckdEFr8'
-
-const codeText1 = "const app = new EzBackend()"
-const codeText2 = `const pets = new EzModel('Pets', {
-  name: Type.VARCHAR,
-  species: Type.VARCHAR,
-  age: Type.INT
-})`
-const codeText3 = `app.addApp("pets", pets, { prefix: "pets" })`
-const codeText4 = `app.start()`
-
-function Txty(props) {
-  return (
-    <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
-  )
-}
-
-function StepFeature(props) {
-  return (
-    <Delayed waitBeforeShow={props.delay}>
-      <div className='fade'>
-        <div className='flex justify-start gap-3 my-2'>
-          <IconTick className='self-start w-6 h-6' />
-          <div className='font-monts'>
-            {props.children}
-          </div>
-        </div>
-      </div>
-    </Delayed>
-  )
-}
+const LPBKND_BASEURL = 'http://localhost:8000'
 
 export default function Home() {
 
   const [isVisible, setIsVisible] = useState(false)
   const [isAnimationOver, setIsAnimationOver] = useState(false)
+  const [signUpEmail, setSignUpEmail] = useState('')
+
+  function submitSignUp(props) {
+    axios.post(LPBKND_BASEURL + '/signUps', {
+      email: signUpEmail,
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -71,13 +54,13 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-
   return (
     <Layout>
 
       <div id="tailwind">
         <div className='grid place-items-center'>
           <div className='
+
             grid
             grid-flow-row
 
@@ -104,19 +87,18 @@ export default function Home() {
                 </div>
                 <div className='flex flex-col sm:flex-row justify-center gap-4'>
                   <div>
-                    <CtaButton link="/docs/getting-started">
+                    <CtaButton isLink={true} link="/docs/getting-started" >
                       Get Started
                     </CtaButton>
                   </div>
-                  <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' target='_blank'>
-                    <CtaButton>
+                  <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' isLink={false} target='_blank'>
+                    <CtaButton isLink={false}>
                       Live Demo
                     </CtaButton>
                   </a>
                 </div>
               </div>
             </div>
-
 
             <div className='grid place-items-center lg:place-items-end self-center col-span-full lg:col-span-1'>
               <div className='bg-dracula rounded-lg w-full lg:h-320px' style={{ maxWidth: '500px' }}>
@@ -218,18 +200,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* <div className='col-span-full'>
-              <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
-                Why EzBackend
-              </div>
-              <div className='text-lg font-monts flex justify-center'>
-                <p className='max-w-3xl text-center'>
-                  Lorem consequat fugiat velit nisi. Dolore in dolore deserunt est pariatur fugiat. Consectetur proident aute excepteur duis minim qui officia. Irure dolor veniam non duis duis ut ad fugiat sint. Magna cillum ex culpa ut nisi voluptate.
-                </p>
-              </div>
-            </div> */}
-
-
             <div className='col-span-full'>
               <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
                 Tutorial Demo
@@ -251,12 +221,9 @@ export default function Home() {
 
             <div className='col-span-full grid place-items-center'>
               <div className='font-monts font-bold text-2xl mb-12'>
-                Join Our Community
+                Our Community
               </div>
               <div className='flex flex-wrap mx-4 sm:mx-0 justify-center gap-8'>
-                {/* <a href='mailto:we.are.kapydev@gmail.com' target='_blank'>
-                  <IconEmail className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
-                </a> */}
                 <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
                   <IconDiscord className='animate-wiggle' />
                 </a>
@@ -266,34 +233,27 @@ export default function Home() {
                 <a href='https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ' target='_blank'>
                   <IconYoutube className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
                 </a>
-                {/* <a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>
-                  <IconProductHunt className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
-                </a> */}
               </div>
             </div>
 
             <div className='col-span-full flex justify-center align-middle'>
-              <div className='bg-dracula px-16 py-9 rounded-lg flex justify-center gap-10'>
-                <div className='font-monts font-semibold text-xl self-center '>
-                  Keep Me Updated!
+              <div className='bg-dracula p-10 rounded-lg grid gap-6'>
+                <div className='font-monts text-xl text-center font-semibold'>
+                  Join Our Mailing List
                 </div>
-                <input className='border-0 font-monts rounded-lg text-lg p-2 font-semibold' type="text" placeholder='Email' name="email" />
-                <CtaButton>
+                <input
+                  onChange={e => setSignUpEmail(e.target.value)}
+                  className='border-0 font-monts rounded-lg text-lg p-2 font-semibold'
+                  type="text"
+                  placeholder='Email'
+                  name="email" />
+                <CtaButton isLink={false} onMouseDown={submitSignUp}>
                   <div className='text-sm'>
                     Sign Up
                   </div>
                 </CtaButton>
               </div>
             </div>
-
-
-            {/* 
-            <div className='col-span-full'>
-              <div className='font-monts text-xl text-center'>
-                Want to be an Early Adopter? Get in <span className='font-semibold'><a href='https://www.producthunt.com/upcoming/ezbackend-2' target='_blank'>touch</a></span> with us!
-              </div>
-            </div> */}
-
 
 
           </div>
@@ -309,4 +269,37 @@ export default function Home() {
     </Layout >
   );
 }
+
+// UTILITIES
+
+const codeText1 = "const app = new EzBackend()"
+const codeText2 = `const pets = new EzModel('Pets', {
+  name: Type.VARCHAR,
+  species: Type.VARCHAR,
+  age: Type.INT
+})`
+const codeText3 = `app.addApp("pets", pets, { prefix: "pets" })`
+const codeText4 = `app.start()`
+
+function Txty(props) {
+  return (
+    <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
+  )
+}
+
+function StepFeature(props) {
+  return (
+    <Delayed waitBeforeShow={props.delay}>
+      <div className='fade'>
+        <div className='flex justify-start gap-3 my-2'>
+          <IconTick className='self-start w-6 h-6' />
+          <div className='font-monts'>
+            {props.children}
+          </div>
+        </div>
+      </div>
+    </Delayed>
+  )
+}
+
 
