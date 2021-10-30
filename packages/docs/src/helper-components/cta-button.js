@@ -12,7 +12,7 @@ export function CtaButton(props) {
   }
 
   return (
-    <button className="pushable" onClick={routeChange} onMouseDown={props.onMouseDown}>
+    <button className="pushable" onClick={props.islink ? routeChange : props.onClick} >
       <span className="edge"></span>
       <span className="front">
         <div className='font-monts font-bold'>
