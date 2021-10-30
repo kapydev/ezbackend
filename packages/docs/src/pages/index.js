@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player/youtube'
 import Layout from '@theme/Layout';
+import toast, { Toaster } from 'react-hot-toast';
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -21,12 +22,11 @@ import IconWorld from '../assets/icon-world.svg'
 import IconTick from '../assets/icon-tick.svg'
 import IconGithub from '../assets/icon-github.svg'
 import IconYoutube from '../assets/icon-youtube.svg'
-import IconProductHunt from '../assets/icon-producthunt.svg'
 import IconDiscord from '../assets/icon-discord.svg'
 
 const axios = require('axios').default;
 const YT_URL = 'https://youtu.be/kQRRckdEFr8'
-const LPBKND_BASEURL = 'http://localhost:8000'
+const LPBKND_BASEURL = 'https://ez-landing-page-backend.herokuapp.com'
 
 export default function Home() {
 
@@ -34,16 +34,23 @@ export default function Home() {
   const [isAnimationOver, setIsAnimationOver] = useState(false)
   const [signUpEmail, setSignUpEmail] = useState('')
 
-  function submitSignUp(props) {
-    axios.post(LPBKND_BASEURL + '/signUps', {
-      email: signUpEmail,
-    })
-      .then(function (response) {
-        console.log(response);
+  const handleSubmit = (e) => {
+
+    e.preventDefault();
+
+    if (signUpEmail) {
+      axios.post(LPBKND_BASEURL + '/signUps/', {
+        email: signUpEmail,
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (response) {
+          setSignUpEmail('')
+          toast.success('Submitted')
+        })
+        .catch(function (error) {
+          console.log(error);
+          toast.error("SERVER ERROR. We're working on it!")
+        });
+    }
   }
 
   useEffect(() => {
@@ -56,7 +63,17 @@ export default function Home() {
 
   return (
     <Layout>
-
+      <Toaster
+        toastOptions={{
+          style: {
+            padding: '16px',
+            fontWeight: 'bold',
+            color:'white',
+            backgroundColor: '#282A36',
+            fontSize: 16
+          },
+        }}
+      />
       <div id="tailwind">
         <div className='grid place-items-center'>
           <div className='
@@ -80,19 +97,19 @@ export default function Home() {
             <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
                 <div className='text-5xl font-bold font-mono sm:text-center'>
-                  Build Your MVP App Faster
+                  Learn Fast. Build Faster
                 </div>
                 <div className='text-xl font-mono sm:text-center'>
-                  Simple to Setup. Fully Customizable
+                  Simple to Setup. Fully Customizable Backend
                 </div>
                 <div className='flex flex-col sm:flex-row justify-center gap-4'>
                   <div>
-                    <CtaButton isLink={true} link="/docs/getting-started" >
+                    <CtaButton islink={true} link="/docs/getting-started" >
                       Get Started
                     </CtaButton>
                   </div>
-                  <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' isLink={false} target='_blank'>
-                    <CtaButton isLink={false}>
+                  <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' islink={false} target='_blank'>
+                    <CtaButton islink={false}>
                       Live Demo
                     </CtaButton>
                   </a>
@@ -121,7 +138,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='col-span-full lg:col-span-1 w-full lg:w-500px lg:mt-6'>
+            <div className='col-span-full lg:col-span-1 w-full lg:mt-6'>
 
               {isAnimationOver ?
 
@@ -241,13 +258,17 @@ export default function Home() {
                 <div className='font-monts text-xl text-center font-semibold'>
                   Join Our Mailing List
                 </div>
-                <input
-                  onChange={e => setSignUpEmail(e.target.value)}
-                  className='border-0 font-monts rounded-lg text-lg p-2 font-semibold'
-                  type="text"
-                  placeholder='Email'
-                  name="email" />
-                <CtaButton isLink={false} onMouseDown={submitSignUp}>
+                <form>
+                  <input
+                    onChange={e => setSignUpEmail(e.target.value)}
+                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold'
+                    type="text"
+                    id="submitSignUps"
+                    value={signUpEmail}
+                    placeholder='Email'
+                    name="email" />
+                </form>
+                <CtaButton islink={false} onClick={handleSubmit}>
                   <div className='text-sm'>
                     Sign Up
                   </div>

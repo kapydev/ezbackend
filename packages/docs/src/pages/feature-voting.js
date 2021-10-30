@@ -22,10 +22,10 @@ function FeatureCard() {
           gap-6
           '>
         <div className='text-2xl font-bold font-mono'>
-          Lorem Ipsum
+
         </div>
         <div className='font-monts leading-snug'>
-          Est voluptate sint culpa occaecat est id tempor officia duis Lorem ea nostrud. Nisi elit tempor eiusmod do mollit veniam ullamco mollit voluptate.
+
         </div>
         <svg className='' onMouseEnter={() => { setIsHoveringHeart(true) }} onMouseLeave={() => { setIsHoveringHeart(false) }} xmlns="http://www.w3.org/2000/svg" className="h-11 w-11" fill={isHoveringHeart ? '#dadde1' : 'none'} viewBox="0 0 24 24" stroke="#dadde1">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -67,7 +67,7 @@ function FeaturesVoting() {
                 </div>
                 <div className='flex flex-col sm:flex-row justify-center gap-4'>
                   <div>
-                    <CtaButton isLink={false}>
+                    <CtaButton islink={false}>
                       Suggest Feature
                     </CtaButton>
                   </div>
