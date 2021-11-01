@@ -39,17 +39,16 @@ export default function Home() {
     e.preventDefault();
 
     if (signUpEmail) {
-      axios.post(LPBKND_BASEURL + '/signUps/', {
+
+      return axios.post(LPBKND_BASEURL + '/signUps/', {
         email: signUpEmail,
       })
-        .then(function (response) {
-          setSignUpEmail('')
-          toast.success('Submitted')
-        })
         .catch(function (error) {
           console.log(error);
-          toast.error("SERVER ERROR. We're working on it!")
-        });
+        })
+        .then(function (response) {
+          setSignUpEmail('')
+        })
     }
   }
 
@@ -68,7 +67,7 @@ export default function Home() {
           style: {
             padding: '16px',
             fontWeight: 'bold',
-            color:'white',
+            color: 'white',
             backgroundColor: '#282A36',
             fontSize: 16
           },
@@ -268,7 +267,16 @@ export default function Home() {
                     placeholder='Email'
                     name="email" />
                 </form>
-                <CtaButton islink={false} onClick={handleSubmit}>
+                <CtaButton islink={false} onClick={(e) => {
+                  toast.promise(
+                    handleSubmit(e),
+                    {
+                      loading: 'Submitting...',
+                      success: <b>Submitted</b>,
+                      error: <b>Server Error! We are working on it!</b>,
+                    }
+                  );
+                }}>
                   <div className='text-sm'>
                     Sign Up
                   </div>
