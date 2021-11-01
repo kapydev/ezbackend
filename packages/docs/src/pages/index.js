@@ -96,10 +96,10 @@ export default function Home() {
             <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
                 <div className='text-5xl font-bold font-mono sm:text-center'>
-                  Learn Fast. Build Faster
+                  Build Your MVP Faster
                 </div>
                 <div className='text-xl font-mono sm:text-center'>
-                  Simple to Setup. Fully Customizable Backend
+                  Simple to Setup. Fully Customizable
                 </div>
                 <div className='flex flex-col sm:flex-row justify-center gap-4'>
                   <div>
