@@ -58,6 +58,7 @@ const defaultConfig = {
         synchronize: true
     },
     auth: {
+        secretKey: process.env.SECRET_KEY ?? undefined,
         secretKeyPath: path.join(process.cwd(), 'secret-key'),
         successRedirectURL: "http://localhost:8000/db-ui",
         failureRedirectURL: "http://localhost:8000/db-ui",

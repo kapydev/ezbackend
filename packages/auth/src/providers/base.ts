@@ -8,6 +8,7 @@ import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
 declare module '@ezbackend/common' {
     interface EzBackendOpts {
         auth: {
+            secretKey:string
             secretKeyPath: string
             google?: {
                 googleClientId: string,
@@ -56,8 +57,9 @@ export abstract class BaseProvider extends EzApp {
     // abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
     addProvider(instance: EzBackendInstance, opts: EzBackendOpts) {
-        //TODO: Double check edge cases for this
+        //URGENT TODO: Double check edge cases for this
         const providerOpts = {
+            //@ts-ignore
             ...opts.auth[this.providerName]!,
             ...opts.auth
         }
