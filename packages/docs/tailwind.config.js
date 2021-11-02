@@ -1,4 +1,5 @@
 module.exports = {
+
   corePlugins: { preflight: false },
   important: '#tailwind',
   purge: [
@@ -22,7 +23,7 @@ module.exports = {
       colors: {
         dracula: '#282A36',
         purple: '#BD93F9'
-      }
+      },
     },
     keyframes: {
       wiggle: {
