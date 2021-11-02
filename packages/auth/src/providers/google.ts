@@ -41,7 +41,7 @@ export class GoogleProvider extends BaseProvider {
         const googleStrategy = new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
-            callbackURL: `/${this.getCallbackURLNoPreSlash(server)}`
+            callbackURL: this.getCallbackURLNoPreSlash(server)
         }, function (accessToken, refreshToken, profile, cb) {
             const repo = instance.orm.getRepository(that.modelName)
             const model = {
@@ -113,9 +113,11 @@ export class GoogleProvider extends BaseProvider {
     }
 
     getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
+        const callbackRoute = `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`
+        console.log(callbackRoute)
         return {
             method: 'GET',
-            url: `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`,
+            url: callbackRoute,
             preValidation: fastifyPassport.authenticate('google', {
                 scope: opts.scope,
                 successRedirect: opts.successRedirectURL,

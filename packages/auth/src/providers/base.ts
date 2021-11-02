@@ -91,12 +91,14 @@ export abstract class BaseProvider extends EzApp {
 
     getCallbackURLNoPreSlash(server: FastifyInstance) {
         const urlPath = `${this.getFullRoutePrefixNoPrePostSlash(server)}/callback`
-
+        let result
         if (process.env.NODE_ENV === 'production' && process.env.PRODUCTION_URL) {
             const callbackURL = new URL(urlPath, process.env.PRODUCTION_URL).href
-            return callbackURL
+            result= callbackURL
         } else {
-            return urlPath
+            result= urlPath
         }
+        console.log(result)
+        return result
     }
 }
