@@ -8,7 +8,7 @@ import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
 declare module '@ezbackend/common' {
     interface EzBackendOpts {
         auth: {
-            secretKey:string
+            secretKey: string
             secretKeyPath: string
             google?: {
                 googleClientId: string,
@@ -90,7 +90,13 @@ export abstract class BaseProvider extends EzApp {
     }
 
     getCallbackURLNoPreSlash(server: FastifyInstance) {
-        const callbackURL = `${this.getFullRoutePrefixNoPrePostSlash(server)}/callback`
-        return callbackURL
+        const urlPath = `${this.getFullRoutePrefixNoPrePostSlash(server)}/callback`
+
+        if (process.env.NODE_ENV === 'production' && process.env.PRODUCTION_URL) {
+            const callbackURL = new URL(urlPath, process.env.PRODUCTION_URL).href
+            return callbackURL
+        } else {
+            return urlPath
+        }
     }
 }
