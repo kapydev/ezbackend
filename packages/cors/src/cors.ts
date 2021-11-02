@@ -9,7 +9,8 @@ export class EzCors extends App {
             //URGENT TODO: Make sure that user updates these values before going to production
             instance.server.register(fastifyCors, {
                 origin: true,
-                credentials: true
+                credentials: true,
+                methods: ['GET','PUT','POST','PATCH','DELETE', 'OPTIONS']
             })
         })
 

@@ -35,7 +35,9 @@ powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath 
             instance.server.register(fastifySecureSession, {
                 key: key,
                 cookie: {
-                    path: '/'
+                    path: '/',
+                    sameSite: 'none',
+                    secure: true
                 }
             })
 
