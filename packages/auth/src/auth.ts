@@ -12,6 +12,7 @@ export class EzAuth extends EzApp {
         this.setHandler("Add Fastify Secure Session", (instance, opts, done) => {
 
             let key: Buffer = Buffer.alloc(32)
+
             if (typeof opts.auth.secretKey === "string") {
                 key.write(opts.auth.secretKey)
             }
