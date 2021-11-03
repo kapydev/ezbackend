@@ -16,6 +16,8 @@ describe("Plugin Registering", () => {
 
     dotenv.config({path:envPath})
 
+    console.log(process.env)
+
     let app: EzBackend
 
     const defaultConfig= {
