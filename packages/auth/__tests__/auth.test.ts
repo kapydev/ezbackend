@@ -1,12 +1,30 @@
-import { EzApp, EzBackend, EzBackendOpts, Type } from "@ezbackend/common";
-import { EzAuth, EzUser, GoogleProvider } from "../src"
+import { EzApp, EzBackend, EzBackendOpts, EzModel, Type } from "@ezbackend/common";
+import { EzAuth, EzUser, GoogleProvider, Providers } from "../src"
 import path from 'path'
 import dotenv from 'dotenv'
+import { FastifyRequest, FastifyReply } from "fastify";
+import { DeserializeFunction } from "fastify-passport/dist/Authenticator";
 
-//TODO: Figure if there is a better way of getting this data
-function getInternalInstance(ezb: EzBackend) {
-    //@ts-ignore
-    return ezb.instance._lastUsed.server
+class Flag {
+
+    private resolver: undefined | ((value: unknown) => void)
+    private myPromise: Promise<unknown>
+
+    constructor() {
+        this.myPromise = new Promise((resolve, reject) => {
+            this.resolver = resolve
+        })
+    }
+
+    setDone() {
+        this.resolver?.(undefined)
+    }
+
+    async isDone() {
+        await this.myPromise
+        return true
+    }
+
 }
 
 
@@ -42,7 +60,7 @@ describe("Plugin Registering", () => {
     })
 
     afterEach(async () => {
-        const instance = getInternalInstance(app)
+        const instance = app.getInternalInstance()
         await instance.orm.close();
         await instance._server.close();
     });
@@ -203,6 +221,12 @@ describe("Plugin Registering", () => {
 
         const callbackURL = googleProvider.getCallbackURL(server)
         expect(callbackURL).toBe(`${process.env.PRODUCTION_URL}/auth/google/callback`)
+
+        process.env = {
+            ...process.env,
+            NODE_ENV: 'test',
+            PRODUCTION_URL: "https://mywebsite.com"
+        }
     })
 
     it("Should have the correct callbackURL in development", async () => {
@@ -221,4 +245,200 @@ describe("Plugin Registering", () => {
         expect(callbackURL).toBe(`/auth/google/callback`)
     })
 
+    it.todo("Test that the callbackURL is correct even for child apps")
+
+    describe("Logout Handler", () => {
+        it("The logout handler should logout and redirect the user", async () => {
+            const googleProvider = new GoogleProvider("test")
+
+            let loggedOut: boolean = false
+            let redirectedURL: string | undefined = undefined
+
+            const flag = new Flag()
+
+            const mockReq = {
+                logOut: async () => {
+                    loggedOut = true
+                }
+            }
+
+            const mockRes = {
+                redirect: (redirectURL: string) => {
+                    redirectedURL = redirectURL
+                    flag.setDone()
+                }
+            }
+
+            const mockOpts = {
+                successRedirectURL: "https://myfrontend.com"
+            }
+
+            googleProvider.defaultLogoutHandler(
+                mockReq as FastifyRequest,
+                mockRes as FastifyReply,
+                mockOpts
+            )
+
+            await flag.isDone()
+            expect(loggedOut).toBe(true)
+            expect(redirectedURL).toBe("https://myfrontend.com")
+
+            await app.start(defaultConfig)
+
+        })
+    })
+
+    describe("User Serialization", () => {
+        it("User serializer should just return the same value", async () => {
+
+            const googleProvider = new GoogleProvider("test")
+
+            //TODO: Split the functions according to those that require the server to run and those that don't
+            await app.start(defaultConfig)
+
+            const serializeFunction = googleProvider.registerUserSerializer(app.getInternalInstance(), {})
+
+            const objectForSerialization = 1
+
+            const id = await serializeFunction(objectForSerialization, {} as FastifyRequest)
+
+            expect(id).toBe(objectForSerialization)
+
+
+        })
+    })
+
+    describe("Callback Handler", () => {
+        let mockUserModel
+
+        beforeEach(() => {
+            mockUserModel = new EzModel("MockUser", {
+                googleId: {
+                    type: Type.INT,
+                    nullable: true,
+                    unique: true
+                },
+                googleData: {
+                    type: Type.JSON,
+                    nullable: true
+                }
+            })
+
+            app.addApp(mockUserModel)
+        })
+
+        it("Callback Handler should properly serialize a user", async () => {
+
+            const googleProvider = new GoogleProvider("MockUser")
+
+            await app.start(defaultConfig)
+
+            const { err, user } = await new Promise((resolve, reject) => {
+                googleProvider.defaultCallbackHandler(
+                    app.getInternalInstance(),
+                    1,
+                    { displayName: "Thomas" },
+                    (err: any, user: any) => resolve({ err, user })
+                )
+            })
+
+            expect(err).toBe(undefined)
+            expect(user).toBe('google-1')
+
+        })
+
+        it("A user who already has an account should be serialized properly", async () => {
+            const googleProvider = new GoogleProvider("MockUser")
+
+            await app.start(defaultConfig)
+
+            await new Promise((resolve, reject) => {
+                googleProvider.defaultCallbackHandler(
+                    app.getInternalInstance(),
+                    1,
+                    { displayName: "Thomas" },
+                    (err: any, user: any) => resolve({ err, user })
+                )
+            })
+
+            const { err, user } = await new Promise((resolve, reject) => {
+                googleProvider.defaultCallbackHandler(
+                    app.getInternalInstance(),
+                    1,
+                    { displayName: "Thomas" },
+                    (err: any, user: any) => resolve({ err, user })
+                )
+            })
+
+            expect(err).toBe(undefined)
+            expect(user).toBe('google-1')
+        })
+
+        describe("User Deserializing", () => {
+
+            let googleProvider: GoogleProvider
+            let deserializer: DeserializeFunction
+            const mockReq = {} as FastifyRequest
+            const userDetails = {
+                googleId: 1,
+                googleData: {
+                    displayName: "Thomas"
+                }
+            }
+
+            beforeEach(async () => {
+                googleProvider = new GoogleProvider("MockUser")
+
+                await app.start(defaultConfig)
+
+                
+
+                const { err, user } = await new Promise((resolve, reject) => {
+                    googleProvider.defaultCallbackHandler(
+                        app.getInternalInstance(),
+                        userDetails.googleId,
+                        userDetails.googleData,
+                        (err: any, user: any) => resolve({ err, user })
+                    )
+                })
+
+                deserializer = googleProvider.registerUserDeserializer(
+                    app.getInternalInstance(),
+                    {}
+                )
+            })
+
+            it("Should get a user already in the database", async () => {
+                const user = await deserializer('google-1', mockReq)
+                expect(user).toEqual({
+                    id: 1,
+                    ...userDetails
+                })
+            })
+
+            it("Should return null for a user not in the database", async () => {
+                const user = await deserializer('google-99999', mockReq)
+                expect(user).toBe(null)
+            })
+
+            it("Should not get wrong even if there are dashes in the ID", async () => {
+                const user = await deserializer('google-1-1', mockReq)
+                expect(user).toBe(null)
+            })
+
+            it("Should throw the string 'pass' when the provider name is different", async () => {
+                let errored = false
+                try {
+                    const user = await deserializer('facebook-1', mockReq)
+                } catch(e) {
+                    //THIS NEEDS TO BE EXACTLY THE STRING PASS, according to the fastify passport specification
+                    expect(e).toBe("pass")
+                    errored = true
+                } finally {
+                    expect(errored).toBe(true)
+                }
+            })
+
+        })
+    })
 })
