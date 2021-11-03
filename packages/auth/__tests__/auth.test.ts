@@ -1,5 +1,5 @@
 import { EzApp, EzBackend, EzBackendOpts, Type } from "@ezbackend/common";
-import { EzUser } from "@ezbackend/auth"
+import { EzAuth, EzUser } from "../src"
 import path from 'path'
 import dotenv from 'dotenv'
 
@@ -12,29 +12,22 @@ function getInternalInstance(ezb: EzBackend) {
 
 describe("Plugin Registering", () => {
 
-    dotenv.config()
+    const envPath = path.resolve(__dirname, "../../../.env")
+
+    dotenv.config({path:envPath})
 
     let app: EzBackend
 
     const defaultConfig= {
-        port: 3000,
         server: {
             logger:false
-        },
-        auth: {
-            secretKeyPath: path.resolve(__dirname, "./testing-not-secret-key"),
-            google: {
-                googleClientId: process.env.GOOGLE_CLIENT_ID!,
-                googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-                scope: ['profile'],
-                successRedirectURL: "http://localhost:8888/docs",
-                failureRedirectURL: "http://localhost:8888/docs"
-            }
         }
     }
 
     beforeEach(() => {
         app = new EzBackend()
+
+        app.addApp(new EzAuth())
 
         //Prevent server from starting
         app.removeHook("_run", "Run Fastify Server")
@@ -48,7 +41,7 @@ describe("Plugin Registering", () => {
 
     //NOTE: These tests are only able to run locally for now
     //TODO: Make these tests runnable on remote
-    it.skip("Should be able to create a user object", async () => {
+    it("Should be able to create a user object", async () => {
 
         const v1Namespace = new EzApp()
 
@@ -71,7 +64,7 @@ describe("Plugin Registering", () => {
 
     })
 
-    it.skip("Should be able to create user object with additional metadata", async () => {
+    it("Should be able to create user object with additional metadata", async () => {
 
         const v1Namespace = new EzApp()
 
@@ -90,7 +83,7 @@ describe("Plugin Registering", () => {
 
     })
 
-    it.skip("Should not be able to create user object with non-nullable non-defaultable metadata", async () => {
+    it("Should not be able to create user object with non-nullable non-defaultable metadata", async () => {
 
         let errorThrown = false
 
