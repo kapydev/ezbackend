@@ -3,7 +3,6 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import fastifyPassport from 'fastify-passport'
 import { AnyStrategy } from 'fastify-passport/dist/strategies'
 import { RouteOptions, FastifyInstance } from 'fastify'
-import { DeserializeFunction, SerializeFunction } from 'fastify-passport/dist/Authenticator'
 import type { EzBackendInstance } from '@ezbackend/common'
 import { EzError } from "@ezbackend/utils"
 

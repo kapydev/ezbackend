@@ -205,7 +205,20 @@ describe("Plugin Registering", () => {
         expect(callbackURL).toBe(`${process.env.PRODUCTION_URL}/auth/google/callback`)
     })
 
-    it.todo("Should have the correct callbackURL in development")
-    //NOTE: CallbackURL in development must have preslash
+    it("Should have the correct callbackURL in development", async () => {
+        const googleProvider = new GoogleProvider("test")
+        process.env = {
+            ...process.env,
+            PRODUCTION_URL: "https://mywebsite.com"
+        }
+
+        await app.start(defaultConfig)
+
+        const server = app.getInternalServer()
+
+        const callbackURL = googleProvider.getCallbackURL(server)
+        //NOTE: CallbackURL in development must have preslash
+        expect(callbackURL).toBe(`/auth/google/callback`)
+    })
 
 })

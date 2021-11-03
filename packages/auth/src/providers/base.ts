@@ -83,8 +83,11 @@ export abstract class BaseProvider extends EzApp {
 
     getFullRoutePrefixNoPrePostSlash(server: FastifyInstance) {
         const encapsulatedPrefix = server.prefix.replace(/^\//, "")
-        const fullRoute = `${encapsulatedPrefix}/${this.getRoutePrefixNoPrePostSlash(server)}`
-        return fullRoute
+        if (encapsulatedPrefix === "") {
+            return this.getRoutePrefixNoPrePostSlash(server)
+        } else {
+            return `${encapsulatedPrefix}/${this.getRoutePrefixNoPrePostSlash(server)}`
+        }
     }
 
     getCallbackURL(server: FastifyInstance) {
