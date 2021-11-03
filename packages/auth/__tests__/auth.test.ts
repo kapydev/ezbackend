@@ -252,7 +252,7 @@ describe("Plugin Registering", () => {
             const googleProvider = new GoogleProvider("test")
 
             let loggedOut: boolean = false
-            let redirectedURL: string | undefined = undefined
+            let redirectedURL: string 
 
             const flag = new Flag()
 
