@@ -67,9 +67,6 @@ export class EzUser extends EzModel {
                 const tempProvider = new providerOrProviderName()
                 const providerName = tempProvider.providerName
                 modelSchema = addProviderToSchema(providerName, modelSchema)
-
-
-
             }
         })
 

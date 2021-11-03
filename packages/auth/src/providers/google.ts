@@ -41,28 +41,9 @@ export class GoogleProvider extends BaseProvider {
         const googleStrategy = new GoogleStrategy({
             clientID: opts.googleClientId,
             clientSecret: opts.googleClientSecret,
-            callbackURL: this.getCallbackURLNoPreSlash(server)
+            callbackURL: this.getCallbackURL(server)
         }, function (accessToken, refreshToken, profile, cb) {
-            const repo = instance.orm.getRepository(that.modelName)
-            const model = {
-                [`${that.providerName}Id`]: profile.id,
-                [`${that.providerName}Data`]: profile
-            }
-            const serializedID = `${that.providerName}-${profile.id}`
-            repo.save(model).then(
-                () => {
-                    cb(undefined, serializedID)
-                },
-                (e) => {
-                    if (String(e.driverError).toLowerCase().includes('unique')) {
-                        //URGENT TODO: Check if this works for all databases
-                        cb(undefined, serializedID)
-                    }
-                    else {
-                        cb(e)
-                    }
-                }
-            )
+            that.defaultCallbackHandler(instance, profile.id, profile, cb)
         })
 
         return [this.providerName, googleStrategy]
@@ -94,13 +75,7 @@ export class GoogleProvider extends BaseProvider {
         return {
             method: 'GET',
             url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
-            handler: function (req, res) {
-                req.logOut().then(
-                    () => {
-                        res.redirect(opts.successRedirectURL)
-                    }
-                )
-            },
+            handler: (req, res) => this.defaultLogoutHandler(req, res, opts),
             schema: {
                 //TODO: Figure out how to import types for summary
                 //@ts-ignore
@@ -114,7 +89,6 @@ export class GoogleProvider extends BaseProvider {
 
     getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
         const callbackRoute = `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`
-        console.log(callbackRoute)
         return {
             method: 'GET',
             url: callbackRoute,
@@ -135,56 +109,4 @@ export class GoogleProvider extends BaseProvider {
             }
         }
     }
-
-    registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown> {
-        const that = this
-        return async function serializer(id, req) {
-            //URGENT TODO: Remove prefix from here
-            return id
-        }
-    }
-
-    registerUserDeserializer(instance: EzBackendInstance, opts: any): DeserializeFunction<any, any> {
-        const that = this
-        return async function deserializer(providerAndId: string, req) {
-            if (providerAndId.startsWith(`${that.providerName}-`)) {
-                //TODO: Consider the security implications of not checking that the replacement starts at 'google-'
-                const id = providerAndId.replace(`${that.providerName}-`, '')
-                const userRepo = instance.orm.getRepository(that.modelName)
-                const fullUser = await userRepo.findOne({ [`${that.providerName}Id`]: id })
-                if (fullUser) {
-                    return fullUser
-                } else {
-                    //Logout the user if correct provider prefix but not in DB
-                    return null
-                }
-            } else {
-                //TODO: Create test case for this, it needs to be exactly the string pass, which code factor may randomly decide to change
-                //THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
-                // tslint:disable-next-line:no-string-throw
-                throw "pass"
-            }
-
-        }
-    }
-
-    // getSecurityScheme() {
-    //     const that = this
-    //     const securityScheme: OpenAPIV3.SecuritySchemeObject = {
-    //         type: "oauth2",
-    //         //@ts-ignore
-    //         description: "## ⚠️Do not fill client id, just click __'Authorize'__ [(explanation)](http://google.com)",
-    //         flows:
-    //         {
-    //             implicit: {
-    //                 authorizationUrl: `/${that.getRoutePrefixNoPrePostSlash(server)}/login`,
-    //                 scopes: {
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return {
-    //         [`${that.modelName}-${that.providerName}`]: securityScheme
-    //     }
-    // }
 }

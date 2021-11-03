@@ -1,7 +1,7 @@
 import { SerializeFunction } from "fastify-passport/dist/Authenticator"
 import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
 import { AnyStrategy } from "fastify-passport/dist/strategies"
-import type { RouteOptions, FastifyInstance } from "fastify"
+import type { RouteOptions, FastifyInstance, FastifyRequest, FastifyReply } from "fastify"
 import fastifyPassport from 'fastify-passport'
 import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
 
@@ -48,8 +48,6 @@ export abstract class BaseProvider extends EzApp {
 
     //URGENT TODO: Add type for provider opts
     abstract addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: any): [name: string, Strategy: AnyStrategy]
-    abstract registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown>
-    abstract registerUserDeserializer(instance: EzBackendInstance, opts: any): DeserializeFunction<any, any>
     abstract getLoginRoute(server: FastifyInstance, opts: any): RouteOptions
     abstract getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions
     abstract getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions
@@ -89,16 +87,84 @@ export abstract class BaseProvider extends EzApp {
         return fullRoute
     }
 
-    getCallbackURLNoPreSlash(server: FastifyInstance) {
+    getCallbackURL(server: FastifyInstance) {
         const urlPath = `${this.getFullRoutePrefixNoPrePostSlash(server)}/callback`
         let result
         if (process.env.NODE_ENV === 'production' && process.env.PRODUCTION_URL) {
             const callbackURL = new URL(urlPath, process.env.PRODUCTION_URL).href
-            result= callbackURL
+            result = callbackURL
         } else {
-            result= urlPath
+            result = `/${urlPath}`
         }
-        console.log(result)
         return result
+    }
+
+    defaultCallbackHandler(
+        instance: EzBackendInstance,
+        id: string | number,
+        profile: any,
+        cb: (err?: string | Error | null | undefined, user?: Express.User | undefined, info?: any) => void
+    ) {
+        const repo = instance.orm.getRepository(this.modelName)
+            const model = {
+                [`${this.providerName}Id`]: id,
+                [`${this.providerName}Data`]: profile
+            }
+            const serializedID = `${this.providerName}-${profile.id}`
+            repo.save(model).then(
+                () => {
+                    cb(undefined, serializedID)
+                },
+                (e) => {
+                    if (String(e.driverError).toLowerCase().includes('unique')) {
+                        //URGENT TODO: Check if this works for all databases
+                        cb(undefined, serializedID)
+                    }
+                    else {
+                        cb(e)
+                    }
+                }
+            )
+    }
+
+    defaultLogoutHandler(req:FastifyRequest,res:FastifyReply, opts:any) {
+        req.logOut().then(
+            () => {
+                //TODO: Explicity type opts
+                res.redirect(opts.successRedirectURL)
+            }
+        )
+    }
+
+    registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown> {
+        const that = this
+        return async function serializer(id, req) {
+            //URGENT TODO: Remove prefix from here
+            return id
+        }
+    }
+
+    registerUserDeserializer(instance: EzBackendInstance, opts: any): DeserializeFunction<any, any> {
+        const that = this
+        return async function deserializer(providerAndId: string, req) {
+            if (providerAndId.startsWith(`${that.providerName}-`)) {
+                //TODO: Consider the security implications of not checking that the replacement starts at 'google-'
+                const id = providerAndId.replace(`${that.providerName}-`, '')
+                const userRepo = instance.orm.getRepository(that.modelName)
+                const fullUser = await userRepo.findOne({ [`${that.providerName}Id`]: id })
+                if (fullUser) {
+                    return fullUser
+                } else {
+                    //Logout the user if correct provider prefix but not in DB
+                    return null
+                }
+            } else {
+                //TODO: Create test case for this, it needs to be exactly the string pass, which code factor may randomly decide to change
+                //THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
+                // tslint:disable-next-line:no-string-throw
+                throw "pass"
+            }
+
+        }
     }
 }
