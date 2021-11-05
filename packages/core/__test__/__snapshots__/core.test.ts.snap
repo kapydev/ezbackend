@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Default Behaviour An app should not be able to have 2 parents 1`] = `[Error: App's parent has already been set, parents can only be set once]`;
+
+exports[`Default Behaviour Hooks Removing a non-existent hook should throw an error 1`] = `[Error: non-existent does not exist in _handler]`;
+
+exports[`Default Behaviour Hooks Setting a hook twice should throw an error 1`] = `[Error: Set Flag already declared for _init]`;
+
+exports[`Default Behaviour Two child apps should not have the same name 1`] = `[Error: Child app child already exists]`;
+
+exports[`Default Behaviour addApp syntax must be strictly followed 1`] = `[Error: Invalid function signature for addApp()]`;
