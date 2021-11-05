@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Basic CRUD Typeorm Error Handling TypeORM errors should be returned verbosely when facing them 1`] = `"{\\"statusCode\\":400,\\"error\\":\\"Bad Request\\",\\"message\\":\\"SqliteError: UNIQUE constraint failed: sample_unique.idNumber\\"}"`;

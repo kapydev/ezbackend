@@ -128,6 +128,7 @@ function schemaToEntityOptions(schema: ModelSchema) {
     }
     const relations: { [key: string]: EntitySchemaRelationOptions } = {}
     Object.entries(schema).forEach(([key, value]) => {
+
         //URGENT TODO: Allow proper overridding of default columns
         if (isNormalType(value)) {
             columns[key] = {
@@ -136,6 +137,19 @@ function schemaToEntityOptions(schema: ModelSchema) {
             return
         }
         if (isNestedNormalType(value)) {
+
+            if (value.primary === true) {
+                throw new EzError("EzBackend currently only supports one Primary Column per entity",
+                    "A primary id column is created by default for all models. While typeorm supports composite primary keys, EzBackend currently does not support this feature. If you need it drop us a message in github",
+                    `
+new EzModel("IllegalModel", {
+    mySecondPrimaryColumn: {
+        type: Type.VARCHAR,
+        primary: true //This is illegal
+    }
+})`)
+            }
+
             const { type, ...noType } = value
             columns[key] = {
                 type: normalTypeToTypeORMtype(value.type),
@@ -143,12 +157,29 @@ function schemaToEntityOptions(schema: ModelSchema) {
             }
         }
         if (isRelation(value)) {
+            throw new EzError(
+                "You currently need to use the full declaration for specifying a relation",
+                "Relations require additional metadata to generate the Database Tables",
+                `
+Replace
+
+myRelation: Type.ONE_TO_ONE
+
+With
+
+myRelation: {
+    type: Type.ONE_TO_ONE,
+    joinColumn: true,
+    target:'detail'
+},
+                `
+            )
             //Note: This makes it compulsory for the key to be the name of relation
-            relations[key] = {
-                type: relationTypeToTypeORMrelation(value),
-                target: key
-            }
-            return
+            // relations[key] = {
+            //     type: relationTypeToTypeORMrelation(value),
+            //     target: key
+            // }
+            // return
         }
         if (isNestedRelation(value)) {
             const { type, ...noType } = value

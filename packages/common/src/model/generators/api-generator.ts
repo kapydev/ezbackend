@@ -16,38 +16,6 @@ export interface RouterOptions {
 
 type IGenerator = (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => RouteOptions | Array<RouteOptions>;
 
-//Kudos to fastify team for this function, that will be hippity hoppity copied
-/**
- * Use this for building route prefixes.
- * Pass in the instance and plugin prefix to generate a proper route prefix.
- * @param instancePrefix
- * @param pluginPrefix
- * @returns
- */
-export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
-    if (!pluginPrefix) {
-        return instancePrefix
-    }
-
-    // Ensure that there is a '/' between the prefixes
-    if (instancePrefix.endsWith('/') && pluginPrefix[0] === '/') {
-        // Remove the extra '/' to avoid: '/first//second'
-        pluginPrefix = pluginPrefix.slice(1)
-    } else if (pluginPrefix[0] !== '/') {
-        pluginPrefix = '/' + pluginPrefix
-    }
-
-    return instancePrefix + pluginPrefix
-}
-/**
- * getRoutePrefix
- * @param prefixes
- * @returns
- */
-export function getRoutePrefix(prefixes: Array<string>) {
-    return prefixes.reduceRight(buildRoutePrefix)
-}
-
 export type Middleware = (oldRoute: RouteOptions) => RouteOptions
 
 //TODO: Custom routes involving apps?

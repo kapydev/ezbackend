@@ -1,4 +1,4 @@
-import { EzBackend, EzModel } from '@ezbackend/common'
+import { EzBackend, EzModel } from '../src'
 import { Repository } from 'typeorm'
 
 describe("Plugin Registering", () => {

@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import ezb from "./test.index"
-import { getInternalInstance } from './helpers'
 
 //TODO: Make tests independent of each other
 
@@ -14,7 +13,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  const instance = getInternalInstance(ezb)
+  const instance = ezb.getInternalInstance()
   await instance.orm.close();
   await instance._server.close();
 });
@@ -36,7 +35,7 @@ const sampleProgram = {
 describe("Nested CRUD", () => {
   describe("Create", () => {
     test("Cascade creation", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const response = await instance._server.inject({
         method: "POST",
         url: "/Program",
@@ -49,7 +48,7 @@ describe("Nested CRUD", () => {
     })
 
     test("No cascade creation", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const response = await instance._server.inject({
         method: "POST",
         url: "/NoCascadeProgram",
@@ -63,7 +62,7 @@ describe("Nested CRUD", () => {
   });
   describe("Read", () => {
     test("Eager Loading", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const response = await instance._server.inject({
         method: "GET",
         url: "/Program/1",
@@ -76,7 +75,7 @@ describe("Nested CRUD", () => {
     })
 
     test("Lazy Loading", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const response = await instance._server.inject({
         method: "GET",
         url: "/NoCascadeProgram/1",
@@ -91,7 +90,7 @@ describe("Nested CRUD", () => {
 
   describe("Update", () => {
     test("Cascade Update", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const response = await instance._server.inject({
         method: "PATCH",
         url: "/Program/1",
@@ -126,7 +125,7 @@ describe("Nested CRUD", () => {
 
     describe("Foreign Key ID", () => {
       test("Create with Foreign Key ID", async () => {
-        const instance = getInternalInstance(ezb)
+        const instance = ezb.getInternalInstance()
 
         const response = await instance._server.inject({
           method: "POST",
@@ -147,7 +146,7 @@ describe("Nested CRUD", () => {
       })
 
       test("Update with Foreign Key ID", async () => {
-        const instance = getInternalInstance(ezb)
+        const instance = ezb.getInternalInstance()
 
         //Add a second NoCascadeProgram so that we can change the programId to 2
         await instance._server.inject({
@@ -172,7 +171,7 @@ describe("Nested CRUD", () => {
         expect(JSON.parse(response.body)).toHaveProperty("id");
       })
       test("Get entity with just foreign key IDs", async () => {
-        const instance = getInternalInstance(ezb)
+        const instance = ezb.getInternalInstance()
 
         const response = await instance._server.inject({
           method: "GET",
@@ -198,5 +197,9 @@ describe("Nested CRUD", () => {
   describe("Auto ID Column Generation", () => {
     test.todo("For all relations, the id column should automatically expose")
   })
+
+  test.todo("All relations should throw verbose errors when not all the required keys are set")
+
+  test.todo("For all relations you should be able to specify the relation with the other object with the object instead of typing out inverseSide, etc")
 
 });

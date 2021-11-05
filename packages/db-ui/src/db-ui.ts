@@ -4,13 +4,36 @@ import fastifyStatic from 'fastify-static'
 import path from 'path'
 import { RouteOptions, FastifyInstance } from 'fastify'
 import chalk from 'chalk'
-import { EzApp, buildRoutePrefix } from '@ezbackend/common'
+import { EzApp } from '@ezbackend/common'
 
-//TODO: Source maps for debugging?
+//Kudos to fastify team for this function, that will be hippity hoppity copied
+/**
+ * Use this for building route prefixes.
+ * Pass in the instance and plugin prefix to generate a proper route prefix.
+ * @param instancePrefix
+ * @param pluginPrefix
+ * @returns
+ */
+export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
+    if (!pluginPrefix) {
+        return instancePrefix
+    }
+
+    // Ensure that there is a '/' between the prefixes
+    if (instancePrefix.endsWith('/') && pluginPrefix[0] === '/') {
+        // Remove the extra '/' to avoid: '/first//second'
+        pluginPrefix = pluginPrefix.slice(1)
+    } else if (pluginPrefix[0] !== '/') {
+        pluginPrefix = '/' + pluginPrefix
+    }
+
+    return instancePrefix + pluginPrefix
+}
+
 function getDbUIGenerators() {
     const generators = getDefaultGenerators()
     type GeneratorKey = keyof typeof generators
-    Object.entries(generators).forEach(([key,oldGenerator]) => {
+    Object.entries(generators).forEach(([key, oldGenerator]) => {
         generators[key as GeneratorKey] = (repo, opts) => {
             const routeDetails = oldGenerator(repo, opts)
             return {
@@ -19,7 +42,7 @@ function getDbUIGenerators() {
                     ...routeDetails.schema,
                     summary: `Used internally by database UI`,
                     tags: ['db-ui'],
-                    hide:true
+                    hide: true
                 }
             }
         }
@@ -43,12 +66,12 @@ async function addDbUIEndpoints(instance: EzBackendInstance, opts: EzBackendOpts
     const generators = getDbUIGenerators()
 
     instance.entities.forEach(entity => {
-    const repo = instance.orm.getRepository(entity)
+        const repo = instance.orm.getRepository(entity)
         Object.values(generators).forEach(generator => {
-            const routes = ([] as Array<RouteOptions>).concat(generator(repo,{schemaPrefix:"db-ui"}))
+            const routes = ([] as Array<RouteOptions>).concat(generator(repo, { schemaPrefix: "db-ui" }))
             routes.forEach((route) => {
                 //Update the route prefix manually here
-                route.url = buildRoutePrefix(`/db-ui/${repo.metadata.name}`,route.url)
+                route.url = buildRoutePrefix(`/db-ui/${repo.metadata.name}`, route.url)
                 //TODO: Figure out why types don't match
                 instance.server.route(route as Parameters<typeof instance['server']['route']>[0])
             })
@@ -84,13 +107,13 @@ class DBEndpointRouter extends EzApp {
 
 const BUILD_DIR = path.join(__dirname, "../ezbackend-database-ui/build")
 
-async function dbUIFastifyPlugin(server:FastifyInstance) {
-    server.register(fastifyStatic,{
+async function dbUIFastifyPlugin(server: FastifyInstance) {
+    server.register(fastifyStatic, {
         root: BUILD_DIR,
         wildcard: false
     })
 
-    server.setNotFoundHandler((req,res) => {
+    server.setNotFoundHandler((req, res) => {
         //TODO: Make this not have to go back to db-ui on refresh
         res.redirect("/db-ui")
     })
@@ -105,11 +128,11 @@ export class EzDbUI extends EzApp {
 
         this.setHandler("Serve UI Interface", async (instance, opts) => {
 
-            instance.server.register(dbUIFastifyPlugin, {prefix:"db-ui"})
+            instance.server.register(dbUIFastifyPlugin, { prefix: "db-ui" })
         })
 
         //TODO: Remove temporary opts any fix
-        this.setPostRun("Display DB UI URL", async (instance, opts:any) => {
+        this.setPostRun("Display DB UI URL", async (instance, opts: any) => {
             if (opts.port && process.env.NODE_ENV != 'test') {
                 console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui/`))
             }

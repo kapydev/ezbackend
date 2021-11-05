@@ -10,19 +10,21 @@ import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
  * @param prefix
  * @returns
  */
-export function getSchemaName(meta: EntityMetadata | RelationMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema', prefix?: string) {
-  let baseName
-  if (meta instanceof RelationMetadata) {
+export function getSchemaName(meta: EntityMetadata, type: 'createSchema' | 'updateSchema' | 'fullSchema', prefix?: string) {
+  // Uncomment this to support getting schema name for relation metadata
+  // let baseName
+  // if (meta instanceof RelationMetadata) {
 
-    if (typeof meta.type === 'string') {
-      baseName = meta.type
-    } else {
-      baseName = meta.type['name']
-    }
+  //   if (typeof meta.type === 'string') {
+  //     baseName = meta.type
+  //   } else {
+  //     baseName = meta.type['name']
+  //   }
 
-  } else {
-    baseName = meta.name
-  }
+  // } else {
+  //   baseName = meta.name
+  // }
+  const baseName = meta.name
   const resolvedPrefix = prefix ? prefix + '/' : ''
   const schemaName = `${resolvedPrefix}${type}-${baseName}`
   return schemaName
@@ -84,7 +86,8 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
         return 'string'
     }
   }
-  throw new Error(`Unable to determine the Json Schema type for col type ${colType}`)
+  //If we don't know the type, return any possible json schema type
+  return ["number", "string", "boolean", "object", "array", "null"]
 }
 
 function checkColIsGenerated(col: ColumnMetadata) {

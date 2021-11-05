@@ -252,9 +252,11 @@ describe("Plugin Registering", () => {
             const googleProvider = new GoogleProvider("test")
 
             let loggedOut: boolean = false
-            let redirectedURL: string 
+            let redirectedURL: string =""
 
             const flag = new Flag()
+
+
 
             const mockReq = {
                 logOut: async () => {
@@ -265,6 +267,7 @@ describe("Plugin Registering", () => {
             const mockRes = {
                 redirect: (redirectURL: string) => {
                     redirectedURL = redirectURL
+                    console.log(redirectURL)
                     flag.setDone()
                 }
             }

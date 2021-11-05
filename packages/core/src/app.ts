@@ -403,4 +403,5 @@ export class App {
         newInstance[kApp] = parentApp
         return newInstance
     }
+
 }

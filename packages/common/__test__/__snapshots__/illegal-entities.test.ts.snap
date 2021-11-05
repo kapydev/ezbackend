@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Illegal Entity Creation Creating Model with more than one primary column is illegal 1`] = `[Error: App has been started already!]`;
+
+exports[`Illegal Entity Creation Creating a relation without the full syntax should be illegal 1`] = `
+[Error: 
+
+[41m Err  [49m[90m: [39mYou currently need to use the full declaration for specifying a relation
+[41m Desc [49m[90m: [39mRelations require additional metadata to generate the Database Tables
+[41m Fix  [49m[90m: [39m
+Replace
+
+myRelation: Type.ONE_TO_ONE
+
+With
+
+myRelation: {
+    type: Type.ONE_TO_ONE,
+    joinColumn: true,
+    target:'detail'
+},
+                
+]
+`;

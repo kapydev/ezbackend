@@ -8,18 +8,19 @@ import { commandLog } from "./helpers";
 import path from 'path'
 import fs from 'fs'
 import defaultGenerator from './generators/DEFAULT'
-import { EEXIST } from "constants";
 
 
 //TODO: Seperate the cli from the server to reduce load time
 const logger = console;
 
-type initiateOptions = {
+export type initiateOptions = {
   force?: boolean,
-  dir: string
+  dir: string,
+  install? :boolean
 }
 
 export default function initiate(dir: string, options: initiateOptions, pkg: any) {
+  console.log(options)
   const welcomeMessage =
     "EzBackend - An extensible backend optimised for the developer experience";
   logger.log(chalk.inverse(`\n ${welcomeMessage} \n`));
@@ -48,10 +49,10 @@ export default function initiate(dir: string, options: initiateOptions, pkg: any
   }
   process.chdir(installPath)
 
-  return installEzb(projectType);
+  return installEzb(projectType,options);
 }
 
-const installEzb = (projectType: ProjectType) => {
+const installEzb = (projectType: ProjectType,options:initiateOptions) => {
 
   const packageManager = JsPackageManagerFactory.getPackageManager()
 
@@ -63,7 +64,7 @@ const installEzb = (projectType: ProjectType) => {
         logger.log();
         return Promise.resolve();
       case ProjectType.DEFAULT:
-        return defaultGenerator(packageManager).then(
+        return defaultGenerator(packageManager,options).then(
           commandLog("Adding EzBackend to your app")
         );
       default:
