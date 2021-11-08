@@ -29,7 +29,7 @@ describe("Illegal Entity Creation", () => {
 
         } catch (e: unknown) {
             const err = e as EzError
-            expect(err.message).toMatchSnapshot()
+            expect(err.summary).toMatchSnapshot()
             expect(err.description).toMatchSnapshot()
             expect(err.code).toMatchSnapshot()
             errored = true
