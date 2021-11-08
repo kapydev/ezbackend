@@ -10,11 +10,12 @@
 <p align="center">
     <!-- <a href="https://snyk.io/advisor/npm-package/ezbackend"> 
         <img src="https://snyk.io/advisor/npm-package/ezbackend/badge.svg"/>
-    </a>
+    </a> -->
     <a href="https://codecov.io/gh/PhilipWee/ezbackend"> 
         <img src="https://codecov.io/gh/PhilipWee/ezbackend/branch/master/graph/badge.svg?token=YZX7TT9XBQ"/>
     </a>
-    <br/> -->
+    <br/>
+    <br/>
     <a href="https://www.codefactor.io/repository/github/kapydev/ezbackend">
         <img src="https://www.codefactor.io/repository/github/kapydev/ezbackend/badge" alt="CodeFactor" />
     </a>
