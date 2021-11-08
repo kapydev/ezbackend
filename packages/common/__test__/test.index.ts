@@ -1,4 +1,4 @@
-import { EzBackend, EzModel, Type } from '@ezbackend/common'
+import { EzBackend, EzModel, Type } from '../src'
 
 const sample = new EzModel('sample', {
     varchar: Type.VARCHAR,
@@ -7,7 +7,14 @@ const sample = new EzModel('sample', {
     double: Type.DOUBLE,
     real: Type.REAL,
     json: Type.JSON,
-    date: Type.DATE
+    date: Type.DATE,
+    enum: {
+        type: Type.ENUM,
+        enum: ["type1","type2"]
+    },
+    smallint: {
+        type: "smallint" //For testing directly specifying the typeorm type
+    }
 })
 
 const program = new EzModel('program', {
@@ -82,30 +89,45 @@ const sampleNullable = new EzModel('SampleNullable', {
 
 })
 
+const sampleUnique = new EzModel("SampleUnique", {
+    idNumber: {
+        type: Type.INT,
+        unique:true
+    }
+})
+
+const user2 = new EzModel("User2",{
+    programs: {
+        type: Type.MANY_TO_MANY,
+        target: "Program2",
+        inverseSide: "users"
+    }
+})
+
+const program2 = new EzModel("Program2", {
+    users: {
+        type: Type.MANY_TO_MANY,
+        target: "User2",
+        inverseSide: "programs"
+    }
+})
+
 const ezb = new EzBackend()
 
 //Register models
-ezb.addApp('SampleNullable', sampleNullable, { prefix: 'SampleNullable' })
-ezb.addApp('User', user, { prefix: 'User' })
-ezb.addApp('noCascadeUser', noCascadeUser, { prefix: 'NoCascadeUser' })
-ezb.addApp('detail', detail, { prefix: 'Detail' })
-ezb.addApp('NoCascadeProgram', noCascadeProgram, { prefix: 'NoCascadeProgram' })
-ezb.addApp('Program', program, { prefix: 'Program' })
-ezb.addApp('Sample', sample, { prefix: 'Sample' })
+ezb.addApp(sampleNullable, { prefix: 'SampleNullable' })
+ezb.addApp(user, { prefix: 'User' })
+ezb.addApp(noCascadeUser, { prefix: 'NoCascadeUser' })
+ezb.addApp(detail, { prefix: 'Detail' })
+ezb.addApp(noCascadeProgram, { prefix: 'NoCascadeProgram' })
+ezb.addApp(program, { prefix: 'Program' })
+ezb.addApp(sample, { prefix: 'Sample' })
+ezb.addApp(sampleUnique, { prefix: 'SampleUnique' })
+ezb.addApp(user2, { prefix: 'User2' })
+ezb.addApp(program2, { prefix: 'Program2' })
 
 //Prevent server from starting
 ezb.removeHook("_run", "Run Fastify Server")
-
-// ezb.start({
-//     port: 3000,
-//     server: {
-//     },
-//     orm: {
-//       type: "sqlite",
-//       database: ":memory:",
-//       synchronize: true
-//     }
-//   })
 
 export default ezb
 

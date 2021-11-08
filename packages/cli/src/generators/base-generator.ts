@@ -1,13 +1,12 @@
 import fse from "fs-extra";
 import path from "path";
 import { JsPackageManager } from "../js-package-manager/JsPackageManager";
+import { initiateOptions } from "../initiate";
 
-export async function baseGenerator(packageManager: JsPackageManager) {
-  const packageJson = packageManager.retrievePackageJson();
-  //TODO: Think about a possible need for versioning dependencies for different project types
-  //TODO: Think about keep this DRY with the common framework
-  //TODO: Make lerna publish run prepare, and make prepare run tsc build
+function installDependencies(packageManager: JsPackageManager) {
   //TODO: Think about moving these values away into a config file for ease
+  const packageJson = packageManager.retrievePackageJson();
+
   const dependencies = [
     "@ezbackend/core",
     "@ezbackend/common",
@@ -15,7 +14,6 @@ export async function baseGenerator(packageManager: JsPackageManager) {
     "@ezbackend/utils",
 
   ]
-  //LEFT OFF
   packageManager.addDependencies({
     packageJson: packageJson,
     installAsDevDependencies: false
@@ -31,6 +29,15 @@ export async function baseGenerator(packageManager: JsPackageManager) {
     packageJson: packageJson,
     installAsDevDependencies: true
   }, devDependencies);
+}
+
+export async function baseGenerator(packageManager: JsPackageManager,options:initiateOptions) {
+  //TODO: Think about a possible need for versioning dependencies for different project types
+  //TODO: Think about keep this DRY with the common framework
+  //TODO: Make lerna publish run prepare, and make prepare run tsc build
+
+  if (options.install) installDependencies(packageManager)
+
   packageManager.addEzbCommandInScripts()
   copyBoilerPlate();
 }

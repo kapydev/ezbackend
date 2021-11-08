@@ -1,0 +1,372 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Utils Functionality test Should be able to print all fastify plugins nicely 1`] = `
+"bound root 
+├── bound _after 
+└─┬ childFunc 
+  ├── ezbErrorPage 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  ├─┬ childFunc 
+  │ └─┬ childFunc 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   ├── bound _after 
+  │   └── bound _after 
+  └─┬ childFunc 
+    └─┬ childFunc 
+      ├── bound _after 
+      ├── bound _after 
+      ├── bound _after 
+      ├── bound _after 
+      └── bound _after 
+"
+`;
+
+exports[`Test Utils Functionality test Should be able to print routes 1`] = `
+"└── /
+    ├── Sample (POST)
+    │   Sample (GET)
+    │   ├── Nullable (POST)
+    │   │   Nullable (GET)
+    │   │   └── / (POST)
+    │   │       / (GET)
+    │   │       └── :id (GET)
+    │   │           :id (PATCH)
+    │   │           :id (DELETE)
+    │   ├── / (POST)
+    │   │   / (GET)
+    │   │   └── :id (GET)
+    │   │       :id (PATCH)
+    │   │       :id (DELETE)
+    │   └── Unique (POST)
+    │       Unique (GET)
+    │       └── / (POST)
+    │           / (GET)
+    │           └── :id (GET)
+    │               :id (PATCH)
+    │               :id (DELETE)
+    ├── User (POST)
+    │   User (GET)
+    │   ├── 2 (POST)
+    │   │   2 (GET)
+    │   │   └── / (POST)
+    │   │       / (GET)
+    │   │       └── :id (GET)
+    │   │           :id (PATCH)
+    │   │           :id (DELETE)
+    │   └── / (POST)
+    │       / (GET)
+    │       └── :id (GET)
+    │           :id (PATCH)
+    │           :id (DELETE)
+    ├── NoCascade
+    │   ├── User (POST)
+    │   │   User (GET)
+    │   │   └── / (POST)
+    │   │       / (GET)
+    │   │       └── :id (GET)
+    │   │           :id (PATCH)
+    │   │           :id (DELETE)
+    │   └── Program (POST)
+    │       Program (GET)
+    │       └── / (POST)
+    │           / (GET)
+    │           └── :id (GET)
+    │               :id (PATCH)
+    │               :id (DELETE)
+    ├── Detail (POST)
+    │   Detail (GET)
+    │   └── / (POST)
+    │       / (GET)
+    │       └── :id (GET)
+    │           :id (PATCH)
+    │           :id (DELETE)
+    └── Program (POST)
+        Program (GET)
+        ├── 2 (POST)
+        │   2 (GET)
+        │   └── / (POST)
+        │       / (GET)
+        │       └── :id (GET)
+        │           :id (PATCH)
+        │           :id (DELETE)
+        └── / (POST)
+            / (GET)
+            └── :id (GET)
+                :id (PATCH)
+                :id (DELETE)
+"
+`;
+
+exports[`Test Utils Functionality test Should be able to print the plugin tree for debugging 1`] = `
+"bound root 
+├─┬ _init 
+│ ├── Create Entities Container 
+│ ├─┬ UnnamedApp1 
+│ │ └── Create \\"SampleNullable\\" Entity 
+│ ├─┬ UnnamedApp2 
+│ │ └── Create \\"user\\" Entity 
+│ ├─┬ UnnamedApp3 
+│ │ └── Create \\"noCascadeUser\\" Entity 
+│ ├─┬ UnnamedApp4 
+│ │ └── Create \\"detail\\" Entity 
+│ ├─┬ UnnamedApp5 
+│ │ └── Create \\"noCascadeProgram\\" Entity 
+│ ├─┬ UnnamedApp6 
+│ │ └── Create \\"program\\" Entity 
+│ ├─┬ UnnamedApp7 
+│ │ └── Create \\"sample\\" Entity 
+│ ├─┬ UnnamedApp8 
+│ │ └── Create \\"SampleUnique\\" Entity 
+│ ├─┬ UnnamedApp9 
+│ │ └── Create \\"User2\\" Entity 
+│ └─┬ UnnamedApp10 
+│   └── Create \\"Program2\\" Entity 
+├─┬ _postInit 
+│ ├── Create Database Connection 
+│ ├─┬ UnnamedApp1 
+│ │ └── Obtain SampleNullable Repository 
+│ ├─┬ UnnamedApp2 
+│ │ └── Obtain user Repository 
+│ ├─┬ UnnamedApp3 
+│ │ └── Obtain noCascadeUser Repository 
+│ ├─┬ UnnamedApp4 
+│ │ └── Obtain detail Repository 
+│ ├─┬ UnnamedApp5 
+│ │ └── Obtain noCascadeProgram Repository 
+│ ├─┬ UnnamedApp6 
+│ │ └── Obtain program Repository 
+│ ├─┬ UnnamedApp7 
+│ │ └── Obtain sample Repository 
+│ ├─┬ UnnamedApp8 
+│ │ └── Obtain SampleUnique Repository 
+│ ├─┬ UnnamedApp9 
+│ │ └── Obtain User2 Repository 
+│ └─┬ UnnamedApp10 
+│   └── Obtain Program2 Repository 
+├─┬ _handler 
+│ ├── Create Server Stub 
+│ ├── Add Fastify Boom 
+│ ├── Add Error Schema 
+│ ├─┬ UnnamedApp1 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp2 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp3 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp4 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp5 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp6 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp7 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp8 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ ├─┬ UnnamedApp9 
+│ │ ├── Create Server Stub 
+│ │ └─┬ router 
+│ │   ├── Create Server Stub 
+│ │   ├── Add Create Schema 
+│ │   ├── Add Update Schema 
+│ │   ├── Add Full Schema 
+│ │   ├── Generate createOne route 
+│ │   ├── Generate getOne route 
+│ │   ├── Generate getAll route 
+│ │   ├── Generate updateOne route 
+│ │   └── Generate deleteOne route 
+│ └─┬ UnnamedApp10 
+│   ├── Create Server Stub 
+│   └─┬ router 
+│     ├── Create Server Stub 
+│     ├── Add Create Schema 
+│     ├── Add Update Schema 
+│     ├── Add Full Schema 
+│     ├── Generate createOne route 
+│     ├── Generate getOne route 
+│     ├── Generate getAll route 
+│     ├── Generate updateOne route 
+│     └── Generate deleteOne route 
+└─┬ _postHandler 
+  ├── Remove Server Stub 
+  ├── Create Fastify Server 
+  ├── Register Fastify Plugins 
+  ├─┬ UnnamedApp1 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp2 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp3 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp4 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp5 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp6 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp7 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp8 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  ├─┬ UnnamedApp9 
+  │ ├── Remove Server Stub 
+  │ └─┬ router 
+  │   └── Remove Server Stub 
+  └─┬ UnnamedApp10 
+    ├── Remove Server Stub 
+    └─┬ router 
+      └── Remove Server Stub 
+"
+`;

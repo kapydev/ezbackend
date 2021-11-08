@@ -1,26 +1,20 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { EzError } from "@ezbackend/utils";
+import { EzBackend, EzModel, Type } from "../src";
 import ezb from "./test.index"
-import { EzBackend } from "@ezbackend/common";
-
-//TODO: Figure if there is a better way of getting this data
-function getInternalInstance(ezb: EzBackend) {
-    //@ts-ignore
-    return ezb.instance._lastUsed.server
-}
-
-
+import { after } from "lodash";
 
 beforeAll(async () => {
   await ezb.start({
     port: 3000,
     server: {
-      logger:false
+      logger: false
     },
   })
 });
 
 afterAll(async () => {
-  const instance = getInternalInstance(ezb)
+  const instance = ezb.getInternalInstance()
   await instance.orm.close();
   await instance._server.close();
 });
@@ -35,13 +29,15 @@ const sampleData = {
   json: {
     field1: "hello", field2: 1997
   },
+  enum: "type1",
+  smallint: 12
 };
 
 //TODO: Test case for creating with ID
 describe("Basic CRUD", () => {
   describe("Create", () => {
     test("Basic creation", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
 
       //@ts-ignore
       const response = await instance._server.inject({
@@ -54,7 +50,7 @@ describe("Basic CRUD", () => {
       expect(JSON.parse(response.body)).toHaveProperty("id");
     });
     test("Basic invalid input", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const input = {};
       const response = await instance._server.inject({
         method: "POST",
@@ -73,7 +69,7 @@ describe("Basic CRUD", () => {
   });
   describe("Read", () => {
     test("Basic read", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const response = await instance._server.inject({
         method: "GET",
         url: "/Sample/1",
@@ -83,9 +79,22 @@ describe("Basic CRUD", () => {
       expect(JSON.parse(response.body)).toMatchObject(sampleData);
       expect(JSON.parse(response.body)).toHaveProperty("id");
     });
+
+    test("Basic read all", async () => {
+
+      const response = await ezb.inject({
+        method: "GET",
+        url: "/Sample"
+      })
+
+      expect(response.statusCode).toEqual(200);
+      const allRows = JSON.parse(response.body)
+      expect(allRows[0]).toMatchObject(sampleData);
+      expect(allRows[0]).toHaveProperty("id");
+    })
     test("Basic 404", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const input = {};
       const expectedResponse = {
         statusCode: 404,
@@ -104,7 +113,7 @@ describe("Basic CRUD", () => {
   });
   describe("Update", () => {
     test("Basic update", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const updatedData = { ...sampleData };
       updatedData.varchar = "This is a new string";
       //@ts-ignore
@@ -119,7 +128,7 @@ describe("Basic CRUD", () => {
     });
     test("Basic 404", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const input = {};
       const expectedResponse = {
         statusCode: 404,
@@ -137,7 +146,7 @@ describe("Basic CRUD", () => {
     });
     test("Basic invalid input", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const updatedData = { ...sampleData };
       //@ts-ignore
       updatedData.int = "This is a new string";
@@ -158,7 +167,7 @@ describe("Basic CRUD", () => {
   });
   describe("Delete", () => {
     test("Basic delete", async () => {
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const updatedData = { ...sampleData };
       updatedData.varchar = "This is a new string";
       //@ts-ignore
@@ -175,7 +184,7 @@ describe("Basic CRUD", () => {
     });
     test("Basic 404", async () => {
       //TODO: Think if it is good that it accepts coercable strings
-      const instance = getInternalInstance(ezb)
+      const instance = ezb.getInternalInstance()
       const input = {};
       const expectedResponse = {
         statusCode: 404,
@@ -199,7 +208,7 @@ describe("Basic CRUD", () => {
     boolean: false
   }
   describe("Creation Edge Case", () => {
-    test("Creating an object with nullish values should return the nullish values", async() => {
+    test("Creating an object with nullish values should return the nullish values", async () => {
       const result = await ezb.inject({
         method: 'POST',
         url: '/SampleNullable',
@@ -207,7 +216,7 @@ describe("Basic CRUD", () => {
       })
       expect(JSON.parse(result.body)).toMatchObject(sampleNullableInput)
     })
-    test("Creating a object with null values should return null values", async() => {
+    test("Creating a object with null values should return null values", async () => {
       const result = await ezb.inject({
         method: 'POST',
         url: '/SampleNullable',
@@ -218,4 +227,23 @@ describe("Basic CRUD", () => {
       expect(JSON.parse(result.body)).not.toHaveProperty('int')
     })
   })
-});
+
+  describe("Typeorm Error Handling", () => {
+
+    test("TypeORM errors should be returned verbosely when facing them", async () => {
+      const payload = { idNumber: 1 }
+      await ezb.inject({
+        method: 'POST',
+        url: '/SampleUnique',
+        payload: payload
+      })
+      const result = await ezb.inject({
+        method: 'POST',
+        url: '/SampleUnique',
+        payload: payload
+      })
+      expect(result.statusCode).toBe(400)
+      expect(result.body).toMatchSnapshot()
+    })
+  })
+})

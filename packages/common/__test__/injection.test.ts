@@ -1,10 +1,4 @@
-import { EzBackend, EzModel, Type } from "../src";
-
-//TODO: Figure if there is a better way of getting this data
-function getInternalInstance(ezb: EzBackend) {
-    //@ts-ignore
-    return ezb.instance._lastUsed.server
-}
+import { EzBackend } from "../src";
 
 describe("Plugin Registering", () => {
     let app: EzBackend
@@ -24,7 +18,7 @@ describe("Plugin Registering", () => {
     })
 
     afterEach(async () => {
-        const instance = getInternalInstance(app)
+        const instance = app.getInternalInstance()
         await instance.orm.close();
         await instance._server.close();
     });

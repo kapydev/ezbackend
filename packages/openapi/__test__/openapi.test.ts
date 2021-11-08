@@ -1,4 +1,4 @@
-import { EzBackend, EzModel, Type } from "@ezbackend/common";
+import { EzBackend, EzModel, Type } from "../../common/src";
 import { EzOpenAPI } from '../src'
 import { FastifyInstance } from 'fastify'
 

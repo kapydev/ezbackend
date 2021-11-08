@@ -83,8 +83,11 @@ export abstract class BaseProvider extends EzApp {
 
     getFullRoutePrefixNoPrePostSlash(server: FastifyInstance) {
         const encapsulatedPrefix = server.prefix.replace(/^\//, "")
-        const fullRoute = `${encapsulatedPrefix}/${this.getRoutePrefixNoPrePostSlash(server)}`
-        return fullRoute
+        if (encapsulatedPrefix === "") {
+            return this.getRoutePrefixNoPrePostSlash(server)
+        } else {
+            return `${encapsulatedPrefix}/${this.getRoutePrefixNoPrePostSlash(server)}`
+        }
     }
 
     getCallbackURL(server: FastifyInstance) {
@@ -110,7 +113,8 @@ export abstract class BaseProvider extends EzApp {
                 [`${this.providerName}Id`]: id,
                 [`${this.providerName}Data`]: profile
             }
-            const serializedID = `${this.providerName}-${profile.id}`
+
+            const serializedID = `${this.providerName}-${id}`
             repo.save(model).then(
                 () => {
                     cb(undefined, serializedID)
@@ -127,6 +131,7 @@ export abstract class BaseProvider extends EzApp {
             )
     }
 
+    //TODO: Explicit types for opts
     defaultLogoutHandler(req:FastifyRequest,res:FastifyReply, opts:any) {
         req.logOut().then(
             () => {
@@ -137,9 +142,7 @@ export abstract class BaseProvider extends EzApp {
     }
 
     registerUserSerializer(instance: EzBackendInstance, opts: any): SerializeFunction<unknown, unknown> {
-        const that = this
         return async function serializer(id, req) {
-            //URGENT TODO: Remove prefix from here
             return id
         }
     }

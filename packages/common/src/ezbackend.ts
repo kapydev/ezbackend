@@ -3,6 +3,7 @@ import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 import fp from 'fastify-plugin'
 import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
+import { EzError } from "@ezbackend/utils";
 import _ from 'lodash'
 import path from 'path'
 import dotenv from 'dotenv'
@@ -169,12 +170,36 @@ export class EzBackend extends EzApp {
         return server.inject(injectOpts)
     }
 
+    verifyStarted(funcName?: string) {
+        if (!this.instance.started) {
+
+            const additionalMsg = funcName
+                ? `before running ${funcName}`
+                : ''
+
+            throw new EzError("Instance not yet started",
+                `The EzBackend instance must be started ${additionalMsg}`,
+                `
+await app.start()
+
+You must wait for the above function to finish before you can run ${funcName}
+`)
+        }
+    }
+
     printRoutes() {
+        this.verifyStarted("printRoutes")
         return this.getInternalServer().printRoutes()
     }
 
     printPlugins() {
+        this.verifyStarted("printPlugins")
         return this.getInternalServer().printPlugins()
+    }
+
+    prettyPrint() {
+        this.verifyStarted("prettyPrint")
+        return this.instance.prettyPrint()
     }
 
     //URGENT TODO: Remove temporary any fix

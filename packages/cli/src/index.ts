@@ -11,6 +11,7 @@ program
   .command("init <dir>")
   .description("Initialize ezbackend into your project in the specified directory.")
   .option("-f --force", "Force add ezbackend")
+  .option("--no-install","Do not add libraries")
   .action((dir,options) => initiate(dir, options, pkg));
 
 program.parse(process.argv);

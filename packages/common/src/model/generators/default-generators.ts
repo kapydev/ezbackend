@@ -3,6 +3,7 @@ import Boom from '@hapi/boom'
 import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import type { RouterOptions } from './api-generator'
+import { EzError } from "@ezbackend/utils"
 
 /**
  * Returns the primary column name from given metadata
@@ -11,9 +12,6 @@ import type { RouterOptions } from './api-generator'
  */
 export function getPrimaryColName(meta: EntityMetadata) {
     const primaryColumns = meta.primaryColumns
-    if (primaryColumns.length > 1) {
-        throw new Error("EzBackend currently only supports one Primary Column per entity. Raise an issue on github with your use case if you need more than one primary column in your entity")
-    }
     return primaryColumns[0].propertyName
 }
 
@@ -22,7 +20,7 @@ const removeNestedNulls = (obj: any) => {
     Object.keys(obj).forEach(k => {
         if (obj[k] && typeof obj[k] === 'object') {
             removeNestedNulls(obj[k])
-        }  else if (obj[k] === null) {
+        } else if (obj[k] === null) {
             delete obj[k]
         }
     }
@@ -169,17 +167,13 @@ export const getDefaultGenerators = () => {
                     }
                     //URGENT TODO: Currently this causes race conditions, need to do within one request
 
-                    try {
-                        const updatedObj = await repo.save({
-                            //@ts-ignore
-                            id: id,
-                            //@ts-ignore
-                            ...req.body,
-                        });
-                        return updatedObj;
-                    } catch (e: any) {
-                        throw Boom.badRequest(e)
-                    }
+                    const updatedObj = await repo.save({
+                        id: id,
+                        //@ts-ignore
+                        ...req.body,
+                    });
+                    return updatedObj;
+
                 },
             };
             return routeDetails;
@@ -226,15 +220,12 @@ export const getDefaultGenerators = () => {
                     } catch (e) {
                         res.status(404).send(e);
                     }
-                    try {
-                        await repo.delete(id);
-                        return {
-                            success: true,
-                            id: id,
-                        }
-                    } catch (e: any) {
-                        throw Boom.badRequest(e)
+                    await repo.delete(id);
+                    return {
+                        success: true,
+                        id: id,
                     }
+
                 },
             };
             return routeDetails;

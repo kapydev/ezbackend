@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Illegal Entity Creation Creating a relation without the full syntax should be illegal 1`] = `"You currently need to use the full declaration for specifying a relation"`;
+
+exports[`Illegal Entity Creation Creating a relation without the full syntax should be illegal 2`] = `"Relations require additional metadata to generate the Database Tables"`;
+
+exports[`Illegal Entity Creation Creating a relation without the full syntax should be illegal 3`] = `
+"
+Replace
+
+myRelation: Type.ONE_TO_ONE
+
+With
+
+myRelation: {
+    type: Type.ONE_TO_ONE,
+    joinColumn: true,
+    target:'detail'
+},
+                "
+`;

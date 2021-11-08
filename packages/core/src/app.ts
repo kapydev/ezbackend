@@ -244,32 +244,34 @@ export class App {
      * @param newApp
      * @param opts options
      */
-    addApp(childApp:App,opts?:Object): undefined
-    addApp(name:string,childApp:App,opts?:Object): undefined
+    addApp(childApp: App, opts?: Object): undefined
+    addApp(name: string, childApp: App, opts?: Object): undefined
     addApp(arg1: string | App, arg2?: App | Object | undefined, arg3: Object = {}) {
 
         let name: string
         let newApp: App
         let opts: Object
 
-        if (typeof arg1 === 'string') {
-            name = arg1
-        } else {
+        if (
+            arg1 instanceof App && (arg2 instanceof Object || arg2 === undefined)
+        ) {
+            //overload1
             name = `UnnamedApp${this._unnamedCounter}`
             this._unnamedCounter += 1
-        }
-
-        if (arg1 instanceof App) {
             newApp = arg1
             opts = arg2 ?? arg3
-        } else if (arg2 instanceof App) {
+        } else if (
+            typeof arg1 === "string" && arg2 instanceof App && arg3 instanceof Object
+        ) {
+            //overload2
+            name = arg1
             newApp = arg2 as App
             opts = arg3
         } else {
-            throw new Error("Either arg1 or arg2 must be an App!")
+            throw new Error("Invalid function signature for addApp()")
         }
 
-        if (name in this._apps || Object.values(this._apps).indexOf(newApp) !== -1) {
+        if (this._apps.has(name) || Object.values(this._apps).indexOf(newApp) !== -1) {
             throw new Error((`Child app ${name} already exists`))
         }
         newApp.name = name
@@ -398,9 +400,10 @@ export class App {
             //Uses old scope
             newInstance = old
         } else {
-            throw new Error(`Function scope is not defined for ${fn}`)
+            throw new Error(`Function scope is ${fn.prototype[kScope]} for ${fn}, but needs to be ${PluginScope}`)
         }
         newInstance[kApp] = parentApp
         return newInstance
     }
+
 }
