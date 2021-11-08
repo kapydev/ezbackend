@@ -5,7 +5,7 @@ module.exports = {
   testEnvironment: 'node',
   coveragePathIgnorePatterns:[
     "/node_modules/",
-    /*eslint no-useless-escape: "error"*/
+    // eslint-disable-next-line no-useless-escape
     "(\.js)$"
   ]
 };
