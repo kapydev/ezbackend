@@ -89,7 +89,7 @@ describe("DB UI Endpoints", () => {
 
         const result = await app.inject({
             method: "GET",
-            url: "/db-ui"
+            url: "/db-ui/"
         })
 
         expect(result.statusCode).toBe(200)

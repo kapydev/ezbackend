@@ -9,7 +9,10 @@ describe("EzError", () => {
             err = new EzError("Error Summary","Error Description","Some Code","Docs Link")
         })
         it("Should throw a well formatted error", async() => {
-            expect(err.toString()).toMatchSnapshot()
+            expect(err.toString()).toContain("Error Summary")
+            expect(err.toString()).toContain("Error Description")
+            expect(err.toString()).toContain("Some Code")
+            expect(err.toString()).toContain("Docs Link")
         })
     
         it("Should contain a summary property", async() => {

@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import { EzBackend, EzModel, Type } from "../src"
+import { EzError } from "@ezbackend/utils";
 
 
 const defaultConfig = {
@@ -26,8 +27,11 @@ describe("Illegal Entity Creation", () => {
             }))
             await app.start(defaultConfig)
 
-        } catch (e) {
-            expect(e).toMatchSnapshot()
+        } catch (e: unknown) {
+            const err = e as EzError
+            expect(err.message).toMatchSnapshot()
+            expect(err.description).toMatchSnapshot()
+            expect(err.code).toMatchSnapshot()
             errored = true
         }
 
