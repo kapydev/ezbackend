@@ -1,4 +1,4 @@
-import { EzApp, EzBackend, EzBackendOpts, EzModel, Type } from "@ezbackend/common";
+import { EzApp, EzBackend, EzBackendOpts, EzModel, Type } from "../../common/src";
 import { EzAuth, EzUser, GoogleProvider, Providers } from "../src"
 import path from 'path'
 import dotenv from 'dotenv'
@@ -267,7 +267,6 @@ describe("Plugin Registering", () => {
             const mockRes = {
                 redirect: (redirectURL: string) => {
                     redirectedURL = redirectURL
-                    console.log(redirectURL)
                     flag.setDone()
                 }
             }

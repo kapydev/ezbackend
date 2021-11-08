@@ -1,16 +1,9 @@
-//@ts-nocheck
 //URGENT TODO: Figure out why github actions is throwing req has 'any' type even though locally there is no issue
-import { EzApp, EzBackend } from "@ezbackend/common";
+import { EzApp, EzBackend } from "../../common/src";
 import path from 'path'
 import dotenv from 'dotenv'
 import Boom from '@hapi/boom'
 import { RouteShorthandOptionsWithHandler } from "fastify";
-
-//TODO: Figure if there is a better way of getting this data
-function getInternalInstance(ezb: EzBackend) {
-    //@ts-ignore
-    return ezb.instance._lastUsed.server
-}
 
 describe("Plugin Registering", () => {
 
@@ -43,7 +36,7 @@ describe("Plugin Registering", () => {
     })
 
     afterEach(async () => {
-        const instance = getInternalInstance(app)
+        const instance = app.getInternalInstance()
         await instance.orm.close();
         await instance._server.close();
     });

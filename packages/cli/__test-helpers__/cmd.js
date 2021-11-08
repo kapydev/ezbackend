@@ -36,7 +36,6 @@
              },
              env
          ),
-         stdio: [null, null, null, 'ipc'] // This enables interprocess communication (IPC)
      });
  }
  
@@ -117,6 +116,7 @@
                  inputs = [];
              }
              reject(err.toString());
+
          });
  
          childProcess.on('error', reject);

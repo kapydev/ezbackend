@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EzError Full Error Should throw a well formatted error 1`] = `
+"Error: 
+
+[41m Err  [49m[90m: [39mError Summary
+[41m Desc [49m[90m: [39mError Description
+[41m Fix  [49m[90m: [39mSome Code
+[41m Docs [49m[90m: [39mDocs Link
+"
+`;

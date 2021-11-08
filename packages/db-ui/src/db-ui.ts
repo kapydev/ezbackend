@@ -1,10 +1,9 @@
 import { PluginScope } from '@ezbackend/core'
-import { convert, getDefaultGenerators, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
+import { convert, getDefaultGenerators, EzBackendInstance, EzBackendOpts,EzApp } from '@ezbackend/common'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 import { RouteOptions, FastifyInstance } from 'fastify'
 import chalk from 'chalk'
-import { EzApp } from '@ezbackend/common'
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
 /**
@@ -107,7 +106,8 @@ class DBEndpointRouter extends EzApp {
 
 const BUILD_DIR = path.join(__dirname, "../ezbackend-database-ui/build")
 
-async function dbUIFastifyPlugin(server: FastifyInstance) {
+async function dbUIFastifyPlugin(server: FastifyInstance, opts: any, cb: (...opts:any) => void) {
+
     server.register(fastifyStatic, {
         root: BUILD_DIR,
         wildcard: false
@@ -117,6 +117,8 @@ async function dbUIFastifyPlugin(server: FastifyInstance) {
         //TODO: Make this not have to go back to db-ui on refresh
         res.redirect("/db-ui")
     })
+
+    cb()
 }
 
 export class EzDbUI extends EzApp {
@@ -129,6 +131,7 @@ export class EzDbUI extends EzApp {
         this.setHandler("Serve UI Interface", async (instance, opts) => {
 
             instance.server.register(dbUIFastifyPlugin, { prefix: "db-ui" })
+
         })
 
         //TODO: Remove temporary opts any fix
