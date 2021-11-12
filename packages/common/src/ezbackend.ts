@@ -8,6 +8,7 @@ import _ from 'lodash'
 import path from 'path'
 import dotenv from 'dotenv'
 import { InjectOptions } from "light-my-request";
+import { createModelSubscriber, socketIOPlugin } from "./realtime";
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -15,6 +16,7 @@ export interface EzBackendInstance {
     _server: FastifyInstance
     repo: Repository<ObjectLiteral>
     orm: Connection
+    modelSubscriber:Function
 }
 
 export interface EzBackendOpts {
@@ -121,11 +123,17 @@ export class EzBackend extends EzApp {
         this.setInit('Create Entities Container', async (instance, opts) => {
             instance.entities = []
         })
+
+        this.setInit('Manage Event Subscriptions', async (instance, opts) => {
+            instance.modelSubscriber = createModelSubscriber(instance)
+        })
+
         this.setPostInit('Create Database Connection', async (instance, opts) => {
             instance.orm = await createConnection(
                 {
                     ...opts.orm,
-                    entities: instance.entities
+                    entities: instance.entities,
+                    subscribers: [instance.modelSubscriber]
                 }
             )
         })
@@ -133,6 +141,9 @@ export class EzBackend extends EzApp {
         this.setHandler('Add Fastify Boom', async (instance, opts) => {
             instance.server.register(fp(ezbErrorPage))
         })
+
+        this.setHandler('Add SocketIO', socketIOPlugin)
+
         this.setHandler('Add Error Schema', addErrorSchema)
 
         this.setPostHandler('Create Fastify Server', async (instance, opts) => {
