@@ -1,8 +1,10 @@
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent, RemoveEvent } from "typeorm"
+import { DecorateClass } from "..";
 import { EzBackendInstance } from "..";
 
 export function createModelSubscriber(instance: EzBackendInstance) {
 
+    //URGENT URGENT TODO: Expose IO Commands
     function getIO() {
         return instance._server.io
     }
@@ -23,8 +25,3 @@ export function createModelSubscriber(instance: EzBackendInstance) {
         })
 }
 
-const DecorateClass = (decorators: any, target: Function) => {
-    decorators = Array.isArray(decorators) ? decorators : [decorators];
-    (decorators as any[]).forEach(decorator => decorator(target))
-    return target
-}

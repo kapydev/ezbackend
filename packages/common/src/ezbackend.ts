@@ -1,7 +1,7 @@
 import { EzApp, EzBackendServer } from "./ezapp";
 import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 import fp from 'fastify-plugin'
-import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
+import { Connection, createConnection, EntitySchema, EntitySubscriberInterface, ObjectLiteral, Repository } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
 import { EzError } from "@ezbackend/utils";
 import _ from 'lodash'
@@ -9,6 +9,9 @@ import path from 'path'
 import dotenv from 'dotenv'
 import { InjectOptions } from "light-my-request";
 import { createModelSubscriber, socketIOPlugin } from "./realtime";
+import fastifySocketIO from 'fastify-socket.io'
+import { requestContext } from "fastify-request-context";
+import { socketContext } from "socket-io-event-context";
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -16,7 +19,8 @@ export interface EzBackendInstance {
     _server: FastifyInstance
     repo: Repository<ObjectLiteral>
     orm: Connection
-    modelSubscriber:Function
+    //TODO: Find correct type for subscriber
+    subscribers:Array<Function>
 }
 
 export interface EzBackendOpts {
@@ -125,7 +129,8 @@ export class EzBackend extends EzApp {
         })
 
         this.setInit('Manage Event Subscriptions', async (instance, opts) => {
-            instance.modelSubscriber = createModelSubscriber(instance)
+            instance.subscribers = []
+            instance.subscribers.push(createModelSubscriber(instance))
         })
 
         this.setPostInit('Create Database Connection', async (instance, opts) => {
@@ -133,7 +138,7 @@ export class EzBackend extends EzApp {
                 {
                     ...opts.orm,
                     entities: instance.entities,
-                    subscribers: [instance.modelSubscriber]
+                    subscribers: instance.subscribers
                 }
             )
         })
@@ -144,6 +149,7 @@ export class EzBackend extends EzApp {
 
         this.setHandler('Add SocketIO', socketIOPlugin)
 
+
         this.setHandler('Add Error Schema', addErrorSchema)
 
         this.setPostHandler('Create Fastify Server', async (instance, opts) => {
@@ -152,6 +158,21 @@ export class EzBackend extends EzApp {
 
         this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
             this.registerFastifyPlugins(instance._server, this)
+        })
+
+        this.setPostHandler('Set Request Context For Global Access', async(instance,opts) => {
+            instance._server.addHook("onRequest", async (req,res) => {
+                requestContext.set("request",req)
+            })
+        })
+
+        this.setPostHandler('Set SocketIO Context for global access', async(instance,opts) => {
+            instance._server.addHook("onReady", async () => {
+                instance._server.io.use((socket, next) => {
+                    socketContext.set("request",socket.request)
+                    next()
+                })
+            })
         })
 
         this.setRun('Run Fastify Server', async (instance, opts) => {

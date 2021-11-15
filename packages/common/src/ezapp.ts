@@ -50,7 +50,6 @@ function createServer(parent: EzApp) {
         register: generateFastifyFuncWrapper<any>(parent, 'register') as FastifyRegister,
         setNotFoundHandler: generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['setNotFoundHandler']>>(parent, 'setNotFoundHandler'),
         setErrorHandler: generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['setErrorHandler']>>(parent, 'setErrorHandler'),
-
     }
 }
 

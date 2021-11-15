@@ -20,7 +20,6 @@ export type initiateOptions = {
 }
 
 export default function initiate(dir: string, options: initiateOptions, pkg: any) {
-  console.log(options)
   const welcomeMessage =
     "EzBackend - An extensible backend optimised for the developer experience";
   logger.log(chalk.inverse(`\n ${welcomeMessage} \n`));
