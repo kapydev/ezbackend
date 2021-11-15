@@ -51,10 +51,14 @@
     <a href="https://discord.gg/S4gTjYjkuG"> 
         <img src="https://img.shields.io/discord/882956870527098910?label=Discord&logo=discord&style=social"/>
     </a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fkapydev%2Fezbackend?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkapydev%2Fezbackend.svg?type=shield"/></a>
     
 </p>
 
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkapydev%2Fezbackend.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkapydev%2Fezbackend?ref=badge_large)
 
 ## Installation
 
