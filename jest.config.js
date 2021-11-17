@@ -3,9 +3,10 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  coveragePathIgnorePatterns:[
+  coveragePathIgnorePatterns: [
     "/node_modules/",
     // eslint-disable-next-line no-useless-escape
     "(\.js)$"
   ]
 };
+

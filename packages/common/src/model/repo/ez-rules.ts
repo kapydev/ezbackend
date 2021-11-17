@@ -4,6 +4,7 @@ import { socketContext } from "socket-io-event-context"
 import { Socket } from "socket.io"
 import { InsertEvent, UpdateEvent, RemoveEvent, LoadEvent, EventSubscriber, EntitySubscriberInterface } from "typeorm"
 import { DecorateClass } from ".."
+import { als } from "asynchronous-local-storage"
 import { EzApp } from "../../ezapp"
 
 
@@ -38,7 +39,7 @@ export type RuleFunctionMeta = {
     rule: RuleFunction
 }
 
-export class EzRules<CurrentRuleTypes extends RuleTypes = RuleTypes> extends EzApp{
+export class EzRules<CurrentRuleTypes extends RuleTypes = RuleTypes> extends EzApp {
     modelName: string
     context: RuleTypes
     ruleFunctionMetas: Array<RuleFunctionMeta>
@@ -49,8 +50,8 @@ export class EzRules<CurrentRuleTypes extends RuleTypes = RuleTypes> extends EzA
         this.context = []
         this.ruleFunctionMetas = []
 
-        this.setInit("Add Rules Subscriber", async(instance) => {
-            instance.subscribers.push(createRulesSubscriber(this))
+        this.setInit("Add Rules Subscriber", async (instance) => {
+            instance.subscribers.unshift(createRulesSubscriber(this))
         })
     }
 
@@ -76,47 +77,63 @@ export function createRulesSubscriber(ezRules: EzRules) {
         if (event.metadata.name != ezRules.modelName) {
             return false
         }
+
         //TODO: Make RuleSubscriber only subscribe to used events to reduce overhead
         if (!ruleMeta.types.includes(ruleType)) {
             return false
         }
+
         return true
     }
 
-    function getRequest() {
-        return requestContext.get("request") as FastifyRequest | undefined ??
-            socketContext.get("request") as Socket["request"] | undefined ??
-            null
+    function getFastifyRequest() {
+        return requestContext.get("request") as FastifyRequest
+    }
+
+    function getSocketRequest() {
+        return socketContext.get<Socket["request"]>("request")
     }
 
     class RuleSubscriber implements EntitySubscriberInterface {
 
-        afterLoad(event: LoadEvent<any>) {
+        afterLoad(entity: any, event: LoadEvent<any>) {
+            als.set("rule_context", event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.READ)) return
-                const req = getRequest()
-                ruleMeta.rule(req, event)
+                const fastifyReq = getFastifyRequest()
+                if (fastifyReq) ruleMeta.rule(fastifyReq, event)
+                const socketReq = getSocketRequest()
+                if (socketReq) ruleMeta.rule(socketReq, event)
             })
         }
         beforeUpdate(event: UpdateEvent<any>) {
+            als.set("rule_context", event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.UPDATE)) return
-                const req = getRequest()
-                ruleMeta.rule(req,event)
+                const fastifyReq = getFastifyRequest()
+                if (fastifyReq) ruleMeta.rule(fastifyReq, event)
+                const socketReq = getSocketRequest()
+                if (socketReq) ruleMeta.rule(socketReq, event)
             })
         }
         beforeInsert(event: InsertEvent<any>) {
+            als.set("rule_context", event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.CREATE)) return
-                const req = getRequest()
-                ruleMeta.rule(req, event)
+                const fastifyReq = getFastifyRequest()
+                if (fastifyReq) ruleMeta.rule(fastifyReq, event)
+                const socketReq = getSocketRequest()
+                if (socketReq) ruleMeta.rule(socketReq, event)
             })
         }
         beforeRemove(event: RemoveEvent<any>) {
+            als.set("rule_context", event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.DELETE)) return
-                const req = getRequest()
-                ruleMeta.rule(req, event)
+                const fastifyReq = getFastifyRequest()
+                if (fastifyReq) ruleMeta.rule(fastifyReq, event)
+                const socketReq = getSocketRequest()
+                if (socketReq) ruleMeta.rule(socketReq, event)
             })
         }
     }

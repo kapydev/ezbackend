@@ -86,6 +86,9 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 │   │ ├── bound _after 
 │   │ └── bound _after 
 │   └── childFunc 
+├─┬ plugin 
+│ ├── bound _after 
+│ └── bound _after 
 └── bound _after 
 "
 `;
@@ -382,8 +385,10 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
   ├── Remove Server Stub 
   ├── Create Fastify Server 
   ├── Register Fastify Plugins 
+  ├── Add Request Context Plugin 
   ├── Set Request Context For Global Access 
   ├── Set SocketIO Context for global access 
+  ├── Add middleware to authenticate outgoing packets 
   ├─┬ UnnamedApp1 
   │ ├── Remove Server Stub 
   │ ├─┬ router 

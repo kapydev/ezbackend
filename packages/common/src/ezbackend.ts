@@ -1,7 +1,7 @@
 import { EzApp, EzBackendServer } from "./ezapp";
 import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 import fp from 'fastify-plugin'
-import { Connection, createConnection, EntitySchema, EntitySubscriberInterface, ObjectLiteral, Repository } from "typeorm";
+import { Connection, createConnection, EntitySchema, LoadEvent, ObjectLiteral, Repository } from "typeorm";
 import { PluginScope } from "@ezbackend/core";
 import { EzError } from "@ezbackend/utils";
 import _ from 'lodash'
@@ -9,9 +9,10 @@ import path from 'path'
 import dotenv from 'dotenv'
 import { InjectOptions } from "light-my-request";
 import { createModelSubscriber, socketIOPlugin } from "./realtime";
-import fastifySocketIO from 'fastify-socket.io'
-import { requestContext } from "fastify-request-context";
+import { fastifyRequestContextPlugin, requestContext } from "fastify-request-context";
+import { als } from "asynchronous-local-storage"
 import { socketContext } from "socket-io-event-context";
+import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -20,7 +21,7 @@ export interface EzBackendInstance {
     repo: Repository<ObjectLiteral>
     orm: Connection
     //TODO: Find correct type for subscriber
-    subscribers:Array<Function>
+    subscribers: Array<Function>
 }
 
 export interface EzBackendOpts {
@@ -134,7 +135,9 @@ export class EzBackend extends EzApp {
         })
 
         this.setPostInit('Create Database Connection', async (instance, opts) => {
+
             instance.orm = await createConnection(
+                //TODO: Allow user to add their own entities and subscribers in orm opts
                 {
                     ...opts.orm,
                     entities: instance.entities,
@@ -160,20 +163,26 @@ export class EzBackend extends EzApp {
             this.registerFastifyPlugins(instance._server, this)
         })
 
-        this.setPostHandler('Set Request Context For Global Access', async(instance,opts) => {
-            instance._server.addHook("onRequest", async (req,res) => {
-                requestContext.set("request",req)
+        this.setPostHandler('Add Request Context Plugin', async (instance, opts) => {
+            instance._server.register(fastifyRequestContextPlugin)
+        })
+
+        this.setPostHandler('Set Request Context For Global Access', async (instance, opts) => {
+            instance._server.addHook("onRequest", async (req, res) => {
+                requestContext.set("request", req)
             })
         })
 
-        this.setPostHandler('Set SocketIO Context for global access', async(instance,opts) => {
+        this.setPostHandler('Set SocketIO Context for global access', async (instance, opts) => {
             instance._server.addHook("onReady", async () => {
                 instance._server.io.use((socket, next) => {
-                    socketContext.set("request",socket.request)
+                    socketContext.set("request", socket.request)
                     next()
                 })
             })
         })
+
+        this.setPostHandler("Add middleware to authenticate outgoing packets", outgoingPacketMiddleware)
 
         this.setRun('Run Fastify Server', async (instance, opts) => {
             await instance._server.listen(opts.port, opts.address)

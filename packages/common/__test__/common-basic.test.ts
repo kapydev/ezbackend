@@ -1,8 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import { EzError } from "@ezbackend/utils";
-import { EzBackend, EzModel, Type } from "../src";
 import ezb from "./test.index"
-import { after } from "lodash";
 
 beforeAll(async () => {
   await ezb.start({
