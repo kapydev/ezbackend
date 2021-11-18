@@ -1,9 +1,10 @@
 import { App, PluginScope } from "@ezbackend/core"
 import { FastifyInstance, FastifyRegister } from "fastify"
 import fp from 'fastify-plugin'
-import {Plugin} from 'avvio'
+import { Plugin } from 'avvio'
 import { EzBackendInstance, EzBackendOpts } from "."
-import {OverloadParameters,OverloadParameters23, OverloadParameters1to5} from '@ezbackend/utils'
+import { OverloadParameters, OverloadParameters23, OverloadParameters1to5 } from '@ezbackend/utils'
+import type { Server } from "socket.io"
 
 type CallableKeysOf<Type> = {
     [Key in keyof Type]: Type[Key] extends Function ? Key : never
@@ -65,6 +66,8 @@ export class EzApp extends App {
 
     get functions() { return this._functions }
 
+    private localInstance: EzBackendInstance | undefined
+
     /**
      * Creates a fastify instance
      */
@@ -72,6 +75,7 @@ export class EzApp extends App {
         super()
         this.setHandler("Create Server Stub", async (instance, opts) => {
             instance.server = createServer(this)
+            this.localInstance = instance
         })
         this.setPostHandler("Remove Server Stub", async (instance, opts) => {
             //URGENT TODO: Make sure that error message when trying to get decorators that are not present is clear
@@ -105,15 +109,65 @@ export class EzApp extends App {
     //NOTE: Inject is being used by EzBackend which is why we remove it
     // inject = generateFastifyFuncWrapper(this, 'inject')
 
-    setPreInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreInit(funcName,plugin)}
-    setInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setInit(funcName,plugin)}
-    setPostInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostInit(funcName,plugin)}
-    setPreHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreHandler(funcName,plugin)}
-    setHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setHandler(funcName,plugin)}
-    setPostHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostHandler(funcName,plugin)}
-    setPreRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreRun(funcName,plugin)}
-    setRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setRun(funcName,plugin)}
-    setPostRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostRun(funcName,plugin)}
+    setPreInit = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPreInit(funcName, plugin) }
+    setInit = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setInit(funcName, plugin) }
+    setPostInit = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostInit(funcName, plugin) }
+    setPreHandler = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPreHandler(funcName, plugin) }
+    setHandler = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setHandler(funcName, plugin) }
+    setPostHandler = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostHandler(funcName, plugin) }
+    setPreRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPreRun(funcName, plugin) }
+    setRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setRun(funcName, plugin) }
+    setPostRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostRun(funcName, plugin) }
+
+    private buildRoutePrefix (instancePrefix: string, pluginPrefix:string ) {
+        if (!pluginPrefix) {
+          return instancePrefix
+        }
+      
+        // Ensure that there is a '/' between the prefixes
+        if (instancePrefix.endsWith('/') && pluginPrefix[0] === '/') {
+          // Remove the extra '/' to avoid: '/first//second'
+          pluginPrefix = pluginPrefix.slice(1)
+        } else if (pluginPrefix[0] !== '/') {
+          pluginPrefix = '/' + pluginPrefix
+        }
+      
+        return instancePrefix + pluginPrefix
+      }
+      
+
+    getPrefix() : string {
+        if (!this.parent) {
+            return ''
+        }
+        if (this.parent instanceof EzApp) {
+            return this.buildRoutePrefix(this.parent.getPrefix(),this.opts.prefix ?? '')
+        }
+        throw "Parent app of an EzApp needs to be instance of EzApp"
+    }
+
+    private getSocketIOByNamespace(namespace?: string) {
+        if (!this.localInstance) throw "Accessing socket IO too early in boot cycle"
+        const io = this.localInstance.socketIO
+
+        if (namespace) return io.of(namespace)
+        else return io.of('/')
+    }
+
+    /**
+     * Get the Socket IO 'io' object WITH namespacing
+     */
+    getSocketIO() {
+        const prefix = this.getPrefix()
+        return this.getSocketIOByNamespace(prefix)
+    }
+    
+    /**
+     * Get the Socket IO 'io' object WITHOUT namespacing
+     */
+    getSocketIORaw() {
+        return this.getSocketIOByNamespace()
+    }
 
     /**
      * Registers all fastify plugins to server instance of ezbackend application

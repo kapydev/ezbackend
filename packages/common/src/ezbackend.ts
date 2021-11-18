@@ -8,11 +8,11 @@ import _ from 'lodash'
 import path from 'path'
 import dotenv from 'dotenv'
 import { InjectOptions } from "light-my-request";
-import { createModelSubscriber, socketIOPlugin } from "./realtime";
+import { createModelSubscriber, createSocketIO, attachSocketIO } from "./realtime";
 import { fastifyRequestContextPlugin, requestContext } from "fastify-request-context";
-import { als } from "asynchronous-local-storage"
 import { socketContext } from "socket-io-event-context";
 import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
+import {Server} from "socket.io"
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -22,6 +22,7 @@ export interface EzBackendInstance {
     orm: Connection
     //TODO: Find correct type for subscriber
     subscribers: Array<Function>
+    socketIO: Server
 }
 
 export interface EzBackendOpts {
@@ -76,6 +77,13 @@ const defaultConfig = {
             scope: ['profile'],
         }
     },
+    "socket.io": {
+        cors : {
+            origin: true,
+            credentials: true,
+            methods: ['GET','PUT','POST','PATCH','DELETE', 'OPTIONS']
+        }
+    }
     // cors: {
     //     origin: (origin: string, cb: Function) => {
     //         if (/localhost/.test(origin)) {
@@ -88,6 +96,7 @@ const defaultConfig = {
     //     }
     // }
 }
+
 
 // Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
 // Kudos to him
@@ -150,7 +159,7 @@ export class EzBackend extends EzApp {
             instance.server.register(fp(ezbErrorPage))
         })
 
-        this.setHandler('Add SocketIO', socketIOPlugin)
+        this.setHandler('Add SocketIO', createSocketIO)
 
 
         this.setHandler('Add Error Schema', addErrorSchema)
@@ -158,6 +167,8 @@ export class EzBackend extends EzApp {
         this.setPostHandler('Create Fastify Server', async (instance, opts) => {
             instance._server = fastify(opts.server)
         })
+
+        this.setPostHandler('Attach Socket IO', attachSocketIO)
 
         this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
             this.registerFastifyPlugins(instance._server, this)

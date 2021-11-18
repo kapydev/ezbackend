@@ -11,12 +11,14 @@
     "@swc/core": "^1.2.108",
     "@swc/jest": "^0.2.5",
     "@types/node": "^16.10.2",
+    "esbuild": "^0.13.14",
+    "esbuild-jest": "^0.5.0",
     "lerna": "^4.0.0",
     "window-size": "^1.1.1"
   },
   "scripts": {
     "build": "node ./scripts/build-package.js",
-    "test": "jest",
+    "test": "jest --maxWorkers=1",
     "prepare": "lerna run prepare"
   },
   "dependencies": {

@@ -5,7 +5,6 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 ├── bound _after 
 ├─┬ childFunc 
 │ ├── ezbErrorPage 
-│ ├── C:\\\\Users\\\\Philip Wee\\\\Documents\\\\easy2dev\\\\ezbackend\\\\node_modules\\\\fastify-socket.io\\\\index.js 
 │ ├─┬ childFunc 
 │ │ ├─┬ childFunc 
 │ │ │ ├── bound _after 
@@ -384,6 +383,7 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 └─┬ _postHandler 
   ├── Remove Server Stub 
   ├── Create Fastify Server 
+  ├── Attach Socket IO 
   ├── Register Fastify Plugins 
   ├── Add Request Context Plugin 
   ├── Set Request Context For Global Access 

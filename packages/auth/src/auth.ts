@@ -5,6 +5,8 @@ import fastifySecureSession from 'fastify-secure-session'
 import fastifyPassport from 'fastify-passport'
 import fs from 'fs'
 
+const wrap = (middleware: Function, opts:any={}) => (socket:any, next:any) => middleware(socket.request, opts, next);
+
 //TODO: Make this of EzApp type instead
 export class EzAuth extends EzApp {
     constructor() {
@@ -33,6 +35,7 @@ powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath 
 `
                 )
             }
+
             instance.server.register(fastifySecureSession, {
                 key: key,
                 cookie: {
@@ -42,12 +45,24 @@ powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath 
                 }
             })
 
+            // this.getSocketIORaw().use(wrap(fastifySecureSession, {
+            //     key: key,
+            //     cookie: {
+            //         path: '/',
+            //         sameSite: 'none',
+            //         secure: true
+            //     }
+            // }))
+
             done()
         })
 
         this.setHandler("Add Fastify Passport", async (instance, opts) => {
             instance.server.register(fastifyPassport.initialize())
             instance.server.register(fastifyPassport.secureSession())
+
+            // this.getSocketIORaw().use(wrap(fastifyPassport.initialize()))
+            // this.getSocketIORaw().use(wrap(fastifyPassport.secureSession()))
         })
 
         this.scope = PluginScope.PARENT
