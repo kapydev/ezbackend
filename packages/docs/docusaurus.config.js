@@ -6,7 +6,7 @@ const githubLink = 'https://bit.ly/3CMVaNs'
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'EzBackend',
+  title: 'EzBackend | Simplified Backend Setup',
   tagline: 'Simplified Backend Setup',
   url: 'https://www.ezbackend.io/',
   baseUrl: '/',
@@ -21,6 +21,12 @@ module.exports = {
     'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;600;700&display=swap',
   ],
   themeConfig: {
+    metadatas: [
+      {
+        name: 'description',
+        content: 'A Node framework focused on speed and ease of use, while keeping the ability to extend and customize'
+      }
+    ],
     hotjar: {
       siteId: '2653159',
     },
@@ -163,6 +169,8 @@ module.exports = {
       indexName: 'ezbackend',
       contextualSearch: false,
     },
+
+
   },
   presets: [
     [
