@@ -1,4 +1,4 @@
-import { EzApp, EzBackendServer } from "./ezapp";
+import { EzApp } from "./ezapp";
 import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 import fp from 'fastify-plugin'
 import { Connection, createConnection, EntitySchema, LoadEvent, ObjectLiteral, Repository } from "typeorm";
@@ -13,10 +13,12 @@ import { fastifyRequestContextPlugin, requestContext } from "fastify-request-con
 import { socketContext } from "socket-io-event-context";
 import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
 import {Server} from "socket.io"
+import VirtualProxyWrapper from "virtual-proxy-wrapper";
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
-    server: EzBackendServer
+    server: FastifyInstance
+    serverProxy: VirtualProxyWrapper<FastifyInstance>
     _server: FastifyInstance
     repo: Repository<ObjectLiteral>
     orm: Connection

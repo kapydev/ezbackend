@@ -64,9 +64,6 @@ powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath 
         this.setHandler("Add Fastify Passport", async (instance, opts) => {
             instance.server.register(fastifyPassport.initialize())
             instance.server.register(fastifyPassport.secureSession())
-            instance.server.addHook('onRequest', async(req:any,res:any) => {
-                console.log(req.cookies)
-            })
 
             this.getSocketIORaw().use((socket,next) => {
                 if (socket.request.headers.cookie) {
