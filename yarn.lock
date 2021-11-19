@@ -3537,6 +3537,13 @@
   resolved "https://registry.yarnpkg.com/@types/component-emitter/-/component-emitter-1.2.11.tgz#50d47d42b347253817a39709fef03ce66a108506"
   integrity sha512-SRXjM+tfsSlA9VuG8hGO2nft2p8zjXCK1VcC6N4NXbBbYbSia9kzCChYQajIjzIqOOOuh5Ock6MmV2oux4jDZQ==
 
+"@types/connect-flash@^0.0.37":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@types/connect-flash/-/connect-flash-0.0.37.tgz#e686cbbc80bd0787850b239f4828d62d74066418"
+  integrity sha512-SfmGGYpKvPfZeA+v74FS0HlYqVsx8Inb4d3px99kz2xSMx/IQiz/K/i+7MHTmk/OkE+0suZX108tHrQJ8QEGag==
+  dependencies:
+    "@types/express" "*"
+
 "@types/connect@*":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
@@ -5687,6 +5694,11 @@ configstore@^5.0.1:
     unique-string "^2.0.0"
     write-file-atomic "^3.0.0"
     xdg-basedir "^4.0.0"
+
+connect-flash@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/connect-flash/-/connect-flash-0.1.1.tgz#d8630f26d95a7f851f9956b1e8cc6732f3b6aa30"
+  integrity sha1-2GMPJtlaf4UfmVax6MxnMvO2qjA=
 
 connect-history-api-fallback@^1.6.0:
   version "1.6.0"

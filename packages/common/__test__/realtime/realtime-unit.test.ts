@@ -13,6 +13,8 @@ describe("Should be able to get io object", () => {
 
         app.addApp(child, { prefix: "child" })
         child.addApp(nestedChild,{prefix: "nested-child"})
+
+        app.removeHook("_run","Run Fastify Server")
     })
 
     afterEach(async() => {
@@ -22,8 +24,12 @@ describe("Should be able to get io object", () => {
     })
 
     test("Get with namespace", async () => {
+
+        let handlerRan = false
+
         nestedChild.setHandler("Check SocketIO", async (instance, opts) => {
-            expect(nestedChild.getSocketIO().name).toBe("child/nested-child")
+            handlerRan = true
+            expect(nestedChild.getSocketIO().name).toBe("/child/nested-child")
         })
 
         await app.start({
@@ -31,6 +37,8 @@ describe("Should be able to get io object", () => {
                 logger: false
             }
         })
+
+        expect(handlerRan).toBe(true)
     })
 
     test("Get without namespace", async () => {
