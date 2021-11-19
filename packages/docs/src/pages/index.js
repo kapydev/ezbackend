@@ -204,7 +204,7 @@ export default function Home() {
                 <Feature
                   icon={<IconSecurity className='w-12 h-12' />}
                   title='One-Line Authentication'
-                  info='Add user sign ups, logins and permission layering with Google'
+                  info='Add user sign ups, logins and permission layering with Google Authentication'
                 />
 
                 <Feature

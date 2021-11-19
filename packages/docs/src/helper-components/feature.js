@@ -3,11 +3,11 @@ import React from 'react';
 export function Feature(props) {
 
   return (
-    <div style={{minWidth:220}}>
+    <div style={{ minWidth: 220 }}>
 
-      <div className='grid place-items-center self-center'>
+      <div className='grid place-items-center self-center gap-2'>
 
-        <div className='flex justify-center mb-2 mr-2'>
+        <div className='flex mb-2 mr-2'>
           {props.icon}
         </div>
 
@@ -18,10 +18,18 @@ export function Feature(props) {
         </div>
 
         <div className='flex justify-center'>
-          <div className='mt-4 font-monts'>
+          <div className='mt-2 font-monts'>
             <div className='text-md text-center'>
               {props.info}
             </div>
+          </div>
+        </div>
+
+        <div className='flex justify-start'>
+          <div className='flex text-center'>
+            <a className='text-gray-400 hover:text-white' href='www.google.com'>
+              Learn More ➜
+            </a>
           </div>
         </div>
 
@@ -43,7 +51,7 @@ export function MainFeature(props) {
         </div>
       </div>
       <div className='mt-4 font-monts text-xl max-w-md md:max-w-sm'>
-          {props.children}
+        {props.children}
       </div>
     </div>
   )
