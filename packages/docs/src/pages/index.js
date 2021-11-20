@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player/youtube'
 import Layout from '@theme/Layout';
 import toast, { Toaster } from 'react-hot-toast';
+import { features_content } from '../content/features-content'
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -95,23 +96,28 @@ export default function Home() {
 
             <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
-                <div className='text-5xl font-bold font-mono sm:text-center'>
+                <div className='text-5xl font-bold font-mono text-center'>
                   Build Your MVP Faster
                 </div>
-                <div className='text-xl font-mono sm:text-center'>
+                <div className='text-xl font-mono text-center'>
                   Simple to Setup. Fully Customizable
                 </div>
-                <div className='flex flex-col sm:flex-row justify-center gap-4'>
+                <div className='flex flex-row justify-center gap-4'>
                   <div>
                     <CtaButton islink={true} link="/docs/getting-started" >
                       Get Started
                     </CtaButton>
                   </div>
-                  <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' islink={false} target='_blank'>
+                  <div>
+                    <CtaButton islink={true} link="/features/all-features" >
+                      All Features
+                    </CtaButton>
+                  </div>
+                  {/* <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' islink={false} target='_blank'>
                     <CtaButton islink={false}>
                       Live Demo
                     </CtaButton>
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </div>
@@ -187,31 +193,19 @@ export default function Home() {
 
             </div>
 
-            <div className='overflow-x-auto col-span-full '>
-              <div className='gap-6 grid grid-flow-col'>
+            <div className='col-span-full'>
 
-                <Feature
-                  icon={<IconWorld className='w-12 h-12' />}
-                  title='Instant CRUD Generation'
-                  info='Instant CRUD endpoints generation with full customization capabilities'
-                />
+              <div className='grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
 
-                <Feature
-                  icon={<IconApiDocs className='w-12 h-12' />}
-                  title='Automated Documentation'
-                  info='Automatically generate documentation for your APIs from the models you plan'
-                />
-                <Feature
-                  icon={<IconSecurity className='w-12 h-12' />}
-                  title='One-Line Authentication'
-                  info='Add user sign ups, logins and permission layering with Google Authentication'
-                />
-
-                <Feature
-                  icon={<IconDatabase className='w-12 h-12' />}
-                  title='Choose your Database'
-                  info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
-                />
+                {features_content.slice(0, 4).map((feature) => {
+                  return (
+                    <Feature
+                      icon={feature.icon}
+                      title={feature.title}
+                      info={feature.info}
+                      description={feature.description}
+                    />)
+                })}
 
               </div>
             </div>
