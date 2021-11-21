@@ -4,6 +4,7 @@ import ReactPlayer from 'react-player/youtube'
 import Layout from '@theme/Layout';
 import toast, { Toaster } from 'react-hot-toast';
 import { features_content } from '../content/features-content'
+import StepFeature from '../helper-components/step-feature';
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -20,7 +21,6 @@ import IconApiDocs from '../assets/icon-api-docs.svg'
 import IconDatabase from '../assets/icon-database.svg'
 import IconSecurity from '../assets/icon-security.svg'
 import IconWorld from '../assets/icon-world.svg'
-import IconTick from '../assets/icon-tick.svg'
 import IconGithub from '../assets/icon-github.svg'
 import IconYoutube from '../assets/icon-youtube.svg'
 import IconDiscord from '../assets/icon-discord.svg'
@@ -310,19 +310,5 @@ function Txty(props) {
   )
 }
 
-function StepFeature(props) {
-  return (
-    <Delayed waitBeforeShow={props.delay}>
-      <div className='fade'>
-        <div className='flex justify-start gap-3 my-2'>
-          <IconTick className='self-start w-6 h-6' />
-          <div className='font-monts'>
-            {props.children}
-          </div>
-        </div>
-      </div>
-    </Delayed>
-  )
-}
 
 
