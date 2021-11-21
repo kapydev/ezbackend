@@ -28,6 +28,7 @@ export const features_content = [
 
     {
         title: "Instant API Generation",
+        route: "/features/benchmarks",
         icon: <IconWorld className={ICONCLASSNAME} />,
         info: "Instant API endpoints generation with customization capabilities",
         description: "",
@@ -38,6 +39,7 @@ export const features_content = [
 
     {
         title: "Automated Documentation",
+        route: "/features/benchmarks",
         icon: <IconApiDocs className={ICONCLASSNAME} />,
         info: "EzBackend automatically generates documentation according to the OpenAPI specification.",
         description: "",
@@ -48,6 +50,7 @@ export const features_content = [
 
     {
         title: "Authentication",
+        route: "/features/benchmarks",
         icon: <IconSecurity className={ICONCLASSNAME} />,
         info: "Add authentication to your backend in one line of code. User sign ups and logins and permission layering with Google.",
         description: "",
@@ -58,6 +61,7 @@ export const features_content = [
 
     {
         title: "Supports >10 Databases",
+        route: "/features/benchmarks",
         icon: <IconDatabase className={ICONCLASSNAME} />,
         info: "EzBackend remains database agnostic with industry standard databases: Postgres, MySQL, MongoDB, & more",
         description: "EzBackend uses typeorm under the hood, which supports XXX DBs. It also utilise database hooks to provide row level security",
@@ -68,6 +72,7 @@ export const features_content = [
 
     {
         title: "XX% Less Code",
+        route: "/features/benchmarks",
         icon: <IconCode className={ICONCLASSNAME} />,
         info: "Do more with less. See comparisons to other popular frameworks.",
         description: "EzBackend automatically generates API documentation, a REST API and connections to your database. All of the generation functionality is fully customisable, so that generated endpoints can be generated according to your company's specification",
@@ -78,6 +83,7 @@ export const features_content = [
 
     {
         title: "XX% Faster",
+        route: "/features/benchmarks",
         icon: <IconScaling className={ICONCLASSNAME} />,
         info: "See how EzBackend implements performance as a first class citizen",
         description: "EzBackend uses Fastify under the hood, a NodeJS framework with 5 times the benchmark performance as Express (At the time of writing) (Support with our own benchmarks)",
@@ -88,6 +94,7 @@ export const features_content = [
 
     {
         title: "TypeScript Support",
+        route: "/features/benchmarks",
         icon: <IconTypeScript className={ICONCLASSNAME} />,
         info: "An amazing typescript reflection system where you can get typescript types despite writing plain javascript",
         description: <div>EzBackend supports typescript out of the box. However, the file looks like it is written in plain javascript.<br /><br /> Because EzBackend uses a strong type inference system under the hood, most functions within the framework automatically have rich IDE support out of the box</div>,
@@ -98,6 +105,7 @@ export const features_content = [
 
     {
         title: "Fast Refresh",
+        route: "/features/benchmarks",
         icon: <IconRefresh className={ICONCLASSNAME} />,
         info: "Fast, reliable editing experience, with changes being reflected immediately with ctrl-s",
         description: <div>EzBackend uses ts-node-dev under the hood, which recompiles only necessary files with every refresh, significantly reducing compile times and updated code with every ctrl-s<br /><br />It restarts target node process when any of required files changes (as standard node-dev) but shares Typescript compilation process between restarts. This significantly increases speed of restarting comparing to node-dev -r ts-node/register ..., nodemon -x ts-node ... variations because there is no need to instantiate ts-node compilation each time.</div>,
@@ -108,6 +116,7 @@ export const features_content = [
 
     {
         title: <div>Consistent <br /> Dev & Prod Env</div>,
+        route: "/features/benchmarks",
         icon: <IconEnv className={ICONCLASSNAME} />,
         info: "Stop writing extensive environment specific code. EzBackend requires no additional configuration for deployment",
         description: <div>EzBackend automatically detects if it is running in a development environment or production environment, and automatically configures itself to run securely and safely in either one<br /><br />While EzBackend runs with strong defaults, these defaults are still entirely configurable to your custom needs</div>,
@@ -118,6 +127,7 @@ export const features_content = [
 
     {
         title: "Automated Database Interface",
+        route: "/features/benchmarks",
         icon: <IconDatabase className={ICONCLASSNAME} />,
         info: "",
         description: "",
@@ -128,6 +138,7 @@ export const features_content = [
 
     {
         title: "One-Line Realtime Functionality",
+        route: "/features/benchmarks",
         icon: <IconClock className={ICONCLASSNAME} />,
         info: "",
         description: "",
@@ -138,6 +149,7 @@ export const features_content = [
 
     {
         title: "One-Line Storage Functionality",
+        route: "/features/benchmarks",
         icon: <IconFileStorage className={ICONCLASSNAME} />,
         info: "Store and serve files in any format.",
         description: "",

@@ -37,14 +37,14 @@ function AllFeatures() {
                   icon={feature.icon}
                   title={feature.title}
                   info={feature.info}
-                  description={feature.description}
+                  route={feature.route}
                 />
               )
             })}
 
             <br />
 
-            {features_content.map((feature) => {
+            {/* {features_content.map((feature) => {
               if (feature.description !== "") {
                 return (
                   <FeatureDescription
@@ -60,7 +60,7 @@ function AllFeatures() {
                 return null
               }
 
-            })}
+            })} */}
 
           </div>
         </div>

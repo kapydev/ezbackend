@@ -1,6 +1,6 @@
 import Layout from '@theme/Layout';
-import { FeatureDescription } from '../../helper-components/feature-description';
-import { Feature } from '../../helper-components/feature';
+import { FeatureDescription } from '../helper-components/feature-description';
+import { Feature } from '../helper-components/feature';
 import IconApiDocs from '../../assets/icon-api-docs.svg'
 import IconDatabase from '../../assets/icon-database.svg'
 import IconSecurity from '../../assets/icon-security.svg'
@@ -12,7 +12,7 @@ import IconTypeScript from '../../assets/icon-typescript.svg'
 import IconRefresh from '../../assets/icon-refresh.svg'
 import IconEnv from '../../assets/icon-env.svg'
 import IconClock from '../../assets/icon-clock.svg'
-import StepFeature from '../../helper-components/step-feature';
+import StepFeature from '../helper-components/step-feature';
 // /https://heroicons.com/
 
 function LessCode() {

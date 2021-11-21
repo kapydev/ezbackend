@@ -3,7 +3,7 @@ import React from 'react';
 export function Feature(props) {
 
   return (
-    <div style={{ minWidth: 220 }} className='col-span-1 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110'>
+    <a href={props.route} style={{ minWidth: 220 }} className='text-gray-100 no-underline col-span-1 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110'>
 
       <div className='grid place-items-center self-center gap-2'>
 
@@ -25,19 +25,17 @@ export function Feature(props) {
           </div>
         </div>
 
-        {(props.description !== "") ?
-          <div className='flex justify-start'>
-            <div className='flex text-center'>
-              <a className='text-gray-400 hover:text-white' href='/features/all-features'>
-                Learn More ➜
-              </a>
+        <div className='flex justify-start'>
+          <div className='flex text-center'>
+            <div className='text-gray-400 hover:text-white'>
+              Learn More ➜
             </div>
           </div>
-          : null}
+        </div>
 
       </div>
 
-    </div>
+    </a>
   )
 }
 
