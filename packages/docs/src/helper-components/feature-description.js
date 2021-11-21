@@ -14,8 +14,12 @@ export function FeatureDescription(props) {
                 </div>
             </div>
 
-            <div className='col-span-1 md:col-span-1 flex justify-end'>
+            <div className='col-span-1 flex justify-center'>
                 <img src={props.media} alt={props.title} width={props.width} height={props.height} />
+            </div>
+
+            <div className='col-span-full'>
+                {props.add_content}
             </div>
 
         </div>

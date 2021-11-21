@@ -53,6 +53,7 @@ function AllFeatures() {
                     media={(feature.media === null) ? greybox : feature.media}
                     height='80%'
                     width='80%'
+                    add_content={feature.add_content}
                   />
                 )
               } else {
