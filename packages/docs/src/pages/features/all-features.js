@@ -38,6 +38,7 @@ function AllFeatures() {
                   title={feature.title}
                   info={feature.info}
                   route={feature.route}
+                  released={feature.released}
                 />
               )
             })}

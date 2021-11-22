@@ -195,7 +195,7 @@ export default function Home() {
 
             <div className='col-span-full'>
 
-              <div className='grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
+              <div className='grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
 
                 {features_content.slice(0, 4).map((feature) => {
                   return (
@@ -203,10 +203,18 @@ export default function Home() {
                       icon={feature.icon}
                       title={feature.title}
                       info={feature.info}
+                      route={feature.route}
+                      released={feature.released}
                       description={feature.description}
                     />)
                 })}
 
+              </div>
+              <div className="flex justify-center mt-12">
+
+              <CtaButton islink={true} link="/features/all-features" >
+                      All Features
+                    </CtaButton>
               </div>
             </div>
 
