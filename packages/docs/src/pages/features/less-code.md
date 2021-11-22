@@ -70,4 +70,4 @@ Some features built into EzBackend were not included in the other backends to pr
 
 ### Speed Comparisons
 
-Despite the reduction in code, EzBackend still provides the same performance, if not greater. [View the benchmarks here]('./../benchmarks.md)
+Despite the reduction in code, EzBackend still provides the same performance, if not greater. [View the benchmarks here]('./../benchmarks)

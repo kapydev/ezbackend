@@ -19,11 +19,11 @@ import {EzUser, EzAuth} from '@ezbackend/auth'
 
 const app = new EzBackend()
 
-app.addApp('ez-auth', new EzAuth())
+app.addApp(new EzAuth())
 
-const user = new EzUser('User',['google'],{})
+const user = new EzUser('User',['google'])
 
-app.addApp('User',user,{prefix:'user'})
+app.addApp(user,{prefix:'user'})
 
 app.start()
 ```
@@ -62,10 +62,8 @@ For example, setting up the google provider requires you to set the above enviro
 <!-- TODO: Consider if loading environment variables automatically is a good idea (consider load order as well) -->
 
 ```ts
-app.addApp('User',user,{prefix:'user'})
+app.addApp(user,{prefix:'user'})
 ```
-
-`User` - purely visual name of the App
 
 `prefix:user` - All of the user routes are under the prefix `user`
 
@@ -123,7 +121,7 @@ Different users will probably have different roles within the application. For e
 ```ts
 const app = new EzBackend()
 
-app.addApp('ez-auth', new EzAuth())
+app.addApp(new EzAuth())
 
 const user = new EzUser('User', ['google'], {
     isAdmin: { //GOOD
@@ -137,7 +135,7 @@ const user = new EzUser('User', ['google'], {
     isFreeTier: Type.BOOL //BAD
 })
 
-app.addApp('User',user,{prefix:'user'})
+app.addApp(user,{prefix:'user'})
 
 app.start()
 ```
