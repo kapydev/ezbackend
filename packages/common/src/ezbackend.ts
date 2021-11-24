@@ -8,7 +8,6 @@ import { PluginScope } from "@ezbackend/core";
 import _ from 'lodash'
 import dotenv from 'dotenv'
 import fp from 'fastify-plugin'
-import path from 'path'
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -16,6 +15,10 @@ export interface EzBackendInstance {
     _server: FastifyInstance
     repo: Repository<ObjectLiteral>
     orm: Connection
+}
+
+export type RecursivePartial<T> = {
+    [P in keyof T]? : RecursivePartial<T[P]>
 }
 
 export interface EzBackendOpts {
@@ -103,29 +106,7 @@ const defaultConfig: EzBackendOpts['ezbackend'] = {
         type: "better-sqlite3",
         database: "tmp/db.sqlite",
         synchronize: true
-    },
-    // auth: {
-    //     secretKey: process.env.SECRET_KEY ?? undefined,
-    //     secretKeyPath: path.join(process.cwd(), 'secret-key'),
-    //     successRedirectURL: "http://localhost:8000/db-ui",
-    //     failureRedirectURL: "http://localhost:8000/db-ui",
-    //     google: {
-    //         googleClientId: process.env.GOOGLE_CLIENT_ID,
-    //         googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    //         scope: ['profile'],
-    //     }
-    // },
-    // cors: {
-    //     origin: (origin: string, cb: Function) => {
-    //         if (/localhost/.test(origin)) {
-    //             //  Request from localhost will pass
-    //             cb(null, true)
-    //             return
-    //         }
-    //         // Generate an error on other origins, disabling access
-    //         cb(new Error("Not allowed"))
-    //     }
-    // }
+    }
 }
 
 // Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
@@ -161,7 +142,7 @@ const ezbErrorPage: FastifyPluginCallback<{}> = (fastify, options, next) => {
  */
 export class EzBackend extends EzApp {
 
-    constructor(ezbackendOpts?: EzBackendOpts['ezbackend']) {
+    constructor() {
         super()
 
         this.setDefaultOpts(defaultConfig)
@@ -171,7 +152,7 @@ export class EzBackend extends EzApp {
         })
         this.setPostInit('Create Database Connection', async (instance, opts) => {
 
-            const ormOpts = opts.orm ?? this.getOpts('ezbackend', opts, ezbackendOpts)?.typeorm!
+            const ormOpts = opts.orm ?? this.getOpts('ezbackend', opts)?.typeorm!
 
             if (ormOpts.entities) {
                 console.warn("Defining your own entities outside of the EzBackend orm wrapper may result in unexpected interactions. The EzBackend orm wrapper provides the full capability of typeorm so that should be used instead.")
@@ -196,7 +177,7 @@ export class EzBackend extends EzApp {
         this.setHandler('Add Error Schema', addErrorSchema)
 
         this.setPostHandler('Create Fastify Server', async (instance, opts) => {
-            const fastifyOpts = opts.server ?? this.getOpts('ezbackend', opts, ezbackendOpts)?.fastify!
+            const fastifyOpts = opts.server ?? this.getOpts('ezbackend', opts)?.fastify!
 
             instance._server = fastify(fastifyOpts)
         })
@@ -207,7 +188,7 @@ export class EzBackend extends EzApp {
 
         this.setRun('Run Fastify Server', async (instance, opts) => {
 
-            const listenOpts = this.getOpts('ezbackend', opts, ezbackendOpts)
+            const listenOpts = this.getOpts('ezbackend', opts)
             const port = opts.port ?? listenOpts?.listen.port
             const address = opts.address ?? listenOpts?.listen.address
             const backlog = listenOpts?.listen.backlog
@@ -271,7 +252,7 @@ You must wait for the above function to finish before you can run ${funcName}
     }
 
     //URGENT TODO: Remove temporary any fix
-    async start(opts?: EzBackendOpts) {
+    async start(opts?: RecursivePartial<EzBackendOpts>) {
         await super.start(opts)
     }
 

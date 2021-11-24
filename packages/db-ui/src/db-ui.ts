@@ -1,9 +1,10 @@
+import { EzApp, EzBackendInstance, EzBackendOpts, convert, getDefaultGenerators } from '@ezbackend/common'
+import { FastifyInstance, RouteOptions } from 'fastify'
+
 import { PluginScope } from '@ezbackend/core'
-import { convert, getDefaultGenerators, EzBackendInstance, EzBackendOpts, EzApp } from '@ezbackend/common'
+import chalk from 'chalk'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
-import { RouteOptions, FastifyInstance } from 'fastify'
-import chalk from 'chalk'
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
 /**
@@ -122,6 +123,7 @@ export class EzDbUI extends EzApp {
 
         this.setPostRun("Display DB UI URL", async (instance, opts) => {
             //TODO: Check if it is possible to access default port directly from ezbackend.ts
+            //@ts-ignore
             const port = opts.port ?? opts.ezbackend?.listen?.port ?? (process.env.PORT || 8000)
             if (port && process.env.NODE_ENV != 'test') {
                 console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${port}/db-ui/`))

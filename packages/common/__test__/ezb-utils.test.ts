@@ -1,17 +1,17 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import ezb from "./test.index"
-import {EzBackend} from '../src'
 
+import { EzBackend } from '../src'
+import ezb from "./test.index"
 
 describe("Test Utils", () => {
 
-    it("Should throw an error if the instance has not started and you try to use printRoutes, printPlugins or prettyPrint", async() => {
+    it("Should throw an error if the instance has not started and you try to use printRoutes, printPlugins or prettyPrint", async () => {
 
         const app = new EzBackend()
 
         const errored = {
-            printRoutes:false,
-            printPlugins:false,
+            printRoutes: false,
+            printPlugins: false,
             prettyPrint: false
         }
         try {
@@ -30,8 +30,8 @@ describe("Test Utils", () => {
             errored.prettyPrint = true
         }
         expect(errored).toEqual({
-            printRoutes:true,
-            printPlugins:true,
+            printRoutes: true,
+            printPlugins: true,
             prettyPrint: true
         })
     })
@@ -40,14 +40,19 @@ describe("Test Utils", () => {
         beforeAll(async () => {
             await ezb.start({
                 port: 3000,
-                server: {
-                    logger: false
-                },
+                ezbackend: {
+                    fastify: {
+                        logger: false
+                    },
+                    typeorm: {
+                        database: ':memory:'
+                    }
+                }
             })
-        
-        
+
+
         });
-        
+
         afterAll(async () => {
             const instance = ezb.getInternalInstance()
             await instance.orm.close();
@@ -61,23 +66,23 @@ describe("Test Utils", () => {
                 method: "GET",
                 url: "/"
             })
-    
+
             expect(ezb.printRoutes()).toMatchSnapshot()
         })
-    
+
         it("Should be able to print all fastify plugins nicely", async () => {
-    
+
             //Injection to initialize fastify to view the routes
             await ezb.inject({
                 method: "GET",
                 url: "/"
             })
-    
+
             const fastifyPluginsWithoutLoadTimings = ezb.printPlugins().replace(/\d+ ms/gm, "")
-    
+
             expect(fastifyPluginsWithoutLoadTimings).toMatchSnapshot()
         })
-    
+
         it("Should be able to print the plugin tree for debugging", async () => {
             //Injection to initialize fastify to view the routes
             await ezb.inject({
@@ -86,12 +91,12 @@ describe("Test Utils", () => {
             })
             //TODO: Make it able to easily obtain the plugin names
             const pluginsWithoutLoadTimings = ezb.prettyPrint().replace(/\d+ ms/gm, "")
-    
+
             expect(pluginsWithoutLoadTimings).toMatchSnapshot()
-    
+
         })
-        
+
     })
 
-    
+
 })

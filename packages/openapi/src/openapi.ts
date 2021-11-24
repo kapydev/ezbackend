@@ -1,8 +1,9 @@
-import { PluginScope } from "@ezbackend/core"
+import { SwaggerOptions, fastifySwagger } from 'fastify-swagger'
+
 import { EzApp } from "@ezbackend/common"
-import { fastifySwagger, SwaggerOptions } from 'fastify-swagger'
 import { EzBackendOpts } from "@ezbackend/common"
 import type { FastifyRegisterOptions } from 'fastify'
+import { PluginScope } from "@ezbackend/core"
 
 declare module '@ezbackend/common' {
     interface EzBackendOpts {
@@ -30,14 +31,14 @@ const defaultConfig: EzBackendOpts['ezOpenAPI'] = {
 }
 
 export class EzOpenAPI extends EzApp {
-    constructor(openAPIopts?: EzBackendOpts['ezOpenAPI']) {
+    constructor() {
         super()
 
         this.setDefaultOpts(defaultConfig)
 
         this.setHandler('Add Swagger Plugin', async (instance, fullOpts) => {
 
-            const opts = this.getOpts('ezOpenAPI', fullOpts, openAPIopts)
+            const opts = this.getOpts('ezOpenAPI', fullOpts)
 
             instance.server.register(fastifySwagger,opts)
         })

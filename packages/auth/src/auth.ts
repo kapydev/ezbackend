@@ -21,7 +21,7 @@ declare module "@ezbackend/common" {
     }
 }
 
-const defaultConfig: EzBackendOpts['auth'] = {
+export const defaultConfig: EzBackendOpts['auth'] = {
     secretKey: process.env.SECRET_KEY ?? undefined,
     secretKeyPath: path.join(process.cwd(), 'secret-key'),
     successRedirectURL: "http://localhost:8000/db-ui",
@@ -34,6 +34,11 @@ const defaultConfig: EzBackendOpts['auth'] = {
             sameSite: 'none',
             secure: true
         }
+    },
+    google: {
+        googleClientId: process.env.GOOGLE_CLIENT_ID!,
+        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        scope: ['google']
     }
 }
 
@@ -70,14 +75,14 @@ powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath 
 
 //TODO: Make this of EzApp type instead
 export class EzAuth extends EzApp {
-    constructor(authOpts?: EzBackendOpts['auth']) {
+    constructor() {
         super()
 
         this.setDefaultOpts(defaultConfig)
 
         this.setHandler("Add Fastify Secure Session", async (instance, fullOpts) => {
 
-            const opts = this.getOpts('auth', fullOpts, authOpts)
+            const opts = this.getOpts('auth', fullOpts)
 
             const key = getKey(opts)
 

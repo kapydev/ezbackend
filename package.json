@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "node ./scripts/build-package.js",
-    "test": "jest",
+    "test": "jest --runInBand",
     "prepare": "lerna run prepare"
   },
   "dependencies": {

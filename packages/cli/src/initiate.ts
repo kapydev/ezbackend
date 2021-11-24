@@ -1,14 +1,13 @@
-import chalk from "chalk";
-import { ProjectType } from "./project-types";
-import { isEzbInstalled } from "./detect";
-import { readPackageJson } from "./js-package-manager";
 import { JsPackageManagerFactory } from "./js-package-manager/JsPackageManagerFactory";
-import { paddedLog } from "./helpers";
+import { ProjectType } from "./project-types";
+import chalk from "chalk";
 import { commandLog } from "./helpers";
-import path from 'path'
-import fs from 'fs'
 import defaultGenerator from './generators/DEFAULT'
-
+import fs from 'fs'
+import { isEzbInstalled } from "./detect";
+import { paddedLog } from "./helpers";
+import path from 'path'
+import { readPackageJson } from "./js-package-manager";
 
 //TODO: Seperate the cli from the server to reduce load time
 const logger = console;
@@ -20,7 +19,6 @@ export type initiateOptions = {
 }
 
 export default function initiate(dir: string, options: initiateOptions, pkg: any) {
-  console.log(options)
   const welcomeMessage =
     "EzBackend - An extensible backend optimised for the developer experience";
   logger.log(chalk.inverse(`\n ${welcomeMessage} \n`));

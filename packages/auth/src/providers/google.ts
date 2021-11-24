@@ -5,23 +5,12 @@ import { BaseProvider } from './base'
 import type { EzBackendInstance } from '@ezbackend/common'
 import { EzError } from "@ezbackend/utils"
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import { ProviderOptions } from '.'
 import fastifyPassport from 'fastify-passport'
 
-interface GoogleProviderOptions {
+interface GoogleProviderOptions extends ProviderOptions{
     googleClientId: string
     googleClientSecret: string
-    /**
-     * @deprecated Instead of using {google:{successRedirectURL:...}}
-     * use
-     * {successRedirectURL:...}
-     */
-    successRedirectURL: string
-    /**
-     * @deprecated Instead of using {google:{failureRedirectURL:...}}
-     * use
-     * {failureRedirectURL:...}
-     */
-    failureRedirectURL: string
     //TODO: Strict typechecking for allowed google scopes
     scope: Array<string>
 }

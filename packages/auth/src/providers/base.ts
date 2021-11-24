@@ -3,8 +3,9 @@ import type { FastifyInstance, FastifyReply, FastifyRequest, RouteOptions } from
 
 import { AnyStrategy } from "fastify-passport/dist/strategies"
 import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
-import {EzBackendAuthOpts} from '../auth'
+import { EzBackendAuthOpts } from '../auth'
 import { SerializeFunction } from "fastify-passport/dist/Authenticator"
+import { defaultConfig } from '../auth'
 import fastifyPassport from 'fastify-passport'
 
 //TODO: Generate this type more programatically to only have types introduced by user
@@ -12,6 +13,21 @@ declare module 'fastify' {
     interface PassportUser {
         [index: string]: any
     }
+}
+
+export interface ProviderOptions {
+    /**
+     * @deprecated Instead of using {google:{successRedirectURL:...}}
+     * use
+     * {successRedirectURL:...}
+     */
+    successRedirectURL?: string
+    /**
+     * @deprecated Instead of using {google:{failureRedirectURL:...}}
+     * use
+     * {failureRedirectURL:...}
+     */
+    failureRedirectURL?: string
 }
 
 type ProviderName = keyof EzBackendAuthOpts
@@ -26,6 +42,8 @@ export abstract class BaseProvider extends EzApp {
         this.providerName = providerName
         this.modelName = modelName
 
+        this.setDefaultOpts(defaultConfig)
+
         this.setHandler(`Add ${this.providerName} Auth Provider`, async (instance, opts) => {
             this.addProvider(instance, opts)
         })
@@ -39,13 +57,14 @@ export abstract class BaseProvider extends EzApp {
     //TODO: Implement this security scheme in the swagger spec
     // abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
-    addProvider(instance: EzBackendInstance, opts: EzBackendOpts) {
+    addProvider(instance: EzBackendInstance, fullOpts: EzBackendOpts) {
+
+        const opts = this.getOpts('auth', fullOpts)
 
         //URGENT TODO: Double check edge cases for this
         const providerOpts = {
-            //@ts-ignore
-            ...opts.auth[this.providerName]!,
-            ...opts.auth
+            ...opts[this.providerName] as ProviderOptions,
+            ...opts
         }
 
         instance.server.register(async (server, opts) => {

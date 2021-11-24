@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+
 import ezb from "./test.index"
 
 //TODO: Make tests independent of each other
@@ -6,8 +7,13 @@ import ezb from "./test.index"
 beforeAll(async () => {
   await ezb.start({
     port: 3000,
-    server: {
-      logger:false
+    ezbackend: {
+      fastify: {
+        logger: false
+      },
+      typeorm: {
+        database: ':memory:'
+      }
     }
   })
 });

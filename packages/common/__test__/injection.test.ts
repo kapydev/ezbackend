@@ -1,12 +1,16 @@
-import { EzBackend } from "../src";
+import { EzBackend, EzBackendOpts, RecursivePartial } from "../src";
 
 describe("Plugin Registering", () => {
     let app: EzBackend
 
-    const defaultConfig = {
-        port: 3000,
-        server: {
-            logger:false
+    const defaultConfig: RecursivePartial<EzBackendOpts> = {
+        ezbackend: {
+            fastify: {
+                logger: false
+            },
+            typeorm: {
+                database: ':memory:'
+            }
         }
     }
 
@@ -27,7 +31,7 @@ describe("Plugin Registering", () => {
 
         let mock = jest.fn()
 
-        try  {
+        try {
             await app.inject({
                 method: "GET",
                 url: "/"

@@ -2,8 +2,13 @@ import { EzBackend } from "../../common/src"
 import {EzCors} from "../src"
 
 const defaultConfig = {
-    server: {
-        logger: false
+    ezbackend: {
+        fastify: {
+            logger: false
+        },
+        typeorm: {
+            database: ':memory:'
+        }
     }
 }
 describe("Cors", () => {

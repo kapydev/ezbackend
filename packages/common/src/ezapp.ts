@@ -1,9 +1,11 @@
 import { App, PluginScope } from "@ezbackend/core"
-import { FastifyInstance, FastifyRegister } from "fastify"
-import fp from 'fastify-plugin'
-import { Plugin } from 'avvio'
 import { EzBackendInstance, EzBackendOpts } from "."
-import { OverloadParameters, OverloadParameters23, OverloadParameters1to5 } from '@ezbackend/utils'
+import { FastifyInstance, FastifyRegister } from "fastify"
+import { OverloadParameters, OverloadParameters1to5, OverloadParameters23 } from '@ezbackend/utils'
+
+import { Plugin } from 'avvio'
+import fp from 'fastify-plugin'
+import { merge } from "lodash"
 
 type CallableKeysOf<Type> = {
     [Key in keyof Type]: Type[Key] extends Function ? Key : never
@@ -73,19 +75,10 @@ export class EzApp extends App {
 
     getOpts<LocalOptsKey extends keyof EzBackendOpts>(
         optsPrefix: LocalOptsKey,
-        fullOpts: EzBackendOpts,
-        localOpts?: EzBackendOpts[LocalOptsKey]) : EzBackendOpts[LocalOptsKey] {
-        
-        if (localOpts && fullOpts[optsPrefix]) {
-            throw "You can only define either fullOpts[optsPrefix] or localOpts!"
-        }
-
-        if (localOpts) {
-            return localOpts
-        }
+        fullOpts: EzBackendOpts) : EzBackendOpts[LocalOptsKey] {
 
         if (fullOpts[optsPrefix]) {
-            return fullOpts[optsPrefix]
+            return merge(this._defaultOpts,fullOpts[optsPrefix])
         }
 
         if (this._defaultOpts) {

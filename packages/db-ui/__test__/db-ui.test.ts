@@ -1,7 +1,8 @@
+import { EzBackend, EzModel, Type } from "@ezbackend/common"
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import { EzBackend, EzModel, Type } from "@ezbackend/common" //""../../common/src"
-import { EzOpenAPI } from "../../openapi/src" //"@ezbackend/openapi"
+
 import { EzDbUI } from '../src'
+import { EzOpenAPI } from "@ezbackend/openapi"
 
 let app: EzBackend
 
@@ -55,8 +56,13 @@ beforeEach(async () => {
     
 
     await app.start({
-        server: {
-            logger: false
+        ezbackend: {
+            fastify: {
+                logger: false
+            },
+            typeorm: {
+                database: ":memory:",
+            }
         }
     })
     //run the internal fastify boot sequence
