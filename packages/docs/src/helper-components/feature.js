@@ -6,7 +6,6 @@ export function Feature(props) {
     <a href={props.route} style={{ minWidth: 220 }} className='
     text-gray-100
     no-underline
-    col-span-1
     transition
     duration-200
     ease-in-out
@@ -34,19 +33,25 @@ export function Feature(props) {
           </div>
         </div>
 
-        <div className='flex justify-start'>
-          <div className='flex text-center'>
-            <div className='text-gray-400 hover:text-white'>
-              {props.released ?
-                props.route ?
-                  "Learn More ➜"
-                  : ""
-                : "Coming Soon"
+        {(!props.hide_cta) ?
+          <div className='flex justify-start'>
+            <div className='flex text-center'>
+              <div className='text-gray-400 hover:text-white'>
+                {props.released ?
+                  props.route ?
+                    "Learn More ➜"
+                    : ""
+                  : "Coming Soon"
 
-              }
+                }
+              </div>
             </div>
           </div>
-        </div>
+          :
+          null
+        }
+
+
 
       </div>
 

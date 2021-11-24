@@ -108,11 +108,11 @@ export default function Home() {
                       Get Started
                     </CtaButton>
                   </div>
-                  <div>
+                  {/* <div>
                     <CtaButton islink={true} link="/features/all-features" >
                       All Features
                     </CtaButton>
-                  </div>
+                  </div> */}
                   {/* <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' islink={false} target='_blank'>
                     <CtaButton islink={false}>
                       Live Demo
@@ -211,10 +211,9 @@ export default function Home() {
 
               </div>
               <div className="flex justify-center mt-12">
-
-              <CtaButton islink={true} link="/features/all-features" >
-                      All Features
-                    </CtaButton>
+                <CtaButton islink={true} link="/features/all-features" >
+                  All Features ➜
+                </CtaButton>
               </div>
             </div>
 
@@ -257,7 +256,7 @@ export default function Home() {
             <div className='col-span-full flex justify-center align-middle'>
               <div className='bg-dracula p-10 rounded-lg grid gap-6'>
                 <div className='font-monts text-xl text-center font-semibold'>
-                  Join Our Mailing List
+                  Sign Up
                 </div>
                 <form>
                   <input
