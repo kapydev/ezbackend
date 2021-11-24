@@ -1,5 +1,5 @@
 import { PluginScope } from '@ezbackend/core'
-import { convert, getDefaultGenerators, EzBackendInstance, EzBackendOpts,EzApp } from '@ezbackend/common'
+import { convert, getDefaultGenerators, EzBackendInstance, EzBackendOpts, EzApp } from '@ezbackend/common'
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 import { RouteOptions, FastifyInstance } from 'fastify'
@@ -76,24 +76,6 @@ async function addDbUIEndpoints(instance: EzBackendInstance, opts: EzBackendOpts
             })
         })
     })
-
-    // instance.entities.forEach(entity => {
-    //     const repo = instance.orm.getRepository(entity)
-    //     Object.values(generators).forEach(generator => {
-    //         instance.server.register(
-    //             async (server, opts) => {
-    //                 //TODO: Check schema prefix is correct
-    //                 const routes: Array<RouteOptions> = [].concat(generator(repo))
-    //                 routes.forEach((route) => {
-    //                     server.route(route)
-    //                 })
-    //             },
-    //             {
-    //                 prefix: `/db-ui/${repo.metadata.name}`
-    //             }
-    //         )
-    //     })
-    // })
 }
 
 class DBEndpointRouter extends EzApp {
@@ -106,7 +88,7 @@ class DBEndpointRouter extends EzApp {
 
 const BUILD_DIR = path.join(__dirname, "../ezbackend-database-ui/build")
 
-async function dbUIFastifyPlugin(server: FastifyInstance, opts: any, cb: (...opts:any) => void) {
+async function dbUIFastifyPlugin(server: FastifyInstance, opts: any, cb: (...opts: any) => void) {
 
     server.register(fastifyStatic, {
         root: BUILD_DIR,
@@ -128,16 +110,21 @@ export class EzDbUI extends EzApp {
 
         this.addApp("DB-UI Endpoint Router", new DBEndpointRouter())
 
-        this.setHandler("Serve UI Interface", async (instance, opts) => {
+        this.setHandler("Serve UI Interface", async (instance) => {
 
-            instance.server.register(dbUIFastifyPlugin, { prefix: "db-ui" })
+            if (process.env.NODE_ENV !== 'production') {
+                instance.server.register(dbUIFastifyPlugin, { prefix: "db-ui" })
+            } else {
+                console.warn("You should not run EzDBUI in production, since it allows arbitrary database editing")
+            }
 
         })
 
-        //TODO: Remove temporary opts any fix
-        this.setPostRun("Display DB UI URL", async (instance, opts: any) => {
-            if (opts.port && process.env.NODE_ENV != 'test') {
-                console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${opts.port}/db-ui/`))
+        this.setPostRun("Display DB UI URL", async (instance, opts) => {
+            //TODO: Check if it is possible to access default port directly from ezbackend.ts
+            const port = opts.port ?? opts.ezbackend?.listen?.port ?? (process.env.PORT || 8000)
+            if (port && process.env.NODE_ENV != 'test') {
+                console.log(chalk.greenBright(`Use the database UI at `) + chalk.yellow.underline(`http://localhost:${port}/db-ui/`))
             }
         })
 

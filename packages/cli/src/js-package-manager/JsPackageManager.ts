@@ -1,8 +1,8 @@
-import { sync as spawnSync } from "cross-spawn";
-import { commandLog } from "../helpers";
-import { PackageJsonWithDepsAndDevDeps, PackageJson } from "./PackageJson";
+import { PackageJson, PackageJsonWithDepsAndDevDeps } from "./PackageJson";
 import { readPackageJson, writePackageJson } from "./PackageJsonHelper";
 
+import { commandLog } from "../helpers";
+import { sync as spawnSync } from "cross-spawn";
 
 const logger = console
 
@@ -24,12 +24,13 @@ export abstract class JsPackageManager {
 
   public addEzbCommandInScripts() {
 
-    //TODO: See if there is a better way than ts-node
-    //TODO: Programmatically get the file path instead
+    //TODO: Different start command in development vs production (Compiled vs non-compiled)
     const ezbCmd = `npx ts-node-dev src/index.ts`
     this.addScripts({
       ezb: ezbCmd,
-      start: ezbCmd
+      start: ezbCmd,
+      build: `tsc`,
+      'build:watch': 'tsc -w',
     })
   }
 

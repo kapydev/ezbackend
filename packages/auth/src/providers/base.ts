@@ -1,26 +1,11 @@
-import { SerializeFunction } from "fastify-passport/dist/Authenticator"
-import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
-import { AnyStrategy } from "fastify-passport/dist/strategies"
-import type { RouteOptions, FastifyInstance, FastifyRequest, FastifyReply } from "fastify"
-import fastifyPassport from 'fastify-passport'
 import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
+import type { FastifyInstance, FastifyReply, FastifyRequest, RouteOptions } from "fastify"
 
-declare module '@ezbackend/common' {
-    interface EzBackendOpts {
-        auth: {
-            secretKey: string
-            secretKeyPath: string
-            google?: {
-                googleClientId: string,
-                googleClientSecret: string,
-                backendURL: string,
-                scope: Array<string>,
-                successRedirectURL: string,
-                failureRedirectURL: string,
-            }
-        }
-    }
-}
+import { AnyStrategy } from "fastify-passport/dist/strategies"
+import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
+import {EzBackendAuthOpts} from '../auth'
+import { SerializeFunction } from "fastify-passport/dist/Authenticator"
+import fastifyPassport from 'fastify-passport'
 
 //TODO: Generate this type more programatically to only have types introduced by user
 declare module 'fastify' {
@@ -29,7 +14,7 @@ declare module 'fastify' {
     }
 }
 
-type ProviderName = Exclude<keyof EzBackendOpts['auth'], 'secretKeyPath'>
+type ProviderName = keyof EzBackendAuthOpts
 
 export abstract class BaseProvider extends EzApp {
 
@@ -55,6 +40,7 @@ export abstract class BaseProvider extends EzApp {
     // abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
     addProvider(instance: EzBackendInstance, opts: EzBackendOpts) {
+
         //URGENT TODO: Double check edge cases for this
         const providerOpts = {
             //@ts-ignore
@@ -109,30 +95,30 @@ export abstract class BaseProvider extends EzApp {
         cb: (err?: string | Error | null | undefined, user?: Express.User | undefined, info?: any) => void
     ) {
         const repo = instance.orm.getRepository(this.modelName)
-            const model = {
-                [`${this.providerName}Id`]: id,
-                [`${this.providerName}Data`]: profile
-            }
+        const model = {
+            [`${this.providerName}Id`]: id,
+            [`${this.providerName}Data`]: profile
+        }
 
-            const serializedID = `${this.providerName}-${id}`
-            repo.save(model).then(
-                () => {
+        const serializedID = `${this.providerName}-${id}`
+        repo.save(model).then(
+            () => {
+                cb(undefined, serializedID)
+            },
+            (e) => {
+                if (String(e.driverError).toLowerCase().includes('unique')) {
+                    //URGENT TODO: Check if this works for all databases
                     cb(undefined, serializedID)
-                },
-                (e) => {
-                    if (String(e.driverError).toLowerCase().includes('unique')) {
-                        //URGENT TODO: Check if this works for all databases
-                        cb(undefined, serializedID)
-                    }
-                    else {
-                        cb(e)
-                    }
                 }
-            )
+                else {
+                    cb(e)
+                }
+            }
+        )
     }
 
     //TODO: Explicit types for opts
-    defaultLogoutHandler(req:FastifyRequest,res:FastifyReply, opts:any) {
+    defaultLogoutHandler(req: FastifyRequest, res: FastifyReply, opts: any) {
         req.logOut().then(
             () => {
                 //TODO: Explicity type opts

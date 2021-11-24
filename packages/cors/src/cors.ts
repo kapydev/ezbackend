@@ -1,17 +1,34 @@
-import { App, PluginScope } from "@ezbackend/core"
-import fastifyCors from "fastify-cors"
+import { PluginScope } from "@ezbackend/core"
+import fastifyCors, {FastifyCorsOptions} from "fastify-cors"
+import { EzApp } from "@ezbackend/common"
+import type { EzBackendOpts } from "@ezbackend/common"
 
-export class EzCors extends App {
-    constructor() {
+declare module "@ezbackend/common" {
+    interface EzBackendOpts {
+        cors: FastifyCorsOptions
+    }
+}
+
+const defaultConfig: EzBackendOpts['cors'] =  {
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS']
+}
+
+export class EzCors extends EzApp {
+    constructor(corsOpts?: EzBackendOpts['cors']) {
         super()
 
-        this.setHandler('Add Cors Plugin', async (instance, opts) => {
-            //URGENT TODO: Make sure that user updates these values before going to production
-            instance.server.register(fastifyCors, {
-                origin: true,
-                credentials: true,
-                methods: ['GET','PUT','POST','PATCH','DELETE', 'OPTIONS']
-            })
+        this.setDefaultOpts(defaultConfig)
+
+        this.setHandler('Add Cors Plugin', async (instance, fullOpts) => {
+            const opts = this.getOpts('cors',fullOpts,corsOpts)
+
+            if (opts.origin === true) {
+                console.warn("Reflecting the cors origin leaves you backend vulnerable to CSRF attacks. Set it only to trusted urls.")
+            }
+
+            instance.server.register(fastifyCors,opts)
         })
 
         //TODO: Think about naming of PluginScope for scope... should it be a function instead?

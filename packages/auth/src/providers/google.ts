@@ -1,21 +1,38 @@
-import { BaseProvider } from './base'
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import fastifyPassport from 'fastify-passport'
+import { FastifyInstance, RouteOptions } from 'fastify'
+
 import { AnyStrategy } from 'fastify-passport/dist/strategies'
-import { RouteOptions, FastifyInstance } from 'fastify'
+import { BaseProvider } from './base'
 import type { EzBackendInstance } from '@ezbackend/common'
 import { EzError } from "@ezbackend/utils"
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import fastifyPassport from 'fastify-passport'
 
-
-interface IGoogleProviderOptions {
+interface GoogleProviderOptions {
     googleClientId: string
     googleClientSecret: string
-    backendURL: string
+    /**
+     * @deprecated Instead of using {google:{successRedirectURL:...}}
+     * use
+     * {successRedirectURL:...}
+     */
     successRedirectURL: string
+    /**
+     * @deprecated Instead of using {google:{failureRedirectURL:...}}
+     * use
+     * {failureRedirectURL:...}
+     */
     failureRedirectURL: string
     //TODO: Strict typechecking for allowed google scopes
     scope: Array<string>
 }
+
+declare module "../auth" {
+    interface EzBackendAuthOpts {
+        google?: GoogleProviderOptions
+    }
+}
+
+
 
 export class GoogleProvider extends BaseProvider {
 

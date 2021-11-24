@@ -11,6 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "target": "esNEXT",
     "declaration": true,
+    "rootDir": "src",
+    "outDir": "dist",
     "lib": [
       "ES2015",
       "ES2016",

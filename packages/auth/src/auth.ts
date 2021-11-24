@@ -1,48 +1,91 @@
-import { PluginScope, App } from '@ezbackend/core'
-import { EzApp } from '@ezbackend/common'
+import { EzApp, EzBackendOpts } from '@ezbackend/common'
+import fastifySecureSession, { SecureSessionPluginOptions } from 'fastify-secure-session'
+import fs, { PathLike } from 'fs'
+
 import { EzError } from '@ezbackend/utils'
-import fastifySecureSession from 'fastify-secure-session'
+import { PluginScope } from '@ezbackend/core'
 import fastifyPassport from 'fastify-passport'
-import fs from 'fs'
+import path from 'path'
 
-//TODO: Make this of EzApp type instead
-export class EzAuth extends EzApp {
-    constructor() {
-        super()
-        this.setHandler("Add Fastify Secure Session", (instance, opts, done) => {
+export interface EzBackendAuthOpts {
+    secretKey?: string
+    secretKeyPath?: PathLike,
+    successRedirectURL: string,
+    failureRedirectURL: string,
+    fastifySecureSession: SecureSessionPluginOptions
+}
 
-            let key: Buffer = Buffer.alloc(32)
+declare module "@ezbackend/common" {
+    interface EzBackendOpts {
+        auth: EzBackendAuthOpts
+    }
+}
 
-            if (typeof opts.auth.secretKey === "string") {
-                key.write(opts.auth.secretKey)
-            }
+const defaultConfig: EzBackendOpts['auth'] = {
+    secretKey: process.env.SECRET_KEY ?? undefined,
+    secretKeyPath: path.join(process.cwd(), 'secret-key'),
+    successRedirectURL: "http://localhost:8000/db-ui",
+    failureRedirectURL: "http://localhost:8000/db-ui",
+    fastifySecureSession: {
+        //URGENT TODO: Make the process of getting the key type consistent
+        key: '',
+        cookie: {
+            path: '/',
+            sameSite: 'none',
+            secure: true
+        }
+    }
+}
 
-            else if (fs.existsSync(opts.auth.secretKeyPath)) {
-                key = Buffer.from(fs.readFileSync(opts.auth.secretKeyPath), undefined, 32)
-                //TODO: I think this command may fail intermittently producing the wrong output strangely enough
-            } else {
-                throw new EzError(
-                    `Secret key not found at path ${opts.auth.secretKeyPath}`,
-                    "The file 'secret-key' is used to hash the user's session (Seperate from google credentials)",
-                    `
+function getKey(opts: EzBackendOpts['auth']) {
+    let key: Buffer = Buffer.alloc(32)
+
+    if (opts.secretKey && (opts.secretKeyPath && fs.existsSync(opts.secretKeyPath))) {
+        throw "Can only define one secret key!"
+    }
+
+    if (typeof opts.secretKey === "string") {
+        key.write(opts.secretKey)
+    }
+
+    else if (opts.secretKeyPath && fs.existsSync(opts.secretKeyPath)) {
+        key = Buffer.from(fs.readFileSync(opts.secretKeyPath), undefined, 32)
+        //TODO: I think this command may fail intermittently producing the wrong output strangely enough
+    } else {
+        throw new EzError(
+            `Secret key not found at path ${opts.secretKeyPath}`,
+            "The file 'secret-key' is used to hash the user's session (Seperate from google credentials)",
+            `
 Run command in root of project (Same folder as package.json)
 
 linux terminal: ./node_modules/.bin/secure-session-gen-key > secret-key
 cmd prompt:     node_modules\\.bin\\secure-session-gen-key > secret-key
 powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath secret-key -Encoding default -NoNewline
 `
-                )
-            }
-            instance.server.register(fastifySecureSession, {
-                key: key,
-                cookie: {
-                    path: '/',
-                    sameSite: 'none',
-                    secure: true
-                }
-            })
+        )
+    }
 
-            done()
+    return key
+}
+
+//TODO: Make this of EzApp type instead
+export class EzAuth extends EzApp {
+    constructor(authOpts?: EzBackendOpts['auth']) {
+        super()
+
+        this.setDefaultOpts(defaultConfig)
+
+        this.setHandler("Add Fastify Secure Session", async (instance, fullOpts) => {
+
+            const opts = this.getOpts('auth', fullOpts, authOpts)
+
+            const key = getKey(opts)
+
+            if ('key' in opts.fastifySecureSession && opts.fastifySecureSession.key === '') {
+                opts.fastifySecureSession.key = key
+            }
+
+            instance.server.register(fastifySecureSession, opts.fastifySecureSession)
         })
 
         this.setHandler("Add Fastify Passport", async (instance, opts) => {
