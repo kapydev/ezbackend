@@ -19,9 +19,9 @@
     <a href="https://www.codefactor.io/repository/github/kapydev/ezbackend">
         <img src="https://www.codefactor.io/repository/github/kapydev/ezbackend/badge" alt="CodeFactor" />
     </a>
-    <a> 
+    <!-- <a> 
         <img src="https://img.shields.io/github/workflow/status/kapydev/ezbackend/Calculate%20Coverage"/>
-    </a>
+    </a> -->
     <a> 
         <img src="https://img.shields.io/npms-io/maintenance-score/ezbackend"/>
     </a>
