@@ -4,6 +4,7 @@ import fs, { PathLike } from 'fs'
 
 import { EzError } from '@ezbackend/utils'
 import { PluginScope } from '@ezbackend/core'
+import dedent from 'dedent-js'
 import fastifyPassport from 'fastify-passport'
 import path from 'path'
 
@@ -46,7 +47,18 @@ function getKey(opts: EzBackendOpts['auth']) {
     let key: Buffer = Buffer.alloc(32)
 
     if (opts.secretKey && (opts.secretKeyPath && fs.existsSync(opts.secretKeyPath))) {
-        throw "Can only define one secret key!"
+
+        throw new EzError("Can only define one secret key!",
+        "Your secret key can be in the secretKeyPath (default filename 'secret-key') or in your environment variable SECRET_KEY ONLY",
+        dedent`
+        Pick ONE only:
+
+        In .env:
+        SECRET_KEY=my-super-secret-key-longer-than-32-bytes
+
+        A file in your working directory with filename 'secret-key'
+        my-super-secret-key-longer-than-32-bytes
+        `)
     }
 
     if (typeof opts.secretKey === "string") {
@@ -60,13 +72,13 @@ function getKey(opts: EzBackendOpts['auth']) {
         throw new EzError(
             `Secret key not found at path ${opts.secretKeyPath}`,
             "The file 'secret-key' is used to hash the user's session (Seperate from google credentials)",
-            `
-Run command in root of project (Same folder as package.json)
+            dedent`
+            Run command in root of project (Same folder as package.json)
 
-linux terminal: ./node_modules/.bin/secure-session-gen-key > secret-key
-cmd prompt:     node_modules\\.bin\\secure-session-gen-key > secret-key
-powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath secret-key -Encoding default -NoNewline
-`
+            linux terminal: ./node_modules/.bin/secure-session-gen-key > secret-key
+            cmd prompt:     node_modules\\.bin\\secure-session-gen-key > secret-key
+            powershell:     ./node_modules/.bin/secure-session-gen-key | Out-File -FilePath secret-key -Encoding default -NoNewline
+            `
         )
     }
 

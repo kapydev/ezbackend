@@ -3,6 +3,7 @@ import { FastifyInstance, RouteOptions } from 'fastify'
 
 import { PluginScope } from '@ezbackend/core'
 import chalk from 'chalk'
+import { ezWarning } from "@ezbackend/utils"
 import fastifyStatic from 'fastify-static'
 import path from 'path'
 
@@ -116,7 +117,7 @@ export class EzDbUI extends EzApp {
             if (process.env.NODE_ENV !== 'production') {
                 instance.server.register(dbUIFastifyPlugin, { prefix: "db-ui" })
             } else {
-                console.warn("You should not run EzDBUI in production, since it allows arbitrary database editing")
+                ezWarning("You should not run EzDBUI in production, since it allows arbitrary database editing")
             }
 
         })

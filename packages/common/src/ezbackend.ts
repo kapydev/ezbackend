@@ -1,11 +1,12 @@
 import { Connection, EntitySchema, ObjectLiteral, Repository, createConnection } from "typeorm";
 import { EzApp, EzBackendServer } from "./ezapp";
+import { EzError, ezWarning } from "@ezbackend/utils";
 import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 
-import { EzError } from "@ezbackend/utils";
 import { InjectOptions } from "light-my-request";
 import { PluginScope } from "@ezbackend/core";
 import _ from 'lodash'
+import dedent from 'dedent-js'
 import dotenv from 'dotenv'
 import fp from 'fastify-plugin'
 
@@ -155,7 +156,7 @@ export class EzBackend extends EzApp {
             const ormOpts = opts.orm ?? this.getOpts('ezbackend', opts)?.typeorm!
 
             if (ormOpts.entities) {
-                console.warn("Defining your own entities outside of the EzBackend orm wrapper may result in unexpected interactions. The EzBackend orm wrapper provides the full capability of typeorm so that should be used instead.")
+                ezWarning("Defining your own entities outside of the EzBackend orm wrapper may result in unexpected interactions. The EzBackend orm wrapper provides the full capability of typeorm so that should be used instead.")
             }
 
             const optionEntities = ormOpts?.entities ? ormOpts.entities : []
@@ -228,11 +229,11 @@ export class EzBackend extends EzApp {
 
             throw new EzError("Instance not yet started",
                 `The EzBackend instance must be started ${additionalMsg}`,
-                `
-await app.start()
+                dedent`
+                await app.start()
 
-You must wait for the above function to finish before you can run ${funcName}
-`)
+                You must wait for the above function to finish before you can run ${funcName}
+                `)
         }
     }
 

@@ -1,9 +1,10 @@
 import { App, PluginScope } from "@ezbackend/core"
 import { EzBackendInstance, EzBackendOpts } from "."
+import { EzError, OverloadParameters, OverloadParameters1to5, OverloadParameters23 } from '@ezbackend/utils'
 import { FastifyInstance, FastifyRegister } from "fastify"
-import { OverloadParameters, OverloadParameters1to5, OverloadParameters23 } from '@ezbackend/utils'
 
 import { Plugin } from 'avvio'
+import dedent from 'dedent-js'
 import fp from 'fastify-plugin'
 import { merge } from "lodash"
 
@@ -85,7 +86,31 @@ export class EzApp extends App {
             return this._defaultOpts as EzBackendOpts[LocalOptsKey]
         }
 
-        throw "Default opts have not been defined! The plugin developer needs to set default opts with setDefaultOpts"
+        throw new EzError("Default opts have not been defined!",
+        "The plugin developer needs to set default opts with setDefaultOpts",
+        dedent`
+        Instructions for plugin development (Sample plugin called EzPlugin):
+
+        Extend the typescript type
+        declare module "@ezbackend/common" {
+            interface EzBackendOpts {
+                plugin: YourCustomOpts
+            }
+        }
+
+        Set the default options in the constructor
+        export class EzPlugin extends EzApp {
+            constructor() {
+                super()
+
+                //Where defaultConfig is the default configuration
+                this.setDefaultOpts(defaultConfig as YourCustomOpts)
+            }
+        }
+
+        Now you can use this.getOpts('plugin', fullOpts)
+        `
+        )
     }
 
     /**

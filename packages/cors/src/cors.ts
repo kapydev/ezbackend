@@ -1,8 +1,8 @@
+import { EzApp, EzBackendOpts } from "@ezbackend/common"
 import fastifyCors, {FastifyCorsOptions} from "fastify-cors"
 
-import { EzApp } from "@ezbackend/common"
-import type { EzBackendOpts } from "@ezbackend/common"
 import { PluginScope } from "@ezbackend/core"
+import {ezWarning} from '@ezbackend/utils'
 
 declare module "@ezbackend/common" {
     interface EzBackendOpts {
@@ -17,7 +17,7 @@ const defaultConfig: EzBackendOpts['cors'] =  {
 }
 
 export class EzCors extends EzApp {
-    constructor(corsOpts?: EzBackendOpts['cors']) {
+    constructor() {
         super()
 
         this.setDefaultOpts(defaultConfig)
@@ -26,7 +26,7 @@ export class EzCors extends EzApp {
             const opts = this.getOpts('cors',fullOpts)
 
             if (opts.origin === true) {
-                console.warn("Reflecting the cors origin leaves you backend vulnerable to CSRF attacks. Set it only to trusted urls.")
+                ezWarning("Reflecting the cors origin leaves your backend vulnerable to CSRF attacks. Set it only to trusted urls.")
             }
 
             instance.server.register(fastifyCors,opts)
