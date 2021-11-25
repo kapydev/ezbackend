@@ -7,9 +7,11 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import DiagramBuild from '../assets/diagram-scaling-build.png';
 import DiagramScale from '../assets/diagram-scaling-scale.png';
 import ReactCompareImage from 'react-compare-image';
+import toast, { Toaster } from 'react-hot-toast';
 
 const axios = require('axios').default;
 
+const LPBKND_BASEURL = 'https://ez-landing-page-backend.herokuapp.com'
 
 function Landing() {
 
@@ -31,6 +33,17 @@ function Landing() {
     }
     return (
         <div id='tailwind'>
+            <Toaster
+                toastOptions={{
+                    style: {
+                        padding: '16px',
+                        fontWeight: 'bold',
+                        color: 'white',
+                        backgroundColor: '#282A36',
+                        fontSize: 16
+                    },
+                }}
+            />
             <div className='h-screen'>
                 <div className='h-full flex flex-col justify-center'>
                     <div className='grid my-6 p-12 grid-cols-5 h-full overflow-hidden'>
