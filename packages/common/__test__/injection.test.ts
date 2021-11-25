@@ -4,7 +4,7 @@ describe("Plugin Registering", () => {
     let app: EzBackend
 
     const defaultConfig: RecursivePartial<EzBackendOpts> = {
-        ezbackend: {
+        backend: {
             fastify: {
                 logger: false
             },

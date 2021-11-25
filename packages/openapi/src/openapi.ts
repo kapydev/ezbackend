@@ -7,11 +7,11 @@ import { PluginScope } from "@ezbackend/core"
 
 declare module '@ezbackend/common' {
     interface EzBackendOpts {
-        ezOpenAPI: FastifyRegisterOptions<SwaggerOptions> | undefined
+        openAPI: FastifyRegisterOptions<SwaggerOptions> | undefined
     }
 }
 
-const defaultConfig: EzBackendOpts['ezOpenAPI'] = {
+const defaultConfig: EzBackendOpts['openAPI'] = {
     prefix: "/docs",
     routePrefix: "/docs",
     exposeRoute: true,
@@ -38,7 +38,7 @@ export class EzOpenAPI extends EzApp {
 
         this.setHandler('Add Swagger Plugin', async (instance, fullOpts) => {
 
-            const opts = this.getOpts('ezOpenAPI', fullOpts)
+            const opts = this.getOpts('openAPI', fullOpts)
 
             instance.server.register(fastifySwagger,opts)
         })

@@ -1,0 +1,64 @@
+---
+sidebar_position: 2
+---
+
+# Custom Plugins
+
+EzBackend is fully customisable, and you can create your own plugin and hook it into the EzBackend boot lifecycle in order to add any desired functionality to EzBackend
+
+## Lifecycle and Hooks
+
+Before developing plugins for EzBackend, you must understand the [boot lifecycle of EzBackend](../extras/lifecycle-and-hooks), as well as the different hooks. 
+
+## Barebones Plugin
+
+<!-- LEFT OFF -->
+
+## Parsing User Supplied Options
+
+## Typescript Configuration
+
+## Custom Plugin Template
+
+<!-- TODO: Obtain custom plugin template programatically -->
+
+```ts
+import { EzApp } from "@ezbackend/common";
+import { PluginScope } from "@ezbackend/core";
+
+interface MyPluginOpts {}
+
+declare module "@ezbackend/common" {
+  interface EzBackendOpts {
+    myPlugin: MyPluginOpts;
+  }
+}
+
+const defaultConfig: EzBackendOpts["myPlugin"] = {};
+
+export class EzMyPlugin extends EzApp {
+  constructor() {
+    super();
+
+    this.setDefaultOpts(defaultConfig);
+
+    this.setInit("My Plugin Init Script", async (instance, fullOpts) => {
+
+      const opts = this.getOpts("myPlugin", fullOpts);
+
+      //Your Initialization Script here
+
+      console.log("EzMyPlugin is running with opts", opts);
+    });
+
+    this.setHandler("My Plugin Handler Script", async (instance, fullOpts) => {
+
+      const opts = this.getOpts("myPlugin", fullOpts);
+
+      //Your Handler Script Here
+    });
+
+    this.this.scope = PluginScope.PARENT;
+  }
+}
+```

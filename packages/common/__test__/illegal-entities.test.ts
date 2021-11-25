@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import { EzError } from "@ezbackend/utils";
 
 const defaultConfig: RecursivePartial<EzBackendOpts> = {
-    ezbackend: {
+    backend: {
         fastify: {
             logger: false
         },

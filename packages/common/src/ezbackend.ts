@@ -47,7 +47,7 @@ export interface EzBackendOpts {
      * {ezbackend: {fastify: serverOpts}}
      */
     server: Parameters<typeof fastify>[0]
-    ezbackend: {
+    backend: {
         listen: {
             address: string | number
             port: number | string
@@ -75,7 +75,7 @@ async function addErrorSchema(instance: EzBackendInstance, opts: EzBackendOpts) 
 //URGENT TODO: Make running this optional in the default config
 dotenv.config()
 
-const defaultConfig: EzBackendOpts['ezbackend'] = {
+const defaultConfig: EzBackendOpts['backend'] = {
     listen: {
         port: process.env.PORT || 8000,
         address: process.env.ADDRESS || "127.0.0.1",
@@ -153,7 +153,7 @@ export class EzBackend extends EzApp {
         })
         this.setPostInit('Create Database Connection', async (instance, opts) => {
 
-            const ormOpts = opts.orm ?? this.getOpts('ezbackend', opts)?.typeorm!
+            const ormOpts = opts.orm ?? this.getOpts('backend', opts)?.typeorm!
 
             if (ormOpts.entities) {
                 ezWarning("Defining your own entities outside of the EzBackend orm wrapper may result in unexpected interactions. The EzBackend orm wrapper provides the full capability of typeorm so that should be used instead.")
@@ -178,7 +178,7 @@ export class EzBackend extends EzApp {
         this.setHandler('Add Error Schema', addErrorSchema)
 
         this.setPostHandler('Create Fastify Server', async (instance, opts) => {
-            const fastifyOpts = opts.server ?? this.getOpts('ezbackend', opts)?.fastify!
+            const fastifyOpts = opts.server ?? this.getOpts('backend', opts)?.fastify!
 
             instance._server = fastify(fastifyOpts)
         })
@@ -189,7 +189,7 @@ export class EzBackend extends EzApp {
 
         this.setRun('Run Fastify Server', async (instance, opts) => {
 
-            const listenOpts = this.getOpts('ezbackend', opts)
+            const listenOpts = this.getOpts('backend', opts)
             const port = opts.port ?? listenOpts?.listen.port
             const address = opts.address ?? listenOpts?.listen.address
             const backlog = listenOpts?.listen.backlog

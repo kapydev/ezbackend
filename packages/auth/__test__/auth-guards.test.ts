@@ -15,7 +15,7 @@ describe("Plugin Registering", () => {
 
     const defaultConfig = {
         port: 3000,
-        ezbackend: {
+        backend: {
             fastify: {
                 logger:false
             },

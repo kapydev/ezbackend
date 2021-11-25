@@ -2,7 +2,7 @@ import { EzBackend } from "../../common/src"
 import {EzCors} from "../src"
 
 const defaultConfig = {
-    ezbackend: {
+    backend: {
         fastify: {
             logger: false
         },

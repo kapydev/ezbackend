@@ -12,7 +12,7 @@ function getInternalInstance(ezb: EzBackend) {
 let app: EzBackend
 
 const defaultConfig = {
-    ezbackend: {
+    backend: {
         fastify: {
             logger: false
         },

@@ -25,15 +25,16 @@ declare module "@ezbackend/common" {
 export const defaultConfig: EzBackendOpts['auth'] = {
     secretKey: process.env.SECRET_KEY ?? undefined,
     secretKeyPath: path.join(process.cwd(), 'secret-key'),
-    successRedirectURL: "http://localhost:8000/db-ui",
-    failureRedirectURL: "http://localhost:8000/db-ui",
+    successRedirectURL: process.env.AUTH_SUCCESS_REDIRECT ?? "http://localhost:8000/db-ui",
+    failureRedirectURL: process.env.AUTH_FAILURE_REDIRECT ?? "http://localhost:8000/db-ui",
     fastifySecureSession: {
         //URGENT TODO: Make the process of getting the key type consistent
         key: '',
         cookie: {
             path: '/',
             sameSite: 'none',
-            secure: true
+            secure: true,
+            httpOnly: true
         }
     },
     google: {

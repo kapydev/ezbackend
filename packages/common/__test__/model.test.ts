@@ -6,7 +6,7 @@ describe("Plugin Registering", () => {
     let app: EzBackend
 
     const defaultConfig = {
-        ezbackend: {
+        backend: {
             fastify: {
                 logger: false
             },

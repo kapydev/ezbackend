@@ -40,7 +40,7 @@ describe("Test Utils", () => {
         beforeAll(async () => {
             await ezb.start({
                 port: 3000,
-                ezbackend: {
+                backend: {
                     fastify: {
                         logger: false
                     },

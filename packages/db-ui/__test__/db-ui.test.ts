@@ -56,7 +56,7 @@ beforeEach(async () => {
     
 
     await app.start({
-        ezbackend: {
+        backend: {
             fastify: {
                 logger: false
             },
