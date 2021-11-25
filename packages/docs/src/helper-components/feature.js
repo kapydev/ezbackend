@@ -4,14 +4,15 @@ export function Feature(props) {
 
   return (
     <a href={props.route} style={{ minWidth: 220 }} className='
-    text-gray-100
-    no-underline
-    transition
-    duration-200
-    ease-in-out
-    transform
-    hover:-translate-y-1 
-    hover:scale-110'>
+      text-gray-100
+      no-underline
+      transition
+      duration-200
+      ease-in-out
+      transform
+      hover:-translate-y-1 
+      hover:scale-110
+    '>
 
       <div className='grid place-items-center self-center gap-2'>
 
@@ -27,9 +28,17 @@ export function Feature(props) {
 
         <div className='flex justify-center'>
           <div className='mt-2 font-monts'>
-            <div className='text-md text-center'>
-              {props.info}
-            </div>
+            {(props.landing)
+              ?
+              <div className='text-sm text-center'>
+                {props.info}
+              </div>
+              :
+              <div className='text-md text-center'>
+                {props.info}
+              </div>
+            }
+
           </div>
         </div>
 
