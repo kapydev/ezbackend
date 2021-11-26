@@ -15,24 +15,24 @@ const ICONCLASSNAME = 'w-12 h-12'
 
 export const features_content = [
     {
-        title: <span><span className='text-purple'>97%</span> Less Code</span>,
+        title: <span><span className='text-purple'>50%</span> Less Code</span>,
         route: "/features/less-code",
         icon: <IconCode className={ICONCLASSNAME} />,
         info: "Stop writing repeated boilerplate code. Focus on your business logic",
         description: "EzBackend is designed to reduce the amount of boilerplate you have to write",
         media: null,
         released: true,
-        flip_card: 'Cillum veniam ullamco amet magna ut aute officia cupidatat pariatur proident laborum dolor.',
+        flip_card: <span>Common functionality is replaced with minimal code in EzBackend. In <span className='text-purple'>5 lines of code</span> you can add a DB table with CRUD Endpoints</span>,
     },
     {
-        title: <span><span className='text-purple'>14.2x</span> Faster</span>,
+        title: <span><span className='text-purple'>2x</span> Faster</span>,
         route: "/features/benchmarks",
         icon: <IconScaling className={ICONCLASSNAME} />,
-        info: "Learn how EzBackend implements performance as a first class citizen",
+        info: "Learn how EzBackend is designed for speed",
         description: "EzBackend uses Fastify under the hood, a NodeJS framework with 5 times the benchmark performance as Express (At the time of writing) (Support with our own benchmarks)",
         media: null,
         released: true,
-        flip_card: 'Ea dolor irure magna cupidatat voluptate ea in consectetur tempor Lorem.',
+        flip_card: <span>Ezbackend un-apologetically <span className='text-purple'>uses fastify</span> under the hood, to ensure your users experience minimal latency</span>,
     },
     {
         title: "Authentication",
@@ -42,7 +42,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        flip_card: 'Tempor mollit laboris qui laboris commodo eu sunt non exercitation laborum ex cillum sit do.',
+        flip_card: <span>Authentication comes in a plug and play modular provider, allowing you to add <span className='text-purple'>any passport.js supported strategy</span></span>,
     },
     {
         title: "Database Agnostic",
@@ -52,7 +52,7 @@ export const features_content = [
         description: "EzBackend uses typeorm under the hood, which supports XXX DBs. It also utilise database hooks to provide row level security",
         media: null,
         released: true,
-        flip_card: 'Amet exercitation elit cillum aliqua anim deserunt magna eu deserunt.',
+        flip_card: <span>EzBackend wraps typeorm with <span className="text-purple">scaling functionality</span>in order to manage large workloads</span>,
     },
     {
         title: "Instant API Generation",
@@ -62,7 +62,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        flip_card: 'Sunt mollit adipisicing magna ullamco quis.',
+        flip_card: <span>Stop reinventing the wheel with CRUD boilerplates. EzBackend <span className="text-purple">generates the read/write functionality</span> you need, while remaining secure with security rules</span>,
     },
     {
         title: "Automated Documentation",
@@ -72,7 +72,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        flip_card: 'Et id ipsum laboris id officia veniam nisi.',
+        flip_card: <span>Use EzBackend as a <span className="text-purple">single source of truth</span>. No longer update your swagger documentation and backend seperately</span>,
     },
 
 
@@ -84,7 +84,7 @@ export const features_content = [
         description: <div>EzBackend supports typescript out of the box. However, the file looks like it is written in plain javascript.<br /><br /> Because EzBackend uses a strong type inference system under the hood, most functions within the framework automatically have rich IDE support out of the box</div>,
         media: null,
         released: true,
-        flip_card: 'Reprehenderit non cillum consequat consectetur.',
+        flip_card: <span>EzBackend automatically <span className="text-purple">infers types</span> as much as possible, meaning <span className="text-purple">less time spent defining typescript types</span> and more time writing business logic</span>,
     },
 
     {
@@ -92,10 +92,10 @@ export const features_content = [
         // route: "/features/benchmarks",
         icon: <IconRefresh className={ICONCLASSNAME} />,
         info: "Fast, reliable editing experience, with changes being reflected immediately with ctrl-s",
-        description: <div>EzBackend uses ts-node-dev under the hood, which recompiles only necessary files with every refresh, significantly reducing compile times and updated code with every ctrl-s<br /><br />It restarts target node process when any of required files changes (as standard node-dev) but shares Typescript compilation process between restarts. This significantly increases speed of restarting comparing to node-dev -r ts-node/register ..., nodemon -x ts-node ... variations because there is no need to instantiate ts-node compilation each time.</div>,
+        description: "",
         media: null,
         released: true,
-        flip_card: 'Eiusmod eiusmod cupidatat minim deserunt cupidatat magna consequat do magna.',
+        flip_card: <span>Use ts-node-dev to restart the development environment on file changes <span className="text-purple">increase refresh speed</span> as compared to node-dev because ts-node is not instantiated multiple times</span>,
     },
 
 
@@ -108,7 +108,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        flip_card: 'Irure laborum do id id aute reprehenderit anim excepteur.',
+        flip_card: <span>The in-built database-agnoistic DB editor allows you to <span className="text-purple">quickly populate and edit</span> test data. No need for external tools such DBeaver to insert test data.</span>,
     },
     {
         title: <div>Consistent <br /> Dev & Prod Env</div>,
@@ -118,7 +118,7 @@ export const features_content = [
         description: <div>EzBackend automatically detects if it is running in a development environment or production environment, and automatically configures itself to run securely and safely in either one<br /><br />While EzBackend runs with strong defaults, these defaults are still entirely configurable to your custom needs</div>,
         media: null,
         released: false,
-        flip_card: 'Irure duis nisi ut eu officia culpa.',
+        flip_card: <span>EzBackend requires <span className="text-purple">minimal configuration changes</span> between a simple app for casual use and a <span className="text-purple">Leviathan-scale</span> app that scales horizontally to serve millions</span>,
     },
 
     {
@@ -129,7 +129,7 @@ export const features_content = [
         description: "",
         media: null,
         released: false,
-        flip_card: 'Duis aliqua magna fugiat nostrud pariatur ad consectetur exercitation.',
+        flip_card: <span>[COMING SOON] Listen to database updates in realtime. Comes with <span className="text-purple">packet level security</span> where read/write permissions for each recepient is verified before socket.io packets are sent.</span>,
     },
 
     {
@@ -140,7 +140,7 @@ export const features_content = [
         description: "",
         media: null,
         released: false,
-        flip_card: 'Consectetur culpa ut do veniam elit adipisicing ea officia labore nulla laboris.',
+        flip_card: <span>[COMING SOON] Store files in blob-storage</span>
     },
 
 ]
