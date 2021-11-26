@@ -1,12 +1,16 @@
-import { EzBackend, EzModel, Type } from "../src";
+import { EzBackend, EzBackendOpts, EzModel, RecursivePartial, Type } from "../src";
 
 describe("Plugin Registering", () => {
     let app: EzBackend
 
-    const defaultConfig = {
-        port: 3000,
-        server: {
-            logger:false
+    const defaultConfig: RecursivePartial<EzBackendOpts> = {
+        backend: {
+            fastify: {
+                logger: false
+            },
+            typeorm: {
+                database: ':memory:'
+            }
         }
     }
 

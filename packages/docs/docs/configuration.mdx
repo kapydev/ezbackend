@@ -1,0 +1,382 @@
+---
+sidebar_position: 20
+---
+
+# Configuration
+
+EzBackend is designed from the bottom up to be extremely customisable, so that you can customise everything.
+
+## Overview
+
+By default, running EzBackend looks like this
+
+```ts
+const app = new EzBackend();
+
+app.start();
+```
+
+However, under the hood this comes with a default configuration. A general gist of the configuration is:
+
+```ts
+const app = new EzBackend();
+
+app.start({
+  backend: {
+    listen: listenOpts,
+    fastify: fastifyOpts,
+    typeorm: typeormOpts,
+  },
+  cors: corsOpts,
+  auth: {
+    ...authOpts
+    fastifySecureSession: fastifySecureSessionOpts,
+    google: googleOpts,
+  },
+  openAPI: openAPIopts
+});
+```
+
+## Understanding the config
+
+### Environment Loading
+
+:::info
+By default, EzBackend reads values from `.env` in your root folder. There is no need to use `dotenv.config()`, but do take note that the `.env` is loaded by default.
+:::
+
+### Configuration Merging
+
+When a configuration is passed to `app.start()`, it is merged with the default declaration.
+
+Example:
+
+```ts
+app.start({
+  backend: {
+    listen: {
+      port: 3000,
+    },
+  },
+});
+
+//Will be merged to become
+
+app.start({
+  listen: {
+    port: 3000,
+    address: process.env.ADDRESS || "127.0.0.1",
+  },
+  ...otherDefaultOpts,
+});
+```
+
+### Configuration Naming Convention
+
+The convention for ezbackend plugins is to remove the `Ez` in front of the plugin name and `camelCase` it for the plugin options
+
+Example:
+
+```ts
+//To configure the EzAuth Plugin
+
+app.start({
+  auth: authOpts,
+});
+```
+
+### Configuration Overriding
+
+By default, the configuration passed to `app.start({...config})` is taken as the source of truth. Any values passed to `app.start` will override the defaults.
+
+## Reference
+
+### backend
+
+The configuration here is passed to fastify and typeorm. Further broken down into `listen` `fastify` and `typeorm`
+
+### backend.fastify
+
+The arguments passed to fastify during instantiation. See the [fastify docs](https://www.fastify.io/docs/latest/Server/) for the full reference
+
+Example:
+
+```ts
+app.start({
+  backend: {
+    fastify: {
+      logger: true, //Enable logging
+      ignoreTrailingSlash: true, //Ignore trailing slashes on HTTP Endpoints
+    },
+  },
+});
+```
+
+### backend.typeorm
+
+The arguments passed to `createConnection` from `typeorm` during instantiation. See the [typeorm docs](https://orkhan.gitbook.io/typeorm/docs/connection-options#connection-options-example) for the full reference
+
+:::warning
+EzBackend automatically populates the entities field whenever a new EzModel is made. Avoid adding entities manually.
+:::
+
+Example:
+
+```ts
+app.start({
+  backend: {
+    typeorm: {
+    host: "localhost",
+    port: 3306,
+    username: "test",
+    password: "test",
+    database: "test",
+    logging: true,
+    synchronize: true,
+    type: "postgres"
+    subscribers: [
+        "subscriber/*.ts"
+    ],
+    migrations: [
+        "migration/*.js"
+    ],
+    }
+  }
+})
+```
+
+### backend.listen
+
+The arguments passed to `fastify.listen` when the server is started.
+
+Example:
+
+```ts
+app.start({
+  backend: {
+    listen: {
+      port: 80, //Listen on port 80
+      address: "0.0.0.0", //Listen on all IPv4 addresses
+      backlog: 500, //Maximum number of pending connections
+    },
+  },
+});
+```
+
+### cors
+
+The arguments passed to `fastify-cors` to configure cors. See the [fastify-cors docs](https://github.com/fastify/fastify-cors) for the full reference
+
+:::warning
+`credentials:true` is a requirement for EzAuth to work, unless your frontend is hosted the same EzBackend instance
+:::
+
+Example:
+
+```ts
+app.start({
+  cors: {
+    origin: (origin, cb) => {
+      if (/localhost/.test(origin)) {
+        //  Request from localhost will pass
+        cb(null, true);
+        return;
+      }
+      // Generate an error on other origins, disabling access
+      cb(new Error("Not allowed"));
+    },
+  },
+});
+```
+
+:::info
+To resolve the warning `⚠️ Reflecting the cors origin leaves your backend vulnerable to CSRF attacks. Set it only to trusted urls.`
+
+You need to set the `origin` property to an array of hosts from which your frontend is hosted.
+
+e.g. If your frontend is on xyz.ggbet.com
+
+```ts
+app.start({
+  cors: {
+    origin: ["xyz.ggbet.com"],
+  },
+});
+```
+:::
+
+### auth
+
+The options passed to `EzAuth`, a subset of which is passed to `fastifySecureSession`
+
+The default options for auth should be sufficient for most use cases, and it is best to configure it through the environment.
+
+For example
+
+```bash title=".env"
+SECRET_KEY=my-super-secret-key-that-no-one-will-guess
+AUTH_SUCCESS_REDIRECT=http://my-frontend.com/login/success
+AUTH_FAILURE_REDIRECT=http://my-frontend.com/login/fail
+GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=yyy-zzz_aaa
+
+```
+
+However if you wish to further customise it, you can use the below sample or part thereof:
+
+Full Sample:
+
+```ts
+app.start({
+  auth: {
+    //NOTE: ONLY DEFINE EITHER secretKey or secretKeyPath but NOT BOTH
+    secretKey: "my-super-secret-key-that-no-one-will-guess",
+    secretKeyPath: "./my-secret.key",
+    successRedirectURL: "http://my-frontend.com/login/success",
+    failureRedirectURL: "http://my-frontend.com/login/fail",
+    fastifySecureSession: fastifySecureSessionOpts,
+    google: {
+      googleClientId: "xxx.apps.googleusercontent.com",
+      googleClientSecret: "yyy-zzz_aaa",
+      scope: ["google"],
+    },
+  },
+});
+```
+
+The fastify secure session opts are passed to fastify-secure session. See the [fastify-secure-session docs](https://github.com/fastify/fastify-secure-session) for more info.
+
+:::warning
+For fastifySecureSessionOpts, for the cookie options the recommended configuration for your frontend to on a seperate URL is:
+
+```ts
+cookie: {
+  path: '/',
+  sameSite: 'none',
+  secure: true,
+  httpOnly: true
+}
+
+```
+
+:::
+
+:::info
+EzBackend uses [fastify-passport](https://github.com/fastify/fastify-passport) under the hood. The options set for fastifySecureSession will also affect the functionality of fastify-passport
+:::
+
+### openAPI
+
+The arguments passed to `fastify-swagger` to configure openAPI. See the [fastify-swagger docs](https://github.com/fastify/fastify-swagger) for the full reference
+
+:::warning
+The routePrefix must be `/docs` for `EzDBUI` to work
+:::
+
+Full example:
+
+```ts
+app.start({
+  openAPI: {
+    prefix: "/docs",
+    routePrefix: "/docs",
+    exposeRoute: true,
+    logLevel: "warn",
+    openapi: {
+      info: {
+        title: "EzBackend API",
+        description: "Automatically generated documentation for EzBackend",
+        version: "1.0.0",
+      },
+      externalDocs: {
+        url: "https://github.com/kapydev/ezbackend",
+        description: "Find more info here",
+      },
+    },
+  },
+});
+```
+
+## Full Default Configuration Reference
+
+<!-- TODO: Make the default config generate from the actual default config -->
+
+```ts
+const app = new EzBackend();
+
+app.start({
+  backend: {
+    listen: {
+      port: process.env.PORT || 8000,
+      address: process.env.ADDRESS || "127.0.0.1",
+    },
+    fastify: {
+      logger: {
+        prettyPrint: {
+          translateTime: "SYS:HH:MM:ss",
+          ignore: "pid,hostname,reqId,responseTime,req,res",
+          messageFormat: (log, messageKey, levelLabel) => {
+            const method = log.req?.method;
+            const url = log.req?.url;
+            const status = log.res?.statusCode;
+            const resTime = log.responseTime?.toFixed(2);
+            const msg = log[messageKey];
+            if (method && url) {
+              return `${`[${method} ${url}`.padEnd(25, ".")}] ${msg}`;
+            }
+            if (status && resTime) {
+              return `${`[${status} ${resTime}ms`.padEnd(25, ".")}] ${msg}`;
+            }
+            return msg;
+          },
+        },
+      },
+    },
+    typeorm: {
+      type: "better-sqlite3",
+      database: "tmp/db.sqlite",
+      synchronize: true,
+    },
+  },
+  cors: {
+    origin: true,
+    credentials: true,
+    methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
+  },
+  auth: {
+    secretKey: process.env.SECRET_KEY ?? undefined,
+    secretKeyPath: path.join(process.cwd(), "secret-key"),
+    successRedirectURL: "http://localhost:8000/db-ui",
+    failureRedirectURL: "http://localhost:8000/db-ui",
+    fastifySecureSession: {
+      cookie: {
+        path: "/",
+        sameSite: "none",
+        secure: true,
+      },
+    },
+    google: {
+      googleClientId: process.env.GOOGLE_CLIENT_ID!,
+      googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      scope: ["google"],
+    },
+  },
+  openAPI: {
+    prefix: "/docs",
+    routePrefix: "/docs",
+    exposeRoute: true,
+    logLevel: "warn",
+    openapi: {
+      info: {
+        title: "EzBackend API",
+        description: "Automatically generated documentation for EzBackend",
+        version: "1.0.0",
+      },
+      externalDocs: {
+        url: "https://github.com/kapydev/ezbackend",
+        description: "Find more info here",
+      },
+    },
+  },
+});
+```

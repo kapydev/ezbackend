@@ -1,9 +1,10 @@
-import { EzApp, EzBackend, EzBackendOpts, EzModel, Type } from "../../common/src";
-import { EzAuth, EzUser, GoogleProvider, Providers } from "../src"
-import path from 'path'
-import dotenv from 'dotenv'
-import { FastifyRequest, FastifyReply } from "fastify";
+import { EzAuth, EzUser, GoogleProvider } from "../src"
+import { EzBackend, EzBackendOpts, EzModel, RecursivePartial, Type } from "@ezbackend/common";
+import { FastifyReply, FastifyRequest } from "fastify";
+
 import { DeserializeFunction } from "fastify-passport/dist/Authenticator";
+import dotenv from 'dotenv'
+import path from 'path'
 
 class Flag {
 
@@ -38,14 +39,19 @@ describe("Plugin Registering", () => {
     let app: EzBackend
 
     const defaultConfig = {
-        server: {
-            logger: false
-        },
         auth: {
             secretKey: process.env.SECRET_KEY,
             google: {
                 googleClientId: process.env.GOOGLE_CLIENT_ID,
                 googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            }
+        },
+        ezbackend: {
+            fastify: {
+                logger:false
+            },
+            typeorm: {
+                database: ':memory:'
             }
         }
     }

@@ -1,26 +1,12 @@
-import { SerializeFunction } from "fastify-passport/dist/Authenticator"
-import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
-import { AnyStrategy } from "fastify-passport/dist/strategies"
-import type { RouteOptions, FastifyInstance, FastifyRequest, FastifyReply } from "fastify"
-import fastifyPassport from 'fastify-passport'
 import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common'
+import type { FastifyInstance, FastifyReply, FastifyRequest, RouteOptions } from "fastify"
 
-declare module '@ezbackend/common' {
-    interface EzBackendOpts {
-        auth: {
-            secretKey: string
-            secretKeyPath: string
-            google?: {
-                googleClientId: string,
-                googleClientSecret: string,
-                backendURL: string,
-                scope: Array<string>,
-                successRedirectURL: string,
-                failureRedirectURL: string,
-            }
-        }
-    }
-}
+import { AnyStrategy } from "fastify-passport/dist/strategies"
+import { DeserializeFunction } from "fastify-passport/dist/Authenticator"
+import { EzBackendAuthOpts } from '../auth'
+import { SerializeFunction } from "fastify-passport/dist/Authenticator"
+import { defaultConfig } from '../auth'
+import fastifyPassport from 'fastify-passport'
 
 //TODO: Generate this type more programatically to only have types introduced by user
 declare module 'fastify' {
@@ -29,7 +15,22 @@ declare module 'fastify' {
     }
 }
 
-type ProviderName = Exclude<keyof EzBackendOpts['auth'], 'secretKeyPath'>
+export interface ProviderOptions {
+    /**
+     * @deprecated Instead of using {google:{successRedirectURL:...}}
+     * use
+     * {successRedirectURL:...}
+     */
+    successRedirectURL?: string
+    /**
+     * @deprecated Instead of using {google:{failureRedirectURL:...}}
+     * use
+     * {failureRedirectURL:...}
+     */
+    failureRedirectURL?: string
+}
+
+type ProviderName = keyof EzBackendAuthOpts
 
 export abstract class BaseProvider extends EzApp {
 
@@ -40,6 +41,8 @@ export abstract class BaseProvider extends EzApp {
         super()
         this.providerName = providerName
         this.modelName = modelName
+
+        this.setDefaultOpts(defaultConfig)
 
         this.setHandler(`Add ${this.providerName} Auth Provider`, async (instance, opts) => {
             this.addProvider(instance, opts)
@@ -54,12 +57,14 @@ export abstract class BaseProvider extends EzApp {
     //TODO: Implement this security scheme in the swagger spec
     // abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
-    addProvider(instance: EzBackendInstance, opts: EzBackendOpts) {
+    addProvider(instance: EzBackendInstance, fullOpts: EzBackendOpts) {
+
+        const opts = this.getOpts('auth', fullOpts)
+
         //URGENT TODO: Double check edge cases for this
         const providerOpts = {
-            //@ts-ignore
-            ...opts.auth[this.providerName]!,
-            ...opts.auth
+            ...opts[this.providerName] as ProviderOptions,
+            ...opts
         }
 
         instance.server.register(async (server, opts) => {
@@ -109,30 +114,30 @@ export abstract class BaseProvider extends EzApp {
         cb: (err?: string | Error | null | undefined, user?: Express.User | undefined, info?: any) => void
     ) {
         const repo = instance.orm.getRepository(this.modelName)
-            const model = {
-                [`${this.providerName}Id`]: id,
-                [`${this.providerName}Data`]: profile
-            }
+        const model = {
+            [`${this.providerName}Id`]: id,
+            [`${this.providerName}Data`]: profile
+        }
 
-            const serializedID = `${this.providerName}-${id}`
-            repo.save(model).then(
-                () => {
+        const serializedID = `${this.providerName}-${id}`
+        repo.save(model).then(
+            () => {
+                cb(undefined, serializedID)
+            },
+            (e) => {
+                if (String(e.driverError).toLowerCase().includes('unique')) {
+                    //URGENT TODO: Check if this works for all databases
                     cb(undefined, serializedID)
-                },
-                (e) => {
-                    if (String(e.driverError).toLowerCase().includes('unique')) {
-                        //URGENT TODO: Check if this works for all databases
-                        cb(undefined, serializedID)
-                    }
-                    else {
-                        cb(e)
-                    }
                 }
-            )
+                else {
+                    cb(e)
+                }
+            }
+        )
     }
 
     //TODO: Explicit types for opts
-    defaultLogoutHandler(req:FastifyRequest,res:FastifyReply, opts:any) {
+    defaultLogoutHandler(req: FastifyRequest, res: FastifyReply, opts: any) {
         req.logOut().then(
             () => {
                 //TODO: Explicity type opts

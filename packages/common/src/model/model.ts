@@ -1,10 +1,12 @@
-import { EzApp } from '../ezapp'
-import { Plugin } from 'avvio'
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions, EntitySchemaRelationOptions, ObjectLiteral, Repository } from 'typeorm'
-import { EntitySchemaOptions, } from 'typeorm/entity-schema/EntitySchemaOptions'
-import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes'
 import { EzRouter, RouterOptions } from './generators/api-generator'
+
+import { EntitySchemaOptions, } from 'typeorm/entity-schema/EntitySchemaOptions'
+import { EzApp } from '../ezapp'
 import { EzError } from '@ezbackend/utils'
+import { Plugin } from 'avvio'
+import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes'
+import dedent from 'dedent-js'
 
 enum NormalType {
     VARCHAR = 'VARCHAR',
@@ -141,13 +143,13 @@ function schemaToEntityOptions(schema: ModelSchema) {
             if (value.primary === true) {
                 throw new EzError("EzBackend currently only supports one Primary Column per entity",
                     "A primary id column is created by default for all models. While typeorm supports composite primary keys, EzBackend currently does not support this feature. If you need it drop us a message in github",
-                    `
-new EzModel("IllegalModel", {
-    mySecondPrimaryColumn: {
-        type: Type.VARCHAR,
-        primary: true //This is illegal
-    }
-})`)
+                    dedent`
+                    new EzModel("IllegalModel", {
+                        mySecondPrimaryColumn: {
+                            type: Type.VARCHAR,
+                            primary: true //This is illegal
+                        }
+                    })`)
             }
 
             const { type, ...noType } = value
@@ -160,18 +162,18 @@ new EzModel("IllegalModel", {
             throw new EzError(
                 "You currently need to use the full declaration for specifying a relation",
                 "Relations require additional metadata to generate the Database Tables",
-                `
-Replace
+                dedent`
+                Replace
 
-myRelation: Type.ONE_TO_ONE
+                myRelation: Type.ONE_TO_ONE
 
-With
+                With
 
-myRelation: {
-    type: Type.ONE_TO_ONE,
-    joinColumn: true,
-    target:'detail'
-},
+                myRelation: {
+                    type: Type.ONE_TO_ONE,
+                    joinColumn: true,
+                    target:'detail'
+                },
                 `
             )
             //Note: This makes it compulsory for the key to be the name of relation

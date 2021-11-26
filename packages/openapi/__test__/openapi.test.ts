@@ -1,7 +1,7 @@
-import { EzBackend, EzModel, Type } from "../../common/src";
-import { EzOpenAPI } from '../src'
-import { FastifyInstance } from 'fastify'
+import { EzBackend, EzModel, Type } from "@ezbackend/common";
 
+import { EzOpenAPI } from '../src'
+import type { FastifyInstance } from 'fastify'
 
 //TODO: Figure if there is a better way of getting this data
 function getInternalInstance(ezb: EzBackend) {
@@ -12,9 +12,13 @@ function getInternalInstance(ezb: EzBackend) {
 let app: EzBackend
 
 const defaultConfig = {
-    port: 3000,
-    server: {
-        logger:false
+    backend: {
+        fastify: {
+            logger: false
+        },
+        typeorm: {
+            database: ':memory:'
+        }
     }
 }
 
@@ -33,7 +37,7 @@ afterEach(async () => {
 
 describe("Basic Usage", () => {
     it("Should be able to render the docs", async () => {
-        app.addApp('openapi', new EzOpenAPI())
+        app.addApp(new EzOpenAPI())
 
         await app.start(defaultConfig)
 
@@ -60,13 +64,20 @@ describe("Basic Usage", () => {
 
         await app.start(defaultConfig)
 
-        const server: FastifyInstance = getInternalInstance(app)._server
+        const server: FastifyInstance = app.getInternalServer()
+
+        const response2 = await server.inject({
+            method: "GET",
+            url: "/docs",
+        })
 
         const response = await server.inject({
             method: "GET",
             url: "/docs/json",
         })
 
+
+        expect(response.statusCode).toBe(200)
         expect(JSON.parse(response.body)['components']).toMatchSnapshot()
     })
 

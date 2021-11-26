@@ -1,13 +1,14 @@
+import { Connection, EntitySchema, ObjectLiteral, Repository, createConnection } from "typeorm";
 import { EzApp, EzBackendServer } from "./ezapp";
+import { EzError, ezWarning } from "@ezbackend/utils";
 import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
-import fp from 'fastify-plugin'
-import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
-import { PluginScope } from "@ezbackend/core";
-import { EzError } from "@ezbackend/utils";
-import _ from 'lodash'
-import path from 'path'
-import dotenv from 'dotenv'
+
 import { InjectOptions } from "light-my-request";
+import { PluginScope } from "@ezbackend/core";
+import _ from 'lodash'
+import dedent from 'dedent-js'
+import dotenv from 'dotenv'
+import fp from 'fastify-plugin'
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -17,12 +18,46 @@ export interface EzBackendInstance {
     orm: Connection
 }
 
-export interface EzBackendOpts {
-    address: string
-    port: number
-    orm: Parameters<typeof createConnection>[0]
-    server: Parameters<typeof fastify>[0]
+export type RecursivePartial<T> = {
+    [P in keyof T]? : RecursivePartial<T[P]>
 }
+
+export interface EzBackendOpts {
+    /**
+     * @deprecated Instead of {address: 0.0.0.0}
+     * use
+     * {ezbackend: {listen: {address: 0.0.0.0}}}
+     */
+     address: string
+     /**
+      * @deprecated Instead of {port: 8000}
+      * use
+      * {ezbackend: {listen: {port: 8000}}}
+      */
+     port: string | number
+     /**
+      * @deprecated Instead of {orm: ormOpts}
+      * use
+      * {ezbackend: {typeorm: ormOpts}}
+      */
+     orm: Parameters<typeof createConnection>[0]
+     /**
+      * @deprecated Instead of {server: serverOpts}
+      * use
+      * {ezbackend: {fastify: serverOpts}}
+      */
+     server: Parameters<typeof fastify>[0]
+     backend: {
+         listen: {
+             address: string | number
+             port: number | string
+             backlog?: number
+         },
+         fastify: Parameters<typeof fastify>[0],
+         typeorm: Parameters<typeof createConnection>[0]
+     }
+}
+
 
 //TODO: Check if emojis will break instance names
 //URGENT TODO: Strict types for instance, opts
@@ -41,45 +76,39 @@ async function addErrorSchema(instance: EzBackendInstance, opts: EzBackendOpts) 
 //URGENT TODO: Make running this optional in the default config
 dotenv.config()
 
-const defaultConfig = {
-    port: process.env.PORT || 8000,
-    address: process.env.ADDRESS || "127.0.0.1",
-    server: {
+const defaultConfig: EzBackendOpts['backend'] = {
+    listen: {
+        port: process.env.PORT || 8000,
+        address: process.env.ADDRESS || "127.0.0.1",
+    },
+    fastify: {
         logger: {
             prettyPrint: {
                 translateTime: "SYS:HH:MM:ss",
                 ignore: "pid,hostname,reqId,responseTime,req,res",
-                messageFormat: "[{req.method} {req.url}] {msg}",
+                //@ts-ignore
+                messageFormat: (log, messageKey, levelLabel) => {
+                    const method = log.req?.method
+                    const url = log.req?.url
+                    const status = log.res?.statusCode
+                    const resTime = log.responseTime?.toFixed(2)
+                    const msg = log[messageKey]
+                    if (method && url) {
+                        return `${`[${method} ${url}`.padEnd(25, '.')}] ${msg}`
+                    }
+                    if (status && resTime) {
+                        return `${`[${status} ${resTime}ms`.padEnd(25, '.')}] ${msg}`
+                    }
+                    return msg
+                },
             },
         },
     },
-    orm: {
+    typeorm: {
         type: "better-sqlite3",
-        database: ":memory:",
+        database: "tmp/db.sqlite",
         synchronize: true
-    },
-    auth: {
-        secretKey: process.env.SECRET_KEY ?? undefined,
-        secretKeyPath: path.join(process.cwd(), 'secret-key'),
-        successRedirectURL: "http://localhost:8000/db-ui",
-        failureRedirectURL: "http://localhost:8000/db-ui",
-        google: {
-            googleClientId: process.env.GOOGLE_CLIENT_ID,
-            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            scope: ['profile'],
-        }
-    },
-    // cors: {
-    //     origin: (origin: string, cb: Function) => {
-    //         if (/localhost/.test(origin)) {
-    //             //  Request from localhost will pass
-    //             cb(null, true)
-    //             return
-    //         }
-    //         // Generate an error on other origins, disabling access
-    //         cb(new Error("Not allowed"))
-    //     }
-    // }
+    }
 }
 
 // Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
@@ -118,14 +147,28 @@ export class EzBackend extends EzApp {
     constructor() {
         super()
 
+        this.setDefaultOpts(defaultConfig)
+
         this.setInit('Create Entities Container', async (instance, opts) => {
             instance.entities = []
         })
         this.setPostInit('Create Database Connection', async (instance, opts) => {
+
+            const ormOpts = opts.orm ?? this.getOpts('backend', opts)?.typeorm!
+
+            if (ormOpts.entities) {
+                ezWarning("Defining your own entities outside of the EzBackend orm wrapper may result in unexpected interactions. The EzBackend orm wrapper provides the full capability of typeorm so that should be used instead.")
+            }
+
+            const optionEntities = ormOpts?.entities ? ormOpts.entities : []
+
             instance.orm = await createConnection(
                 {
-                    ...opts.orm,
-                    entities: instance.entities
+                    ...ormOpts,
+                    entities: [
+                        ...optionEntities,
+                        ...instance.entities
+                    ]
                 }
             )
         })
@@ -136,7 +179,9 @@ export class EzBackend extends EzApp {
         this.setHandler('Add Error Schema', addErrorSchema)
 
         this.setPostHandler('Create Fastify Server', async (instance, opts) => {
-            instance._server = fastify(opts.server)
+            const fastifyOpts = opts.server ?? this.getOpts('backend', opts)?.fastify!
+
+            instance._server = fastify(fastifyOpts)
         })
 
         this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
@@ -144,7 +189,13 @@ export class EzBackend extends EzApp {
         })
 
         this.setRun('Run Fastify Server', async (instance, opts) => {
-            await instance._server.listen(opts.port, opts.address)
+
+            const listenOpts = this.getOpts('backend', opts)
+            const port = opts.port ?? listenOpts?.listen.port
+            const address = opts.address ?? listenOpts?.listen.address
+            const backlog = listenOpts?.listen.backlog
+
+            await instance._server.listen(port, address, backlog)
         })
 
         this.scope = PluginScope.PARENT
@@ -179,11 +230,11 @@ export class EzBackend extends EzApp {
 
             throw new EzError("Instance not yet started",
                 `The EzBackend instance must be started ${additionalMsg}`,
-                `
-await app.start()
+                dedent`
+                await app.start()
 
-You must wait for the above function to finish before you can run ${funcName}
-`)
+                You must wait for the above function to finish before you can run ${funcName}
+                `)
         }
     }
 
@@ -203,8 +254,7 @@ You must wait for the above function to finish before you can run ${funcName}
     }
 
     //URGENT TODO: Remove temporary any fix
-    async start(opts?: any) {
-        opts = _.merge(defaultConfig, opts)
+    async start(opts?: RecursivePartial<EzBackendOpts>) {
         await super.start(opts)
     }
 

@@ -1,9 +1,11 @@
 //URGENT TODO: Figure out why github actions is throwing req has 'any' type even though locally there is no issue
+
 import { EzApp, EzBackend } from "../../common/src";
-import path from 'path'
-import dotenv from 'dotenv'
+
 import Boom from '@hapi/boom'
 import { RouteShorthandOptionsWithHandler } from "fastify";
+import dotenv from 'dotenv'
+import path from 'path'
 
 describe("Plugin Registering", () => {
 
@@ -13,17 +15,22 @@ describe("Plugin Registering", () => {
 
     const defaultConfig = {
         port: 3000,
-        server: {
-            logger: false
+        backend: {
+            fastify: {
+                logger:false
+            },
+            typeorm: {
+                database: ':memory:'
+            }
         },
         auth: {
             secretKeyPath: path.resolve(__dirname, "./testing-not-secret-key"),
+            successRedirectURL: "http://localhost:8888/docs",
+            failureRedirectURL: "http://localhost:8888/docs",
             google: {
                 googleClientId: process.env.GOOGLE_CLIENT_ID!,
                 googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
                 scope: ['profile'],
-                successRedirectURL: "http://localhost:8888/docs",
-                failureRedirectURL: "http://localhost:8888/docs"
             }
         }
     }

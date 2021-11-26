@@ -1,9 +1,12 @@
 import { App, PluginScope } from "@ezbackend/core"
-import { FastifyInstance, FastifyRegister } from "fastify"
-import fp from 'fastify-plugin'
-import {Plugin} from 'avvio'
 import { EzBackendInstance, EzBackendOpts } from "."
-import {OverloadParameters,OverloadParameters23, OverloadParameters1to5} from '@ezbackend/utils'
+import { EzError, OverloadParameters, OverloadParameters1to5, OverloadParameters23 } from '@ezbackend/utils'
+import { FastifyInstance, FastifyRegister } from "fastify"
+
+import { Plugin } from 'avvio'
+import dedent from 'dedent-js'
+import fp from 'fastify-plugin'
+import { merge } from "lodash"
 
 type CallableKeysOf<Type> = {
     [Key in keyof Type]: Type[Key] extends Function ? Key : never
@@ -63,8 +66,52 @@ export type EzBackendServer = ReturnType<typeof createServer>
 export class EzApp extends App {
 
     protected _functions: Array<Function> = []
+    protected _defaultOpts: EzBackendOpts[keyof EzBackendOpts] | undefined
 
     get functions() { return this._functions }
+
+    setDefaultOpts<LocalOpts extends EzBackendOpts[keyof EzBackendOpts]>(opts: LocalOpts) {
+        this._defaultOpts = opts
+    }
+
+    getOpts<LocalOptsKey extends keyof EzBackendOpts>(
+        optsPrefix: LocalOptsKey,
+        fullOpts: EzBackendOpts) : EzBackendOpts[LocalOptsKey] {
+
+        if (fullOpts[optsPrefix]) {
+            return merge(this._defaultOpts,fullOpts[optsPrefix])
+        }
+
+        if (this._defaultOpts) {
+            return this._defaultOpts as EzBackendOpts[LocalOptsKey]
+        }
+
+        throw new EzError("Default opts have not been defined!",
+        "The plugin developer needs to set default opts with setDefaultOpts",
+        dedent`
+        Instructions for plugin development (Sample plugin called EzPlugin):
+
+        Extend the typescript type
+        declare module "@ezbackend/common" {
+            interface EzBackendOpts {
+                plugin: YourCustomOpts
+            }
+        }
+
+        Set the default options in the constructor
+        export class EzPlugin extends EzApp {
+            constructor() {
+                super()
+
+                //Where defaultConfig is the default configuration
+                this.setDefaultOpts(defaultConfig as YourCustomOpts)
+            }
+        }
+
+        Now you can use this.getOpts('plugin', fullOpts)
+        `
+        )
+    }
 
     /**
      * Creates a fastify instance
@@ -106,15 +153,15 @@ export class EzApp extends App {
     //NOTE: Inject is being used by EzBackend which is why we remove it
     // inject = generateFastifyFuncWrapper(this, 'inject')
 
-    setPreInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreInit(funcName,plugin)}
-    setInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setInit(funcName,plugin)}
-    setPostInit = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostInit(funcName,plugin)}
-    setPreHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreHandler(funcName,plugin)}
-    setHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setHandler(funcName,plugin)}
-    setPostHandler = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostHandler(funcName,plugin)}
-    setPreRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPreRun(funcName,plugin)}
-    setRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setRun(funcName,plugin)}
-    setPostRun = (funcName: string, plugin: Plugin<EzBackendOpts,EzBackendInstance>) => {super.setPostRun(funcName,plugin)}
+    setPreInit = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPreInit(funcName, plugin) }
+    setInit = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setInit(funcName, plugin) }
+    setPostInit = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostInit(funcName, plugin) }
+    setPreHandler = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPreHandler(funcName, plugin) }
+    setHandler = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setHandler(funcName, plugin) }
+    setPostHandler = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostHandler(funcName, plugin) }
+    setPreRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPreRun(funcName, plugin) }
+    setRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setRun(funcName, plugin) }
+    setPostRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostRun(funcName, plugin) }
 
     /**
      * Registers all fastify plugins to server instance of ezbackend application

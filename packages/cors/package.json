@@ -21,7 +21,10 @@
     "url": "git+https://github.com/PhilipWee/ezbackend.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build:clean": "npx rimraf dist && tsc",
+    "build": "tsc",
+    "watch": "tsc -w"
   },
   "bugs": {
     "url": "https://github.com/PhilipWee/ezbackend/issues"

@@ -1,13 +1,18 @@
 import { EzBackend, EzModel } from '../src'
+
 import { Repository } from 'typeorm'
 
 describe("Plugin Registering", () => {
     let app: EzBackend
 
     const defaultConfig = {
-        port: 3000,
-        server: {
-            logger: false
+        backend: {
+            fastify: {
+                logger: false
+            },
+            typeorm: {
+                database: ':memory:'
+            }
         }
     }
 
@@ -28,23 +33,23 @@ describe("Plugin Registering", () => {
         test("Should be able to get repo in the handler hook", async () => {
             const model = new EzModel("TestModel", {})
 
-            app.addApp('model', model, {prefix: "model"})
+            app.addApp('model', model, { prefix: "model" })
 
-            app.setHandler("getRepo", async() => {
+            app.setHandler("getRepo", async () => {
                 const repo = model.getRepo()
                 expect(repo instanceof Repository).toBe(true)
             })
             await app.start(defaultConfig)
         })
 
-        test("Should not be able to get repo in the init hook", async() => {
+        test("Should not be able to get repo in the init hook", async () => {
             const model = new EzModel("TestModel", {})
 
-            app.addApp('model', model, {prefix: "model"})
+            app.addApp('model', model, { prefix: "model" })
 
             let errored = false
 
-            app.setInit("getRepo", async() => {
+            app.setInit("getRepo", async () => {
                 try {
                     model.getRepo()
                 } catch {

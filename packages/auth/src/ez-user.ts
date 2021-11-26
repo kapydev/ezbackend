@@ -1,7 +1,8 @@
-import { EzModel, ModelSchema, ModelOpts, Type, isRelation, isNestedRelation, isNormalType, isNestedNormalType } from '@ezbackend/common'
-import providerDict from './providers'
+import { EzModel, ModelOpts, ModelSchema, Type, isNestedNormalType, isNestedRelation, isNormalType, isRelation } from '@ezbackend/common'
+
 import { EzError } from '@ezbackend/utils'
-import { BaseProvider } from './providers'
+import dedent from 'dedent-js'
+import providerDict from './providers'
 
 //URGENT TODO: Figure out base provider type from abstract class
 export type Providers = Array<'google' | any>
@@ -31,16 +32,16 @@ function checkGeneratable(modelSchema: ModelSchema) {
     const nullableError = new EzError(
         "Columns of EzUser need to either have a default value or be nullable",
         "When a user is created from logging in, ezbackend needs to either fill all columns in the user table with null or a default value",
-`
-const user = new EzUser("User",["google"],{
-    userVariable = {
-        type: Type.VARCHAR,
-        nullable: true,
-        //OR
-        //default: "This is my default value"
-    }
-})
-`
+        dedent`
+        const user = new EzUser("User",["google"],{
+            userVariable = {
+                type: Type.VARCHAR,
+                nullable: true,
+                //OR
+                //default: "This is my default value"
+            }
+        })
+        `
         )
     Object.values(modelSchema).forEach(col => {
         if (isRelation(col) || isNormalType(col)) {
@@ -95,11 +96,11 @@ export class EzUser extends EzModel {
 
                     throw new EzError("An authentication provider must be either a string or extend BaseProvider",
                         "Read the docs for a list of allowed providers",
+                        dedent`
+                        const user = new EzUser('User', ['google']) //GOOD
+                        const user = new EzUser('User', [GoogleProvider]) //GOOD
+                        const user = new EzUser('User', ['hahaha']) //BAD, hahaha is not a valid provider
                         `
-    const user = new EzUser('User', ['google']) //GOOD
-    const user = new EzUser('User', [GoogleProvider]) //GOOD
-    const user = new EzUser('User', ['hahaha']) //BAD, hahaha is not a valid provider
-    `
                     )
                 } else {
                     throw e

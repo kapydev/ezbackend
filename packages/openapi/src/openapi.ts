@@ -1,39 +1,48 @@
-import { App, PluginScope } from "@ezbackend/core"
-import { fastifySwagger } from 'fastify-swagger'
-import chalk from 'chalk'
-import { EzBackendInstance, EzBackendOpts, getPrimaryColName } from "@ezbackend/common"
-import { RouteOptions } from "fastify"
+import { SwaggerOptions, fastifySwagger } from 'fastify-swagger'
 
-//TODO: Allow configuration editing
-async function addSwaggerPlugin(instance: EzBackendInstance, opts: EzBackendOpts) {
-    instance.server.register(fastifySwagger, {
-        prefix: "/docs",
-        routePrefix: "/docs",
-        exposeRoute: true,
-        //TODO: Figure out why its logging so much
-        logLevel: 'warn',
-        openapi: {
-            info: {
-                title: "EzBackend API",
-                description: "Automatically generated documentation for EzBackend",
-                version: "1.0.0",
-            },
-            externalDocs: {
-                url: "https://github.com/kapydev/ezbackend",
-                description: "Find more info here",
-            }
-        },
+import { EzApp } from "@ezbackend/common"
+import { EzBackendOpts } from "@ezbackend/common"
+import type { FastifyRegisterOptions } from 'fastify'
+import { PluginScope } from "@ezbackend/core"
 
-    })
+declare module '@ezbackend/common' {
+    interface EzBackendOpts {
+        openAPI: FastifyRegisterOptions<SwaggerOptions> | undefined
+    }
 }
 
-export class EzOpenAPI extends App {
+const defaultConfig: EzBackendOpts['openAPI'] = {
+    prefix: "/docs",
+    routePrefix: "/docs",
+    exposeRoute: true,
+    //TODO: Figure out why its logging so much
+    logLevel: 'warn',
+    openapi: {
+        info: {
+            title: "EzBackend API",
+            description: "Automatically generated documentation for EzBackend",
+            version: "1.0.0",
+        },
+        externalDocs: {
+            url: "https://github.com/kapydev/ezbackend",
+            description: "Find more info here",
+        }
+    },
+}
+
+export class EzOpenAPI extends EzApp {
     constructor() {
         super()
 
-        this.setHandler('Add Swagger Plugin', addSwaggerPlugin)
+        this.setDefaultOpts(defaultConfig)
 
-        //TODO: Think about naming of PluginScope for scope... should it be a function instead?
+        this.setHandler('Add Swagger Plugin', async (instance, fullOpts) => {
+
+            const opts = this.getOpts('openAPI', fullOpts)
+
+            instance.server.register(fastifySwagger,opts)
+        })
+
         this.scope = PluginScope.PARENT
     }
 }

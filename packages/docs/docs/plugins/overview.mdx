@@ -1,0 +1,33 @@
+---
+sidebar_postion: 1
+---
+
+# Overview
+
+import CodeSnippet from "../CodeSnippet"
+
+EzBackend comes with several plugins in order to streamline the developer experience.
+
+|Plugin|Description|Notes|
+|-|-|-|
+|![ez-db-ui](../assets/ez-db-ui.png)|An all in one interface for <br/>1. Looking at your API endpoints <br/>2. Managing your database<br/>3. Testing your API endpoints|`Requires EzOpenAPI plugin to be used as well`|
+|![ez-open-api](../assets/ez-open-api.png)|Automatically generates documentation for your backend||
+|![ez-cors](../assets/ez-cors.png)|Plugin for managing CORS, by default accepts requests from anywhere| `Make sure to change cors settings before deployment`|
+|![ez-auth](../assets/ez-auth.png)|Plugin for managing Auth|Uses Encrypted Session Cookies by default|
+
+## Using plugins
+
+In EzBackend, everything is an ezapp. You can enable plugins by doing the following:
+
+<CodeSnippet
+sample={`app.addApp(new EzCors())`}
+fullCode={`import { EzBackend } from '@ezbackend/common'
+import { EzCors } from "@ezbackend/cors";\n
+const app = new EzBackend()\n
+app.addApp(new EzCors())\n
+app.start()`}
+/>
+
+## Configuration
+
+All plugins are designed to be fully extensible and configurable. You can view the configuration options [here](../configuration)

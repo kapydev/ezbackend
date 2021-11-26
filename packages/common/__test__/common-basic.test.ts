@@ -1,15 +1,21 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import { EzError } from "@ezbackend/utils";
 import { EzBackend, EzModel, Type } from "../src";
-import ezb from "./test.index"
+import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+
+import { EzError } from "@ezbackend/utils";
 import { after } from "lodash";
+import ezb from "./test.index"
 
 beforeAll(async () => {
   await ezb.start({
     port: 3000,
-    server: {
-      logger: false
-    },
+    backend: {
+      fastify: {
+        logger: false
+      },
+      typeorm: {
+        database: ':memory:'
+      }
+    }
   })
 });
 

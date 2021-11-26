@@ -10,11 +10,12 @@
   "devDependencies": {
     "@types/node": "^16.10.2",
     "lerna": "^4.0.0",
+    "rimraf": "^3.0.2",
     "window-size": "^1.1.1"
   },
   "scripts": {
     "build": "node ./scripts/build-package.js",
-    "test": "jest",
+    "test": "jest --runInBand",
     "prepare": "lerna run prepare"
   },
   "dependencies": {

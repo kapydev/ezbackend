@@ -1,12 +1,17 @@
+import { EzBackend, EzBackendOpts, EzModel, RecursivePartial, Type } from "../src"
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import { EzBackend, EzModel, Type } from "../src"
+
 import { EzError } from "@ezbackend/utils";
 
-
-const defaultConfig = {
-    server: {
-        logger: false
-    },
+const defaultConfig: RecursivePartial<EzBackendOpts> = {
+    backend: {
+        fastify: {
+            logger: false
+        },
+        typeorm: {
+            database: ':memory:'
+        }
+    }
 }
 describe("Illegal Entity Creation", () => {
 

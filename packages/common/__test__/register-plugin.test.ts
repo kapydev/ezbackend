@@ -1,13 +1,16 @@
 import { EzBackend } from "../src";
 
-
 describe("Plugin Registering", () => {
     let app: EzBackend
 
     const defaultConfig = {
-        port: 3000,
-        server: {
-            logger:false
+        backend: {
+            fastify: {
+                logger: false
+            },
+            typeorm: {
+                database: ':memory:'
+            }
         }
     }
 

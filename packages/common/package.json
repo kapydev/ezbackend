@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
+    "build:clean": "npx rimraf dist && tsc",
     "watch": "tsc -w"
   },
   "files": [
@@ -22,6 +23,7 @@
     "@types/lodash": "^4.14.175",
     "@types/node": "^16.4.13",
     "@types/passport-google-oauth20": "^2.0.10",
+    "@types/pino": "^7.0.5",
     "jest": "^27.0.6",
     "lodash": "^4.17.21",
     "ts-jest": "^27.0.4"
