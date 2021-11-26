@@ -1,7 +1,7 @@
 import fse from "fs-extra";
 import path from "path";
 import { JsPackageManager } from "../js-package-manager/JsPackageManager";
-import { initiateOptions } from "../initiate";
+import { InitiateOptions } from "../initiate";
 
 function installDependencies(packageManager: JsPackageManager) {
   //TODO: Think about moving these values away into a config file for ease
@@ -31,7 +31,7 @@ function installDependencies(packageManager: JsPackageManager) {
   }, devDependencies);
 }
 
-export async function baseGenerator(packageManager: JsPackageManager,options:initiateOptions) {
+export async function baseGenerator(packageManager: JsPackageManager,options:InitiateOptions) {
   //TODO: Think about a possible need for versioning dependencies for different project types
   //TODO: Think about keep this DRY with the common framework
   //TODO: Make lerna publish run prepare, and make prepare run tsc build

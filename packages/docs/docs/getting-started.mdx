@@ -13,9 +13,20 @@ import CodeBlock from "@theme/CodeBlock";
 
 Make sure you have [Node](https://nodejs.org/en/download/) installed.
 
-```bash
-npx ezbackend init my-ezbackend
-```
+<Tabs
+  defaultValue="npm"
+  values={[
+    { label: "npm", value: "npm" },
+    { label: "yarn", value: "yarn" },
+  ]}
+>
+  <TabItem value="npm">
+    <CodeBlock className="language-bash">npx ezbackend init my-ezbackend</CodeBlock>
+  </TabItem>
+  <TabItem value="yarn">
+    <CodeBlock className="language-bash">npx ezbackend init my-ezbackend --yarn</CodeBlock>
+  </TabItem>
+</Tabs>
 
 Replace `my-ezbackend` with `your-folder-name` or `.` for current dir
 

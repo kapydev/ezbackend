@@ -12,13 +12,14 @@ import { readPackageJson } from "./js-package-manager";
 //TODO: Seperate the cli from the server to reduce load time
 const logger = console;
 
-export type initiateOptions = {
+export type InitiateOptions = {
   force?: boolean,
   dir: string,
-  install? :boolean
+  install? :boolean,
+  yarn?: boolean
 }
 
-export default function initiate(dir: string, options: initiateOptions, pkg: any) {
+export default function initiate(dir: string, options: InitiateOptions, pkg: any) {
   const welcomeMessage =
     "EzBackend - An extensible backend optimised for the developer experience";
   logger.log(chalk.inverse(`\n ${welcomeMessage} \n`));
@@ -50,9 +51,9 @@ export default function initiate(dir: string, options: initiateOptions, pkg: any
   return installEzb(projectType,options);
 }
 
-const installEzb = (projectType: ProjectType,options:initiateOptions) => {
+const installEzb = (projectType: ProjectType,options:InitiateOptions) => {
 
-  const packageManager = JsPackageManagerFactory.getPackageManager()
+  const packageManager = JsPackageManagerFactory.getPackageManager(options)
 
   const runGenerator: () => Promise<void> = () => {
     switch (projectType) {

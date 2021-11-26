@@ -39,6 +39,12 @@ app.start({
 
 ## Understanding the config
 
+### Environment Loading
+
+:::info
+By default, EzBackend reads values from `.env` in your root folder. There is no need to use `dotenv.config()`, but do take note that the `.env` is loaded by default.
+:::
+
 ### Configuration Merging
 
 When a configuration is passed to `app.start()`, it is merged with the default declaration.

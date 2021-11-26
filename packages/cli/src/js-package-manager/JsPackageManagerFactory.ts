@@ -4,16 +4,17 @@ import { sync as findUpSync } from "find-up";
 import { Yarn1Proxy } from "./Yarn1Proxy";
 import { Yarn2Proxy } from "./Yarn2Proxy";
 import { NPMProxy } from "./NPMProxy";
+import { InitiateOptions } from "../initiate";
 
 export class JsPackageManagerFactory {
-  public static getPackageManager() {
+  public static getPackageManager(options: InitiateOptions) {
     const yarnVersion = getYarnVersion();
     const hasYarnLockFile = findUpSync("yarn.lock");
 
     const hasNPMCommand = hasNPM();
 
     //TODO: Add in support for Yarn 2 and npm. Refer to https://github.com/storybookjs/storybook/tree/next/lib/cli/src/js-package-manager
-    if (yarnVersion && (hasYarnLockFile || !hasNPMCommand)) {
+    if (options.yarn || (yarnVersion && (hasYarnLockFile || !hasNPMCommand))) {
       return yarnVersion === 1 ? new Yarn1Proxy() : new Yarn2Proxy();
     }
 
