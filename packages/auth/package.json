@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/auth",
-  "version": "0.0.140",
+  "version": "0.0.141",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/kapydev/ezbackend#readme",
@@ -32,7 +32,6 @@
   "dependencies": {
     "@types/eth-sig-util": "^2.1.1",
     "@types/ethereumjs-util": "^6.1.0",
-    "dedent": "^0.7.0",
     "dedent-js": "^1.0.1",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.1.3",
