@@ -1,5 +1,10 @@
-export * from './ezbackend'
+export {
+    EzBackend,
+} from './ezbackend'
+export type {
+    EzBackendInstance,
+    EzBackendOpts,
+    RecursivePartial
+} from "./ezbackend"
 export * from './model'
 export * from './ezapp'
-
-import "declarations/ezbackend-opts"

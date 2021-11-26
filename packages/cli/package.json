@@ -9,6 +9,7 @@
   "scripts": {
     "test": "echo \"Testing server with version: $npm_package_version",
     "build": "tsc",
+    "build:clean": "npx rimraf dist && tsc",
     "watch": "tsc -w"
   },
   "files": [

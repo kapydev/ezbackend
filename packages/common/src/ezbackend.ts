@@ -28,35 +28,36 @@ export interface EzBackendOpts {
      * use
      * {ezbackend: {listen: {address: 0.0.0.0}}}
      */
-    address: string
-    /**
-     * @deprecated Instead of {port: 8000}
-     * use
-     * {ezbackend: {listen: {port: 8000}}}
-     */
-    port: string | number
-    /**
-     * @deprecated Instead of {orm: ormOpts}
-     * use
-     * {ezbackend: {typeorm: ormOpts}}
-     */
-    orm: Parameters<typeof createConnection>[0]
-    /**
-     * @deprecated Instead of {server: serverOpts}
-     * use
-     * {ezbackend: {fastify: serverOpts}}
-     */
-    server: Parameters<typeof fastify>[0]
-    backend: {
-        listen: {
-            address: string | number
-            port: number | string
-            backlog?: number
-        },
-        fastify: Parameters<typeof fastify>[0],
-        typeorm: Parameters<typeof createConnection>[0]
-    }
+     address: string
+     /**
+      * @deprecated Instead of {port: 8000}
+      * use
+      * {ezbackend: {listen: {port: 8000}}}
+      */
+     port: string | number
+     /**
+      * @deprecated Instead of {orm: ormOpts}
+      * use
+      * {ezbackend: {typeorm: ormOpts}}
+      */
+     orm: Parameters<typeof createConnection>[0]
+     /**
+      * @deprecated Instead of {server: serverOpts}
+      * use
+      * {ezbackend: {fastify: serverOpts}}
+      */
+     server: Parameters<typeof fastify>[0]
+     backend: {
+         listen: {
+             address: string | number
+             port: number | string
+             backlog?: number
+         },
+         fastify: Parameters<typeof fastify>[0],
+         typeorm: Parameters<typeof createConnection>[0]
+     }
 }
+
 
 //TODO: Check if emojis will break instance names
 //URGENT TODO: Strict types for instance, opts
