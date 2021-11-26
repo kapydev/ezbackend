@@ -11,17 +11,6 @@ import IconRefresh from '../assets/icon-refresh.svg'
 import IconEnv from '../assets/icon-env.svg'
 import IconClock from '../assets/icon-clock.svg'
 
-// This is the code for making the add_content prop match layout - 2 columns for big screen 1 column for phone
-
-{/* <div className='grid grid-flow-row grid-cols-1 sm:grid-cols-2'>
-    <div className='col-span-1 flex justify-center'>
-
-    </div>
-    <div className='col-span-1 flex justify-center'>
-
-    </div>
-</div> */}
-
 const ICONCLASSNAME = 'w-12 h-12'
 
 export const features_content = [
@@ -33,7 +22,7 @@ export const features_content = [
         description: "EzBackend is designed to reduce the amount of boilerplate you have to write",
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Cillum veniam ullamco amet magna ut aute officia cupidatat pariatur proident laborum dolor.',
     },
     {
         title: <span><span className='text-purple'>14.2x</span> Faster</span>,
@@ -43,7 +32,7 @@ export const features_content = [
         description: "EzBackend uses Fastify under the hood, a NodeJS framework with 5 times the benchmark performance as Express (At the time of writing) (Support with our own benchmarks)",
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Ea dolor irure magna cupidatat voluptate ea in consectetur tempor Lorem.',
     },
     {
         title: "Authentication",
@@ -53,7 +42,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Tempor mollit laboris qui laboris commodo eu sunt non exercitation laborum ex cillum sit do.',
     },
     {
         title: "Database Agnostic",
@@ -63,7 +52,7 @@ export const features_content = [
         description: "EzBackend uses typeorm under the hood, which supports XXX DBs. It also utilise database hooks to provide row level security",
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Amet exercitation elit cillum aliqua anim deserunt magna eu deserunt.',
     },
     {
         title: "Instant API Generation",
@@ -73,7 +62,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Sunt mollit adipisicing magna ullamco quis.',
     },
     {
         title: "Automated Documentation",
@@ -83,7 +72,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Et id ipsum laboris id officia veniam nisi.',
     },
 
 
@@ -95,7 +84,7 @@ export const features_content = [
         description: <div>EzBackend supports typescript out of the box. However, the file looks like it is written in plain javascript.<br /><br /> Because EzBackend uses a strong type inference system under the hood, most functions within the framework automatically have rich IDE support out of the box</div>,
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Reprehenderit non cillum consequat consectetur.',
     },
 
     {
@@ -106,7 +95,7 @@ export const features_content = [
         description: <div>EzBackend uses ts-node-dev under the hood, which recompiles only necessary files with every refresh, significantly reducing compile times and updated code with every ctrl-s<br /><br />It restarts target node process when any of required files changes (as standard node-dev) but shares Typescript compilation process between restarts. This significantly increases speed of restarting comparing to node-dev -r ts-node/register ..., nodemon -x ts-node ... variations because there is no need to instantiate ts-node compilation each time.</div>,
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Eiusmod eiusmod cupidatat minim deserunt cupidatat magna consequat do magna.',
     },
 
 
@@ -119,7 +108,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        add_content: <div></div>,
+        flip_card: 'Irure laborum do id id aute reprehenderit anim excepteur.',
     },
     {
         title: <div>Consistent <br /> Dev & Prod Env</div>,
@@ -129,7 +118,7 @@ export const features_content = [
         description: <div>EzBackend automatically detects if it is running in a development environment or production environment, and automatically configures itself to run securely and safely in either one<br /><br />While EzBackend runs with strong defaults, these defaults are still entirely configurable to your custom needs</div>,
         media: null,
         released: false,
-        add_content: <div></div>,
+        flip_card: 'Irure duis nisi ut eu officia culpa.',
     },
 
     {
@@ -140,7 +129,7 @@ export const features_content = [
         description: "",
         media: null,
         released: false,
-        add_content: <div></div>,
+        flip_card: 'Duis aliqua magna fugiat nostrud pariatur ad consectetur exercitation.',
     },
 
     {
@@ -151,7 +140,7 @@ export const features_content = [
         description: "",
         media: null,
         released: false,
-        add_content: <div></div>,
+        flip_card: 'Consectetur culpa ut do veniam elit adipisicing ea officia labore nulla laboris.',
     },
 
 ]

@@ -108,11 +108,6 @@ export default function Home() {
                       Get Started
                     </CtaButton>
                   </div>
-                  {/* <div>
-                    <CtaButton islink={true} link="/features/all-features" >
-                      All Features
-                    </CtaButton>
-                  </div> */}
                   {/* <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' islink={false} target='_blank'>
                     <CtaButton islink={false}>
                       Live Demo

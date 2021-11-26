@@ -1,11 +1,7 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import { Feature } from '../../helper-components/feature';
-import { FeatureDescription } from '../../helper-components/feature-description';
 import { features_content } from '../../content/features-content';
-import greybox from '../../assets/grey-rect.png';
-
-const ICONCLASSNAME = 'w-12 h-12'
 
 function AllFeatures() {
   return (
@@ -44,24 +40,6 @@ function AllFeatures() {
             })}
 
             <br />
-
-            {/* {features_content.map((feature) => {
-              if (feature.description !== "") {
-                return (
-                  <FeatureDescription
-                    title={feature.title}
-                    description={feature.description}
-                    media={(feature.media === null) ? greybox : feature.media}
-                    height='80%'
-                    width='80%'
-                    add_content={feature.add_content}
-                  />
-                )
-              } else {
-                return null
-              }
-
-            })} */}
 
           </div>
         </div>
