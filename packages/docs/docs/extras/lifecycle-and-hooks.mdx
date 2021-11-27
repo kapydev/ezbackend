@@ -6,133 +6,243 @@ sidebar_position: 1
 
 import CodeSnippet from '../CodeSnippet'
 
-<!-- LEFT OFF: Need to specify the nested capability of lifecycle and hooks -->
+## Introduction
 
-:::warning
+EzBackend's works by having modular hooks into the boot lifecycle of the app, allowing you to run any initialization code you need at any point of the boot lifecyle.
 
-This page is currently being updated and not fully up to date
+### Boot order
 
+Assuming the following hierarchy:
+
+```
+EzBackend
+├─┬ child 1
+| └── child 2
+└── child 3
+```
+
+Lifecycle hooks are run in this order:
+
+1. All EzBackend `preInit` hooks
+1. All child 1 `preInit` hooks
+1. All child 2 `preInit` hooks
+1. All child 3 `preInit` hooks
+1. All EzBackend `init` hooks
+1. All child 1 `init` hooks
+1. And so on...
+
+The available hooks are:
+1. preInit
+2. init
+3. postInit
+4. preHandler
+5. handler
+6. postHandler
+7. preRun
+8. run
+9. postRun
+
+## Sample Boot Cycle
+
+You can print the boot lifecycle using:
+
+<CodeSnippet
+sample={`async function main() {
+  await app.start()
+  console.log(app.prettyPrint())
+}
+main()`}
+fullCode={`import {EzBackend, EzModel, Type} from '@ezbackend/common'
+import { EzOpenAPI } from "@ezbackend/openapi";
+import { EzDbUI } from "@ezbackend/db-ui";
+import { EzCors } from "@ezbackend/cors";\n
+const app = new EzBackend()\n
+//---Plugins---
+//Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI())
+app.addApp(new EzDbUI())
+app.addApp(new EzCors())
+//---Plugins---\n
+//Models are also ezapps in ezbackend
+const model = new EzModel('ModelName', {
+  var1: Type.VARCHAR, //string
+  var2: Type.INT, //integer
+})\n
+app.addApp(model, { prefix: 'model-route-prefix' })\n
+async function main() {
+  await app.start()
+  console.log(app.prettyPrint())
+}
+main()`}
+/>
+
+The sample boot cycle for a default app is
+
+```
+bound root 217 ms
+├─┬ _init 3 ms
+│ ├── Create Entities Container 0 ms
+│ └─┬ UnnamedApp4 1 ms
+│   └── Create "ModelName" Entity 1 ms
+├─┬ _postInit 38 ms
+│ ├── Create Database Connection 36 ms
+│ └─┬ UnnamedApp4 1 ms
+│   └── Obtain ModelName Repository 0 ms
+├─┬ _handler 17 ms
+│ ├── Create Server Stub 1 ms
+│ ├── Add Fastify Boom 0 ms
+│ ├── Add Error Schema 0 ms
+│ ├─┬ UnnamedApp1 1 ms
+│ │ ├── Create Server Stub 0 ms
+│ │ └── Add Swagger Plugin 0 ms
+│ ├─┬ UnnamedApp2 4 ms
+│ │ ├── Create Server Stub 0 ms
+│ │ ├── Add DB-UI endpoint schemas 1 ms
+│ │ ├── Serve UI Interface 0 ms
+│ │ └─┬ DB-UI Endpoint Router 2 ms
+│ │   ├── Create Server Stub 0 ms
+│ │   └── Add DB-UI endpoints 1 ms
+│ ├─┬ UnnamedApp3 3 ms
+│ │ ├── Create Server Stub 0 ms
+│ │ └── Add Cors Plugin 3 ms
+│ └─┬ UnnamedApp4 6 ms
+│   ├── Create Server Stub 0 ms
+│   └─┬ router 5 ms
+│     ├── Create Server Stub 0 ms
+│     ├── Add Create Schema 1 ms
+│     ├── Add Update Schema 0 ms
+│     ├── Add Full Schema 0 ms
+│     ├── Generate createOne route 0 ms
+│     ├── Generate getOne route 0 ms
+│     ├── Generate getAll route 0 ms
+│     ├── Generate updateOne route 0 ms
+│     └── Generate deleteOne route 0 ms
+├─┬ _postHandler 27 ms
+│ ├── Remove Server Stub 0 ms
+│ ├── Create Fastify Server 20 ms
+│ ├── Register Fastify Plugins 1 ms
+│ ├─┬ UnnamedApp1 0 ms
+│ │ └── Remove Server Stub 0 ms
+│ ├─┬ UnnamedApp2 1 ms
+│ │ ├── Remove Server Stub 0 ms
+│ │ └─┬ DB-UI Endpoint Router 0 ms
+│ │   └── Remove Server Stub 0 ms
+│ ├─┬ UnnamedApp3 1 ms
+│ │ └── Remove Server Stub 0 ms
+│ └─┬ UnnamedApp4 1 ms
+│   ├── Remove Server Stub 0 ms
+│   └─┬ router 0 ms
+│     └── Remove Server Stub 0 ms
+├─┬ _run 123 ms
+│ └── Run Fastify Server 123 ms
+└─┬ _postRun 1 ms
+  └─┬ UnnamedApp2 1 ms
+    └── Display DB UI URL 0 ms
+```
+
+## Adding hooks
+
+
+We can add hooks in order to run different points in the lifecycle. For example, if we want a hook to print `---Systems Online---` after everything is loaded:
+
+<CodeSnippet
+sample={`app.setPostRun("Print Systems Online", async(instance,opts) => {
+  console.log("---Systems Online---")
+})`}
+fullCode={`import {EzBackend, EzModel, Type} from '@ezbackend/common'
+import { EzOpenAPI } from "@ezbackend/openapi";
+import { EzDbUI } from "@ezbackend/db-ui";
+import { EzCors } from "@ezbackend/cors";\n
+const app = new EzBackend()\n
+//---Plugins---
+//Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI())
+app.addApp(new EzDbUI())
+app.addApp(new EzCors())
+//---Plugins---\n
+//Models are also ezapps in ezbackend
+const model = new EzModel('ModelName', {
+  var1: Type.VARCHAR, //string
+  var2: Type.INT, //integer
+})\n
+app.addApp(model, { prefix: 'model-route-prefix' })\n
+app.setPostRun("Print Systems Online", async(instance,opts) => {
+  console.log("---Systems Online---")
+})\n
+app.start()`}
+/>
+
+### Hook
+
+Used to define the point in the lifecycle to add the hook
+
+Example:
+
+```ts
+app.setInit(...)
+app.setPostInit(...)
+app.setPreInit(...)
+```
+
+### Hook Name
+
+Used during the pretty print to ensure future users understand what function is being run
+
+Example:
+
+```ts
+app.setInit("My init hook",...)
+app.setPostInit("My post init hook",...)
+app.setPreInit("My pre init hook",...)
+app.setPostRun("Print Systems Online",...)
+```
+
+### Hook Function
+
+The function used to alter the running instance, as well as the options supplied to it during `app.start(opts)`
+
+```ts
+app.setPostRun("Print Systems Online", async(instance,opts) => {
+  console.log("---Systems Online---")
+})
+```
+
+|Argument|Type|Description
+|-|-|-|
+|instance| `import {EzBackendInstance} from "@ezbackend/common"` | Used to modify fastify, typeorm or any other objects in the instance
+|opts| `import {EzBackendOpts} from "@ezbackend/common"` | Used to get a reference to the `opts` passed during `app.start(opts)`
+
+:::tip
+You can see what is in the instance and opts using
+
+```ts
+app.setPostRun("View Instance and opts", async(instance,opts) => {
+  console.log(instance)
+  console.log(opts)
+})
+```
+/>
 :::
 
-EzBackend allows you to create custom plugins by hooking your plugins into any part of the EzBackend lifecycle as you so wish
+:::warning
+Take note of the boot order in order to ensure your hooks are running in the right order. You can check this with `console.log(app.prettyPrint())` after `await app.start`
+:::
 
-<!-- TODO: Make hooks into functions instead of replacing properties because thats kinda weird -->
+## Removing Hooks
 
-## An introduction to lifecycle and hooks
+Removing hooks can be useful, for example if you wish to test EzBackend without running the server
 
-EzBackend's lifecycle is as shown below, with code running from top to bottom.
-
-```
-preInit
-|_preInit[0]
-|_preInit[1]
-|
-init
-|
-postInit
-|_postInit[0]
-|_postInit[1]
-|
-preHandler
-|_preHandler[0]
-|_preHandler[1]
-|
-handler
-|
-postHandler
-|_postHandler[0]
-|_postHandler[1]
-|
-preRun
-|_preRun[0]
-|_preRun[1]
-|
-run
-|
-postRun
-|_postRun[0]
-|_postRun[1]
+```ts
+app.removeHook("_run", "Run Fastify Server")
 ```
 
-All of the `pre` and `post` parts of the lifecycles are arrays, whereas everything else is a single function
+You can obtain the hook names from `console.log(app.prettyPrint())`
+
+## Core Module
+
+`@ezbackend/core` provides the core functionality for running the boot order in EzBackend. It is a thin wrapper around [fastify's avvio](https://github.com/fastify/avvio)
 
 When you run `import {App} from '@ezbackend/core`, there are no functions in the lifecycle
 
-However, when you use `import {EzBackend} from '@ezbackend/common` as a plugin, It comes with some lifecycle hooks
+However, when you use `import {EzBackend} from '@ezbackend/common` as a plugin, It comes with some lifecycle hooks in order to boot the application, as seen in the [sample boot cycle](#sample-boot-cycle)
 
-```
-.
-|
-init[🎣Create typeorm connection and fastify instance]
-|
-.
-|
-handler[🎣Import models from index.ts and register routes]
-|
-.
-|
-run[🎣Sync DB tables and start server]
-|
-.
-```
-
-As you can see we have 🎣hooked🎣 onto the lifecycle the commands to automatically start a server based on just a provided schema!
-
-Let's look at an actual example from how `postInit` in `EzBackend` is implemented
-<!-- TODO: Keep this updated from the code -->
-
-```ts
-export class EzBackend extends EzApp {
-
-    constructor() {
-        super()
-        .
-        .
-        this.setPostInit('Create Database Connection', async (instance, opts) => {
-            instance.orm = await createConnection(
-                {
-                    ...opts.orm,
-                    entities: instance.entities
-                }
-            )
-        })
-        .
-        .
-    }
-}
-```
-
-This system uses [avvio by fastify](https://github.com/fastify/avvio) to declare every function at each step as a plugin, so that regardless of whether plugins are asynchronous or not they will still load in the same order
-
-Hence, for making a real plugin we should instead be creating pre and post hooks.
-
-Let's look at an actual example from `@ezbackend/openapi`, the plugin for generating documentation
-
-```
-.
-|
-init[Create typeorm and fastify instance]
-|
-postInit
-|_[🎣register swagger]
-|
-handler[🎣register swagger]
-|
-.
-|
-run[Sync DB tables and start server]
-|
-postRun
-|_[🎣run swagger and open documentation]
-```
-
-So, instead of replacing the function entirely, we append the function, which means that each plugin can add an additional hook without removing hooks from previous plugins
-
-The actual implementation for running open api is something like this:
-
-```ts
-ezb.plugins.postRun.push(()=> {
-  ezb.server.swagger();
-  if (ezb.options.server.port) open(`http://localhost:${ezb.options.server.port}/docs`);
-})
-```
