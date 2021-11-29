@@ -259,7 +259,7 @@ export default function Home() {
                 <form>
                   <input
                     onChange={e => setSignUpEmail(e.target.value)}
-                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold '
+                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold w-full'
                     type="text"
                     id="submitSignUps"
                     value={signUpEmail}
@@ -267,17 +267,21 @@ export default function Home() {
                     name="email" />
                 </form>
                 <CtaButton islink={false} onClick={(e) => {
-                  toast.promise(
-                    handleSubmit(e),
-                    {
-                      loading: 'Submitting...',
-                      success: <b>Submitted</b>,
-                      error: <b>Server Error! We are working on it!</b>,
-                    }
-                  );
+                  if (signUpEmail === "") {
+                    toast.error("Please fill in your email")
+                  } else {
+                    toast.promise(
+                      handleSubmit(e),
+                      {
+                        loading: 'Submitting...',
+                        success: <b>Submitted</b>,
+                        error: <b>Server Error! We are working on it!</b>,
+                      }
+                    );
+                  }
                 }}>
                   <div className='text-sm'>
-                    Sign Up
+                    SIGN UP
                   </div>
                 </CtaButton>
               </div>

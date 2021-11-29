@@ -71,14 +71,18 @@ function Landing() {
                                                 name="email" />
                                         </form>
                                         <CtaButton className='w-full' islink={false} onClick={(e) => {
-                                            toast.promise(
-                                                handleSubmit(e),
-                                                {
-                                                    loading: 'Submitting...',
-                                                    success: <b>Submitted</b>,
-                                                    error: <b>Server Error! We are working on it!</b>,
-                                                }
-                                            );
+                                            if (signUpEmail === "") {
+                                                toast.error("Please fill in your email")
+                                            } else {
+                                                toast.promise(
+                                                    handleSubmit(e),
+                                                    {
+                                                        loading: 'Submitting...',
+                                                        success: <b>Submitted</b>,
+                                                        error: <b>Server Error! We are working on it!</b>,
+                                                    }
+                                                );
+                                            }
                                         }}>
                                             Sign Up
                                         </CtaButton>
