@@ -229,7 +229,7 @@ export default function Home() {
               </Accordion>
             </div>
 
-            <div className='col-span-full xl:p-12'>
+            <div className='col-span-full xl:p-24'>
               <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
             </div>
 
