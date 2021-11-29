@@ -81,7 +81,8 @@ function Landing() {
                                                         success: <b>Submitted</b>,
                                                         error: <b>Server Error! We are working on it!</b>,
                                                     }
-                                                );
+                                                )
+                                                    .then(() => { window.open("/") })
                                             }
                                         }}>
                                             Sign Up
