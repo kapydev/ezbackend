@@ -97,10 +97,10 @@ export default function Home() {
             <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
                 <div className='text-5xl font-bold font-mono text-center'>
-                  Build Your MVP Faster
+                  Simple to Build | Ready to Scale
                 </div>
                 <div className='text-xl font-mono text-center'>
-                  Simple to Setup. Fully Customizable
+                  The   Low-Code Backend Framework for Startup Founders
                 </div>
                 <div className='flex flex-row justify-center gap-4'>
                   <div>
@@ -169,7 +169,7 @@ export default function Home() {
                     Database Connection Made
                   </StepFeature>
                   <StepFeature delay={4500}>
-                    <span className='text-purple'>Pets</span> Table Created in Database
+                    Table Columns Added
                   </StepFeature>
                   <StepFeature delay={9000}>
                     <span className='text-purple'>Name</span>, <span className='text-purple'>Species</span>, <span className='text-purple'>Age</span>, Columns Added in Table
@@ -249,14 +249,17 @@ export default function Home() {
             </div>
 
             <div className='col-span-full flex justify-center align-middle'>
-              <div className='bg-dracula p-10 rounded-lg grid gap-6'>
-                <div className='font-monts text-xl text-center font-semibold'>
-                  Sign Up
+              <div className='p-10 rounded-lg grid gap-6'>
+                <div className='font-monts text-2xl text-center font-bold'>
+                  Be an Early Adopter
+                </div>
+                <div className='font-monts text-md text-center'>
+                  Claim 100USD Hosting Credits when you sign up today
                 </div>
                 <form>
                   <input
                     onChange={e => setSignUpEmail(e.target.value)}
-                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold'
+                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold '
                     type="text"
                     id="submitSignUps"
                     value={signUpEmail}

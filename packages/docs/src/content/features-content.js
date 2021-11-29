@@ -52,7 +52,7 @@ export const features_content = [
         description: "EzBackend uses typeorm under the hood, which supports XXX DBs. It also utilise database hooks to provide row level security",
         media: null,
         released: true,
-        flip_card: <span>EzBackend wraps typeorm with <span className="text-purple">scaling functionality</span>in order to manage large workloads</span>,
+        flip_card: <span>EzBackend wraps typeorm with <span className="text-purple">scaling functionality</span> in order to manage large workloads</span>,
     },
     {
         title: "Instant API Generation",
@@ -72,7 +72,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        flip_card: <span>Use EzBackend as a <span className="text-purple">single source of truth</span>. No longer update your swagger documentation and backend seperately</span>,
+        flip_card: <span>Use EzBackend as a <span className="text-purple">single source of truth</span>. Goodbye to updating your swagger documentation and backend seperately</span>,
     },
 
 
@@ -129,7 +129,7 @@ export const features_content = [
         description: "",
         media: null,
         released: false,
-        flip_card: <span>[COMING SOON] Listen to database updates in realtime. Comes with <span className="text-purple">packet level security</span> where read/write permissions for each recepient is verified before socket.io packets are sent.</span>,
+        flip_card: <span> <span className='italic'>COMING SOON</span> <br />Listen to database updates in realtime. Comes with <span className="text-purple">packet level security</span> where read/write permissions for each recepient is verified before socket.io packets are sent.</span>,
     },
 
     {
@@ -140,7 +140,7 @@ export const features_content = [
         description: "",
         media: null,
         released: false,
-        flip_card: <span>[COMING SOON] Store files in blob-storage</span>
+        flip_card: <span><span className='italic'>COMING SOON</span> <br />Store files in blob-storage</span>
     },
 
 ]
