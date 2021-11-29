@@ -34,9 +34,9 @@ export function AccordionItem({ toggle, children }) {
     return (
         <div role="button" onClick={toggleItem(toggle)} className={style.item}>
             {children}
-            <span className="flex justify-center py-4">
+            <div className="flex justify-center py-4">
                 {selected === toggle ? <AngleUpIcon /> : <AngleDownIcon />}
-            </span>
+            </div>
         </div>
     );
 }
@@ -55,7 +55,7 @@ export function AccordionPanel({ children, id }) {
 }
 
 const AngleUpIcon = () => (
-    <button className='flex flex-wrap justify-center items-center gap-2 bg-transparent border-0'>
+    <button className='flex flex-wrap justify-center items-center gap-2 bg-transparent border-0 cursor-pointer'>
         <div className='font-monts font-bold text-lg'>
             Core Features
         </div>
@@ -72,7 +72,7 @@ const AngleUpIcon = () => (
 );
 
 const AngleDownIcon = () => (
-    <button className='flex flex-wrap justify-center items-center gap-2 bg-transparent border-0'>
+    <button className='flex flex-wrap justify-center items-center gap-2 bg-transparent border-0 cursor-pointer'>
         <div className='font-monts font-bold text-lg'>
             More Features
         </div>

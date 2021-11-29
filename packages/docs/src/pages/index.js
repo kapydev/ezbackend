@@ -264,7 +264,7 @@ export default function Home() {
             </div>
 
             <div className='col-span-full flex justify-center align-middle'>
-              <div className='p-10 rounded-lg grid gap-6'>
+              <div className='p-10 rounded-lg grid gap-6 bg-dracula'>
                 <div className='font-monts text-2xl text-center font-bold'>
                   Be an Early Adopter
                 </div>
