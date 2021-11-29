@@ -5,6 +5,7 @@ import Layout from '@theme/Layout';
 import toast, { Toaster } from 'react-hot-toast';
 import { features_content } from '../content/features-content'
 import StepFeature from '../helper-components/step-feature';
+import { Accordion, AccordionItem, AccordionPanel } from '../helper-components/accordion';
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -100,7 +101,7 @@ export default function Home() {
                   Simple to Build | Ready to Scale
                 </div>
                 <div className='text-xl font-mono text-center'>
-                  The   Low-Code Backend Framework for Startup Founders
+                  The Low-Code Backend Framework for Startup Founders
                 </div>
                 <div className='flex flex-row justify-center gap-4'>
                   <div>
@@ -191,7 +192,6 @@ export default function Home() {
             <div className='col-span-full'>
 
               <div className='grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
-
                 {features_content.slice(0, 4).map((feature) => {
                   return (
                     <Feature
@@ -203,13 +203,28 @@ export default function Home() {
                       description={feature.description}
                     />)
                 })}
+              </div>
 
-              </div>
-              <div className="flex justify-center mt-12">
-                <CtaButton islink={true} link="/features/all-features" >
-                  All Features ➜
-                </CtaButton>
-              </div>
+              <Accordion>
+                <AccordionItem toggle="features" />
+                <AccordionPanel id="features">
+                  <div className='grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
+                    {features_content.slice(4).map((feature) => {
+                      return (
+                        <Feature
+                          icon={feature.icon}
+                          title={feature.title}
+                          info={feature.info}
+                          route={feature.route}
+                          released={feature.released}
+                          description={feature.description}
+                        />)
+                    })}
+                  </div>
+                </AccordionPanel>
+              </Accordion>
+
+
             </div>
 
             <div className='col-span-full'>
