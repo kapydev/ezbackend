@@ -56,11 +56,6 @@ module.exports = {
           position: 'left',
           label: 'Pricing',
         },
-        {
-          to: 'features/all-features',
-          position: 'left',
-          label: 'Features'
-        },
         // {
         //   type: 'dropdown',
         //   label: 'Solutions',

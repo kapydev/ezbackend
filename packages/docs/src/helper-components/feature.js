@@ -11,7 +11,8 @@ export function Feature(props) {
       ease-in-out
       transform
       hover:-translate-y-1 
-      hover:scale-110
+      hover:scale-105
+      m-2
     '>
 
       <div className='grid place-items-center self-center gap-2'>

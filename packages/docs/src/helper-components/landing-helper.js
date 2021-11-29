@@ -113,6 +113,8 @@ function LandingHelper() {
                 })}
             </div>
 
+            <br />
+
             <div className='col-span-full flex justify-center mt-12'>
                 <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
             </div>

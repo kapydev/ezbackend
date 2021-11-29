@@ -6,6 +6,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { features_content } from '../content/features-content'
 import StepFeature from '../helper-components/step-feature';
 import { Accordion, AccordionItem, AccordionPanel } from '../helper-components/accordion';
+import ReactCompareImage from 'react-compare-image';
+
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -25,6 +27,8 @@ import IconWorld from '../assets/icon-world.svg'
 import IconGithub from '../assets/icon-github.svg'
 import IconYoutube from '../assets/icon-youtube.svg'
 import IconDiscord from '../assets/icon-discord.svg'
+import DiagramBuild from '../assets/diagram-scaling-build.png';
+import DiagramScale from '../assets/diagram-scaling-scale.png';
 
 const axios = require('axios').default;
 const YT_URL = 'https://youtu.be/kQRRckdEFr8'
@@ -223,8 +227,10 @@ export default function Home() {
                   </div>
                 </AccordionPanel>
               </Accordion>
+            </div>
 
-
+            <div className='col-span-full xl:p-12'>
+              <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
             </div>
 
             <div className='col-span-full'>
@@ -248,7 +254,7 @@ export default function Home() {
 
             <div className='col-span-full grid place-items-center'>
               <div className='font-monts font-bold text-2xl mb-12'>
-                Our Community
+                Join Our Community
               </div>
               <div className='flex flex-wrap mx-4 sm:mx-0 justify-center gap-8'>
                 <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
@@ -268,8 +274,8 @@ export default function Home() {
                 <div className='font-monts text-2xl text-center font-bold'>
                   Be an Early Adopter
                 </div>
-                <div className='font-monts text-md text-center'>
-                  Claim 100USD Hosting Credits when you sign up today
+                <div className='font-monts text-md text-center max-w-lg'>
+                  Claim <span className='font-bold'>100USD</span> Hosting Credits when you sign up for our <span className='text-purple'>Alpha</span> programme today!
                 </div>
                 <form>
                   <input
@@ -296,7 +302,7 @@ export default function Home() {
                   }
                 }}>
                   <div className='text-sm'>
-                    SIGN UP
+                    SIGN UP NOW
                   </div>
                 </CtaButton>
               </div>
