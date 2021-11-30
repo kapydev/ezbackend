@@ -103,7 +103,7 @@ function LandingHelper() {
                                     </div>
                                 </div>
                                 <div className="flip-back">
-                                    <div className='flex h-full pt-4 text-sm font-monts flex-wrap content-center'>
+                                    <div className='flex h-full flex-col justify-center text-sm font-monts'>
                                         {feature.flip_card}
                                     </div>
                                 </div>

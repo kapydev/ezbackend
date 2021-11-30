@@ -5,6 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import LandingHelper from '../helper-components/landing-helper';
 import '../css/landing.css'
 import { Scrollbars } from 'react-custom-scrollbars';
+import validator from 'validator'
 
 
 const axios = require('axios').default;
@@ -71,7 +72,7 @@ function Landing() {
                                                 name="email" />
                                         </form>
                                         <CtaButton className='w-full' islink={false} onClick={(e) => {
-                                            if (signUpEmail === "") {
+                                            if (!validator.isEmail(signUpEmail)) {
                                                 toast.error("Please fill in your email")
                                             } else {
                                                 toast.promise(

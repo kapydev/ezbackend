@@ -72,9 +72,8 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        flip_card: <div>Use EzBackend as a <span className="text-purple">single source of truth</span>. Goodbye to updating your swagger documentation and backend seperately</div>,
+        flip_card: <div>Use EzBackend as a <span className="text-purple">single source of truth</span>. Goodbye to updating your swagger documentation and backend seperately </div>,
     },
-
 
     {
         title: "TypeScript Support",
@@ -95,7 +94,7 @@ export const features_content = [
         description: "",
         media: null,
         released: true,
-        flip_card: <div>Use ts-node-dev to restart the development environment on file changes <span className="text-purple">increase refresh speed</span> as compared to node-dev because ts-node is not instantiated multiple times</div>,
+        flip_card: <div>Uses ts-node-dev to restart the dev env on file changes <span className="text-purple">increasing refresh speed</span> as compared to node-dev because ts-node is not instantiated multiple times</div>,
     },
 
 

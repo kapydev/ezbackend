@@ -7,7 +7,7 @@ import { features_content } from '../content/features-content'
 import StepFeature from '../helper-components/step-feature';
 import { Accordion, AccordionItem, AccordionPanel } from '../helper-components/accordion';
 import ReactCompareImage from 'react-compare-image';
-
+import validator from 'validator'
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -229,7 +229,7 @@ export default function Home() {
               </Accordion>
             </div>
 
-            <div className='col-span-full xl:p-24'>
+            <div className='col-span-full'>
               <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
             </div>
 
@@ -288,7 +288,7 @@ export default function Home() {
                     name="email" />
                 </form>
                 <CtaButton islink={false} onClick={(e) => {
-                  if (signUpEmail === "") {
+                  if (!validator.isEmail(signUpEmail)) {
                     toast.error("Please fill in your email")
                   } else {
                     toast.promise(
