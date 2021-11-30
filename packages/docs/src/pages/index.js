@@ -233,7 +233,7 @@ export default function Home() {
               <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
             </div>
 
-            <div className='col-span-full'>
+            {/* <div className='col-span-full'>
               <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
                 Tutorial Demo
               </div>
@@ -250,7 +250,7 @@ export default function Home() {
                   controls={true}
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className='col-span-full grid place-items-center'>
               <div className='font-monts font-bold text-2xl mb-12'>
@@ -339,6 +339,3 @@ function Txty(props) {
     <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
   )
 }
-
-
-
