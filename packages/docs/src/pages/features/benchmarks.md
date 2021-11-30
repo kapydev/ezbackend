@@ -30,25 +30,27 @@ With the following criteria:
 
 You can view the sample apps [here](https://github.com/kapydev/ezbackend-comparisons)
 
-### Write Operations
-
-|Framework| writes/s | Times Faster
-|-|-|-|
-|EzBackend| 1960 |14.2x|
-|express + node-postgres (Benchmark) | 138 | 1x (Baseline)|
-
 ### Read Operations
 
-|Framework| reads/s | Times Faster
-|-|-|-|
-|EzBackend| 1960 |14.2x|
-|express + node-postgres (Benchmark) | 138 | 1x (Baseline)|
+| Framework                      | Requests/s | Latency | Throughput/Mb |
+| ------------------------------ | ---------- | ------- | ------------- |
+| read-ezbackend-postgres-sample | 2500       | 2.97    | 0.73          |
+| read-express-postgres-sample   | 1428.6     | 6.26    | 0.54          |
+| read-express-mongo-sample      | 1250.0     | 7.44    | 0.42          |
+
+### Write Operations
+
+| Framework                       | Requests/s | Latency | Throughput/Mb |
+| ------------------------------- | ---------- | ------- | ------------- |
+| write-ezbackend-postgres-sample | 1667.2     | 4.52    | 0.55          |
+| write-express-postgres-sample   | 1111.1     | 7.68    | 0.46          |
+| write-express-mongo-sample      | 909.1      | 10.08   | 0.33          |
 
 :::info
 Benchmark Machine:
 
-Processor	Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz   2.59 GHz
+Processor Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz 2.59 GHz
 
-Installed RAM	24.0 GB (23.8 GB usable)
+Installed RAM 24.0 GB (23.8 GB usable)
 
 :::

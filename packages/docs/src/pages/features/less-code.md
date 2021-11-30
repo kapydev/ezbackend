@@ -17,8 +17,8 @@ EzBackend saves you time and effort by reducing the time you spend writing boile
 EzBackend saves you time with convention over configuration - EzBackend comes with strong defaults that are <!--[built to scale](built-to-scale) and--> [fully configurable](../docs/basics/configuration).
 
 <!-- TODO: CROP -->
-![Strong Defaults](./../../../docs/assets/strong-defaults-generation.png)
 
+![Strong Defaults](./../../../docs/assets/strong-defaults-generation.png)
 
 EzBackend does this with a modular system of building blocks that allow you to add tables to your database, generate API documentation, implement authentication and more with very little code
 
@@ -27,6 +27,7 @@ EzBackend does this with a modular system of building blocks that allow you to a
 A possible concern you might have is whether the auto-generated functionality, such as CRUD endpoints and authentication are customisable to your business needs.
 
 <!-- TODO: CROP -->
+
 ![Fully Customisable](./../../../docs/assets/fully-customisable.png)
 
 Because of the modular, fully customisable nature of EzBackend, you can inject your custom functionality wherever needed to configure or remove the auto-generated functionlality
@@ -53,10 +54,11 @@ With the following criteria:
 
 You can view the sample apps [here](https://github.com/kapydev/ezbackend-comparisons)
 
-|Framework| Lines of Code| Difference (%)
-|-|-|-|
-|EzBackend|32|-97 %|
-|express + node-postgres (Benchmark) |1257| 0 % (Baseline)|
+| Framework                           | Number of Files | blankLines | Comments | Code |
+| ----------------------------------- | --------------- | ---------- | -------- | ---- |
+| lineCount-ezbackend-postgres-sample | 1               | 6          | 4        | 31   |
+| lineCount-express-mongo-sample      | 9               | 46         | 12       | 147  |
+| lineCount-express-postgres-sample   | 11              | 43         | 13       | 179  |
 
 ### Additional Functionality in EzBackend
 
