@@ -129,18 +129,31 @@ function LandingHelper() {
                 <table>
                     <tr>
                         <th>Framework</th>
-                        <th>Lines of Code</th>
-                        <th>Difference (%)</th>
+                        <th>Number of Files</th>
+                        <th>blankLines</th>
+                        <th>Comments</th>
+                        <th>Code</th>
                     </tr>
                     <tr>
-                        <td>EzBackend</td>
-                        <td>32</td>
-                        <td>-97 %</td>
+                        <td>lineCount-ezbackend-postgres-sample	</td>
+                        <td>1</td>
+                        <td>6</td>
+                        <td>3</td>
+                        <td>31</td>
                     </tr>
                     <tr>
-                        <td>express + node-postgres (Benchmark)</td>
-                        <td>1257</td>
-                        <td>0 % (Baseline)</td>
+                        <td>lineCount-express-mongo-sample	</td>
+                        <td>9</td>
+                        <td>46</td>
+                        <td>12</td>
+                        <td>147</td>
+                    </tr>
+                    <tr>
+                        <td>lineCount-express-postgres-sample	</td>
+                        <td>11</td>
+                        <td>43</td>
+                        <td>13</td>
+                        <td>179</td>
                     </tr>
                 </table>
             </div>
@@ -155,18 +168,27 @@ function LandingHelper() {
                 <table>
                     <tr>
                         <th>Framework</th>
-                        <th>reads/s</th>
-                        <th>Times Faster</th>
+                        <th>Requests/s</th>
+                        <th>Latency</th>
+                        <th>Throughput/Mb</th>
                     </tr>
                     <tr>
-                        <td>EzBackend</td>
-                        <td>1960</td>
-                        <td>14.2×</td>
+                        <td>read-ezbackend-postgres-sample</td>
+                        <td>2500.0</td>
+                        <td>2.97</td>
+                        <td>0.73</td>
                     </tr>
                     <tr>
-                        <td>express + node-postgres (Benchmark)</td>
-                        <td>138</td>
-                        <td>1× (Baseline)</td>
+                        <td>read-express-postgres-sample</td>
+                        <td>1428.6</td>
+                        <td>6.26</td>
+                        <td>0.54</td>
+                    </tr>
+                    <tr>
+                        <td>read-express-mongo-sample	</td>
+                        <td>1250.0</td>
+                        <td>7.44</td>
+                        <td>0.42</td>
                     </tr>
                 </table>
             </div>
@@ -181,18 +203,27 @@ function LandingHelper() {
                 <table>
                     <tr>
                         <th>Framework</th>
-                        <th>writes/s</th>
-                        <th>Times Faster</th>
+                        <th>Requests/s</th>
+                        <th>Latency</th>
+                        <th>Throughput/Mb</th>
                     </tr>
                     <tr>
-                        <td>EzBackend</td>
-                        <td>1960</td>
-                        <td>14.2×</td>
+                        <td>write-ezbackend-postgres-sample</td>
+                        <td>1667.2</td>
+                        <td>4.52</td>
+                        <td>0.55</td>
                     </tr>
                     <tr>
-                        <td>express + node-postgres (Benchmark)</td>
-                        <td>138</td>
-                        <td>1× (Baseline)</td>
+                        <td>write-express-postgres-sample</td>
+                        <td>1111.1</td>
+                        <td>7.68</td>
+                        <td>0.46</td>
+                    </tr>
+                    <tr>
+                        <td>write-express-mongo-sample	</td>
+                        <td>909.1</td>
+                        <td>10.08</td>
+                        <td>0.33</td>
                     </tr>
                 </table>
             </div>

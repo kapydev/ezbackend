@@ -47,7 +47,6 @@ function Landing() {
                 <div className='h-full flex flex-col justify-center'>
                     <div className='grid my-6 p-12 grid-cols-3 xl:grid-cols-5 h-full'>
 
-
                         <div className='col-span-full xl:col-span-2'>
                             <div className='h-full flex text-center xl:text-left justify-center xl:items-center'>
                                 <div className='col-span-full'>
