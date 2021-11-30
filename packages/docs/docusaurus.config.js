@@ -56,30 +56,11 @@ module.exports = {
           position: 'left',
           label: 'Pricing',
         },
-        // {
-        //   type: 'dropdown',
-        //   label: 'Solutions',
-        //   position: 'left',
-        //   items: [
-        //     {
-        //       to: 'features',
-        //       label: 'For Developers',
-        //     },
-        //     {
-        //       to: 'features',
-        //       label: 'For Startups',
-        //     }
-        //   ],
-        // },
         {
           type: 'dropdown',
           label: 'Developers',
           position: 'left',
           items: [
-            {
-              to: 'how-it-works',
-              label: '🛠 How It Works',
-            },
             {
               label: 'NPM',
               href: 'https://www.npmjs.com/package/ezbackend',
@@ -103,10 +84,6 @@ module.exports = {
               to: 'blog',
               label: '❤ Blog',
             },
-            // {
-            //   to: 'feature-voting',
-            //   label: '🚗 Feature Roadmap',
-            // },
             {
               label: 'Discord',
               href: 'https://discord.gg/RwgdruFJHc'
