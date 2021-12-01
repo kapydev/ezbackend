@@ -26,16 +26,16 @@ const useAccordion = () => React.useContext(Context);
 
 const style = {
     item: `block focus:outline-none text-white border-b my-2 p-3`,
-    panel: `overflow-hidden md:overflow-x-hidden transition-height ease duration-300 text-gray-600`,
+    panel: `overflow-hidden md:overflow-x-hidden transition-height ease duration-300`,
 };
 
-export function AccordionItem({ toggle, children }) {
+export function AccordionItem({ toggle, children, before_text, after_text }) {
     const { selected, toggleItem } = useAccordion();
     return (
         <div role="button" onClick={toggleItem(toggle)} className={style.item}>
             {children}
             <div className="flex justify-center py-4">
-                {selected === toggle ? <AngleUpIcon /> : <AngleDownIcon />}
+                {selected === toggle ? <AngleUpIcon after_text={after_text} /> : <AngleDownIcon before_text={before_text} />}
             </div>
         </div>
     );
@@ -54,10 +54,10 @@ export function AccordionPanel({ children, id }) {
     );
 }
 
-const AngleUpIcon = () => (
+const AngleUpIcon = (props) => (
     <button className='flex flex-wrap justify-center items-center gap-2 bg-transparent border-0 cursor-pointer'>
         <div className='font-monts font-bold text-lg'>
-            Core Features
+            {props.after_text}
         </div>
         <svg
             fill="white"
@@ -71,10 +71,10 @@ const AngleUpIcon = () => (
     </button>
 );
 
-const AngleDownIcon = () => (
+const AngleDownIcon = (props) => (
     <button className='flex flex-wrap justify-center items-center gap-2 bg-transparent border-0 cursor-pointer'>
         <div className='font-monts font-bold text-lg'>
-            More Features
+            {props.before_text}
         </div>
         <svg
             stroke="currentColor"

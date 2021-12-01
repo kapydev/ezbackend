@@ -11,6 +11,7 @@ import DiagramBuild from '../assets/diagram-scaling-build.png';
 import DiagramScale from '../assets/diagram-scaling-scale.png';
 import ReactCompareImage from 'react-compare-image';
 import '../css/landing.css'
+import { Accordion, AccordionItem, AccordionPanel } from './accordion';
 
 const codeText1 = "const app = new EzBackend()"
 const codeText2 = `const users = new EzModel('Users', {
@@ -115,25 +116,30 @@ function LandingHelper() {
 
             <br />
 
-            <div className='col-span-full flex justify-center mt-12'>
-                <div className='max-w-2xl'>
+            <div className='col-span-full mt-12 flex justify-center'>
+                <div className='max-w-3xl w-full'>
                     <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
                 </div>
             </div>
 
             <div className='col-span-full text-left mt-6 font-monts p-6 leading-8'>
-                <p >EzBackend allows you to 'build once, scale indefintely' with EzDeploy. EzDeploys scales using:</p>
-                <ol type="1">
-                    <li className='mb-2'>[COMING SOON] Reverse Proxy. All traffic is routed through EzDeploy's reverse proxy for load balancing. The reverse proxy also serves as an additional layer of security by providing SSL encryption and hiding actual servers from the internet</li>
-                    <li className='mb-2'>Stateless Servers - EzBackend is designed in principle to be completely stateless, allowing you to scale across regions by creating new EzBackend instances</li>
-                    <li className='mb-2'>[COMING SOON] Read Replicas. By creating read-replicas in the same Virtual Private Cloud as your EzBackend instances, the end-user can receive low-latency regardless of region.</li>
-                    <li className='mb-2'>[COMING SOON] Adapters. EzBackend comes batteries included with adapters to manage realtime updates with socket.io and other operations that require action on all EzBackend instances</li>
-                </ol>
-                <p className='text-xl'>Caveats:</p>
-                <ol type='1'>
-                    <li className='mb-2'>Write operations. There are currently no plans for EzBackend to scale for write operations, but research is being done to scale postgres writes with cross-region database sharding and writeback caching wrappers</li>
-                    <li className='mb-2'>Replication lag. When reads are performed to a replica at the same time a write to the main postgres instance occurs, the information read out may not be fully accurate. In scenarios where data accuracy is paramount, EzBackend reads can be configured to read from the main postgres instance instead.</li>
-                </ol>
+                <Accordion>
+                    <AccordionItem toggle="scale" before_text='One-Click-Deploy' after_text='One-Click-Deploy' />
+                    <AccordionPanel id="scale">
+                        <p >EzBackend allows you to 'build once, scale indefintely' with EzDeploy. EzDeploys scales using:</p>
+                        <ol type="1">
+                            <li className='mb-2'>[COMING SOON] Reverse Proxy. All traffic is routed through EzDeploy's reverse proxy for load balancing. The reverse proxy also serves as an additional layer of security by providing SSL encryption and hiding actual servers from the internet</li>
+                            <li className='mb-2'>Stateless Servers - EzBackend is designed in principle to be completely stateless, allowing you to scale across regions by creating new EzBackend instances</li>
+                            <li className='mb-2'>[COMING SOON] Read Replicas. By creating read-replicas in the same Virtual Private Cloud as your EzBackend instances, the end-user can receive low-latency regardless of region.</li>
+                            <li className='mb-2'>[COMING SOON] Adapters. EzBackend comes batteries included with adapters to manage realtime updates with socket.io and other operations that require action on all EzBackend instances</li>
+                        </ol>
+                        <p className='text-xl'>Caveats:</p>
+                        <ol type='1'>
+                            <li className='mb-2'>Write operations. There are currently no plans for EzBackend to scale for write operations, but research is being done to scale postgres writes with cross-region database sharding and writeback caching wrappers</li>
+                            <li className='mb-2'>Replication lag. When reads are performed to a replica at the same time a write to the main postgres instance occurs, the information read out may not be fully accurate. In scenarios where data accuracy is paramount, EzBackend reads can be configured to read from the main postgres instance instead.</li>
+                        </ol>
+                    </AccordionPanel>
+                </Accordion>
             </div>
 
             <div className='col-span-full py-12 flex justify-center'>
