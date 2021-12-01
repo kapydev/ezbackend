@@ -102,7 +102,7 @@ function Landing() {
 
                         <div className='col-span-3 p-16 hidden xl:block'>
 
-                            <Scrollbars>
+                            <Scrollbars universal autoHide>
 
                                 <LandingHelper />
 
