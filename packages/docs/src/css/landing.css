@@ -15,6 +15,7 @@
   transition: transform 0.3s;
 }
 .flip-front, .flip-back {
+  transform: rotateY(0deg);
   position: absolute;
   height: 100%;
   width: 100%;
