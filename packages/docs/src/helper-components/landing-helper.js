@@ -116,7 +116,9 @@ function LandingHelper() {
             <br />
 
             <div className='col-span-full flex justify-center mt-12'>
-                <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
+                <div className='max-w-2xl'>
+                    <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
+                </div>
             </div>
 
             <div className='col-span-full text-left mt-6 font-monts p-6 leading-8'>
