@@ -3,7 +3,7 @@ import React from 'react';
 export function Feature(props) {
 
   return (
-    <a href={props.route} className='
+    <a style={{ pointerEvents: props.noClick ? 'none' : 'auto' }} href={props.route} className='
       text-gray-100
       no-underline
       transition
