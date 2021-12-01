@@ -105,7 +105,7 @@ export default function Home() {
                   Simple to Build | Ready to Scale
                 </div>
                 <div className='text-xl font-mono text-center'>
-                  The Low-Code Backend Framework for Startup Founders
+                  The Low-Code Backend Framework for Technical Founders
                 </div>
                 <div className='flex flex-row justify-center gap-4'>
                   <div>

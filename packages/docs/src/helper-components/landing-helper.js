@@ -144,9 +144,18 @@ function LandingHelper() {
 
             <div className='col-span-full py-12 flex justify-center'>
                 <div className='text-2xl font-mono font-bold'>
-                    Framework Comparison
+                    <span className='text-purple'>82%</span> Less Code*
                 </div>
+
             </div>
+            <div className="text-center">
+                <p >Code comparisons done between apps with these features</p>
+
+                <li className='mb-2'>A user model with CRUD routes</li>
+                <li className='mb-2'>A post model with CRUD routes</li>
+                <li className='mb-2'>User authentication with Google OAuth2</li>
+            </div>
+            <br />
 
             <div className='col-span-full flex justify-center'>
                 <table>
@@ -182,8 +191,8 @@ function LandingHelper() {
             </div>
 
             <div className='col-span-full py-12 flex justify-center'>
-                <div className='text-lg font-mono font-bold'>
-                    Read Operations
+                <div className='text-2xl font-mono font-bold'>
+                    <span className='text-purple'>2x</span> Faster Reads
                 </div>
             </div>
 
@@ -217,8 +226,8 @@ function LandingHelper() {
             </div>
 
             <div className='col-span-full py-12 flex justify-center'>
-                <div className='text-lg font-mono font-bold'>
-                    Write Operations
+                <div className='text-2xl font-mono font-bold'>
+                    <span className='text-purple'>1.8x</span> Faster Writes
                 </div>
             </div>
 

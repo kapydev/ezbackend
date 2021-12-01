@@ -51,14 +51,14 @@ function Landing() {
                             <div className='h-full flex text-center xl:text-left justify-center xl:items-center'>
                                 <div className='col-span-full'>
                                     <div className='p-10 rounded-lg grid gap-6 max-w-lg'>
-                                        <div className='font-monts text-3xl font-semibold '>
-                                            EzBackend
+                                        <div className='font-mono text-4xl font-semibold leading-snug'>
+                                        Simple to Setup <br/> Ready to Scale
                                         </div>
                                         <div className='font-monts text-md'>
-                                            The Low-Code Backend Framework for Startup Founders
+                                            EzBackend - The Low-Code Backend Framework for Technical Founders
                                         </div>
                                         <div className='font-monts text-lg font-semibold'>
-                                            Free 100USD Hosting Credits when you sign up as an Early Adopter today
+                                            Claim <span className='font-bold'>100USD</span> Hosting Credits when you sign up for our <span className='text-purple'>Alpha</span> programme today!
                                         </div>
                                         <form>
                                             <input

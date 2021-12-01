@@ -15,7 +15,7 @@ const ICONCLASSNAME = 'w-12 h-12'
 
 export const features_content = [
     {
-        title: <span><span className='text-purple'>50%</span> Less Code</span>,
+        title: <span><span className='text-purple'>82%</span> Less Code</span>,
         route: "/features/less-code",
         icon: <IconCode className={ICONCLASSNAME} />,
         info: "Stop writing repeated boilerplate code. Focus on your business logic",
