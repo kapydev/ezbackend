@@ -317,7 +317,7 @@ export default function Home() {
                     toast.promise(
                       handleSubmit(e),
                       {
-                        loading: 'Submitting...',
+                        loading: 'Waiting for Heroku...',
                         success: <b>Submitted</b>,
                         error: <b>Server Error! We are working on it!</b>,
                       }

@@ -14,6 +14,43 @@ const LPBKND_BASEURL = 'https://ez-landing-page-backend.herokuapp.com'
 
 function Landing() {
 
+    function SignUpper() {
+        return (
+            <>
+                <div className='font-monts text-lg font-semibold'>
+                    Claim <span className='font-bold'>100USD</span> Hosting Credits when you sign up for our <span className='text-purple'>Alpha</span> programme today!
+                </div>
+                <form>
+                    <input
+                        onChange={e => setSignUpEmail(e.target.value)}
+                        className='border-0 font-monts rounded-lg text-lg p-2 font-semibold w-full'
+                        type="text"
+                        id="submitSignUps"
+                        value={signUpEmail}
+                        placeholder='Email'
+                        name="email" />
+                </form>
+                <CtaButton className='w-full' islink={false} onClick={(e) => {
+                    if (!validator.isEmail(signUpEmail)) {
+                        toast.error("Please fill in your email")
+                    } else {
+                        toast.promise(
+                            handleSubmit(e),
+                            {
+                                loading: 'Waiting for Heroku...',
+                                success: <b>Submitted</b>,
+                                error: <b>Server Error! We are working on it!</b>,
+                            }
+                        )
+                            .then(() => { window.open("/") })
+                    }
+                }}>
+                    Sign Up
+                </CtaButton>
+            </>
+        )
+    }
+
     const [signUpEmail, setSignUpEmail] = useState('')
 
     const handleSubmit = (e) => {
@@ -50,43 +87,14 @@ function Landing() {
                         <div className='col-span-full xl:col-span-2'>
                             <div className='h-full flex text-center xl:text-left justify-center xl:items-center'>
                                 <div className='col-span-full'>
-                                    <div className='p-10 rounded-lg grid gap-6 max-w-lg'>
+                                    <div className='p-10 grid gap-6 max-w-lg'>
                                         <div className='font-mono text-4xl font-semibold leading-snug'>
-                                        Simple to Setup <br/> Ready to Scale
+                                            Simple to Setup <br /> Ready to Scale
                                         </div>
                                         <div className='font-monts text-md'>
                                             EzBackend - The Low-Code Backend Framework for Technical Founders
                                         </div>
-                                        <div className='font-monts text-lg font-semibold'>
-                                            Claim <span className='font-bold'>100USD</span> Hosting Credits when you sign up for our <span className='text-purple'>Alpha</span> programme today!
-                                        </div>
-                                        <form>
-                                            <input
-                                                onChange={e => setSignUpEmail(e.target.value)}
-                                                className='border-0 font-monts rounded-lg text-lg p-2 font-semibold w-full'
-                                                type="text"
-                                                id="submitSignUps"
-                                                value={signUpEmail}
-                                                placeholder='Email'
-                                                name="email" />
-                                        </form>
-                                        <CtaButton className='w-full' islink={false} onClick={(e) => {
-                                            if (!validator.isEmail(signUpEmail)) {
-                                                toast.error("Please fill in your email")
-                                            } else {
-                                                toast.promise(
-                                                    handleSubmit(e),
-                                                    {
-                                                        loading: 'Submitting...',
-                                                        success: <b>Submitted</b>,
-                                                        error: <b>Server Error! We are working on it!</b>,
-                                                    }
-                                                )
-                                                    .then(() => { window.open("/") })
-                                            }
-                                        }}>
-                                            Sign Up
-                                        </CtaButton>
+                                        <SignUpper />
                                     </div>
                                 </div>
                             </div>
@@ -105,6 +113,12 @@ function Landing() {
 
                         <div className='col-span-full block xl:hidden'>
                             <LandingHelper />
+                        </div>
+
+                        <div className='col-span-full flex justify-center p-12 xl:hidden'>
+                            <div className='p-10 grid gap-6 max-w-lg'>
+                                <SignUpper />
+                            </div>
                         </div>
 
                     </div>
