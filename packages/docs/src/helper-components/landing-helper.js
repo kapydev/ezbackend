@@ -131,7 +131,7 @@ function LandingHelper() {
                             <li className='mb-2'>[COMING SOON] Reverse Proxy. All traffic is routed through EzDeploy's reverse proxy for load balancing. The reverse proxy also serves as an additional layer of security by providing SSL encryption and hiding actual servers from the internet</li>
                             <li className='mb-2'>Stateless Servers - EzBackend is designed in principle to be completely stateless, allowing you to scale across regions by creating new EzBackend instances</li>
                             <li className='mb-2'>[COMING SOON] Read Replicas. By creating read-replicas in the same Virtual Private Cloud as your EzBackend instances, the end-user can receive low-latency regardless of region.</li>
-                            <li className='mb-2'>[COMING SOON] Adapters. EzBackend comes batteries included with adapters to manage realtime updates with socket.io and other operations that require action on all EzBackend instances</li>
+                            <li className='mb-2'>[COMING SOON] Adapters. EzBackend comes "batteries included" with adapters to manage realtime updates with socket.io and other operations that require action on all EzBackend instances</li>
                         </ol>
                         <p className='text-xl'>Caveats:</p>
                         <ol type='1'>
