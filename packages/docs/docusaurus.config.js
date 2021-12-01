@@ -103,7 +103,7 @@ module.exports = {
           title: 'Contact Us',
           items: [
             {
-              html: 'Email: we.are.kapydev@gmail.com'
+              html: 'Email: ezbackend@gmail.com'
             },
             {
               html: "Phone: +65 9650 3241"
@@ -157,7 +157,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-          'https://github.com/kapydev/ezbackend/edit/master/packages/docs/'
+            'https://github.com/kapydev/ezbackend/edit/master/packages/docs/'
         },
         blog: {
           showReadingTime: true,
