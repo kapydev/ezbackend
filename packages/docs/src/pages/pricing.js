@@ -1,32 +1,74 @@
 import React from 'react';
 import Layout from '@theme/Layout';
 import IconTick from '../assets/icon-tick.svg'
+import { CtaButton } from '../helper-components/cta-button';
 
-function FeatureDark(props) {
+const freeFeatures = [
+  <div>API Documentation (Swagger)</div>,
+  <div>OAuth Google Sign In (Passport)</div>,
+  <div>Database (SQLite, Postgres, etc)</div>,
+  <div>CRUD Endpoints Generation</div>,
+  <div>Database GUI</div>,
+  <div>File Storage (Multer)</div>, //coming soon
+  <div>Realtime Database (SocketIO)</div> //coming soon
+]
+
+const oneClickDeployFeatures = [
+  <div>All Free Features</div>,
+  <div>Instant Cloud Deployment</div>,
+  <div>Automatic Scaling</div>,
+  <div>SSL Encryption</div>,
+  <div>Content Caching</div>,
+]
+
+const enterpriseFeatures = [
+  <div>All Free and One-Click-Deploy Features</div>,
+  <div>Custom-Made Features</div>,
+  <div>Technical Guidance & Code Reviews</div>,
+  <div>Long-term Support & Upgrade Assistance</div>,
+]
+
+function ListItem(props) {
   return (
-    <p className="text-gray-400 text-left text-sm pt-5">
+    <span className="flex text-gray-200 text-left text-sm pt-5">
       <span className="material-icons align-middle">
         <IconTick className='w-6 h-6' />
       </span>
       <span className="pl-2 font-medium font-monts">
         {props.children}
       </span>
-    </p>
+    </span>
   )
 }
 
-function FeatureLight(props) {
+function PricingCard(props) {
   return (
-    <p className="text-gray-600 text-left text-sm pt-5">
-      <span className="material-icons align-middle">
-        <IconTick className='w-6 h-6' />
-      </span>
-      <span className="pl-2 font-medium font-monts">
-        {props.children}
-      </span>
-    </p>
+    <div className="p-8 bg-dracula text-center rounded-3xl shadow-xl">
+      <div className="text-gray-200 font-semibold text-3xl font-mono pb-2">
+        {props.title}
+      </div>
+      <hr className="mt-4 border-1" />
+      <div>
+        {props.listItems.map((listItem) => {
+          return (
+            <ListItem>
+              {listItem}
+            </ListItem>
+          )
+        })}
+        <br />
+        <a href={props.href}>
+          <div className="pt-8 flex flex-col">
+            <CtaButton>
+              {props.button_text}
+            </CtaButton>
+          </div>
+        </a>
+      </div>
+    </div>
   )
 }
+
 
 function Pricing() {
   return (
@@ -52,87 +94,60 @@ function Pricing() {
           lg:max-w-7xl      
           "
           >
-            <div className="text-left font-semibold col-span-1 sm:col-span-2 lg:col-span-1">
+            <div className="text-center font-semibold col-span-full">
               <div className="text-5xl">
-                <span className="text-blue-300 tracking-wide font-mono">Flexible </span>
-                <span>Plans</span>
+                <span className=" tracking-wide font-mono">Flexible Plans</span>
               </div>
               <div className="pt-6 text-xl text-gray-400 font-normal font-monts">
-                Building with our open-source package.
-                One-Click Deploy with EzBackend
+                Build For Free. Scale with Us.
               </div>
             </div>
 
-
-
-            <div className="p-8 bg-gray-200 text-center rounded-3xl shadow-xl">
-              <h1 className="text-black font-semibold text-3xl font-mono">
-                Free
-              </h1>
-              <hr className="mt-4 border-1" />
-              <div>
-                <FeatureLight >
-                  <span className="text-black">API Documentation</span> (Swagger)
-                </FeatureLight>
-                <FeatureLight >
-                  <span className="text-black">OAuth</span> Google Sign In (Passport)
-                </FeatureLight>
-                <FeatureLight >
-                  <span className="text-black">Database</span> (SQLite, Postgres, etc)
-                </FeatureLight>
-                <FeatureLight >
-                  <span className="text-black">CRUD</span> Endpoints Generation
-                </FeatureLight>
-                <FeatureLight >
-                  Database <span className="text-black">GUI</span>
-                </FeatureLight>
-                <a href="docs/intro">
-                  <p className="py-4 bg-blue-600 mt-8 rounded-xl text-white">
-                    <span className="font-medium">
-                      Try Now
-                    </span>
-                  </p>
-                </a>
-              </div>
+            <div className='col-span-1'>
+              <PricingCard
+                title={
+                  <div>
+                    <div className='text-4xl'>
+                      Free
+                    </div>
+                    <div className='pt-6 text-xl'>
+                      Open Source
+                    </div>
+                  </div>
+                }
+                listItems={freeFeatures}
+                button_text='Get Started'
+                href='/docs/intro'
+              />
             </div>
 
-
-
-            <div className="p-8 bg-gray-800 text-center rounded-3xl text-white border-4 shadow-xl border-gray-400">
-              <h1 className="text-white font-semibold text-3xl font-mono">Enterprise</h1>
-              <hr className="mt-4 border-1 border-gray-600" />
-
-              <div>
-                <FeatureDark >
-                  <span className="text-white">One-Click Deploy</span>
-                </FeatureDark>
-                <FeatureDark >
-                  <span className="text-white">Horizontal Scaling</span> - Wrapper
-                </FeatureDark>
-                <FeatureDark >
-                  <span className="text-white">Security</span> - Wrapper
-                </FeatureDark>
-                <FeatureDark >
-                  All features in <span className="text-white">Free</span>
-                </FeatureDark>
-                <FeatureDark>
-                  <span className="text-white">File Storage</span> (Multer)
-                </FeatureDark>
-
-                <a href="https://calendly.com/ezbackend/30min" target='_blank'>
-                  <p className="py-4 bg-blue-600 mt-8 rounded-xl text-white">
-                    <span className="font-medium">
-                      Contact Us
-                    </span>
-                  </p>
-                </a>
-              </div>
+            <div className='col-span-1'>
+              <PricingCard
+                title={
+                  <div>
+                    <div className='text-4xl'>
+                      $25
+                    </div>
+                    <div className='pt-6 text-xl'>
+                      One-Click-Deploy
+                    </div>
+                  </div>
+                }
+                listItems={oneClickDeployFeatures}
+                button_text='Contact Us'
+                href='https://calendly.com/ezbackend/30min'
+              />
             </div>
 
+            <div className='col-span-1'>
+              <PricingCard
+                title='Enterprise'
+                listItems={enterpriseFeatures}
+                button_text='Contact Us'
+                href='https://calendly.com/ezbackend/30min'
+              />
+            </div>
 
-
-
-            <br />
           </div>
         </div>
       </div>

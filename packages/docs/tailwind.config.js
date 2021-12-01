@@ -22,7 +22,8 @@ module.exports = {
       },
       colors: {
         dracula: '#282A36',
-        purple: '#BD93F9'
+        purple: '#BD93F9',
+        darkness: '#18191A',
       },
     },
     keyframes: {

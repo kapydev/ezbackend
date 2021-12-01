@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player/youtube'
 import Layout from '@theme/Layout';
 import toast, { Toaster } from 'react-hot-toast';
+import { features_content } from '../content/features-content'
+import StepFeature from '../helper-components/step-feature';
+import { Accordion, AccordionItem, AccordionPanel } from '../helper-components/accordion';
+import ReactCompareImage from 'react-compare-image';
+import validator from 'validator'
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -19,10 +24,11 @@ import IconApiDocs from '../assets/icon-api-docs.svg'
 import IconDatabase from '../assets/icon-database.svg'
 import IconSecurity from '../assets/icon-security.svg'
 import IconWorld from '../assets/icon-world.svg'
-import IconTick from '../assets/icon-tick.svg'
 import IconGithub from '../assets/icon-github.svg'
 import IconYoutube from '../assets/icon-youtube.svg'
 import IconDiscord from '../assets/icon-discord.svg'
+import DiagramBuild from '../assets/diagram-scaling-build.png';
+import DiagramScale from '../assets/diagram-scaling-scale.png';
 
 const axios = require('axios').default;
 const YT_URL = 'https://youtu.be/kQRRckdEFr8'
@@ -95,23 +101,23 @@ export default function Home() {
 
             <div className='col-span-full'>
               <div className='grid grid-flow-row gap-7'>
-                <div className='text-5xl font-bold font-mono sm:text-center'>
-                  Build Your MVP Faster
+                <div className='text-5xl font-bold font-mono text-center'>
+                  Simple to Build | Ready to Scale
                 </div>
-                <div className='text-xl font-mono sm:text-center'>
-                  Simple to Setup. Fully Customizable
+                <div className='text-xl font-mono text-center'>
+                  The Low-Code Backend Framework for Technical Founders
                 </div>
-                <div className='flex flex-col sm:flex-row justify-center gap-4'>
+                <div className='flex flex-row justify-center gap-4'>
                   <div>
                     <CtaButton islink={true} link="/docs/getting-started" >
                       Get Started
                     </CtaButton>
                   </div>
-                  <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' islink={false} target='_blank'>
+                  {/* <a href='https://codesandbox.io/s/ezb-demo-1-de5d3?file=/src/index.ts' islink={false} target='_blank'>
                     <CtaButton islink={false}>
                       Live Demo
                     </CtaButton>
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </div>
@@ -168,7 +174,7 @@ export default function Home() {
                     Database Connection Made
                   </StepFeature>
                   <StepFeature delay={4500}>
-                    <span className='text-purple'>Pets</span> Table Created in Database
+                    Table Columns Added
                   </StepFeature>
                   <StepFeature delay={9000}>
                     <span className='text-purple'>Name</span>, <span className='text-purple'>Species</span>, <span className='text-purple'>Age</span>, Columns Added in Table
@@ -187,36 +193,70 @@ export default function Home() {
 
             </div>
 
-            <div className='overflow-x-auto col-span-full '>
-              <div className='gap-6 grid grid-flow-col'>
+            <div className='col-span-full'>
 
-                <Feature
-                  icon={<IconWorld className='w-12 h-12' />}
-                  title='Instant CRUD Generation'
-                  info='Instant CRUD endpoints generation with full customization capabilities'
-                />
+              <div className='grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
+                {features_content.slice(0, 4).map((feature) => {
+                  return (
+                    <Feature
+                      icon={feature.icon}
+                      title={feature.title}
+                      info={feature.info}
+                      route={feature.route}
+                      released={feature.released}
+                      description={feature.description}
+                    />)
+                })}
+              </div>
 
-                <Feature
-                  icon={<IconApiDocs className='w-12 h-12' />}
-                  title='Automated Documentation'
-                  info='Automatically generate documentation for your APIs from the models you plan'
-                />
-                <Feature
-                  icon={<IconSecurity className='w-12 h-12' />}
-                  title='One-Line Authentication'
-                  info='Add user sign ups, logins and permission layering with Google'
-                />
+              <Accordion>
+                <AccordionItem toggle="features" before_text='More Features' after_text='Core Features' />
+                <AccordionPanel id="features">
+                  <div className='grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
+                    {features_content.slice(4).map((feature) => {
+                      return (
+                        <Feature
+                          icon={feature.icon}
+                          title={feature.title}
+                          info={feature.info}
+                          route={feature.route}
+                          released={feature.released}
+                          description={feature.description}
+                        />)
+                    })}
+                  </div>
+                </AccordionPanel>
+              </Accordion>
+            </div>
 
-                <Feature
-                  icon={<IconDatabase className='w-12 h-12' />}
-                  title='Choose your Database'
-                  info='Pick from multiple industry standards: Postgres, MySQL, MongoDB, & more'
-                />
-
+            <div className='col-span-full flex justify-center'>
+              <div className='max-w-3xl w-full'>
+                <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
               </div>
             </div>
 
             <div className='col-span-full'>
+              <Accordion>
+                <AccordionItem toggle="scale" before_text='One-Click-Deploy' after_text='One-Click-Deploy' />
+                <AccordionPanel id="scale">
+                  <p >EzBackend allows you to 'build once, scale indefintely' with EzDeploy. EzDeploys scales using:</p>
+                  <ol type="1">
+                    <li className='mb-2'>[COMING SOON] Reverse Proxy. All traffic is routed through EzDeploy's reverse proxy for load balancing. The reverse proxy also serves as an additional layer of security by providing SSL encryption and hiding actual servers from the internet</li>
+                    <li className='mb-2'>Stateless Servers - EzBackend is designed in principle to be completely stateless, allowing you to scale across regions by creating new EzBackend instances</li>
+                    <li className='mb-2'>[COMING SOON] Read Replicas. By creating read-replicas in the same Virtual Private Cloud as your EzBackend instances, the end-user can receive low-latency regardless of region.</li>
+                    <li className='mb-2'>[COMING SOON] Adapters. EzBackend comes batteries included with adapters to manage realtime updates with socket.io and other operations that require action on all EzBackend instances</li>
+                  </ol>
+                  <p className='text-xl'>Caveats:</p>
+                  <ol type='1'>
+                    <li className='mb-2'>Write operations. There are currently no plans for EzBackend to scale for write operations, but research is being done to scale postgres writes with cross-region database sharding and writeback caching wrappers</li>
+                    <li className='mb-2'>Replication lag. When reads are performed to a replica at the same time a write to the main postgres instance occurs, the information read out may not be fully accurate. In scenarios where data accuracy is paramount, EzBackend reads can be configured to read from the main postgres instance instead.</li>
+                  </ol>
+                </AccordionPanel>
+              </Accordion>
+
+            </div>
+
+            {/* <div className='col-span-full'>
               <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
                 Tutorial Demo
               </div>
@@ -233,11 +273,11 @@ export default function Home() {
                   controls={true}
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className='col-span-full grid place-items-center'>
               <div className='font-monts font-bold text-2xl mb-12'>
-                Our Community
+                Join Our Community
               </div>
               <div className='flex flex-wrap mx-4 sm:mx-0 justify-center gap-8'>
                 <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
@@ -253,14 +293,17 @@ export default function Home() {
             </div>
 
             <div className='col-span-full flex justify-center align-middle'>
-              <div className='bg-dracula p-10 rounded-lg grid gap-6'>
-                <div className='font-monts text-xl text-center font-semibold'>
-                  Join Our Mailing List
+              <div className='p-10 rounded-lg grid gap-6 bg-dracula'>
+                <div className='font-monts text-2xl text-center font-bold'>
+                  Be an Early Adopter
+                </div>
+                <div className='font-monts text-md text-center max-w-lg'>
+                  Claim <span className='font-bold'>100USD</span> Hosting Credits when you sign up for our <span className='text-purple'>Alpha</span> programme today!
                 </div>
                 <form>
                   <input
                     onChange={e => setSignUpEmail(e.target.value)}
-                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold'
+                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold w-full'
                     type="text"
                     id="submitSignUps"
                     value={signUpEmail}
@@ -268,17 +311,21 @@ export default function Home() {
                     name="email" />
                 </form>
                 <CtaButton islink={false} onClick={(e) => {
-                  toast.promise(
-                    handleSubmit(e),
-                    {
-                      loading: 'Submitting...',
-                      success: <b>Submitted</b>,
-                      error: <b>Server Error! We are working on it!</b>,
-                    }
-                  );
+                  if (!validator.isEmail(signUpEmail)) {
+                    toast.error("Please fill in your email")
+                  } else {
+                    toast.promise(
+                      handleSubmit(e),
+                      {
+                        loading: 'Waiting for Heroku...',
+                        success: <b>Submitted</b>,
+                        error: <b>Server Error! We are working on it!</b>,
+                      }
+                    );
+                  }
                 }}>
                   <div className='text-sm'>
-                    Sign Up
+                    SIGN UP NOW
                   </div>
                 </CtaButton>
               </div>
@@ -315,20 +362,3 @@ function Txty(props) {
     <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
   )
 }
-
-function StepFeature(props) {
-  return (
-    <Delayed waitBeforeShow={props.delay}>
-      <div className='fade'>
-        <div className='flex justify-start gap-3 my-2'>
-          <IconTick className='self-start w-6 h-6' />
-          <div className='font-monts'>
-            {props.children}
-          </div>
-        </div>
-      </div>
-    </Delayed>
-  )
-}
-
-
