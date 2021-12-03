@@ -1,6 +1,6 @@
 .flip {
   width: 100%;
-  min-height: 200px;
+  height: 200px;
   text-align: center;
   perspective: 600px;
 }
