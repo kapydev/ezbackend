@@ -1,6 +1,6 @@
 .flip {
   width: 100%;
-  height: 225px;   
+  min-height: 200px;
   text-align: center;
   perspective: 600px;
 }
@@ -14,12 +14,13 @@
   transform: rotateY(180deg);
   transition: transform 0.3s;
 }
-.flip-front, .flip-back {
+.flip-front,
+.flip-back {
   transform: rotateY(0deg);
   position: absolute;
   height: 100%;
   width: 100%;
-  backface-visibility: hidden;  
+  backface-visibility: hidden;
 }
 .flip-back {
   transform: rotateY(180deg);

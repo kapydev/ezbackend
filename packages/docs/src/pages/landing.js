@@ -87,7 +87,7 @@ function Landing() {
                         <div className='col-span-full xl:col-span-2'>
                             <div className='h-full flex text-center xl:text-left justify-center xl:items-center'>
                                 <div className='col-span-full'>
-                                    <div className='p-10 grid gap-6 max-w-lg'>
+                                    <div className='grid gap-6 max-w-lg'>
                                         <div className='font-mono text-4xl font-semibold leading-snug'>
                                             Simple to Setup <br /> Ready to Scale
                                         </div>
@@ -115,8 +115,8 @@ function Landing() {
                             <LandingHelper />
                         </div>
 
-                        <div className='col-span-full flex justify-center p-12 xl:hidden'>
-                            <div className='p-10 grid gap-6 max-w-lg'>
+                        <div className='col-span-full flex justify-center xl:hidden'>
+                            <div className='grid gap-6 max-w-lg'>
                                 <SignUpper />
                             </div>
                         </div>

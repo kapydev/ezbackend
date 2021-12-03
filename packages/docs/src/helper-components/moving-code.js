@@ -44,7 +44,7 @@ export function MovingCode(props) {
 
     // const [code, setCode] = useState(originalCode)
 
-    const [code] = useWindupString(props.text, {pace: () => 50})
+    const [code] = useWindupString(props.text, { pace: () => 50 })
 
     return (<div>
         <Editor

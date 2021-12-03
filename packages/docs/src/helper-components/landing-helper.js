@@ -35,8 +35,8 @@ function LandingHelper() {
             </div>
 
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 place-items-center self-center col-span-full transform md:scale-90'>
-                <div className='bg-dracula rounded-lg' style={{ maxWidth: '500px' }}>
-                    <div className='rounded-lg text-xs md:text-sm pointer-events-none font-mono' style={{ padding: 32 }}>
+                <div className='bg-dracula rounded-lg' style={{ width: '100%' }}>
+                    <div className='rounded-lg text-xs md:text-sm pointer-events-none font-mono' style={{ padding: 32, minHeight: 300 }}>
                         <Delayed waitBeforeShow={0}>
                             <MovingCode text={codeText1} />
                         </Delayed>
@@ -51,7 +51,7 @@ function LandingHelper() {
                         </Delayed>
                     </div>
                 </div>
-                <div className='grid place-items-center w-full self-start'>
+                <div className='sm:grid col-span-full sm:col-span-1 place-items-center w-full self-start hidden '>
                     <div className='w-full'>
                         <StepFeature delay={1700}>
                             Backend Created
@@ -84,7 +84,7 @@ function LandingHelper() {
                 </div>
             </div>
 
-            <div className='grid place-items-start gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+            <div className='grid place-items-start gap-0 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
                 {features_content.map((feature) => {
                     return (
                         <div className="flip">
@@ -122,7 +122,7 @@ function LandingHelper() {
                 </div>
             </div>
 
-            <div className='col-span-full text-left mt-6 font-monts p-6 leading-8'>
+            <div className='col-span-full text-left mt-6 font-monts leading-8'>
                 <Accordion>
                     <AccordionItem toggle="scale" before_text='One-Click-Deploy' after_text='One-Click-Deploy' />
                     <AccordionPanel id="scale">
