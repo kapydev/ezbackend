@@ -344,13 +344,13 @@ export default function Home() {
                   }
                 }}>
                   <div className='text-sm'>
-                    SIGN UP NOW
+                    SIGN UP
                   </div>
                 </CtaButton>
                 {fomoVisible ?
                   <FadeIn>
-                    <div className='font-monts text-center'>
-                      <span className='font-semibold text-2xl'>{signUpCount}</span> Users are in Alpha
+                    <div className='font-monts text-center text-gray-200'>
+                      Join <span className='font-semibold text-2xl'>{signUpCount}</span> Users in Alpha
                     </div>
                   </FadeIn>
                   :

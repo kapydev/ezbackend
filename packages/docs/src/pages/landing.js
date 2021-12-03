@@ -63,13 +63,13 @@ function Landing() {
                                     .then(() => { window.open("/") })
                             }
                         }}>
-                            Sign Up Now
+                            SIGN UP 
                         </CtaButton>
                     </div>
                     {fomoVisible ?
                         <FadeIn>
-                            <div className='font-monts'>
-                                <span className='font-semibold text-2xl'>{signUpCount}</span> Users are in Alpha
+                            <div className='font-monts pl-4 text-gray-200'>
+                                Join <span className='font-semibold text-2xl'>{signUpCount}</span> Users in Alpha
                             </div>
                         </FadeIn>
                         :
