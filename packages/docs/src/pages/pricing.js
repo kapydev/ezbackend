@@ -126,7 +126,7 @@ function Pricing() {
                 title={
                   <div>
                     <div className='text-4xl'>
-                      $25
+                      $25<span className='text-xl'>/month</span>
                     </div>
                     <div className='pt-6 text-xl'>
                       One-Click-Deploy

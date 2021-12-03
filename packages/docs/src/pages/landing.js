@@ -69,7 +69,7 @@ function Landing() {
                     {fomoVisible ?
                         <FadeIn>
                             <div className='font-monts'>
-                                <span className='font-semibold text-2xl'>{signUpCount}</span> users are in Alpha
+                                <span className='font-semibold text-2xl'>{signUpCount}</span> Users are in Alpha
                             </div>
                         </FadeIn>
                         :
