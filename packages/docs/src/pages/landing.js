@@ -139,7 +139,6 @@ function Landing() {
 
                             <Scrollbars
                                 universal
-                                autoHide
                             >
 
                                 <LandingHelper />

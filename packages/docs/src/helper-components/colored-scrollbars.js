@@ -19,27 +19,26 @@ export default class ColoredScrollbars extends Component {
     renderView({ style, ...props }) {
         const { top } = this.state;
         const viewStyle = {
-            padding: 15,
-            backgroundColor: `rgb(${Math.round(255 - (top * 255))}, ${Math.round(top * 255)}, ${Math.round(255)})`,
-            color: `rgb(${Math.round(255 - (top * 255))}, ${Math.round(255 - (top * 255))}, ${Math.round(255 - (top * 255))})`
+
         };
         return (
             <div
                 className="box"
-                style={{ ...style}}
-                {...props}/>
+                style={{ ...style }}
+                {...props} />
         );
     }
 
     renderThumb({ style, ...props }) {
         const { top } = this.state;
         const thumbStyle = {
-            backgroundColor: `rgb(${Math.round(255 - (top * 255))}, ${Math.round(255 - (top * 255))}, ${Math.round(255 - (top * 255))})`
+            backgroundColor: "#3B3B3B",
+            borderRadius: 12
         };
         return (
             <div
                 style={{ ...style, ...thumbStyle }}
-                {...props}/>
+                {...props} />
         );
     }
 
@@ -50,7 +49,7 @@ export default class ColoredScrollbars extends Component {
                 renderThumbHorizontal={this.renderThumb}
                 renderThumbVertical={this.renderThumb}
                 onUpdate={this.handleUpdate}
-                {...this.props}/>
+                {...this.props} />
         );
     }
 }
