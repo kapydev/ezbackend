@@ -94,8 +94,11 @@ function LandingHelper() {
                             info={feature.info}
                             route={feature.route}
                             released={feature.released}
-                            description={feature.description}
-                        />)
+                            hide_cta={true}
+                            landing={true}
+                            noClick={true}
+                        />
+                    )
                 })}
 
                 <Accordion>
@@ -109,8 +112,11 @@ function LandingHelper() {
                                     info={feature.info}
                                     route={feature.route}
                                     released={feature.released}
-                                    description={feature.description}
-                                />)
+                                    hide_cta={true}
+                                    landing={true}
+                                    noClick={true}
+                                />
+                            )
                         })}
                     </AccordionPanel>
                 </Accordion>
