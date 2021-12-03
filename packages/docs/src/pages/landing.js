@@ -115,7 +115,7 @@ function Landing() {
                             <LandingHelper />
                         </div>
 
-                        <div className='col-span-full flex justify-center xl:hidden'>
+                        <div className='col-span-full flex py-12 pb-32 justify-center xl:hidden'>
                             <div className='grid gap-6 max-w-lg'>
                                 <SignUpper />
                             </div>

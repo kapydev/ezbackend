@@ -84,7 +84,39 @@ function LandingHelper() {
                 </div>
             </div>
 
-            <div className='grid place-items-start gap-0 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
+            <div className='col-span-full block sm:hidden'>
+
+                {features_content.slice(0, 4).map((feature) => {
+                    return (
+                        <Feature
+                            icon={feature.icon}
+                            title={feature.title}
+                            info={feature.info}
+                            route={feature.route}
+                            released={feature.released}
+                            description={feature.description}
+                        />)
+                })}
+
+                <Accordion>
+                    <AccordionItem toggle="features" before_text='More Features' after_text='Core Features' />
+                    <AccordionPanel id="features">
+                        {features_content.slice(4).map((feature) => {
+                            return (
+                                <Feature
+                                    icon={feature.icon}
+                                    title={feature.title}
+                                    info={feature.info}
+                                    route={feature.route}
+                                    released={feature.released}
+                                    description={feature.description}
+                                />)
+                        })}
+                    </AccordionPanel>
+                </Accordion>
+            </div>
+
+            <div className='hidden sm:grid place-items-start gap-0 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 '>
                 {features_content.map((feature) => {
                     return (
                         <div className="flip">
@@ -158,30 +190,30 @@ function LandingHelper() {
             <br />
 
             <div className='col-span-full flex justify-center'>
-                <table>
+                <table className='transform scale-90 -mx-12 sm:transform-none'>
                     <tr>
                         <th>Framework</th>
-                        <th>Number of Files</th>
-                        <th>blankLines</th>
+                        <th>No. of Files</th>
+                        <th>Blank Lines</th>
                         <th>Comments</th>
                         <th>Code</th>
                     </tr>
                     <tr>
-                        <td>lineCount-ezbackend-postgres-sample	</td>
+                        <td>Ezbackend-Postgres</td>
                         <td>1</td>
                         <td>6</td>
                         <td>3</td>
                         <td>31</td>
                     </tr>
                     <tr>
-                        <td>lineCount-express-mongo-sample	</td>
+                        <td>Express-Mongo</td>
                         <td>9</td>
                         <td>46</td>
                         <td>12</td>
                         <td>147</td>
                     </tr>
                     <tr>
-                        <td>lineCount-express-postgres-sample	</td>
+                        <td>Express-Postgres</td>
                         <td>11</td>
                         <td>43</td>
                         <td>13</td>
@@ -197,27 +229,27 @@ function LandingHelper() {
             </div>
 
             <div className='col-span-full flex justify-center'>
-                <table>
+                <table className='transform scale-90 -mx-12 sm:transform-none'>
                     <tr>
                         <th>Framework</th>
-                        <th>Requests/s</th>
+                        <th>Req/s</th>
                         <th>Latency</th>
                         <th>Throughput/Mb</th>
                     </tr>
                     <tr>
-                        <td>read-ezbackend-postgres-sample</td>
+                        <td>Ezbackend-Postgres</td>
                         <td>2500.0</td>
                         <td>2.97</td>
                         <td>0.73</td>
                     </tr>
                     <tr>
-                        <td>read-express-postgres-sample</td>
+                        <td>Express-Postgres</td>
                         <td>1428.6</td>
                         <td>6.26</td>
                         <td>0.54</td>
                     </tr>
                     <tr>
-                        <td>read-express-mongo-sample	</td>
+                        <td>Express-Mongo</td>
                         <td>1250.0</td>
                         <td>7.44</td>
                         <td>0.42</td>
@@ -232,27 +264,27 @@ function LandingHelper() {
             </div>
 
             <div className='col-span-full flex justify-center'>
-                <table>
+                <table className='transform scale-90 -mx-12 sm:transform-none'>
                     <tr>
                         <th>Framework</th>
-                        <th>Requests/s</th>
+                        <th>Req/s</th>
                         <th>Latency</th>
                         <th>Throughput/Mb</th>
                     </tr>
                     <tr>
-                        <td>write-ezbackend-postgres-sample</td>
+                        <td>Ezbackend-Postgres</td>
                         <td>1667.2</td>
                         <td>4.52</td>
                         <td>0.55</td>
                     </tr>
                     <tr>
-                        <td>write-express-postgres-sample</td>
+                        <td>Express-Postgres</td>
                         <td>1111.1</td>
                         <td>7.68</td>
                         <td>0.46</td>
                     </tr>
                     <tr>
-                        <td>write-express-mongo-sample	</td>
+                        <td>Express-Mongo</td>
                         <td>909.1</td>
                         <td>10.08</td>
                         <td>0.33</td>

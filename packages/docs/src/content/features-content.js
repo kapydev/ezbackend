@@ -45,16 +45,6 @@ export const features_content = [
         flip_card: <div>Authentication comes in a plug and play modular provider, allowing you to add <span className='text-purple'>any passport.js supported strategy</span></div>,
     },
     {
-        title: "Database Agnostic",
-        route: "/docs/basics/configuration",
-        icon: <IconDatabase className={ICONCLASSNAME} />,
-        info: "Supports enterprise Databases: Postgres, MySQL, MongoDB, & more",
-        description: "EzBackend uses typeorm under the hood, which supports XXX DBs. It also utilise database hooks to provide row level security",
-        media: null,
-        released: true,
-        flip_card: <div>EzBackend wraps typeorm with <span className="text-purple">scaling functionality</span> in order to manage large workloads</div>,
-    },
-    {
         title: "Instant API Generation",
         route: "/docs/basics/auto-generated-routes",
         icon: <IconWorld className={ICONCLASSNAME} />,
@@ -63,6 +53,16 @@ export const features_content = [
         media: null,
         released: true,
         flip_card: <div>Stop reinventing the wheel with CRUD boilerplates. EzBackend <span className="text-purple">generates the read/write functionality</span> you need, while remaining secure with security rules</div>,
+    },
+    {
+        title: "Database Agnostic",
+        route: "/docs/basics/configuration",
+        icon: <IconDatabase className={ICONCLASSNAME} />,
+        info: "Supports enterprise Databases: Postgres, MySQL, MongoDB, & more",
+        description: "EzBackend uses typeorm under the hood, which supports XXX DBs. It also utilise database hooks to provide row level security",
+        media: null,
+        released: true,
+        flip_card: <div>EzBackend wraps typeorm with <span className="text-purple">scaling functionality</span> in order to manage large workloads</div>,
     },
     {
         title: "Automated Documentation",
