@@ -1,11 +1,12 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CtaButton } from '../helper-components/cta-button';
 import toast, { Toaster } from 'react-hot-toast';
 import LandingHelper from '../helper-components/landing-helper';
 import '../css/landing.css'
 import { Scrollbars } from 'react-custom-scrollbars';
 import validator from 'validator'
+import FadeIn from 'react-fade-in';
 
 
 const axios = require('axios').default;
@@ -13,6 +14,21 @@ const axios = require('axios').default;
 const LPBKND_BASEURL = 'https://ez-landing-page-backend.herokuapp.com'
 
 function Landing() {
+
+    const [signUpCount, setSignUpCount] = useState(0);
+    const [fomoVisible, setFomoVisible] = useState(false)
+
+    useEffect(() => {
+        axios.get(LPBKND_BASEURL + '/signUps/count')
+            .then(function (response) {
+                setFomoVisible(true)
+                setSignUpCount(response.data)
+            })
+            .catch(function (error) {
+                setFomoVisible(false)
+                console.log(error);
+            })
+    });
 
     function SignUpper() {
         return (
@@ -30,23 +46,36 @@ function Landing() {
                         placeholder='Email'
                         name="email" />
                 </form>
-                <CtaButton className='w-full' islink={false} onClick={(e) => {
-                    if (!validator.isEmail(signUpEmail)) {
-                        toast.error("Please fill in your email")
-                    } else {
-                        toast.promise(
-                            handleSubmit(e),
-                            {
-                                loading: 'Waiting for Heroku...',
-                                success: <b>Submitted</b>,
-                                error: <b>Server Error! We are working on it!</b>,
+                <div className='w-full flex justify-between'>
+                    <div className='w-max'>
+                        <CtaButton islink={false} onClick={(e) => {
+                            if (!validator.isEmail(signUpEmail)) {
+                                toast.error("Please fill in your email")
+                            } else {
+                                toast.promise(
+                                    handleSubmit(e),
+                                    {
+                                        loading: 'Waiting for Heroku...',
+                                        success: <b>Submitted</b>,
+                                        error: <b>Server Error! We are working on it!</b>,
+                                    }
+                                )
+                                    .then(() => { window.open("/") })
                             }
-                        )
-                            .then(() => { window.open("/") })
+                        }}>
+                            Sign Up Now
+                        </CtaButton>
+                    </div>
+                    {fomoVisible ?
+                        <FadeIn>
+                            <div className='font-monts'>
+                                <span className='font-semibold text-2xl'>{signUpCount}</span> users are in Alpha
+                            </div>
+                        </FadeIn>
+                        :
+                        null
                     }
-                }}>
-                    Sign Up
-                </CtaButton>
+                </div>
             </>
         )
     }
@@ -92,7 +121,7 @@ function Landing() {
                                             Simple to Setup <br /> Ready to Scale
                                         </div>
                                         <div className='font-monts text-md'>
-                                            EzBackend - The Low-Code Backend Framework for Technical Founders
+                                            The Low-Code Backend Framework for Technical Founders
                                         </div>
                                         <SignUpper />
                                     </div>

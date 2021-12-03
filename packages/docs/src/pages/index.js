@@ -8,6 +8,7 @@ import StepFeature from '../helper-components/step-feature';
 import { Accordion, AccordionItem, AccordionPanel } from '../helper-components/accordion';
 import ReactCompareImage from 'react-compare-image';
 import validator from 'validator'
+import FadeIn from 'react-fade-in';
 
 //CSS
 import "tailwindcss/tailwind.css"
@@ -40,6 +41,9 @@ export default function Home() {
   const [isAnimationOver, setIsAnimationOver] = useState(false)
   const [signUpEmail, setSignUpEmail] = useState('')
 
+  const [signUpCount, setSignUpCount] = useState(0);
+  const [fomoVisible, setFomoVisible] = useState(false)
+
   const handleSubmit = (e) => {
 
     e.preventDefault();
@@ -59,11 +63,26 @@ export default function Home() {
   }
 
   useEffect(() => {
+    axios.get(LPBKND_BASEURL + '/signUps/count')
+      .then(function (response) {
+        setFomoVisible(true)
+        setSignUpCount(response.data)
+      })
+      .catch(function (error) {
+        setFomoVisible(false)
+        console.log(error);
+      })
+  });
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsAnimationOver(true)
       setIsVisible(true)
     }, 17000);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer)
+    }
+
   }, []);
 
   return (
@@ -328,6 +347,15 @@ export default function Home() {
                     SIGN UP NOW
                   </div>
                 </CtaButton>
+                {fomoVisible ?
+                  <FadeIn>
+                    <div className='font-monts text-center'>
+                      <span className='font-semibold text-2xl'>{signUpCount}</span> users are in Alpha
+                    </div>
+                  </FadeIn>
+                  :
+                  null
+                }
               </div>
             </div>
 
