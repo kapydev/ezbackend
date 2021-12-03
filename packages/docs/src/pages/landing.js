@@ -7,6 +7,7 @@ import '../css/landing.css'
 import { Scrollbars } from 'react-custom-scrollbars';
 import validator from 'validator'
 import FadeIn from 'react-fade-in';
+import { Helmet } from "react-helmet";
 
 
 const axios = require('axios').default;
@@ -63,7 +64,7 @@ function Landing() {
                                     .then(() => { window.open("/") })
                             }
                         }}>
-                            SIGN UP 
+                            SIGN UP
                         </CtaButton>
                     </div>
                     {fomoVisible ?
@@ -98,6 +99,11 @@ function Landing() {
     }
     return (
         <div id='tailwind'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>EzBackend | Low-Code Backend Framework</title>
+                <meta name="description" content="Simple to Setup. Ready to Scale." />
+            </Helmet>
             <Toaster
                 toastOptions={{
                     style: {
@@ -154,7 +160,6 @@ function Landing() {
                 </div>
             </div>
         </div>
-
     );
 }
 
