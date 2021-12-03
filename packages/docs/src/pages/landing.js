@@ -4,7 +4,7 @@ import { CtaButton } from '../helper-components/cta-button';
 import toast, { Toaster } from 'react-hot-toast';
 import LandingHelper from '../helper-components/landing-helper';
 import '../css/landing.css'
-import { Scrollbars } from 'react-custom-scrollbars';
+import Scrollbars from '../helper-components/colored-scrollbars';
 import validator from 'validator'
 import FadeIn from 'react-fade-in';
 import { Helmet } from "react-helmet";
@@ -137,7 +137,10 @@ function Landing() {
 
                         <div className='col-span-3 p-16 hidden xl:block'>
 
-                            <Scrollbars universal autoHide>
+                            <Scrollbars
+                                universal
+                                autoHide
+                            >
 
                                 <LandingHelper />
 
