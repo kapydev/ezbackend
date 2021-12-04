@@ -19,6 +19,9 @@ function Landing() {
     const [signUpCount, setSignUpCount] = useState(0);
     const [fomoVisible, setFomoVisible] = useState(false)
 
+    let signUpEmail = ""
+    const setSignUpEmail = (newEmail) => {signUpEmail = newEmail}
+
     useEffect(() => {
         axios.get(LPBKND_BASEURL + '/signUps/count')
             .then(function (response) {
@@ -29,7 +32,39 @@ function Landing() {
                 setFomoVisible(false)
                 console.log(error);
             })
-    });
+    },[]);
+
+    const sendValidatedEmail = () => {
+        if (signUpEmail) {
+            return axios.post(LPBKND_BASEURL + '/signUps/', {
+                email: signUpEmail,
+            })
+                .catch(function (error) {
+                    console.log(error);
+                })
+                .then(function (response) {
+                    setSignUpEmail('')
+                })
+        }
+    }
+
+    const validateAndSendEmail = () => {
+        if (!validator.isEmail(signUpEmail)) {
+            toast.error("Please fill in your email")
+        } else {
+            toast.promise(
+                sendValidatedEmail(),
+                {
+                    loading: 'Waiting for Heroku...',
+                    success: <b>Submitted</b>,
+                    error: <b>Server Error! We are working on it!</b>,
+                }
+            )
+                .then(() => { window.open("/") })
+        }
+    }
+
+
 
     function SignUpper() {
         return (
@@ -43,27 +78,12 @@ function Landing() {
                         className='border-0 font-monts rounded-lg text-lg p-2 font-semibold w-full'
                         type="text"
                         id="submitSignUps"
-                        value={signUpEmail}
                         placeholder='Email'
                         name="email" />
                 </form>
                 <div className='w-full flex justify-between'>
                     <div className='w-max'>
-                        <CtaButton islink={false} onClick={(e) => {
-                            if (!validator.isEmail(signUpEmail)) {
-                                toast.error("Please fill in your email")
-                            } else {
-                                toast.promise(
-                                    handleSubmit(e),
-                                    {
-                                        loading: 'Waiting for Heroku...',
-                                        success: <b>Submitted</b>,
-                                        error: <b>Server Error! We are working on it!</b>,
-                                    }
-                                )
-                                    .then(() => { window.open("/") })
-                            }
-                        }}>
+                        <CtaButton islink={false} onClick={validateAndSendEmail}>
                             SIGN UP
                         </CtaButton>
                     </div>
@@ -81,22 +101,8 @@ function Landing() {
         )
     }
 
-    const [signUpEmail, setSignUpEmail] = useState('')
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (signUpEmail) {
-            return axios.post(LPBKND_BASEURL + '/signUps/', {
-                email: signUpEmail,
-            })
-                .catch(function (error) {
-                    console.log(error);
-                })
-                .then(function (response) {
-                    setSignUpEmail('')
-                })
-        }
-    }
+    
     return (
         <div id='tailwind'>
             <Helmet>
