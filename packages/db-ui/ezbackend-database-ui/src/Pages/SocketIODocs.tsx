@@ -7,20 +7,20 @@ dotenv.config()
 
 const URL = getBaseURL()
 
-
+const logger = console
 
 
 function SocketIODocs() {
 
     useEffect(()=>{
-        console.log("CONNECTING SOCKET IO")
+        logger.log("CONNECTING SOCKET IO")
         const socket = io(URL!,{
             withCredentials: true,
             transports: ["websocket"]
         })
         
         socket.on("connect", () => {
-            console.log("Socket IO Connected!")
+            logger.log("Socket IO Connected!")
         })
     },[])
 

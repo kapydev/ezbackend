@@ -260,4 +260,10 @@ You must wait for the above function to finish before you can run ${funcName}
         await super.start(opts)
     }
 
+    async close() {
+        const instance = this.getInternalInstance()
+        await instance.orm.close()
+        await instance._server.close()
+    }
+
 }

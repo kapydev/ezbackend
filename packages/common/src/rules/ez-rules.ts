@@ -3,9 +3,9 @@ import { requestContext } from "fastify-request-context"
 import { socketContext } from "socket-io-event-context"
 import { Socket } from "socket.io"
 import { InsertEvent, UpdateEvent, RemoveEvent, LoadEvent, EventSubscriber, EntitySubscriberInterface } from "typeorm"
-import { DecorateClass } from ".."
-import { als } from "asynchronous-local-storage"
-import { EzApp } from "../../ezapp"
+import { DecorateClass } from "../model"
+import { EzApp } from "../ezapp"
+import { getContext, REALTIME, setContext } from "./context"
 
 
 export enum RuleType {
@@ -97,7 +97,8 @@ export function createRulesSubscriber(ezRules: EzRules) {
     class RuleSubscriber implements EntitySubscriberInterface {
 
         afterLoad(entity: any, event: LoadEvent<any>) {
-            als.set("rule_context", event)
+            if (getContext(REALTIME.IGNORE_RULES) === true) return
+            setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.READ)) return
                 const fastifyReq = getFastifyRequest()
@@ -107,7 +108,8 @@ export function createRulesSubscriber(ezRules: EzRules) {
             })
         }
         beforeUpdate(event: UpdateEvent<any>) {
-            als.set("rule_context", event)
+            if (getContext(REALTIME.IGNORE_RULES) === true) return
+            setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.UPDATE)) return
                 const fastifyReq = getFastifyRequest()
@@ -117,7 +119,8 @@ export function createRulesSubscriber(ezRules: EzRules) {
             })
         }
         beforeInsert(event: InsertEvent<any>) {
-            als.set("rule_context", event)
+            if (getContext(REALTIME.IGNORE_RULES) === true) return
+            setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.CREATE)) return
                 const fastifyReq = getFastifyRequest()
@@ -127,7 +130,8 @@ export function createRulesSubscriber(ezRules: EzRules) {
             })
         }
         beforeRemove(event: RemoveEvent<any>) {
-            als.set("rule_context", event)
+            if (getContext(REALTIME.IGNORE_RULES) === true) return
+            setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.DELETE)) return
                 const fastifyReq = getFastifyRequest()
