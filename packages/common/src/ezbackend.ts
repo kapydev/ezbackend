@@ -15,6 +15,7 @@ import { socketContext } from "socket-io-event-context";
 import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
 import { Server } from "socket.io"
 import path from 'path'
+import { REALTIME } from ".";
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -251,16 +252,7 @@ export class EzBackend extends EzApp {
 
         this.setPostHandler('Set Request Context For Global Access', async (instance, opts) => {
             instance._server.addHook("onRequest", async (req, res) => {
-                requestContext.set("request", req)
-            })
-        })
-
-        this.setPostHandler('Set SocketIO Context for global access', async (instance, opts) => {
-            instance._server.addHook("onReady", async () => {
-                instance._server.io.use((socket, next) => {
-                    socketContext.set("request", socket.request)
-                    next()
-                })
+                requestContext.set(REALTIME.REQ_CONTEXT, req)
             })
         })
 

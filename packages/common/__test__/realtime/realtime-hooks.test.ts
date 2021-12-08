@@ -1,5 +1,5 @@
-import { EzBackend, EzModel, Type, RuleType } from "../../src"
 import clientIO, { Socket as ClientSocket } from "socket.io-client"
+import { EzBackend, EzModel, RuleType, Type } from "../../src"
 
 function connectAsync(socket: ClientSocket) {
     return new Promise((resolve, reject) => {
@@ -50,10 +50,17 @@ describe("All realtime listeners should run as expected", () => {
 
     test("Should be able to receive create events", async () => {
         await app.start({
-            server: {
-                logger: false
-            },
-            port: PORT
+            backend: {
+                fastify: {
+                    logger: false
+                },
+                typeorm: {
+                    database: ':memory:'
+                },
+                listen: {
+                    port: PORT
+                }
+            }
         })
 
         clientSocket = clientIO(`http://localhost:${PORT}`, {
@@ -70,7 +77,9 @@ describe("All realtime listeners should run as expected", () => {
                 "block-me": "true"
             }
         })
+
         await connectAsync(clientSocket)
+        await connectAsync(clientSocket2)
 
         const userPayload = {
             name: "Thomas",
@@ -92,7 +101,7 @@ describe("All realtime listeners should run as expected", () => {
                     expect(modelName).toBe("FakeUser")
                     expect(entity).toMatchObject(userPayload)
                     setImmediate(() => {
-                        //Give the other listener an event loop to possibly receive an event and throw and error
+                        //Give the other listener an event loop to possibly receive an event and throw an error
                         resolve()
                     })
                 })

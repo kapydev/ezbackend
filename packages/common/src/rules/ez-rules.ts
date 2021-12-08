@@ -87,11 +87,11 @@ export function createRulesSubscriber(ezRules: EzRules) {
     }
 
     function getFastifyRequest() {
-        return requestContext.get("request") as FastifyRequest
+        return requestContext.get(REALTIME.REQ_CONTEXT) as FastifyRequest
     }
 
     function getSocketRequest() {
-        return socketContext.get<Socket["request"]>("request")
+        return socketContext.get<Socket["request"]>(REALTIME.SOCKET_CONTEXT)
     }
 
     class RuleSubscriber implements EntitySubscriberInterface {

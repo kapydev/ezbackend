@@ -36,10 +36,17 @@ describe("All realtime listeners should run as expected", () => {
         app.addApp(fakeUser, { prefix: "user" })
 
         await app.start({
-            server: {
-                logger: false
-            },
-            port: PORT
+            backend: {
+                fastify: {
+                    logger: false
+                },
+                typeorm: {
+                    database: ':memory:'
+                },
+                listen: {
+                    port: PORT
+                }
+            }
         })
 
         clientSocket = clientIO(`http://localhost:${PORT}`, {
@@ -116,7 +123,11 @@ describe("All realtime listeners should run as expected", () => {
 
         clientSocket.on("entity_deleted", (modelName: string, entity: any) => {
             expect(modelName).toBe("FakeUser")
-            expect(entity).toBe(null)
+            expect(entity).toMatchObject({
+                age: 23,
+                id: 1,
+                name: "Thomas"
+            })
             done()
         })
 

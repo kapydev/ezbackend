@@ -33,8 +33,13 @@ describe("Should be able to get io object", () => {
         })
 
         await app.start({
-            server: {
-                logger: false
+            backend: {
+                fastify: {
+                    logger: false
+                },
+                typeorm: {
+                    database: ':memory:'
+                }
             }
         })
 
@@ -47,8 +52,13 @@ describe("Should be able to get io object", () => {
         })
 
         await app.start({
-            server: {
-                logger: false
+            backend: {
+                fastify: {
+                    logger: false
+                },
+                typeorm: {
+                    database: ':memory:'
+                }
             }
         })
 

@@ -1,9 +1,21 @@
-import { EzBackend, EzModel, Type, RuleType } from "../../src"
+import { EzBackend, EzModel, Type, RuleType, EzBackendOpts } from "../../src"
 
 describe("All row level hooks should run as expected", () => {
 
     let app: EzBackend
     let fakeUser: EzModel
+
+    const defaultConfig = {
+        backend: {
+            fastify: {
+                logger: false
+            },
+            typeorm: {
+                database: ':memory:'
+            }
+        }
+    }
+
 
     beforeEach(async () => {
         app = new EzBackend()
@@ -37,11 +49,7 @@ describe("All row level hooks should run as expected", () => {
             })
         })
 
-        await app.start({
-            server: {
-                logger: false
-            }
-        })
+        await app.start(defaultConfig)
 
         await app.inject({
             method: "POST",
@@ -70,11 +78,7 @@ describe("All row level hooks should run as expected", () => {
             })
         })
 
-        await app.start({
-            server: {
-                logger: false
-            }
-        })
+        await app.start(defaultConfig)
 
         await app.inject({
             method: "POST",
@@ -109,11 +113,7 @@ describe("All row level hooks should run as expected", () => {
             })
         })
 
-        await app.start({
-            server: {
-                logger: false
-            }
-        })
+        await app.start(defaultConfig)
 
         await app.inject({
             method: "POST",
@@ -151,11 +151,7 @@ describe("All row level hooks should run as expected", () => {
             })
         })
 
-        await app.start({
-            server: {
-                logger: false
-            }
-        })
+        await app.start(defaultConfig)
 
         await app.inject({
             method: "POST",
