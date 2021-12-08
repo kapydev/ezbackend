@@ -1,21 +1,19 @@
-import { Connection, EntitySchema, ObjectLiteral, Repository, createConnection } from "typeorm";
-import { EzApp, EzBackendServer } from "./ezapp";
-import { EzError, ezWarning } from "@ezbackend/utils";
-import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
-
-import { InjectOptions } from "light-my-request";
-import fp from 'fastify-plugin'
 import { PluginScope } from "@ezbackend/core";
-import _ from 'lodash'
-import dedent from 'dedent-js'
-import dotenv from 'dotenv'
-import { createModelSubscriber, createSocketIO, attachSocketIO } from "./realtime";
+import { EzError, ezWarning } from "@ezbackend/utils";
+import dedent from 'dedent-js';
+import dotenv from 'dotenv';
+import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
+import fp from 'fastify-plugin';
 import { fastifyRequestContextPlugin, requestContext } from "fastify-request-context";
-import { socketContext } from "socket-io-event-context";
-import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
-import { Server } from "socket.io"
-import path from 'path'
+import { InjectOptions } from "light-my-request";
+import path from 'path';
+import { Server } from "socket.io";
+import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
 import { REALTIME } from ".";
+import { EzApp, EzBackendServer } from "./ezapp";
+import { attachSocketIO, createModelSubscriber, createSocketIO } from "./realtime";
+import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
+
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>

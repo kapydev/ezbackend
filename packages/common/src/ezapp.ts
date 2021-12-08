@@ -195,11 +195,14 @@ export class EzApp extends App {
         if (this.parent instanceof EzApp) {
             return this.buildRoutePrefix(this.parent.getPrefix(), this.opts.prefix ?? '')
         }
-        throw "Parent app of an EzApp needs to be instance of EzApp"
+        throw new EzError("Parent app of an EzApp needs to be instance of EzApp",
+            "If the parent of an EzApp is not an EzApp then it will be impossible to build the route prefix")
     }
 
     private getSocketIOByNamespace(namespace?: string) {
-        if (!this.localInstance) throw "Accessing socket IO too early in boot cycle. Try using useSocketIO/useSocketIORaw instead"
+        if (!this.localInstance) throw new EzError("Accessing socket IO too early in boot cycle",
+            "Socket IO is only instantiated in the lifecycle hook preHandler. Try using useSocketIO/useSocketIORaw instead",
+            `app.useSocketIORaw((io) => {/* Your Custom Functionality */})`)
         const io = this.localInstance.socketIO
 
         if (namespace) return io.of(namespace)

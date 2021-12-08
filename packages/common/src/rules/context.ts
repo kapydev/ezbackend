@@ -12,12 +12,12 @@ export interface AllowedValues {
     [REALTIME.RULE_CONTEXT]: LoadEvent<any> | UpdateEvent<any> | InsertEvent<any> | RemoveEvent<any>
     [REALTIME.IGNORE_RULES]: boolean
     //TODO: Set Request context and socket context types
-    [REALTIME.REQ_CONTEXT]: any 
+    [REALTIME.REQ_CONTEXT]: any
     [REALTIME.SOCKET_CONTEXT]: any
 }
 
 export function ignoreRules() {
-    setContext(REALTIME.IGNORE_RULES,true)
+    setContext(REALTIME.IGNORE_RULES, true)
 }
 
 export function setContext<T extends REALTIME>(key: T, value: AllowedValues[T]) {

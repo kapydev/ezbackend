@@ -126,7 +126,6 @@ export class EzAuth extends EzApp {
                     socket.request.session = instance._server.decodeSecureSession(parsedCookie.session)
                 }
 
-                // 
                 next()
             })
 
