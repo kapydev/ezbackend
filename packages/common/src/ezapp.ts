@@ -4,7 +4,7 @@ import fp from 'fastify-plugin'
 import { Plugin } from 'avvio'
 import { EzBackendInstance, EzBackendOpts } from "."
 import { OverloadParameters, OverloadParameters23, OverloadParameters1to5 } from '@ezbackend/utils'
-import type { Server } from "socket.io"
+import type { Namespace } from "socket.io"
 
 type CallableKeysOf<Type> = {
     [Key in keyof Type]: Type[Key] extends Function ? Key : never
@@ -22,6 +22,8 @@ function generateFastifyFuncWrapper<Params extends Array<unknown>>(
         )
     }
 }
+
+
 
 //TODO: Add types based on fastify instance
 //TODO: Tests for all stubbing performed
@@ -63,6 +65,7 @@ export type EzBackendServer = ReturnType<typeof createServer>
 export class EzApp extends App {
 
     protected _functions: Array<Function> = []
+    protected _socketIOfunctions: Array<Function> = []
 
     get functions() { return this._functions }
 
@@ -76,6 +79,9 @@ export class EzApp extends App {
         this.setHandler("Create Server Stub", async (instance, opts) => {
             instance.server = createServer(this)
             this.localInstance = instance
+        })
+        this.setHandler("Run all SocketIO Functions", async () => {
+            this._socketIOfunctions.forEach(func => func())
         })
         this.setPostHandler("Remove Server Stub", async (instance, opts) => {
             //URGENT TODO: Make sure that error message when trying to get decorators that are not present is clear
@@ -119,35 +125,35 @@ export class EzApp extends App {
     setRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setRun(funcName, plugin) }
     setPostRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostRun(funcName, plugin) }
 
-    private buildRoutePrefix (instancePrefix: string, pluginPrefix:string ) {
+    private buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
         if (!pluginPrefix) {
-          return instancePrefix
+            return instancePrefix
         }
-      
+
         // Ensure that there is a '/' between the prefixes
         if (instancePrefix.endsWith('/') && pluginPrefix[0] === '/') {
-          // Remove the extra '/' to avoid: '/first//second'
-          pluginPrefix = pluginPrefix.slice(1)
+            // Remove the extra '/' to avoid: '/first//second'
+            pluginPrefix = pluginPrefix.slice(1)
         } else if (pluginPrefix[0] !== '/') {
-          pluginPrefix = '/' + pluginPrefix
+            pluginPrefix = '/' + pluginPrefix
         }
-      
-        return instancePrefix + pluginPrefix
-      }
-      
 
-    getPrefix() : string {
+        return instancePrefix + pluginPrefix
+    }
+
+
+    getPrefix(): string {
         if (!this.parent) {
             return ''
         }
         if (this.parent instanceof EzApp) {
-            return this.buildRoutePrefix(this.parent.getPrefix(),this.opts.prefix ?? '')
+            return this.buildRoutePrefix(this.parent.getPrefix(), this.opts.prefix ?? '')
         }
         throw "Parent app of an EzApp needs to be instance of EzApp"
     }
 
     private getSocketIOByNamespace(namespace?: string) {
-        if (!this.localInstance) throw "Accessing socket IO too early in boot cycle"
+        if (!this.localInstance) throw "Accessing socket IO too early in boot cycle. Try using useSocketIO/useSocketIORaw instead"
         const io = this.localInstance.socketIO
 
         if (namespace) return io.of(namespace)
@@ -161,12 +167,28 @@ export class EzApp extends App {
         const prefix = this.getPrefix()
         return this.getSocketIOByNamespace(prefix)
     }
-    
+
+    useSocketIO(func: (io: Namespace) => void) {
+        this._socketIOfunctions.push(
+            () => {
+                func(this.getSocketIO())
+            }
+        )
+    }
+
     /**
      * Get the Socket IO 'io' object WITHOUT namespacing
      */
     getSocketIORaw() {
         return this.getSocketIOByNamespace()
+    }
+
+    useSocketIORaw(func: (io: Namespace) => void) {
+        this._socketIOfunctions.push(
+            () => {
+                func(this.getSocketIORaw())
+            }
+        )
     }
 
     /**

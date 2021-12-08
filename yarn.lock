@@ -15665,6 +15665,11 @@ vfile@^4.0.0:
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
 
+virtual-proxy-wrapper@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/virtual-proxy-wrapper/-/virtual-proxy-wrapper-1.0.8.tgz#3b5a17df8c45ce7b34cec19f11e5c56059726dad"
+  integrity sha512-zoj9Ad/uB74QOJ+xbxnQ6sKprd/wKpUAyjpcOBhtk5udA7x/2kkAfAtq60SgBV03s21R+5R3azFFb/oDcgS3FQ==
+
 vlq@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/vlq/-/vlq-1.0.1.tgz#c003f6e7c0b4c1edd623fd6ee50bbc0d6a1de468"

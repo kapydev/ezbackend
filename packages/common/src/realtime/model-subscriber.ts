@@ -14,7 +14,8 @@ export function createModelSubscriber(instance: EzBackendInstance) {
             afterUpdate(event: UpdateEvent<any>) {
                 instance.socketIO?.emit("entity_updated",event.metadata.name, event.entity);
             }
-            afterRemove(event: RemoveEvent<any>) {
+            beforeRemove(event: RemoveEvent<any>) {
+                console.log(event)
                 instance.socketIO?.emit("entity_deleted",event.metadata.name, event.entity);
             }
 

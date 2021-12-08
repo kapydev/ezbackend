@@ -215,11 +215,11 @@ export const getDefaultGenerators = () => {
                     //@ts-ignore
                     const id = req.params[primaryCol]
                     try {
-                        await repo.findOneOrFail(id);
+                        const result = await repo.findOneOrFail(id);
+                        await repo.remove(result);
                     } catch (e) {
                         res.status(404).send(e);
                     }
-                    await repo.delete(id);
                     return {
                         success: true,
                         id: id,

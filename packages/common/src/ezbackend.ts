@@ -155,11 +155,12 @@ export class EzBackend extends EzApp {
             )
         })
 
+        this.setPreHandler('Add SocketIO', createSocketIO)
+        
         this.setHandler('Add Fastify Boom', async (instance, opts) => {
             instance.server.register(fp(ezbErrorPage))
         })
 
-        this.setHandler('Add SocketIO', createSocketIO)
 
 
         this.setHandler('Add Error Schema', addErrorSchema)
