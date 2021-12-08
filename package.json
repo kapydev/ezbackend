@@ -8,18 +8,39 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "^16.10.2",
+    "@types/node": "^16.11.12",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-react": "^7.27.1",
+    "husky": "^7.0.4",
     "lerna": "^4.0.0",
+    "lint-staged": "^12.1.2",
+    "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
+    "typescript": "^4.5.2",
     "window-size": "^1.1.1"
   },
   "scripts": {
     "build": "node ./scripts/build-package.js",
     "test": "jest --runInBand",
-    "prepare": "lerna run prepare"
+    "prepare": "lerna run prepare",
+    "lint": "eslint --ignore-path .gitignore \"packages/**/*.+(ts|js|tsx)\"",
+    "format": "prettier --ignore-path .gitignore \"packages/**/*.+(ts|js|tsx)\" --write"
   },
-  "dependencies": {
-    "typescript": "^4.3.5"
+  "lint-staged": {
+    "*.{js, ts, tsx, jsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json, md, html, js, jsx, ts, tsx}": [
+      "prettier --write"
+    ]
   },
   "version": "0.0.0"
 }

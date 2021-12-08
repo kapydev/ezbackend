@@ -1,2 +1,2 @@
-export * from './openapi'
-import 'fastify-swagger'
+import "fastify-swagger";
+export * from "./openapi";

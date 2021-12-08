@@ -1,88 +1,89 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import ReactPlayer from 'react-player/youtube'
-import Layout from '@theme/Layout';
-import toast, { Toaster } from 'react-hot-toast';
-import { features_content } from '../content/features-content'
-import StepFeature from '../helper-components/step-feature';
-import { Accordion, AccordionItem, AccordionPanel } from '../helper-components/accordion';
-import ReactCompareImage from 'react-compare-image';
-import validator from 'validator'
-import FadeIn from 'react-fade-in';
+import React, { useEffect, useState } from "react";
+import ReactPlayer from "react-player/youtube";
+import Layout from "@theme/Layout";
+import toast, { Toaster } from "react-hot-toast";
+import { featuresContent } from "../content/features-content";
+import StepFeature from "../helper-components/step-feature";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionPanel,
+} from "../helper-components/accordion";
+import ReactCompareImage from "react-compare-image";
+import validator from "validator";
+import FadeIn from "react-fade-in";
+import axios from "axios";
 
-//CSS
-import "tailwindcss/tailwind.css"
-import 'animate.css';
+// CSS
+import "tailwindcss/tailwind.css";
+import "animate.css";
 
-//HELPER COMPONENTS
-import { Delayed } from '../helper-components/delayed';
-import { CtaButton } from '../helper-components/cta-button';
-import { MovingCode } from '../helper-components/moving-code'
-import { Feature, MainFeature } from '../helper-components/feature';
+// HELPER COMPONENTS
+import { Delayed } from "../helper-components/delayed";
+import { CtaButton } from "../helper-components/cta-button";
+import { MovingCode } from "../helper-components/moving-code";
+import { Feature, MainFeature } from "../helper-components/feature";
 
-//SVG IMPORTS
-import IconApiDocs from '../assets/icon-api-docs.svg'
-import IconDatabase from '../assets/icon-database.svg'
-import IconSecurity from '../assets/icon-security.svg'
-import IconWorld from '../assets/icon-world.svg'
-import IconGithub from '../assets/icon-github.svg'
-import IconYoutube from '../assets/icon-youtube.svg'
-import IconDiscord from '../assets/icon-discord.svg'
-import DiagramBuild from '../assets/diagram-scaling-build.png';
-import DiagramScale from '../assets/diagram-scaling-scale.png';
+// SVG IMPORTS
+import IconApiDocs from "../assets/icon-api-docs.svg";
+import IconDatabase from "../assets/icon-database.svg";
+import IconSecurity from "../assets/icon-security.svg";
+import IconWorld from "../assets/icon-world.svg";
+import IconGithub from "../assets/icon-github.svg";
+import IconYoutube from "../assets/icon-youtube.svg";
+import IconDiscord from "../assets/icon-discord.svg";
+import DiagramBuild from "../assets/diagram-scaling-build.png";
+import DiagramScale from "../assets/diagram-scaling-scale.png";
 
-const axios = require('axios').default;
-const YT_URL = 'https://youtu.be/kQRRckdEFr8'
-const LPBKND_BASEURL = 'https://ez-landing-page-backend.herokuapp.com'
+const YT_URL = "https://youtu.be/kQRRckdEFr8";
+const LPBKND_BASEURL = "https://ez-landing-page-backend.herokuapp.com";
 
 export default function Home() {
-
-  const [isVisible, setIsVisible] = useState(false)
-  const [isAnimationOver, setIsAnimationOver] = useState(false)
-  const [signUpEmail, setSignUpEmail] = useState('')
+  const [isVisible, setIsVisible] = useState(false);
+  const [isAnimationOver, setIsAnimationOver] = useState(false);
+  const [signUpEmail, setSignUpEmail] = useState("");
 
   const [signUpCount, setSignUpCount] = useState(0);
-  const [fomoVisible, setFomoVisible] = useState(false)
+  const [fomoVisible, setFomoVisible] = useState(false);
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
 
     if (signUpEmail) {
-
-      return axios.post(LPBKND_BASEURL + '/signUps/', {
-        email: signUpEmail,
-      })
+      return axios
+        .post(LPBKND_BASEURL + "/signUps/", {
+          email: signUpEmail,
+        })
         .catch(function (error) {
           console.log(error);
         })
         .then(function (response) {
-          setSignUpEmail('')
-        })
+          setSignUpEmail("");
+        });
     }
-  }
+  };
 
   useEffect(() => {
-    axios.get(LPBKND_BASEURL + '/signUps/count')
+    axios
+      .get(LPBKND_BASEURL + "/signUps/count")
       .then(function (response) {
-        setFomoVisible(true)
-        setSignUpCount(response.data)
+        setFomoVisible(true);
+        setSignUpCount(response.data);
       })
       .catch(function (error) {
-        setFomoVisible(false)
+        setFomoVisible(false);
         console.log(error);
-      })
+      });
   });
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsAnimationOver(true)
-      setIsVisible(true)
+      setIsAnimationOver(true);
+      setIsVisible(true);
     }, 17000);
     return () => {
-      clearTimeout(timer)
-    }
-
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -90,17 +91,18 @@ export default function Home() {
       <Toaster
         toastOptions={{
           style: {
-            padding: '16px',
-            fontWeight: 'bold',
-            color: 'white',
-            backgroundColor: '#282A36',
-            fontSize: 16
+            padding: "16px",
+            fontWeight: "bold",
+            color: "white",
+            backgroundColor: "#282A36",
+            fontSize: 16,
           },
         }}
       />
       <div id="tailwind">
-        <div className='grid place-items-center'>
-          <div className='
+        <div className="grid place-items-center">
+          <div
+            className="
 
             grid
             grid-flow-row
@@ -116,19 +118,19 @@ export default function Home() {
             md:my-14
             md:gap-20
 
-            '>
-
-            <div className='col-span-full'>
-              <div className='grid grid-flow-row gap-7'>
-                <div className='text-5xl font-bold font-mono text-center'>
+            "
+          >
+            <div className="col-span-full">
+              <div className="grid grid-flow-row gap-7">
+                <div className="text-5xl font-bold font-mono text-center">
                   Simple to Build | Ready to Scale
                 </div>
-                <div className='text-xl font-mono text-center'>
+                <div className="text-xl font-mono text-center">
                   The Low-Code Backend Framework for Technical Founders
                 </div>
-                <div className='flex flex-row justify-center gap-4'>
+                <div className="flex flex-row justify-center gap-4">
                   <div>
-                    <CtaButton islink={true} link="/docs/getting-started" >
+                    <CtaButton islink={true} link="/docs/getting-started">
                       Get Started
                     </CtaButton>
                   </div>
@@ -141,10 +143,15 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='grid place-items-center lg:place-items-end self-center col-span-full lg:col-span-1'>
-              <div className='bg-dracula rounded-lg w-full lg:h-320px' style={{ maxWidth: '500px' }}>
-                <div className='rounded-lg text-sm pointer-events-none font-mono' style={{ padding: 32 }}>
-
+            <div className="grid place-items-center lg:place-items-end self-center col-span-full lg:col-span-1">
+              <div
+                className="bg-dracula rounded-lg w-full lg:h-320px"
+                style={{ maxWidth: "500px" }}
+              >
+                <div
+                  className="rounded-lg text-sm pointer-events-none font-mono"
+                  style={{ padding: 32 }}
+                >
                   <Delayed waitBeforeShow={0}>
                     <MovingCode text={codeText1} />
                   </Delayed>
@@ -157,46 +164,46 @@ export default function Home() {
                   <Delayed waitBeforeShow={14000}>
                     <MovingCode text={codeText4} />
                   </Delayed>
-
                 </div>
               </div>
             </div>
 
-            <div className='col-span-full lg:col-span-1 w-full lg:mt-6'>
-
-              {isAnimationOver ?
-
-                <div className='w-full' onMouseEnter={() => setIsVisible(false)} onMouseLeave={() => { setIsVisible(true) }}>
-
-                  <div className='fade'>
+            <div className="col-span-full lg:col-span-1 w-full lg:mt-6">
+              {isAnimationOver ? (
+                <div
+                  className="w-full"
+                  onMouseEnter={() => setIsVisible(false)}
+                  onMouseLeave={() => {
+                    setIsVisible(true);
+                  }}
+                >
+                  <div className="fade">
                     <MainFeature
                       title={
-                        <div className=''>
-                          <div className='text-4xl mb-2'>Simplified</div>
-                          <div className=''>Backend Development</div>
+                        <div className="">
+                          <div className="text-4xl mb-2">Simplified</div>
+                          <div className="">Backend Development</div>
                         </div>
                       }
                     >
-                      A Node framework focused on <Txty>speed</Txty> and <Txty>ease of use,</Txty> while keeping the ability to <Txty>extend</Txty> and <Txty>customize</Txty>
+                      A Node framework focused on <Txty>speed</Txty> and{" "}
+                      <Txty>ease of use,</Txty> while keeping the ability to{" "}
+                      <Txty>extend</Txty> and <Txty>customize</Txty>
                     </MainFeature>
                   </div>
-
                 </div>
-
-                :
-
-                <div className='self-center lg:self-start'>
-                  <StepFeature delay={1700}>
-                    Backend Created
-                  </StepFeature>
+              ) : (
+                <div className="self-center lg:self-start">
+                  <StepFeature delay={1700}>Backend Created</StepFeature>
                   <StepFeature delay={4000}>
                     Database Connection Made
                   </StepFeature>
-                  <StepFeature delay={4500}>
-                    Table Columns Added
-                  </StepFeature>
+                  <StepFeature delay={4500}>Table Columns Added</StepFeature>
                   <StepFeature delay={9000}>
-                    <span className='text-purple'>Name</span>, <span className='text-purple'>Species</span>, <span className='text-purple'>Age</span>, Columns Added in Table
+                    <span className="text-purple">Name</span>,{" "}
+                    <span className="text-purple">Species</span>,{" "}
+                    <span className="text-purple">Age</span>, Columns Added in
+                    Table
                   </StepFeature>
                   <StepFeature delay={12900}>
                     CRUD Endpoints Generated
@@ -204,18 +211,14 @@ export default function Home() {
                   <StepFeature delay={15000}>
                     API Documentation Generated
                   </StepFeature>
-                  <StepFeature delay={15300}>
-                    Running on PORT 8000
-                  </StepFeature>
+                  <StepFeature delay={15300}>Running on PORT 8000</StepFeature>
                 </div>
-              }
-
+              )}
             </div>
 
-            <div className='col-span-full'>
-
-              <div className='grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
-                {features_content.slice(0, 4).map((feature) => {
+            <div className="col-span-full">
+              <div className="grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
+                {featuresContent.slice(0, 4).map((feature) => {
                   return (
                     <Feature
                       icon={feature.icon}
@@ -224,15 +227,20 @@ export default function Home() {
                       route={feature.route}
                       released={feature.released}
                       description={feature.description}
-                    />)
+                    />
+                  );
                 })}
               </div>
 
               <Accordion>
-                <AccordionItem toggle="features" before_text='More Features' after_text='Core Features' />
+                <AccordionItem
+                  toggle="features"
+                  beforeText="More Features"
+                  afterText="Core Features"
+                />
                 <AccordionPanel id="features">
-                  <div className='grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12'>
-                    {features_content.slice(4).map((feature) => {
+                  <div className="grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
+                    {featuresContent.slice(4).map((feature) => {
                       return (
                         <Feature
                           icon={feature.icon}
@@ -241,38 +249,82 @@ export default function Home() {
                           route={feature.route}
                           released={feature.released}
                           description={feature.description}
-                        />)
+                        />
+                      );
                     })}
                   </div>
                 </AccordionPanel>
               </Accordion>
             </div>
 
-            <div className='col-span-full flex justify-center'>
-              <div className='max-w-3xl w-full'>
-                <ReactCompareImage leftImage={DiagramScale} rightImage={DiagramBuild} sliderPositionPercentage={0.03} sliderLineWidth={4} />
+            <div className="col-span-full flex justify-center">
+              <div className="max-w-3xl w-full">
+                <ReactCompareImage
+                  leftImage={DiagramScale}
+                  rightImage={DiagramBuild}
+                  sliderPositionPercentage={0.03}
+                  sliderLineWidth={4}
+                />
               </div>
             </div>
 
-            <div className='col-span-full'>
+            <div className="col-span-full">
               <Accordion>
-                <AccordionItem toggle="scale" before_text='One-Click-Deploy' after_text='One-Click-Deploy' />
+                <AccordionItem
+                  toggle="scale"
+                  beforeText="One-Click-Deploy"
+                  afterText="One-Click-Deploy"
+                />
                 <AccordionPanel id="scale">
-                  <p >EzBackend allows you to 'build once, scale indefintely' with EzDeploy. EzDeploys scales using:</p>
+                  <p>
+                    EzBackend allows you to 'build once, scale indefintely' with
+                    EzDeploy. EzDeploys scales using:
+                  </p>
                   <ol type="1">
-                    <li className='mb-2'>[COMING SOON] Reverse Proxy. All traffic is routed through EzDeploy's reverse proxy for load balancing. The reverse proxy also serves as an additional layer of security by providing SSL encryption and hiding actual servers from the internet</li>
-                    <li className='mb-2'>Stateless Servers - EzBackend is designed in principle to be completely stateless, allowing you to scale across regions by creating new EzBackend instances</li>
-                    <li className='mb-2'>[COMING SOON] Read Replicas. By creating read-replicas in the same Virtual Private Cloud as your EzBackend instances, the end-user can receive low-latency regardless of region.</li>
-                    <li className='mb-2'>[COMING SOON] Adapters. EzBackend comes batteries included with adapters to manage realtime updates with socket.io and other operations that require action on all EzBackend instances</li>
+                    <li className="mb-2">
+                      [COMING SOON] Reverse Proxy. All traffic is routed through
+                      EzDeploy's reverse proxy for load balancing. The reverse
+                      proxy also serves as an additional layer of security by
+                      providing SSL encryption and hiding actual servers from
+                      the internet
+                    </li>
+                    <li className="mb-2">
+                      Stateless Servers - EzBackend is designed in principle to
+                      be completely stateless, allowing you to scale across
+                      regions by creating new EzBackend instances
+                    </li>
+                    <li className="mb-2">
+                      [COMING SOON] Read Replicas. By creating read-replicas in
+                      the same Virtual Private Cloud as your EzBackend
+                      instances, the end-user can receive low-latency regardless
+                      of region.
+                    </li>
+                    <li className="mb-2">
+                      [COMING SOON] Adapters. EzBackend comes batteries included
+                      with adapters to manage realtime updates with socket.io
+                      and other operations that require action on all EzBackend
+                      instances
+                    </li>
                   </ol>
-                  <p className='text-xl'>Caveats:</p>
-                  <ol type='1'>
-                    <li className='mb-2'>Write operations. There are currently no plans for EzBackend to scale for write operations, but research is being done to scale postgres writes with cross-region database sharding and writeback caching wrappers</li>
-                    <li className='mb-2'>Replication lag. When reads are performed to a replica at the same time a write to the main postgres instance occurs, the information read out may not be fully accurate. In scenarios where data accuracy is paramount, EzBackend reads can be configured to read from the main postgres instance instead.</li>
+                  <p className="text-xl">Caveats:</p>
+                  <ol type="1">
+                    <li className="mb-2">
+                      Write operations. There are currently no plans for
+                      EzBackend to scale for write operations, but research is
+                      being done to scale postgres writes with cross-region
+                      database sharding and writeback caching wrappers
+                    </li>
+                    <li className="mb-2">
+                      Replication lag. When reads are performed to a replica at
+                      the same time a write to the main postgres instance
+                      occurs, the information read out may not be fully
+                      accurate. In scenarios where data accuracy is paramount,
+                      EzBackend reads can be configured to read from the main
+                      postgres instance instead.
+                    </li>
                   </ol>
                 </AccordionPanel>
               </Accordion>
-
             </div>
 
             {/* <div className='col-span-full'>
@@ -294,74 +346,77 @@ export default function Home() {
               </div>
             </div> */}
 
-            <div className='col-span-full grid place-items-center'>
-              <div className='font-monts font-bold text-2xl mb-12'>
+            <div className="col-span-full grid place-items-center">
+              <div className="font-monts font-bold text-2xl mb-12">
                 Join Our Community
               </div>
-              <div className='flex flex-wrap mx-4 sm:mx-0 justify-center gap-8'>
-                <a href='https://discord.gg/RwgdruFJHc' target='_blank'>
-                  <IconDiscord className='animate-wiggle' />
+              <div className="flex flex-wrap mx-4 sm:mx-0 justify-center gap-8">
+                <a href="https://discord.gg/RwgdruFJHc" target="_blank">
+                  <IconDiscord className="animate-wiggle" />
                 </a>
-                <a href='https://github.com/kapydev/ezbackend' target='_blank'>
-                  <IconGithub className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
+                <a href="https://github.com/kapydev/ezbackend" target="_blank">
+                  <IconGithub className="transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
                 </a>
-                <a href='https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ' target='_blank'>
-                  <IconYoutube className='transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110' />
+                <a
+                  href="https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ"
+                  target="_blank"
+                >
+                  <IconYoutube className="transition duration-250 ease-in-out transform hover:-translate-y-1 hover:scale-110" />
                 </a>
               </div>
             </div>
 
-            <div className='col-span-full flex justify-center align-middle'>
-              <div className='p-10 rounded-lg grid gap-6 bg-dracula'>
-                <div className='font-monts text-2xl text-center font-bold'>
+            <div className="col-span-full flex justify-center align-middle">
+              <div className="p-10 rounded-lg grid gap-6 bg-dracula">
+                <div className="font-monts text-2xl text-center font-bold">
                   Be an Early Adopter
                 </div>
-                <div className='font-monts text-md text-center max-w-lg'>
-                  Claim <span className='font-bold'>100USD</span> Hosting Credits when you sign up for our <span className='text-purple'>Alpha</span> programme today!
+                <div className="font-monts text-md text-center max-w-lg">
+                  Claim <span className="font-bold">100USD</span> Hosting
+                  Credits when you sign up for our{" "}
+                  <span className="text-purple">Alpha</span> programme today!
                 </div>
                 <form>
                   <input
-                    onChange={e => setSignUpEmail(e.target.value)}
-                    className='border-0 font-monts rounded-lg text-lg p-2 font-semibold w-full'
+                    onChange={(e) => setSignUpEmail(e.target.value)}
+                    className="border-0 font-monts rounded-lg text-lg p-2 font-semibold w-full"
                     type="text"
                     id="submitSignUps"
                     value={signUpEmail}
-                    placeholder='Email'
-                    name="email" />
+                    placeholder="Email"
+                    name="email"
+                  />
                 </form>
-                <CtaButton islink={false} onClick={(e) => {
-                  if (!validator.isEmail(signUpEmail)) {
-                    toast.error("Please fill in your email")
-                  } else {
-                    toast.promise(
-                      handleSubmit(e),
-                      {
-                        loading: 'Waiting for Heroku...',
+                <CtaButton
+                  islink={false}
+                  onClick={(e) => {
+                    if (!validator.isEmail(signUpEmail)) {
+                      toast.error("Please fill in your email");
+                    } else {
+                      toast.promise(handleSubmit(e), {
+                        loading: "Waiting for Heroku...",
                         success: <b>Submitted</b>,
                         error: <b>Server Error! We are working on it!</b>,
-                      }
-                    );
-                  }
-                }}>
-                  <div className='text-sm'>
-                    SIGN UP
-                  </div>
+                      });
+                    }
+                  }}
+                >
+                  <div className="text-sm">SIGN UP</div>
                 </CtaButton>
-                {fomoVisible ?
+                {fomoVisible ? (
                   <FadeIn>
-                    <div className='font-monts text-center text-gray-200'>
-                      Join <span className='font-semibold text-2xl'>{signUpCount}</span> Users in Alpha
+                    <div className="font-monts text-center text-gray-200">
+                      Join{" "}
+                      <span className="font-semibold text-2xl">
+                        {signUpCount}
+                      </span>{" "}
+                      Users in Alpha
                     </div>
                   </FadeIn>
-                  :
-                  null
-                }
+                ) : null}
               </div>
             </div>
-
-
           </div>
-
         </div>
       </div>
 
@@ -369,24 +424,25 @@ export default function Home() {
       <br />
       <br />
       <br />
-
-    </Layout >
+    </Layout>
   );
 }
 
 // UTILITIES
 
-const codeText1 = "const app = new EzBackend()"
+const codeText1 = "const app = new EzBackend()";
 const codeText2 = `const pets = new EzModel('Pets', {
   name: Type.VARCHAR,
   species: Type.VARCHAR,
   age: Type.INT
-})`
-const codeText3 = `app.addApp("pets", pets, { prefix: "pets" })`
-const codeText4 = `app.start()`
+})`;
+const codeText3 = `app.addApp("pets", pets, { prefix: "pets" })`;
+const codeText4 = `app.start()`;
 
 function Txty(props) {
   return (
-    <span className='font-semibold' style={{ color: '#BD93F9' }}>{props.children}</span>
-  )
+    <span className="font-semibold" style={{ color: "#BD93F9" }}>
+      {props.children}
+    </span>
+  );
 }

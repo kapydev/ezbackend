@@ -1,1 +1,1 @@
-export * from './typeorm-json-schema'
+export * from "./typeorm-json-schema";
