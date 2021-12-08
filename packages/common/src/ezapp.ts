@@ -2,9 +2,9 @@ import { App, PluginScope } from "@ezbackend/core"
 import { EzBackendInstance, EzBackendOpts } from "."
 import { EzError, OverloadParameters, OverloadParameters1to5, OverloadParameters23 } from '@ezbackend/utils'
 import { FastifyInstance, FastifyRegister } from "fastify"
-
 import { Plugin } from 'avvio'
 import dedent from 'dedent-js'
+import type { Namespace } from "socket.io"
 import fp from 'fastify-plugin'
 import { merge } from "lodash"
 
@@ -24,6 +24,8 @@ function generateFastifyFuncWrapper<Params extends Array<unknown>>(
         )
     }
 }
+
+
 
 //TODO: Add types based on fastify instance
 //TODO: Tests for all stubbing performed
@@ -53,7 +55,6 @@ function createServer(parent: EzApp) {
         register: generateFastifyFuncWrapper<any>(parent, 'register') as FastifyRegister,
         setNotFoundHandler: generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['setNotFoundHandler']>>(parent, 'setNotFoundHandler'),
         setErrorHandler: generateFastifyFuncWrapper<OverloadParameters1to5<FastifyInstance['setErrorHandler']>>(parent, 'setErrorHandler'),
-
     }
 }
 
@@ -67,6 +68,8 @@ export class EzApp extends App {
 
     protected _functions: Array<Function> = []
     protected _defaultOpts: EzBackendOpts[keyof EzBackendOpts] | undefined
+    protected _socketIOfunctions: Array<Function> = []
+    private localInstance: EzBackendInstance | undefined
 
     get functions() { return this._functions }
 
@@ -76,10 +79,10 @@ export class EzApp extends App {
 
     getOpts<LocalOptsKey extends keyof EzBackendOpts>(
         optsPrefix: LocalOptsKey,
-        fullOpts: EzBackendOpts) : EzBackendOpts[LocalOptsKey] {
+        fullOpts: EzBackendOpts): EzBackendOpts[LocalOptsKey] {
 
         if (fullOpts[optsPrefix]) {
-            return merge(this._defaultOpts,fullOpts[optsPrefix])
+            return merge(this._defaultOpts, fullOpts[optsPrefix])
         }
 
         if (this._defaultOpts) {
@@ -87,8 +90,8 @@ export class EzApp extends App {
         }
 
         throw new EzError("Default opts have not been defined!",
-        "The plugin developer needs to set default opts with setDefaultOpts",
-        dedent`
+            "The plugin developer needs to set default opts with setDefaultOpts",
+            dedent`
         Instructions for plugin development (Sample plugin called EzPlugin):
 
         Extend the typescript type
@@ -113,6 +116,7 @@ export class EzApp extends App {
         )
     }
 
+
     /**
      * Creates a fastify instance
      */
@@ -120,6 +124,10 @@ export class EzApp extends App {
         super()
         this.setHandler("Create Server Stub", async (instance, opts) => {
             instance.server = createServer(this)
+            this.localInstance = instance
+        })
+        this.setHandler("Run all SocketIO Functions", async () => {
+            this._socketIOfunctions.forEach(func => func())
         })
         this.setPostHandler("Remove Server Stub", async (instance, opts) => {
             //URGENT TODO: Make sure that error message when trying to get decorators that are not present is clear
@@ -162,6 +170,72 @@ export class EzApp extends App {
     setPreRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPreRun(funcName, plugin) }
     setRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setRun(funcName, plugin) }
     setPostRun = (funcName: string, plugin: Plugin<EzBackendOpts, EzBackendInstance>) => { super.setPostRun(funcName, plugin) }
+
+    private buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
+        if (!pluginPrefix) {
+            return instancePrefix
+        }
+
+        // Ensure that there is a '/' between the prefixes
+        if (instancePrefix.endsWith('/') && pluginPrefix[0] === '/') {
+            // Remove the extra '/' to avoid: '/first//second'
+            pluginPrefix = pluginPrefix.slice(1)
+        } else if (pluginPrefix[0] !== '/') {
+            pluginPrefix = '/' + pluginPrefix
+        }
+
+        return instancePrefix + pluginPrefix
+    }
+
+
+    getPrefix(): string {
+        if (!this.parent) {
+            return ''
+        }
+        if (this.parent instanceof EzApp) {
+            return this.buildRoutePrefix(this.parent.getPrefix(), this.opts.prefix ?? '')
+        }
+        throw "Parent app of an EzApp needs to be instance of EzApp"
+    }
+
+    private getSocketIOByNamespace(namespace?: string) {
+        if (!this.localInstance) throw "Accessing socket IO too early in boot cycle. Try using useSocketIO/useSocketIORaw instead"
+        const io = this.localInstance.socketIO
+
+        if (namespace) return io.of(namespace)
+        else return io.of('/')
+    }
+
+    /**
+     * Get the Socket IO 'io' object WITH namespacing
+     */
+    getSocketIO() {
+        const prefix = this.getPrefix()
+        return this.getSocketIOByNamespace(prefix)
+    }
+
+    useSocketIO(func: (io: Namespace) => void) {
+        this._socketIOfunctions.push(
+            () => {
+                func(this.getSocketIO())
+            }
+        )
+    }
+
+    /**
+     * Get the Socket IO 'io' object WITHOUT namespacing
+     */
+    getSocketIORaw() {
+        return this.getSocketIOByNamespace()
+    }
+
+    useSocketIORaw(func: (io: Namespace) => void) {
+        this._socketIOfunctions.push(
+            () => {
+                func(this.getSocketIORaw())
+            }
+        )
+    }
 
     /**
      * Registers all fastify plugins to server instance of ezbackend application

@@ -4,11 +4,17 @@ import { EzError, ezWarning } from "@ezbackend/utils";
 import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 
 import { InjectOptions } from "light-my-request";
+import fp from 'fastify-plugin'
 import { PluginScope } from "@ezbackend/core";
 import _ from 'lodash'
 import dedent from 'dedent-js'
 import dotenv from 'dotenv'
-import fp from 'fastify-plugin'
+import { createModelSubscriber, createSocketIO, attachSocketIO } from "./realtime";
+import { fastifyRequestContextPlugin, requestContext } from "fastify-request-context";
+import { socketContext } from "socket-io-event-context";
+import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
+import { Server } from "socket.io"
+import path from 'path'
 
 export interface EzBackendInstance {
     entities: Array<EntitySchema>
@@ -16,10 +22,13 @@ export interface EzBackendInstance {
     _server: FastifyInstance
     repo: Repository<ObjectLiteral>
     orm: Connection
+    //TODO: Find correct type for subscriber
+    subscribers: Array<Function>
+    socketIO: Server
 }
 
 export type RecursivePartial<T> = {
-    [P in keyof T]? : RecursivePartial<T[P]>
+    [P in keyof T]?: RecursivePartial<T[P]>
 }
 
 export interface EzBackendOpts {
@@ -28,34 +37,34 @@ export interface EzBackendOpts {
      * use
      * {ezbackend: {listen: {address: 0.0.0.0}}}
      */
-     address: string
-     /**
-      * @deprecated Instead of {port: 8000}
-      * use
-      * {ezbackend: {listen: {port: 8000}}}
-      */
-     port: string | number
-     /**
-      * @deprecated Instead of {orm: ormOpts}
-      * use
-      * {ezbackend: {typeorm: ormOpts}}
-      */
-     orm: Parameters<typeof createConnection>[0]
-     /**
-      * @deprecated Instead of {server: serverOpts}
-      * use
-      * {ezbackend: {fastify: serverOpts}}
-      */
-     server: Parameters<typeof fastify>[0]
-     backend: {
-         listen: {
-             address: string | number
-             port: number | string
-             backlog?: number
-         },
-         fastify: Parameters<typeof fastify>[0],
-         typeorm: Parameters<typeof createConnection>[0]
-     }
+    address: string
+    /**
+     * @deprecated Instead of {port: 8000}
+     * use
+     * {ezbackend: {listen: {port: 8000}}}
+     */
+    port: string | number
+    /**
+     * @deprecated Instead of {orm: ormOpts}
+     * use
+     * {ezbackend: {typeorm: ormOpts}}
+     */
+    orm: Parameters<typeof createConnection>[0]
+    /**
+     * @deprecated Instead of {server: serverOpts}
+     * use
+     * {ezbackend: {fastify: serverOpts}}
+     */
+    server: Parameters<typeof fastify>[0]
+    backend: {
+        listen: {
+            address: string | number
+            port: number | string
+            backlog?: number
+        },
+        fastify: Parameters<typeof fastify>[0],
+        typeorm: Parameters<typeof createConnection>[0]
+    }
 }
 
 
@@ -108,8 +117,38 @@ const defaultConfig: EzBackendOpts['backend'] = {
         type: "better-sqlite3",
         database: "tmp/db.sqlite",
         synchronize: true
+    },
+    auth: {
+        secretKey: process.env.SECRET_KEY ?? undefined,
+        secretKeyPath: path.join(process.cwd(), 'secret-key'),
+        successRedirectURL: "http://localhost:8000/db-ui",
+        failureRedirectURL: "http://localhost:8000/db-ui",
+        google: {
+            googleClientId: process.env.GOOGLE_CLIENT_ID,
+            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            scope: ['profile'],
+        }
+    },
+    "socket.io": {
+        cors: {
+            origin: true,
+            credentials: true,
+            methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS']
+        }
     }
+    // cors: {
+    //     origin: (origin: string, cb: Function) => {
+    //         if (/localhost/.test(origin)) {
+    //             //  Request from localhost will pass
+    //             cb(null, true)
+    //             return
+    //         }
+    //         // Generate an error on other origins, disabling access
+    //         cb(new Error("Not allowed"))
+    //     }
+    // }
 }
+
 
 // Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
 // Kudos to him
@@ -152,6 +191,12 @@ export class EzBackend extends EzApp {
         this.setInit('Create Entities Container', async (instance, opts) => {
             instance.entities = []
         })
+
+        this.setInit('Manage Event Subscriptions', async (instance, opts) => {
+            instance.subscribers = []
+            instance.subscribers.push(createModelSubscriber(instance))
+        })
+
         this.setPostInit('Create Database Connection', async (instance, opts) => {
 
             const ormOpts = opts.orm ?? this.getOpts('backend', opts)?.typeorm!
@@ -161,6 +206,7 @@ export class EzBackend extends EzApp {
             }
 
             const optionEntities = ormOpts?.entities ? ormOpts.entities : []
+            const optionSubscribers = ormOpts?.subscribers ? ormOpts.subscribers : []
 
             instance.orm = await createConnection(
                 {
@@ -168,14 +214,23 @@ export class EzBackend extends EzApp {
                     entities: [
                         ...optionEntities,
                         ...instance.entities
+                    ],
+                    subscribers: [
+                        ...optionSubscribers,
+                        ...instance.subscribers
                     ]
                 }
             )
         })
 
+        this.setPreHandler('Add SocketIO', createSocketIO)
+
         this.setHandler('Add Fastify Boom', async (instance, opts) => {
             instance.server.register(fp(ezbErrorPage))
         })
+
+
+
         this.setHandler('Add Error Schema', addErrorSchema)
 
         this.setPostHandler('Create Fastify Server', async (instance, opts) => {
@@ -184,9 +239,32 @@ export class EzBackend extends EzApp {
             instance._server = fastify(fastifyOpts)
         })
 
+        this.setPostHandler('Attach Socket IO', attachSocketIO)
+
         this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
             this.registerFastifyPlugins(instance._server, this)
         })
+
+        this.setPostHandler('Add Request Context Plugin', async (instance, opts) => {
+            instance._server.register(fastifyRequestContextPlugin)
+        })
+
+        this.setPostHandler('Set Request Context For Global Access', async (instance, opts) => {
+            instance._server.addHook("onRequest", async (req, res) => {
+                requestContext.set("request", req)
+            })
+        })
+
+        this.setPostHandler('Set SocketIO Context for global access', async (instance, opts) => {
+            instance._server.addHook("onReady", async () => {
+                instance._server.io.use((socket, next) => {
+                    socketContext.set("request", socket.request)
+                    next()
+                })
+            })
+        })
+
+        this.setPostHandler("Add middleware to authenticate outgoing packets", outgoingPacketMiddleware)
 
         this.setRun('Run Fastify Server', async (instance, opts) => {
 
@@ -256,6 +334,12 @@ export class EzBackend extends EzApp {
     //URGENT TODO: Remove temporary any fix
     async start(opts?: RecursivePartial<EzBackendOpts>) {
         await super.start(opts)
+    }
+
+    async close() {
+        const instance = this.getInternalInstance()
+        await instance.orm.close()
+        await instance._server.close()
     }
 
 }

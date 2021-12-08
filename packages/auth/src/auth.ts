@@ -1,11 +1,14 @@
 import { EzApp, EzBackendOpts } from '@ezbackend/common'
 import fastifySecureSession, { SecureSessionPluginOptions } from 'fastify-secure-session'
 import fs, { PathLike } from 'fs'
-
+import fastifyPassport, { Authenticator } from 'fastify-passport'
+import 'fastify-cookie'
+import { logIn, logOut, isAuthenticated, isUnauthenticated } from 'fastify-passport/dist/decorators'
+import flash from 'connect-flash'
+import { AuthenticationRoute } from 'fastify-passport/dist/AuthenticationRoute'
 import { EzError } from '@ezbackend/utils'
 import { PluginScope } from '@ezbackend/core'
 import dedent from 'dedent-js'
-import fastifyPassport from 'fastify-passport'
 import path from 'path'
 
 export interface EzBackendAuthOpts {
@@ -86,6 +89,9 @@ function getKey(opts: EzBackendOpts['auth']) {
     return key
 }
 
+
+const wrap = (middleware: Function, opts: any = {}) => (socket: any, next: any) => middleware(socket.request, opts, next);
+
 //TODO: Make this of EzApp type instead
 export class EzAuth extends EzApp {
     constructor() {
@@ -109,6 +115,48 @@ export class EzAuth extends EzApp {
         this.setHandler("Add Fastify Passport", async (instance, opts) => {
             instance.server.register(fastifyPassport.initialize())
             instance.server.register(fastifyPassport.secureSession())
+
+            this.getSocketIORaw().use((socket,next) => {
+                if (socket.request.headers.cookie) {
+
+                    //TODO: Figure out why there are no parse cookie types
+                    //@ts-ignore
+                    const parsedCookie = instance._server.parseCookie(socket.request.headers.cookie)
+                    //@ts-ignore
+                    socket.request.session = instance._server.decodeSecureSession(parsedCookie.session)
+                }
+
+                // 
+                next()
+            })
+
+            function createInitializePluginForConnectMiddleware(passport: Authenticator) {
+                return ((req: any, res: any, next: any) => {
+                    flash()(req, res, () => {
+                        req['passport'] = passport
+                        req['logIn'] = logIn
+                        req['login'] = logIn
+                        req['logOut'] = logOut
+                        req['logout'] = logOut
+                        req['isAuthenticated'] = isAuthenticated
+                        req['isUnauthenticated'] = isUnauthenticated
+                        req[passport.userProperty] = null
+                        next()
+                    })
+                })
+            }
+
+            function createSecureSessionPluginForConnectMiddleware(passport: Authenticator) {
+                return ((req: any, res: any, next: any) => {
+                    req.log = {trace : () => {}}
+                    new AuthenticationRoute(passport, 'session', {}).handler(req, res).then(() => {
+                        next()
+                    })
+                })
+            }
+
+            this.getSocketIORaw().use(wrap(createInitializePluginForConnectMiddleware(fastifyPassport)))
+            this.getSocketIORaw().use(wrap(createSecureSessionPluginForConnectMiddleware(fastifyPassport)))
         })
 
         this.scope = PluginScope.PARENT

@@ -113,6 +113,8 @@ describe("DB UI Endpoints", () => {
         // expect(extendedPath.body).toMatch(dbUIpath.body)
         expect(extendedPath.headers.location).toBe('/db-ui')
     })
+
+    it.todo("Should be able to obtain values from db-ui endpoints even with EzRules enabled")
     it.todo("Should open to the same page when refreshed, instead of going back to DB-UI (This removes the need for redirecting)")
 
     it.todo("Should throw an error if the OpenAPI plugin is not installed")

@@ -8,7 +8,11 @@
     "access": "public"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.108",
+    "@swc/jest": "^0.2.5",
     "@types/node": "^16.10.2",
+    "esbuild": "^0.13.14",
+    "esbuild-jest": "^0.5.0",
     "lerna": "^4.0.0",
     "rimraf": "^3.0.2",
     "window-size": "^1.1.1"

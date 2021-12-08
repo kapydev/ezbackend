@@ -1,7 +1,7 @@
 import { ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import { EzApp } from "../../ezapp"
-import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-json-schema";
+import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-helpers";
 import { getDefaultGenerators } from "./default-generators"
 import { EzBackendOpts } from "../..";
 //TODO: Consider if we should remove the cyclic importing

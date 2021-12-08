@@ -1,11 +1,11 @@
 import { EzApp, EzBackendInstance, EzBackendOpts, convert, getDefaultGenerators } from '@ezbackend/common'
 import { FastifyInstance, RouteOptions } from 'fastify'
-
 import { PluginScope } from '@ezbackend/core'
 import chalk from 'chalk'
 import { ezWarning } from "@ezbackend/utils"
 import fastifyStatic from 'fastify-static'
 import path from 'path'
+import { ignoreRules } from '@ezbackend/common'
 
 //Kudos to fastify team for this function, that will be hippity hoppity copied
 /**
@@ -37,8 +37,15 @@ function getDbUIGenerators() {
     Object.entries(generators).forEach(([key, oldGenerator]) => {
         generators[key as GeneratorKey] = (repo, opts) => {
             const routeDetails = oldGenerator(repo, opts)
+            const oldHandler = routeDetails.handler as RouteOptions['handler']
+            //URGENT TODO: See if function invocation fails when read/writes are performed in prehandler
+            //URGENT TODO: Apply rule that old generator MUST be async(req,res) => {} format
             return {
                 ...routeDetails,
+                handler : async function (req,res) {
+                    ignoreRules()
+                    return oldHandler.bind(this)(req,res)
+                },
                 schema: {
                     ...routeDetails.schema,
                     summary: `Used internally by database UI`,
