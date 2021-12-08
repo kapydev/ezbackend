@@ -419,7 +419,6 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
   ├── Register Fastify Plugins 
   ├── Add Request Context Plugin 
   ├── Set Request Context For Global Access 
-  ├── Set SocketIO Context for global access 
   ├── Add middleware to authenticate outgoing packets 
   ├─┬ UnnamedApp1 
   │ ├── Remove Server Stub 
