@@ -6,8 +6,7 @@ import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
 import fp from 'fastify-plugin';
 import { fastifyRequestContextPlugin, requestContext } from "fastify-request-context";
 import { InjectOptions } from "light-my-request";
-import path from 'path';
-import { Server } from "socket.io";
+import { Server, ServerOptions } from "socket.io";
 import { Connection, createConnection, EntitySchema, ObjectLiteral, Repository } from "typeorm";
 import { REALTIME } from ".";
 import { EzApp, EzBackendServer } from "./ezapp";
@@ -64,6 +63,7 @@ export interface EzBackendOpts {
         fastify: Parameters<typeof fastify>[0],
         typeorm: Parameters<typeof createConnection>[0]
     }
+    ["socket.io"]: Partial<ServerOptions>
 }
 
 
@@ -117,17 +117,6 @@ const defaultConfig: EzBackendOpts['backend'] = {
         database: "tmp/db.sqlite",
         synchronize: true
     },
-    auth: {
-        secretKey: process.env.SECRET_KEY ?? undefined,
-        secretKeyPath: path.join(process.cwd(), 'secret-key'),
-        successRedirectURL: "http://localhost:8000/db-ui",
-        failureRedirectURL: "http://localhost:8000/db-ui",
-        google: {
-            googleClientId: process.env.GOOGLE_CLIENT_ID,
-            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            scope: ['profile'],
-        }
-    },
     "socket.io": {
         cors: {
             origin: true,
@@ -135,17 +124,6 @@ const defaultConfig: EzBackendOpts['backend'] = {
             methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS']
         }
     }
-    // cors: {
-    //     origin: (origin: string, cb: Function) => {
-    //         if (/localhost/.test(origin)) {
-    //             //  Request from localhost will pass
-    //             cb(null, true)
-    //             return
-    //         }
-    //         // Generate an error on other origins, disabling access
-    //         cb(new Error("Not allowed"))
-    //     }
-    // }
 }
 
 
