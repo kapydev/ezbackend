@@ -31,8 +31,8 @@
     "build": "node ./scripts/build-package.js",
     "test": "jest --runInBand",
     "prepare": "lerna run prepare",
-    "lint": "eslint --ignore-path .gitignore \"packages/**/*.+(ts|js|tsx)\"",
-    "format": "prettier --ignore-path .gitignore \"packages/**/*.+(ts|js|tsx)\" --write"
+    "lint": "eslint \"packages/**/*.+(ts|js|tsx)\"",
+    "format": "prettier \"packages/**/*.+(ts|js|tsx)\" --write"
   },
   "lint-staged": {
     "*.{js, ts, tsx, jsx}": [
