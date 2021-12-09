@@ -61,9 +61,9 @@ export interface EzBackendOpts {
             backlog?: number
         },
         fastify: Parameters<typeof fastify>[0],
-        typeorm: Parameters<typeof createConnection>[0]
+        typeorm: Parameters<typeof createConnection>[0],
+        ["socket.io"]: Partial<ServerOptions>
     }
-    ["socket.io"]: Partial<ServerOptions>
 }
 
 
@@ -117,12 +117,12 @@ const defaultConfig: EzBackendOpts['backend'] = {
         database: "tmp/db.sqlite",
         synchronize: true
     },
-    "socket.io": {
+    ['socket.io'] : {
         cors: {
             origin: true,
             credentials: true,
             methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS']
-        }
+          }
     }
 }
 
@@ -200,7 +200,7 @@ export class EzBackend extends EzApp {
             )
         })
 
-        this.setPreHandler('Add SocketIO', createSocketIO)
+        this.setPreHandler('Add SocketIO', createSocketIO(this))
 
         this.setHandler('Add Fastify Boom', async (instance, opts) => {
             instance.server.register(fp(ezbErrorPage))

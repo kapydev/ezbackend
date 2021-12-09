@@ -1,6 +1,6 @@
 import { Server } from "socket.io"
 import { socketContextPlugin } from "socket-io-event-context"
-import { EzBackendInstance } from '..'
+import { EzBackend, EzBackendInstance, EzBackendOpts } from '..'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -8,11 +8,19 @@ declare module 'fastify' {
   }
 }
 
-export const createSocketIO = async (instance: EzBackendInstance, opts: any) => {
-  const io = new Server(opts?.["socket.io"])
-  instance.socketIO = io
-  io.use(socketContextPlugin)
+export const createSocketIO = (ezbackend: EzBackend) => {
+  //Higher order function because we need a reference to the original ezbackend for the opts merging
+  return async (instance: EzBackendInstance, opts: any) => {
+
+    const socketIOopts = ezbackend.getOpts('backend', opts)["socket.io"]
+    const io = new Server(socketIOopts)
+    instance.socketIO = io
+
+    io.use(socketContextPlugin)
+
+  }
 }
+
 
 export const attachSocketIO = async (instance: EzBackendInstance, opts: any) => {
 
