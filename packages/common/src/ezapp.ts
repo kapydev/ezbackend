@@ -23,18 +23,18 @@ function generateFastifyFuncWrapper<Params extends Array<unknown>>(
 ) {
   return (...opts: Params) => {
     parent.functions.push(
-      //any has to be used here because of typescript recursion limit
+      // any has to be used here because of typescript recursion limit
       (server: FastifyInstance) => (server[funcName] as any)(...opts),
     );
   };
 }
 
-//TODO: Add types based on fastify instance
-//TODO: Tests for all stubbing performed
+// TODO: Add types based on fastify instance
+// TODO: Tests for all stubbing performed
 function createServer(parent: EzApp) {
   return {
-    //TODO: Figure out how to get types with overrides
-    //Routes
+    // TODO: Figure out how to get types with overrides
+    // Routes
     delete: generateFastifyFuncWrapper<
       OverloadParameters1to5<FastifyInstance["delete"]>
     >(parent, "delete"),
@@ -62,7 +62,7 @@ function createServer(parent: EzApp) {
     route: generateFastifyFuncWrapper<
       OverloadParameters1to5<FastifyInstance["route"]>
     >(parent, "route"),
-    //This one specifically uses the 23 overload parameters because otherwise the recursion is too deep for typescript to automatically detect the type
+    // This one specifically uses the 23 overload parameters because otherwise the recursion is too deep for typescript to automatically detect the type
     addHook: generateFastifyFuncWrapper<
       OverloadParameters23<FastifyInstance["addHook"]>
     >(parent, "addHook"),
@@ -87,7 +87,7 @@ function createServer(parent: EzApp) {
     inject: generateFastifyFuncWrapper<
       OverloadParameters<FastifyInstance["inject"]>
     >(parent, "inject"),
-    //TODO: Figure out why the type inference cannot handle async/callback styles
+    // TODO: Figure out why the type inference cannot handle async/callback styles
     register: generateFastifyFuncWrapper<any>(
       parent,
       "register",
@@ -176,74 +176,91 @@ export class EzApp extends App {
       this._socketIOfunctions.forEach((func) => func());
     });
     this.setPostHandler("Remove Server Stub", async (instance, opts) => {
-      //URGENT TODO: Make sure that error message when trying to get decorators that are not present is clear
-      //@ts-ignore
+      // URGENT TODO: Make sure that error message when trying to get decorators that are not present is clear
+      // @ts-ignore
       delete instance.server;
     });
   }
 
-  //Make routing with apps easy
-  //URGENT TODO: Should we do this within the handler to be part of the plugin tree?
+  // Make routing with apps easy
+  // URGENT TODO: Should we do this within the handler to be part of the plugin tree?
   delete = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["delete"]>
   >(this, "delete");
+
   get = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["get"]>
   >(this, "get");
+
   head = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["head"]>
   >(this, "head");
+
   patch = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["patch"]>
   >(this, "patch");
+
   post = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["post"]>
   >(this, "post");
+
   put = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["put"]>
   >(this, "put");
+
   options = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["options"]>
   >(this, "options");
+
   all = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["all"]>
   >(this, "all");
+
   route = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["route"]>
   >(this, "route");
+
   addHook = generateFastifyFuncWrapper<any>(
     this,
     "addHook",
   ) as FastifyInstance["addHook"];
+
   addSchema = generateFastifyFuncWrapper<
     OverloadParameters<FastifyInstance["addSchema"]>
   >(this, "addSchema");
+
   setSerializerCompiler = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["setSerializerCompiler"]>
   >(this, "setSerializerCompiler");
+
   addContentTypeParser = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["addContentTypeParser"]>
   >(this, "addContentTypeParser");
+
   decorate = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["decorate"]>
   >(this, "decorate");
+
   decorateReply = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["decorateReply"]>
   >(this, "decorateReply");
+
   decorateRequest = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["decorateRequest"]>
   >(this, "decorateRequest");
 
   register = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["register"]>
-  >(this, "register"); //TODO: Why is the async one not working?
+  >(this, "register"); // TODO: Why is the async one not working?
+
   setNotFoundHandler = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["setNotFoundHandler"]>
   >(this, "setNotFoundHandler");
+
   setErrorHandler = generateFastifyFuncWrapper<
     OverloadParameters1to5<FastifyInstance["setErrorHandler"]>
   >(this, "setErrorHandler");
-  //NOTE: Inject is being used by EzBackend which is why we remove it
+  // NOTE: Inject is being used by EzBackend which is why we remove it
   // inject = generateFastifyFuncWrapper(this, 'inject')
 
   setPreInit = (
@@ -252,48 +269,56 @@ export class EzApp extends App {
   ) => {
     super.setPreInit(funcName, plugin);
   };
+
   setInit = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
   ) => {
     super.setInit(funcName, plugin);
   };
+
   setPostInit = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
   ) => {
     super.setPostInit(funcName, plugin);
   };
+
   setPreHandler = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
   ) => {
     super.setPreHandler(funcName, plugin);
   };
+
   setHandler = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
   ) => {
     super.setHandler(funcName, plugin);
   };
+
   setPostHandler = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
   ) => {
     super.setPostHandler(funcName, plugin);
   };
+
   setPreRun = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
   ) => {
     super.setPreRun(funcName, plugin);
   };
+
   setRun = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
   ) => {
     super.setRun(funcName, plugin);
   };
+
   setPostRun = (
     funcName: string,
     plugin: Plugin<EzBackendOpts, EzBackendInstance>,
@@ -390,7 +415,7 @@ export class EzApp extends App {
       });
     };
 
-    //TODO: Add test case that tests encapsulation requirements for plugins when parent.scope == PluginScope.PARENT
+    // TODO: Add test case that tests encapsulation requirements for plugins when parent.scope == PluginScope.PARENT
     const scopedChildFunc =
       parent.scope === PluginScope.PARENT ? fp(childFunc) : childFunc;
 

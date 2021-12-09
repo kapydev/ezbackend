@@ -1,173 +1,162 @@
-import { EzBackend, EzModel, Type, RuleType, EzBackendOpts } from "../../src"
+import { EzBackend, EzModel, Type, RuleType, EzBackendOpts } from "../../src";
 
 describe("All row level hooks should run as expected", () => {
+  let app: EzBackend;
+  let fakeUser: EzModel;
 
-    let app: EzBackend
-    let fakeUser: EzModel
+  const defaultConfig = {
+    backend: {
+      fastify: {
+        logger: false,
+      },
+      typeorm: {
+        database: ":memory:",
+      },
+    },
+  };
 
-    const defaultConfig = {
-        backend: {
-            fastify: {
-                logger: false
-            },
-            typeorm: {
-                database: ':memory:'
-            }
-        }
-    }
-
-
-    beforeEach(async () => {
-        app = new EzBackend()
-        fakeUser = new EzModel("FakeUser", {
-            name: Type.VARCHAR,
-            age: Type.INT
-        })
-
-        app.addApp(fakeUser, { prefix: "user" })
-        app.removeHook("_run", "Run Fastify Server")
-
-    })
-
-    afterEach(async () => {
-        const instance = app.getInternalInstance()
-        await instance.orm.close();
-        await instance._server.close();
+  beforeEach(async () => {
+    app = new EzBackend();
+    fakeUser = new EzModel("FakeUser", {
+      name: Type.VARCHAR,
+      age: Type.INT,
     });
-    test("Create Hook should trigger for http request", async () => {
 
-        let ruleRan = false
+    app.addApp(fakeUser, { prefix: "user" });
+    app.removeHook("_run", "Run Fastify Server");
+  });
 
-        fakeUser.rules.for(RuleType.CREATE).check((req, event) => {
-            ruleRan = true
-            expect(req?.method).toBe("POST")
-            expect(req?.url).toBe("/user")
-            expect(event.entity).toMatchObject({
-                id: 1,
-                age: 24,
-                name: "Robert",
-            })
-        })
+  afterEach(async () => {
+    const instance = app.getInternalInstance();
+    await instance.orm.close();
+    await instance._server.close();
+  });
+  test("Create Hook should trigger for http request", async () => {
+    let ruleRan = false;
 
-        await app.start(defaultConfig)
+    fakeUser.rules.for(RuleType.CREATE).check((req, event) => {
+      ruleRan = true;
+      expect(req?.method).toBe("POST");
+      expect(req?.url).toBe("/user");
+      expect(event.entity).toMatchObject({
+        id: 1,
+        age: 24,
+        name: "Robert",
+      });
+    });
 
-        await app.inject({
-            method: "POST",
-            url: "/user",
-            payload: {
-                name: "Robert",
-                age: 24
-            }
-        })
+    await app.start(defaultConfig);
 
-        expect(ruleRan).toBe(true)
+    await app.inject({
+      method: "POST",
+      url: "/user",
+      payload: {
+        name: "Robert",
+        age: 24,
+      },
+    });
 
-    })
-    test("Read Hook should trigger for http request", async () => {
+    expect(ruleRan).toBe(true);
+  });
+  test("Read Hook should trigger for http request", async () => {
+    let ruleRan = false;
 
-        let ruleRan = false
+    fakeUser.rules.for(RuleType.READ).check((req, event) => {
+      ruleRan = true;
+      expect(req?.method).toBe("GET");
+      expect(req?.url).toBe("/user");
+      expect(event.entity).toMatchObject({
+        id: 1,
+        age: 24,
+        name: "Robert",
+      });
+    });
 
-        fakeUser.rules.for(RuleType.READ).check((req, event) => {
-            ruleRan = true
-            expect(req?.method).toBe("GET")
-            expect(req?.url).toBe("/user")
-            expect(event.entity).toMatchObject({
-                id: 1,
-                age: 24,
-                name: "Robert",
-            })
-        })
+    await app.start(defaultConfig);
 
-        await app.start(defaultConfig)
+    await app.inject({
+      method: "POST",
+      url: "/user",
+      payload: {
+        name: "Robert",
+        age: 24,
+      },
+    });
 
-        await app.inject({
-            method: "POST",
-            url: "/user",
-            payload: {
-                name: "Robert",
-                age: 24
-            }
-        })
+    await app.inject({
+      method: "GET",
+      url: "/user",
+    });
 
-        await app.inject({
-            method: "GET",
-            url: "/user"
-        })
+    expect(ruleRan).toBe(true);
+  });
 
-        expect(ruleRan).toBe(true)
+  test("Update Hook should trigger for http request", async () => {
+    let ruleRan = false;
 
-    })
+    fakeUser.rules.for(RuleType.UPDATE).check((req, event) => {
+      ruleRan = true;
+      expect(req?.method).toBe("PATCH");
+      expect(req?.url).toBe("/user/1");
+      expect(event.entity).toMatchObject({
+        id: 1,
+        age: 24,
+        name: "Mary",
+      });
+    });
 
-    test("Update Hook should trigger for http request", async () => {
+    await app.start(defaultConfig);
 
-        let ruleRan = false
+    await app.inject({
+      method: "POST",
+      url: "/user",
+      payload: {
+        name: "Robert",
+        age: 24,
+      },
+    });
 
-        fakeUser.rules.for(RuleType.UPDATE).check((req, event) => {
-            ruleRan = true
-            expect(req?.method).toBe("PATCH")
-            expect(req?.url).toBe("/user/1")
-            expect(event.entity).toMatchObject({
-                id: 1,
-                age: 24,
-                name: "Mary",
-            })
-        })
+    await app.inject({
+      method: "PATCH",
+      url: "/user/1",
+      payload: {
+        name: "Mary",
+      },
+    });
 
-        await app.start(defaultConfig)
+    expect(ruleRan).toBe(true);
+  });
 
-        await app.inject({
-            method: "POST",
-            url: "/user",
-            payload: {
-                name: "Robert",
-                age: 24
-            }
-        })
+  test("Delete Hook should trigger for http request", async () => {
+    let ruleRan = false;
 
-        await app.inject({
-            method: "PATCH",
-            url: "/user/1",
-            payload: {
-                name: "Mary"
-            }
-        })
+    fakeUser.rules.for(RuleType.READ).check((req, event) => {
+      ruleRan = true;
+      expect(req?.method).toBe("DELETE");
+      expect(req?.url).toBe("/user/1");
+      expect(event.entity).toMatchObject({
+        id: 1,
+        age: 24,
+        name: "Robert",
+      });
+    });
 
-        expect(ruleRan).toBe(true)
+    await app.start(defaultConfig);
 
-    })
+    await app.inject({
+      method: "POST",
+      url: "/user",
+      payload: {
+        name: "Robert",
+        age: 24,
+      },
+    });
 
-    test("Delete Hook should trigger for http request", async () => {
+    await app.inject({
+      method: "DELETE",
+      url: "/user/1",
+    });
 
-        let ruleRan = false
-
-        fakeUser.rules.for(RuleType.READ).check((req, event) => {
-            ruleRan = true
-            expect(req?.method).toBe("DELETE")
-            expect(req?.url).toBe("/user/1")
-            expect(event.entity).toMatchObject({
-                id: 1,
-                age: 24,
-                name: "Robert",
-            })
-        })
-
-        await app.start(defaultConfig)
-
-        await app.inject({
-            method: "POST",
-            url: "/user",
-            payload: {
-                name: "Robert",
-                age: 24
-            }
-        })
-
-        await app.inject({
-            method: "DELETE",
-            url: "/user/1"
-        })
-
-        expect(ruleRan).toBe(true)
-
-    })
-})
+    expect(ruleRan).toBe(true);
+  });
+});

@@ -106,7 +106,7 @@ const wrap =
   (socket: any, next: any) =>
     middleware(socket.request, opts, next);
 
-//TODO: Make this of EzApp type instead
+// TODO: Make this of EzApp type instead
 export class EzAuth extends EzApp {
   constructor() {
     super();
@@ -140,12 +140,12 @@ export class EzAuth extends EzApp {
 
       this.getSocketIORaw().use((socket, next) => {
         if (socket.request.headers.cookie) {
-          //TODO: Figure out why there are no parse cookie types
-          //@ts-ignore
+          // TODO: Figure out why there are no parse cookie types
+          // @ts-ignore
           const parsedCookie = instance._server.parseCookie(
             socket.request.headers.cookie,
           );
-          //@ts-ignore
+          // @ts-ignore
           socket.request.session = instance._server.decodeSecureSession(
             parsedCookie.session,
           );
@@ -159,13 +159,13 @@ export class EzAuth extends EzApp {
       ) {
         return (req: any, res: any, next: any) => {
           flash()(req, res, () => {
-            req["passport"] = passport;
-            req["logIn"] = logIn;
-            req["login"] = logIn;
-            req["logOut"] = logOut;
-            req["logout"] = logOut;
-            req["isAuthenticated"] = isAuthenticated;
-            req["isUnauthenticated"] = isUnauthenticated;
+            req.passport = passport;
+            req.logIn = logIn;
+            req.login = logIn;
+            req.logOut = logOut;
+            req.logout = logOut;
+            req.isAuthenticated = isAuthenticated;
+            req.isUnauthenticated = isUnauthenticated;
             req[passport.userProperty] = null;
             next();
           });

@@ -12,12 +12,12 @@ const defaultConfig = {
   },
 };
 describe("Cors", () => {
-    let app: EzBackend
-    beforeAll(() => {
-        app = new EzBackend()
-        app.addApp(new EzCors())
-        app.removeHook('_run','Run Fastify Server')
-    })
+  let app: EzBackend;
+  beforeAll(() => {
+    app = new EzBackend();
+    app.addApp(new EzCors());
+    app.removeHook("_run", "Run Fastify Server");
+  });
 
   it("Should be able to be used as a plugin (Smoke test)", async () => {
     await app.start(defaultConfig);

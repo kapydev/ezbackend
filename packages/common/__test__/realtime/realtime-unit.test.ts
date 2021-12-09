@@ -1,66 +1,63 @@
-import { EzBackend, EzApp, Type, RuleType } from "../../src"
+import { EzBackend, EzApp, Type, RuleType } from "../../src";
 
 describe("Should be able to get io object", () => {
+  let app: EzBackend;
+  let child: EzApp;
+  let nestedChild: EzApp;
 
-    let app: EzBackend
-    let child: EzApp
-    let nestedChild: EzApp
+  beforeEach(() => {
+    app = new EzBackend();
+    child = new EzApp();
+    nestedChild = new EzApp();
 
-    beforeEach(() => {
-        app = new EzBackend()
-        child = new EzApp()
-        nestedChild = new EzApp()
+    app.addApp(child, { prefix: "child" });
+    child.addApp(nestedChild, { prefix: "nested-child" });
 
-        app.addApp(child, { prefix: "child" })
-        child.addApp(nestedChild,{prefix: "nested-child"})
+    app.removeHook("_run", "Run Fastify Server");
+  });
 
-        app.removeHook("_run","Run Fastify Server")
-    })
+  afterEach(async () => {
+    const instance = app.getInternalInstance();
+    await instance.orm.close();
+    await instance._server.close();
+  });
 
-    afterEach(async() => {
-        const instance=  app.getInternalInstance()
-        await instance.orm.close()
-        await instance._server.close()
-    })
+  test("Get with namespace", async () => {
+    let handlerRan = false;
 
-    test("Get with namespace", async () => {
+    nestedChild.setHandler("Check SocketIO", async (instance, opts) => {
+      handlerRan = true;
+      expect(nestedChild.getSocketIO().name).toBe("/child/nested-child");
+    });
 
-        let handlerRan = false
+    await app.start({
+      backend: {
+        fastify: {
+          logger: false,
+        },
+        typeorm: {
+          database: ":memory:",
+        },
+      },
+    });
 
-        nestedChild.setHandler("Check SocketIO", async (instance, opts) => {
-            handlerRan = true
-            expect(nestedChild.getSocketIO().name).toBe("/child/nested-child")
-        })
+    expect(handlerRan).toBe(true);
+  });
 
-        await app.start({
-            backend: {
-                fastify: {
-                    logger: false
-                },
-                typeorm: {
-                    database: ':memory:'
-                }
-            }
-        })
+  test("Get without namespace", async () => {
+    nestedChild.setHandler("Check SocketIO", async (instance, opts) => {
+      expect(nestedChild.getSocketIORaw().name).toBe("/");
+    });
 
-        expect(handlerRan).toBe(true)
-    })
-
-    test("Get without namespace", async () => {
-        nestedChild.setHandler("Check SocketIO", async (instance, opts) => {
-            expect(nestedChild.getSocketIORaw().name).toBe('/')
-        })
-
-        await app.start({
-            backend: {
-                fastify: {
-                    logger: false
-                },
-                typeorm: {
-                    database: ':memory:'
-                }
-            }
-        })
-
-    })
-})
+    await app.start({
+      backend: {
+        fastify: {
+          logger: false,
+        },
+        typeorm: {
+          database: ":memory:",
+        },
+      },
+    });
+  });
+});

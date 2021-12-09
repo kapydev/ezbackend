@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
-import ezb from "./test.index"
+import ezb from "./test.index";
 
 beforeAll(async () => {
   await ezb.start({

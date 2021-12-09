@@ -1,8 +1,13 @@
 import { getSchemaName } from "../typeorm-helpers";
-import Boom from '@hapi/boom'
-import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
+import Boom from "@hapi/boom";
+import {
+  DeepPartial,
+  EntityMetadata,
+  ObjectLiteral,
+  Repository,
+} from "typeorm";
 import { RouteOptions } from "fastify";
-import type { RouterOptions } from './ez-router'
+import type { RouterOptions } from "./ez-router";
 
 /**
  * Returns the primary column name from given metadata
@@ -240,20 +245,19 @@ export const getDefaultGenerators = () => {
                 success: {
                   type: "boolean",
                 },
+                // @ts-ignore
                 handler: async (req, res) => {
-                    //@ts-ignore
-                    const id = req.params[primaryCol]
-                    try {
-                        const result = await repo.findOneOrFail(id);
-                        await repo.remove(result);
-                    } catch (e) {
-                        res.status(404).send(e);
-                    }
-                    return {
-                        success: true,
-                        id: id,
-                    }
-
+                  const id = req.params[primaryCol];
+                  try {
+                    const result = await repo.findOneOrFail(id);
+                    await repo.remove(result);
+                  } catch (e) {
+                    res.status(404).send(e);
+                  }
+                  return {
+                    success: true,
+                    id: id,
+                  };
                 },
               },
               required: ["success", "id"],

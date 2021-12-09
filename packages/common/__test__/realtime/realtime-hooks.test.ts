@@ -1,130 +1,121 @@
-import clientIO, { Socket as ClientSocket } from "socket.io-client"
-import { EzBackend, EzModel, RuleType, Type } from "../../src"
+import clientIO, { Socket as ClientSocket } from "socket.io-client";
+import { EzBackend, EzModel, RuleType, Type } from "../../src";
 
 function connectAsync(socket: ClientSocket) {
-    return new Promise((resolve, reject) => {
-        socket.connect()
-        socket.once("connect", () => {
-            resolve(socket)
-        })
-        socket.once('connect_error', function () {
-            reject(new Error('connect_error'));
-        });
-        socket.once('connect_timeout', function () {
-            reject(new Error('connect_timeout'));
-        });
-
-    })
+  return new Promise((resolve, reject) => {
+    socket.connect();
+    socket.once("connect", () => {
+      resolve(socket);
+    });
+    socket.once("connect_error", function () {
+      reject(new Error("connect_error"));
+    });
+    socket.once("connect_timeout", function () {
+      reject(new Error("connect_timeout"));
+    });
+  });
 }
 
-
 describe("All realtime listeners should run as expected", () => {
+  let app: EzBackend;
+  let fakeUser: EzModel;
+  let clientSocket: ClientSocket;
+  let clientSocket2: ClientSocket;
 
-    let app: EzBackend
-    let fakeUser: EzModel
-    let clientSocket: ClientSocket
-    let clientSocket2: ClientSocket
+  const PORT = 8002;
 
-    const PORT = 8002
-
-    beforeEach(async () => {
-
-        app = new EzBackend()
-        fakeUser = new EzModel("FakeUser", {
-            name: Type.VARCHAR,
-            age: Type.INT
-        })
-
-        app.addApp(fakeUser, { prefix: "user" })
-
-
-    })
-
-    afterEach(async () => {
-        clientSocket.close()
-        clientSocket2.close()
-        const instance = app.getInternalInstance()
-        await instance.orm.close();
-        await instance._server.close();
+  beforeEach(async () => {
+    app = new EzBackend();
+    fakeUser = new EzModel("FakeUser", {
+      name: Type.VARCHAR,
+      age: Type.INT,
     });
 
-    test("Should be able to receive create events", async () => {
-        await app.start({
-            backend: {
-                fastify: {
-                    logger: false
-                },
-                typeorm: {
-                    database: ':memory:'
-                },
-                listen: {
-                    port: PORT
-                }
-            }
-        })
+    app.addApp(fakeUser, { prefix: "user" });
+  });
 
-        clientSocket = clientIO(`http://localhost:${PORT}`, {
-            reconnectionDelay: 0,
-            forceNew: true,
-            transports: ['websocket'],
-        })
+  afterEach(async () => {
+    clientSocket.close();
+    clientSocket2.close();
+    const instance = app.getInternalInstance();
+    await instance.orm.close();
+    await instance._server.close();
+  });
 
-        clientSocket2 = clientIO(`http://localhost:${PORT}`, {
-            reconnectionDelay: 0,
-            forceNew: true,
-            transports: ['websocket'],
-            extraHeaders: {
-                "block-me": "true"
-            }
-        })
+  test("Should be able to receive create events", async () => {
+    await app.start({
+      backend: {
+        fastify: {
+          logger: false,
+        },
+        typeorm: {
+          database: ":memory:",
+        },
+        listen: {
+          port: PORT,
+        },
+      },
+    });
 
-        await connectAsync(clientSocket)
-        await connectAsync(clientSocket2)
+    clientSocket = clientIO(`http://localhost:${PORT}`, {
+      reconnectionDelay: 0,
+      forceNew: true,
+      transports: ["websocket"],
+    });
 
-        const userPayload = {
-            name: "Thomas",
-            age: 23
-        }
+    clientSocket2 = clientIO(`http://localhost:${PORT}`, {
+      reconnectionDelay: 0,
+      forceNew: true,
+      transports: ["websocket"],
+      extraHeaders: {
+        "block-me": "true",
+      },
+    });
 
-        let blockMeHit = false
+    await connectAsync(clientSocket);
+    await connectAsync(clientSocket2);
 
-        fakeUser.rules.for(RuleType.READ).check((req, event) => {
-            if (req?.headers["block-me"] === "true") {
-                blockMeHit = true
-                throw new Error("User is blocked based on request")
-            }
-        })
+    const userPayload = {
+      name: "Thomas",
+      age: 23,
+    };
 
-        const doneFlag = new Promise<void>(
-            (resolve, reject) => {
-                clientSocket.on("entity_created", (modelName: string, entity: any) => {
-                    expect(modelName).toBe("FakeUser")
-                    expect(entity).toMatchObject(userPayload)
-                    setImmediate(() => {
-                        //Give the other listener an event loop to possibly receive an event and throw an error
-                        resolve()
-                    })
-                })
+    let blockMeHit = false;
 
-                clientSocket2.on("entity_created", (modelName: string, entity: any) => {
-                    reject(new Error("This socket should not receive the event"))
-                })
+    fakeUser.rules.for(RuleType.READ).check((req, event) => {
+      if (req?.headers["block-me"] === "true") {
+        blockMeHit = true;
+        throw new Error("User is blocked based on request");
+      }
+    });
 
-            }
-        )
+    const doneFlag = new Promise<void>((resolve, reject) => {
+      clientSocket.on("entity_created", (modelName: string, entity: any) => {
+        expect(modelName).toBe("FakeUser");
+        expect(entity).toMatchObject(userPayload);
+        setImmediate(() => {
+          // Give the other listener an event loop to possibly receive an event and throw an error
+          resolve();
+        });
+      });
 
-        await app.inject({
-            method: 'POST',
-            url: '/user',
-            payload: userPayload
-        })
+      clientSocket2.on("entity_created", (modelName: string, entity: any) => {
+        reject(new Error("This socket should not receive the event"));
+      });
+    });
 
-        await doneFlag
+    await app.inject({
+      method: "POST",
+      url: "/user",
+      payload: userPayload,
+    });
 
-        expect(blockMeHit).toBe(true)
-    })
+    await doneFlag;
 
-    test.todo("Confirm that the socket request hooks library does not clash namespace with normal usage of als")
+    expect(blockMeHit).toBe(true);
+  });
 
-
-})
+  test.todo(
+    "Confirm that the socket request hooks library does not clash namespace with normal usage of als",
+  );
+});

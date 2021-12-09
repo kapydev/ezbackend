@@ -77,44 +77,43 @@ afterEach(async () => {
 });
 
 describe("DB UI Endpoints", () => {
-    it("Should run even with nested instances", async () => {
-    })
-    it("Should generate the OpenAPI spec at /docs/json", async () => {
+  it("Should run even with nested instances", async () => {});
+  it("Should generate the OpenAPI spec at /docs/json", async () => {
+    const result = await app.inject({
+      method: "GET",
+      url: "/docs/json",
+    });
 
-        const result = await app.inject({
-            method: "GET",
-            url: "/docs/json"
-        })
+    expect(result.statusCode).toBe(200);
+  });
 
-        expect(result.statusCode).toBe(200)
-    })
+  // TODO: Figure out why this runs differently on github actions
+  it.skip("Should render the DB-UI", async () => {
+    const result = await app.inject({
+      method: "GET",
+      url: "/db-ui/",
+    });
 
-    //TODO: Figure out why this runs differently on github actions
-    it.skip("Should render the DB-UI", async () => {
+    expect(result.statusCode).toBe(200);
+  });
 
-        const result = await app.inject({
-            method: "GET",
-            url: "/db-ui/"
-        })
+  it("Should redirect to DB-UI when visiting an extended path", async () => {
+    const extendedPath = await app.inject({
+      method: "GET",
+      url: "/db-ui/api-documentation",
+    });
 
-        expect(result.statusCode).toBe(200)
-    })
+    expect(extendedPath.statusCode).toBe(302);
+    // expect(extendedPath.body).toMatch(dbUIpath.body)
+    expect(extendedPath.headers.location).toBe("/db-ui");
+  });
 
-    it("Should redirect to DB-UI when visiting an extended path", async() => {
+  it.todo(
+    "Should be able to obtain values from db-ui endpoints even with EzRules enabled",
+  );
+  it.todo(
+    "Should open to the same page when refreshed, instead of going back to DB-UI (This removes the need for redirecting)",
+  );
 
-        const extendedPath = await app.inject({
-            method: "GET",
-            url: "/db-ui/api-documentation"
-        })
-
-        expect(extendedPath.statusCode).toBe(302)
-        // expect(extendedPath.body).toMatch(dbUIpath.body)
-        expect(extendedPath.headers.location).toBe('/db-ui')
-    })
-
-    it.todo("Should be able to obtain values from db-ui endpoints even with EzRules enabled")
-    it.todo("Should open to the same page when refreshed, instead of going back to DB-UI (This removes the need for redirecting)")
-
-    it.todo("Should throw an error if the OpenAPI plugin is not installed")
-
-})
+  it.todo("Should throw an error if the OpenAPI plugin is not installed");
+});

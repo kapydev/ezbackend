@@ -2,11 +2,14 @@ import { RouteOptions } from "fastify";
 import { ObjectLiteral, Repository } from "typeorm";
 import { EzBackendOpts } from "../..";
 import { EzApp } from "../../ezapp";
-//TODO: Consider if we should remove the cyclic importing
-import type { EzBackendInstance } from '../../ezbackend';
-import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-helpers";
+// TODO: Consider if we should remove the cyclic importing
+import type { EzBackendInstance } from "../../ezbackend";
+import {
+  getCreateSchema,
+  getFullSchema,
+  getUpdateSchema,
+} from "../typeorm-helpers";
 import { getDefaultGenerators } from "./default-generators";
-
 
 export interface RouterOptions {
   schemaPrefix?: string;

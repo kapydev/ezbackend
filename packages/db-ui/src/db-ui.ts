@@ -1,24 +1,12 @@
-<<<<<<< HEAD
-import { EzApp, EzBackendInstance, EzBackendOpts, convert, getDefaultGenerators } from '@ezbackend/common'
-import { FastifyInstance, RouteOptions } from 'fastify'
-import { PluginScope } from '@ezbackend/core'
-import chalk from 'chalk'
-import { ezWarning } from "@ezbackend/utils"
-import fastifyStatic from 'fastify-static'
-import path from 'path'
-import { ignoreRules } from '@ezbackend/common'
-
-//Kudos to fastify team for this function, that will be hippity hoppity copied
-=======
 import {
   EzApp,
   EzBackendInstance,
   EzBackendOpts,
   convert,
   getDefaultGenerators,
+  ignoreRules,
 } from "@ezbackend/common";
 import { FastifyInstance, RouteOptions } from "fastify";
-
 import { PluginScope } from "@ezbackend/core";
 import chalk from "chalk";
 import { ezWarning } from "@ezbackend/utils";
@@ -26,7 +14,6 @@ import fastifyStatic from "fastify-static";
 import path from "path";
 
 // Kudos to fastify team for this function, that will be hippity hoppity copied
->>>>>>> test
 /**
  * Use this for building route prefixes.
  * Pass in the instance and plugin prefix to generate a proper route prefix.
@@ -51,39 +38,20 @@ export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
 }
 
 function getDbUIGenerators() {
-<<<<<<< HEAD
-    const generators = getDefaultGenerators()
-    type GeneratorKey = keyof typeof generators
-    Object.entries(generators).forEach(([key, oldGenerator]) => {
-        generators[key as GeneratorKey] = (repo, opts) => {
-            const routeDetails = oldGenerator(repo, opts)
-            const oldHandler = routeDetails.handler as RouteOptions['handler']
-            //URGENT TODO: See if function invocation fails when read/writes are performed in prehandler
-            //URGENT TODO: Apply rule that old generator MUST be async(req,res) => {} format
-            return {
-                ...routeDetails,
-                handler : async function (req,res) {
-                    ignoreRules()
-                    return oldHandler.bind(this)(req,res)
-                },
-                schema: {
-                    ...routeDetails.schema,
-                    summary: `Used internally by database UI`,
-                    tags: ['db-ui'],
-                    hide: true
-                }
-            }
-        }
-    })
-    return generators
-=======
   const generators = getDefaultGenerators();
   type GeneratorKey = keyof typeof generators;
   Object.entries(generators).forEach(([key, oldGenerator]) => {
     generators[key as GeneratorKey] = (repo, opts) => {
       const routeDetails = oldGenerator(repo, opts);
+      const oldHandler = routeDetails.handler as RouteOptions["handler"];
+      // URGENT TODO: See if function invocation fails when read/writes are performed in prehandler
+      // URGENT TODO: Apply rule that old generator MUST be async(req,res) => {} format
       return {
         ...routeDetails,
+        handler: async function (req, res) {
+          ignoreRules();
+          return oldHandler.bind(this)(req, res);
+        },
         schema: {
           ...routeDetails.schema,
           summary: `Used internally by database UI`,
@@ -94,7 +62,6 @@ function getDbUIGenerators() {
     };
   });
   return generators;
->>>>>>> test
 }
 
 async function addDBSchemas(instance: EzBackendInstance, opts: EzBackendOpts) {
