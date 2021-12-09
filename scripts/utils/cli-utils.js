@@ -1,23 +1,24 @@
-/* eslint-disable global-require, no-octal-escape */
-const childProcess = require('child_process');
+const childProcess = require("child_process");
 
 const logger = console;
 
-//TODO: Figure out why this is not installing the dependencies
+// TODO: Figure out why this is not installing the dependencies
 const checkDependenciesAndRun = (run) => {
   let cooldown = 0;
   try {
-    require('prompts');
-    require('commander');
-    require('chalk');
-    require('npmlog');
+    require("prompts");
+    require("commander");
+    require("chalk");
+    require("npmlog");
   } catch (e) {
-    logger.log('🕘 running build on a clean repo, we have to install dependencies');
-    childProcess.spawnSync('yarn', ['install', '--ignore-optional'], {
-      stdio: ['inherit', 'inherit', 'inherit'],
+    logger.log(
+      "🕘 running build on a clean repo, we have to install dependencies",
+    );
+    childProcess.spawnSync("yarn", ["install", "--ignore-optional"], {
+      stdio: ["inherit", "inherit", "inherit"],
     });
-    process.stdout.write('\x07');
-    process.stdout.write('\033c');
+    process.stdout.write("\x07");
+    process.stdout.write("\033c");
 
     // give the filesystem some time
     cooldown = 1000;
@@ -29,7 +30,7 @@ const checkDependenciesAndRun = (run) => {
 const spawn = (command, options = {}) => {
   const out = childProcess.spawnSync(`${command}`, {
     shell: true,
-    stdio: 'inherit',
+    stdio: "inherit",
     ...options,
   });
 

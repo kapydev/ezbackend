@@ -1,6 +1,4 @@
-export {
-    EzBackend,
-} from './ezbackend'
+export { EzBackend } from "./ezbackend";
 export type {
     EzBackendInstance,
     EzBackendOpts,

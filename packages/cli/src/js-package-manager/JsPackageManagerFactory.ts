@@ -1,6 +1,6 @@
 import { sync as spawnSync } from "cross-spawn";
 import { sync as findUpSync } from "find-up";
-//TODO: Figure out why all the other packages can compile without js
+// TODO: Figure out why all the other packages can compile without js
 import { Yarn1Proxy } from "./Yarn1Proxy";
 import { Yarn2Proxy } from "./Yarn2Proxy";
 import { NPMProxy } from "./NPMProxy";
@@ -13,7 +13,7 @@ export class JsPackageManagerFactory {
 
     const hasNPMCommand = hasNPM();
 
-    //TODO: Add in support for Yarn 2 and npm. Refer to https://github.com/storybookjs/storybook/tree/next/lib/cli/src/js-package-manager
+    // TODO: Add in support for Yarn 2 and npm. Refer to https://github.com/storybookjs/storybook/tree/next/lib/cli/src/js-package-manager
     if (options.yarn || (yarnVersion && (hasYarnLockFile || !hasNPMCommand))) {
       return yarnVersion === 1 ? new Yarn1Proxy() : new Yarn2Proxy();
     }
@@ -23,7 +23,7 @@ export class JsPackageManagerFactory {
     }
 
     throw new Error(
-      "Unable to find a usable package manager within NPM, Yarn and Yarn 2"
+      "Unable to find a usable package manager within NPM, Yarn and Yarn 2",
     );
   }
 }

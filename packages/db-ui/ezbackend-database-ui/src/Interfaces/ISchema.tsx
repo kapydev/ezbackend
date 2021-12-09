@@ -1,14 +1,13 @@
 export default interface ISchema {
-    schemaName: string
-    properties: Object
-  }
+  schemaName: string;
+  properties: Object;
+}
 
-
-  // "properties": {
-  //   "name": {
-  //     "type": "string"
-  //   },
-  //   "id": {
-  //     "type": "number"
-  //   }
-  // }
+// "properties": {
+//   "name": {
+//     "type": "string"
+//   },
+//   "id": {
+//     "type": "number"
+//   }
+// }

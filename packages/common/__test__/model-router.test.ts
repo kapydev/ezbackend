@@ -1,59 +1,61 @@
-import { EzBackend, EzBackendOpts, EzModel, RecursivePartial, Type } from "../src";
+import {
+  EzBackend,
+  EzBackendOpts,
+  EzModel,
+  RecursivePartial,
+  Type,
+} from "../src";
 
 describe("Plugin Registering", () => {
-    let app: EzBackend
+  let app: EzBackend;
 
-    const defaultConfig: RecursivePartial<EzBackendOpts> = {
-        backend: {
-            fastify: {
-                logger: false
-            },
-            typeorm: {
-                database: ':memory:'
-            }
-        }
-    }
+  const defaultConfig: RecursivePartial<EzBackendOpts> = {
+    backend: {
+      fastify: {
+        logger: false,
+      },
+      typeorm: {
+        database: ":memory:",
+      },
+    },
+  };
 
-    beforeEach(() => {
-        app = new EzBackend()
+  beforeEach(() => {
+    app = new EzBackend();
 
-        //Prevent server from starting
-        app.removeHook("_run", "Run Fastify Server")
-    })
+    // Prevent server from starting
+    app.removeHook("_run", "Run Fastify Server");
+  });
 
-    afterEach(async () => {
-        const instance = app.getInternalInstance()
-        await instance.orm.close();
-        await instance._server.close();
+  afterEach(async () => {
+    const instance = app.getInternalInstance();
+    await instance.orm.close();
+    await instance._server.close();
+  });
+
+  it("router => for => hook syntax should work", async () => {
+    const mock1 = jest.fn();
+
+    const testModel = new EzModel("test", {
+      var1: Type.VARCHAR,
     });
 
-    it("router => for => hook syntax should work", async () => {
+    app.addApp("test", testModel, { prefix: "test" });
 
-        const mock1 = jest.fn()
+    testModel.router.for("createOne").preHandler(async (req, res) => {
+      mock1();
+    });
 
-        const testModel = new EzModel("test", {
-            var1: Type.VARCHAR
-        })
+    await app.start(defaultConfig);
 
-        app.addApp("test", testModel, { prefix: "test" })
+    await app.inject({
+      method: "POST",
+      url: "/test",
+      payload: {
+        var1: "hello world",
+      },
+    });
 
-        testModel.router.for('createOne').preHandler(async (req, res) => {
-            mock1()
-        })
-
-
-        await app.start(defaultConfig)
-
-        await app.inject({
-            method: "POST",
-            url: "/test",
-            payload: {
-                var1: "hello world"
-            }
-        })
-
-        expect(mock1.mock.calls.length).toBe(1)
-
-    })
-
-})
+    expect(mock1.mock.calls.length).toBe(1);
+  });
+});

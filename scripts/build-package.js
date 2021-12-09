@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-/* eslint-disable global-require */
-const { resolve } = require('path');
-const terminalSize = require('window-size');
-const { checkDependenciesAndRun, spawn } = require('./utils/cli-utils');
+const { resolve } = require("path");
+const terminalSize = require("window-size");
+const { checkDependenciesAndRun, spawn } = require("./utils/cli-utils");
 
 const getEzBackendPackages = () => {
   const listCommand = spawn(`lerna list`, {
-    stdio: 'pipe',
+    stdio: "pipe",
   });
 
   const packages = listCommand.output
@@ -19,21 +18,21 @@ const getEzBackendPackages = () => {
 };
 
 function run() {
-  const prompts = require('prompts');
-  const program = require('commander');
-  const chalk = require('chalk');
-  const log = require('npmlog');
+  const prompts = require("prompts");
+  const program = require("commander");
+  const chalk = require("chalk");
+  const log = require("npmlog");
 
-  log.heading = 'ezbackend';
-  const prefix = 'build';
-  log.addLevel('aborted', 3001, { fg: 'red', bold: true });
+  log.heading = "ezbackend";
+  const prefix = "build";
+  log.addLevel("aborted", 3001, { fg: "red", bold: true });
 
   const packages = getEzBackendPackages();
   const packageTasks = packages
     .map((package) => {
       return {
         name: package,
-        suffix: package.replace('@ezbackend/', ''),
+        suffix: package.replace("@ezbackend/", ""),
         defaultValue: false,
         helpText: `build only the ${package} package`,
       };
@@ -47,17 +46,21 @@ function run() {
     watch: {
       name: `watch`,
       defaultValue: false,
-      suffix: '--watch',
-      helpText: 'build on watch mode',
+      suffix: "--watch",
+      helpText: "build on watch mode",
     },
     ...packageTasks,
   };
 
-  const main = program.version('5.0.0').option('--all', `build everything ${chalk.gray('(all)')}`);
-
+  const main = program
+    .version("5.0.0")
+    .option("--all", `build everything ${chalk.gray("(all)")}`);
 
   Object.keys(tasks)
-    .reduce((acc, key) => acc.option(tasks[key].suffix, tasks[key].helpText), main)
+    .reduce(
+      (acc, key) => acc.option(tasks[key].suffix, tasks[key].helpText),
+      main,
+    )
     .parse(process.argv);
 
   Object.keys(tasks).forEach((key) => {
@@ -73,22 +76,20 @@ function run() {
       .map((key) => tasks[key].value)
       .filter(Boolean).length
   ) {
-
     selection = prompts([
       {
-        type: 'toggle',
-        name: 'mode',
-        message: 'Start in watch mode',
+        type: "toggle",
+        name: "mode",
+        message: "Start in watch mode",
         initial: false,
-        active: 'yes',
-        inactive: 'no',
+        active: "yes",
+        inactive: "no",
       },
       {
-        type: 'autocompleteMultiselect',
-        message: 'Select the packages to build',
-        name: 'todo',
-        hint:
-          'You can also run directly with package name like `yarn build core`, or `yarn build --all` for all packages!',
+        type: "autocompleteMultiselect",
+        message: "Select the packages to build",
+        name: "todo",
+        hint: "You can also run directly with package name like `yarn build core`, or `yarn build --all` for all packages!",
         optionsPerPage: terminalSize.height - 3, // 3 lines for extra info
         choices: packages.map((key) => ({
           value: key,
@@ -102,18 +103,18 @@ function run() {
     });
   } else {
     // hits here when running yarn build --packagename
-    watchMode = process.argv.includes('--watch');
+    watchMode = process.argv.includes("--watch");
     selection = Promise.resolve(
       Object.keys(tasks)
         .map((key) => tasks[key])
-        .filter((item) => item.name !== 'watch' && item.value === true)
+        .filter((item) => item.name !== "watch" && item.value === true),
     );
   }
 
   selection
     .then((list) => {
       if (list.length === 0) {
-        log.warn(prefix, 'Nothing to build!');
+        log.warn(prefix, "Nothing to build!");
       } else {
         const packageNames = list
           // filters out watch command if --watch is used
@@ -122,17 +123,15 @@ function run() {
 
         let glob =
           packageNames.length > 1
-            ? `@ezbackend/{${packageNames.join(',')}}`
+            ? `@ezbackend/{${packageNames.join(",")}}`
             : `@ezbackend/${packageNames[0]}`;
 
-
-
-        const isAllPackages = process.argv.includes('--all');
+        const isAllPackages = process.argv.includes("--all");
         if (isAllPackages) {
-          glob = '@ezbackend/*';
+          glob = "@ezbackend/*";
 
           log.warn(
-            'You are building a lot of packages on watch mode. This is an expensive action and might slow your computer down.\nIf this is an issue, run yarn build to filter packages and speed things up!'
+            "You are building a lot of packages on watch mode. This is an expensive action and might slow your computer down.\nIf this is an issue, run yarn build to filter packages and speed things up!",
           );
         }
 
@@ -151,10 +150,12 @@ function run() {
           runWatchMode();
         } else {
           //TODO: Figure out how to avoid this disgusting workaround
-          spawn(`lerna exec --scope '${glob}' --parallel --no-bail -- tsc || exit 0`);
+          spawn(
+            `lerna exec --scope '${glob}' --parallel --no-bail -- tsc || exit 0`,
+          );
           spawn(`lerna exec --scope '${glob}' --parallel -- tsc --noEmit`);
         }
-        process.stdout.write('\x07');
+        process.stdout.write("\x07");
       }
     })
     .catch((e) => {

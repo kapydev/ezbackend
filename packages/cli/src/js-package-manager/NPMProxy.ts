@@ -28,7 +28,7 @@ export class NPMProxy extends JsPackageManager {
 
   protected runAddDeps(
     dependencies: string[],
-    installAsDevDependencies: boolean
+    installAsDevDependencies: boolean,
   ): void {
     let args = [...dependencies];
 

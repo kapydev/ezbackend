@@ -4,7 +4,7 @@ import { readPackageJson, writePackageJson } from "./PackageJsonHelper";
 import { commandLog } from "../helpers";
 import { sync as spawnSync } from "cross-spawn";
 
-const logger = console
+const logger = console;
 
 export abstract class JsPackageManager {
   public abstract readonly type: "npm" | "yarn1" | "yarn2";
@@ -23,26 +23,25 @@ export abstract class JsPackageManager {
   }
 
   public addEzbCommandInScripts() {
-
-    //TODO: Different start command in development vs production (Compiled vs non-compiled)
-    const ezbCmd = `npx ts-node-dev src/index.ts`
+    // TODO: Different start command in development vs production (Compiled vs non-compiled)
+    const ezbCmd = `npx ts-node-dev src/index.ts`;
     this.addScripts({
       ezb: ezbCmd,
       start: ezbCmd,
       build: `tsc`,
-      'build:watch': 'tsc -w',
-    })
+      "build:watch": "tsc -w",
+    });
   }
 
-  public addScripts(scripts: Record<string,string>) {
-    const packageJson = this.retrievePackageJson()
+  public addScripts(scripts: Record<string, string>) {
+    const packageJson = this.retrievePackageJson();
     writePackageJson({
       ...packageJson,
       scripts: {
         ...packageJson.scripts,
-        ...scripts
-      }
-    })
+        ...scripts,
+      },
+    });
   }
 
   /**
@@ -69,7 +68,7 @@ export abstract class JsPackageManager {
   public executeCommand(
     command: string,
     args: string[],
-    stdio?: "pipe" | "inherit"
+    stdio?: "pipe" | "inherit",
   ): string {
     const commandResult = spawnSync(command, args, {
       stdio: stdio ?? "pipe",
@@ -97,10 +96,10 @@ export abstract class JsPackageManager {
     options: {
       skipInstall?: boolean;
       installAsDevDependencies?: boolean;
-      //TODO: Figure out why the storybook one doesn't need this to be required
+      // TODO: Figure out why the storybook one doesn't need this to be required
       packageJson: PackageJson;
     },
-    dependencies: string[]
+    dependencies: string[],
   ): void {
     const { skipInstall } = options;
 
@@ -136,17 +135,20 @@ export abstract class JsPackageManager {
     }
   }
 
-  protected abstract runAddDeps(dependencies: string[], installAsDevDependencies: boolean): void;
+  protected abstract runAddDeps(
+    dependencies: string[],
+    installAsDevDependencies: boolean,
+  ): void;
 }
 
 export function getPackageDetails(pkg: string): [string, string?] {
-    const idx = pkg.lastIndexOf('@');
-    // If the only `@` is the first character, it is a scoped package
-    // If it isn't in the string, it will be -1
-    if (idx <= 0) {
-      return [pkg, undefined];
-    }
-    const packageName = pkg.slice(0, idx);
-    const packageVersion = pkg.slice(idx + 1);
-    return [packageName, packageVersion];
+  const idx = pkg.lastIndexOf("@");
+  // If the only `@` is the first character, it is a scoped package
+  // If it isn't in the string, it will be -1
+  if (idx <= 0) {
+    return [pkg, undefined];
   }
+  const packageName = pkg.slice(0, idx);
+  const packageVersion = pkg.slice(idx + 1);
+  return [packageName, packageVersion];
+}

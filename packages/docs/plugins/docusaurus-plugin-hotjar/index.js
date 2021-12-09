@@ -1,5 +1,3 @@
-const path = require("path");
-
 module.exports = function (context) {
   const { siteConfig } = context;
   const { themeConfig } = siteConfig;
@@ -7,7 +5,7 @@ module.exports = function (context) {
 
   if (!hotjar) {
     throw new Error(
-      `Create a 'hotjar' object containing a 'siteId' property in 'themeConfig'.`
+      `Create a 'hotjar' object containing a 'siteId' property in 'themeConfig'.`,
     );
   }
 
@@ -15,7 +13,7 @@ module.exports = function (context) {
 
   if (!siteId) {
     throw new Error(
-      "Error in `themeConfig`. `hotjar` object found but `siteId` prop is missing."
+      "Error in `themeConfig`. `hotjar` object found but `siteId` prop is missing.",
     );
   }
 

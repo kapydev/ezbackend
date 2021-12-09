@@ -4,21 +4,24 @@ import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'Inter, Roboto Mono, monospace',
-  }
+    fontFamily: "Inter, Roboto Mono, monospace",
+  },
 });
 
 function App() {
-
   const [open, setOpen] = useState<boolean>(false);
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline/>
+      <CssBaseline />
       <Layout
         open={open}
-        handleClose={() => { setOpen(false) }}
-        handleOpen={() => { setOpen(true) }}
+        handleClose={() => {
+          setOpen(false);
+        }}
+        handleOpen={() => {
+          setOpen(true);
+        }}
       />
     </ThemeProvider>
   );
