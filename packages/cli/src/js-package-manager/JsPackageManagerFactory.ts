@@ -13,7 +13,6 @@ export class JsPackageManagerFactory {
 
     const hasNPMCommand = hasNPM();
 
-    // TODO: Add in support for Yarn 2 and npm. Refer to https://github.com/storybookjs/storybook/tree/next/lib/cli/src/js-package-manager
     if (options.yarn || (yarnVersion && (hasYarnLockFile || !hasNPMCommand))) {
       return yarnVersion === 1 ? new Yarn1Proxy() : new Yarn2Proxy();
     }

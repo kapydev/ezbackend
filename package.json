@@ -35,7 +35,7 @@
     "build": "node ./scripts/build-package.js",
     "test": "jest --runInBand",
     "prepare": "husky install && lerna run prepare",
-    "lint": "eslint \"**/*.+(ts|js|tsx)\" --fix",
+    "lint": "eslint \"**/*.+(ts|js|tsx)\"",
     "format": "prettier \"**/*.+(ts|js|tsx)\" --write"
   },
   "lint-staged": {

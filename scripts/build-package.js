@@ -149,7 +149,7 @@ function run() {
 
           runWatchMode();
         } else {
-          //TODO: Figure out how to avoid this disgusting workaround
+          // TODO: Figure out how to avoid this disgusting workaround
           spawn(
             `lerna exec --scope '${glob}' --parallel --no-bail -- tsc || exit 0`,
           );

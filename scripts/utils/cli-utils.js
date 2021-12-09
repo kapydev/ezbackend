@@ -18,7 +18,7 @@ const checkDependenciesAndRun = (run) => {
       stdio: ["inherit", "inherit", "inherit"],
     });
     process.stdout.write("\x07");
-    process.stdout.write("\033c");
+    process.stdout.write("\x1Bc");
 
     // give the filesystem some time
     cooldown = 1000;
