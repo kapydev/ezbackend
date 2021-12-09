@@ -30,7 +30,7 @@
   "scripts": {
     "build": "node ./scripts/build-package.js",
     "test": "jest --runInBand",
-    "prepare": "lerna run prepare",
+    "prepare": "lerna run prepare && husky install",
     "lint": "eslint \"packages/**/*.+(ts|js|tsx)\"",
     "format": "prettier \"packages/**/*.+(ts|js|tsx)\" --write"
   },
