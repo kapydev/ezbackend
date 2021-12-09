@@ -7,8 +7,11 @@ import type {
 } from "fastify";
 
 import { AnyStrategy } from "fastify-passport/dist/strategies";
-import { DeserializeFunction , SerializeFunction } from "fastify-passport/dist/Authenticator";
-import { EzBackendAuthOpts , defaultConfig } from "../auth";
+import {
+  DeserializeFunction,
+  SerializeFunction,
+} from "fastify-passport/dist/Authenticator";
+import { EzBackendAuthOpts, defaultConfig } from "../auth";
 import fastifyPassport from "fastify-passport";
 
 // TODO: Generate this type more programatically to only have types introduced by user

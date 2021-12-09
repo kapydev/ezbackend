@@ -299,7 +299,8 @@ function Database() {
                         <IconButton>
                           <RefreshIcon
                             onClick={() => {
-                              const fetchPromise = handleGetRowData(selectedItem);
+                              const fetchPromise =
+                                handleGetRowData(selectedItem);
                               promiseToast(fetchPromise);
                             }}
                           />

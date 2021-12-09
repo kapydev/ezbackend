@@ -1,6 +1,6 @@
 import { SwaggerOptions, fastifySwagger } from "fastify-swagger";
 
-import { EzApp , EzBackendOpts } from "@ezbackend/common";
+import { EzApp, EzBackendOpts } from "@ezbackend/common";
 import type { FastifyRegisterOptions } from "fastify";
 import { PluginScope } from "@ezbackend/core";
 

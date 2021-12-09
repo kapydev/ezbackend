@@ -273,25 +273,27 @@ function getNestedMetadata(
   meta: EntityMetadata,
   type: "create" | "update" | "read",
 ) {
-  return meta.relations
-    // eslint-disable-next-line array-callback-return
-    .filter((relation) => {
-      switch (type) {
-        case "create":
-          return relation.isCascadeInsert;
-        case "update":
-          return relation.isCascadeUpdate;
-        case "read":
-          return relation.isEager;
-      }
-    })
-    .map((relation) => {
-      return {
-        data: relation.inverseEntityMetadata,
-        isMany: relation.isManyToMany || relation.isOneToMany,
-        propertyName: relation.propertyName,
-      };
-    });
+  return (
+    meta.relations
+      // eslint-disable-next-line array-callback-return
+      .filter((relation) => {
+        switch (type) {
+          case "create":
+            return relation.isCascadeInsert;
+          case "update":
+            return relation.isCascadeUpdate;
+          case "read":
+            return relation.isEager;
+        }
+      })
+      .map((relation) => {
+        return {
+          data: relation.inverseEntityMetadata,
+          isMany: relation.isManyToMany || relation.isOneToMany,
+          propertyName: relation.propertyName,
+        };
+      })
+  );
 }
 
 /**

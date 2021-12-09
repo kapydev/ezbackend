@@ -180,8 +180,7 @@ export class EzBackend extends EzApp {
     this.setHandler("Add Error Schema", addErrorSchema);
 
     this.setPostHandler("Create Fastify Server", async (instance, opts) => {
-      const fastifyOpts =
-        opts.server ?? this.getOpts("backend", opts)?.fastify;
+      const fastifyOpts = opts.server ?? this.getOpts("backend", opts)?.fastify;
 
       instance._server = fastify(fastifyOpts);
     });

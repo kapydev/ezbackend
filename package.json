@@ -31,14 +31,14 @@
     "build": "node ./scripts/build-package.js",
     "test": "jest --runInBand",
     "prepare": "husky install && lerna run prepare",
-    "lint": "eslint \"packages/**/*.+(ts|js|tsx)\"",
-    "format": "prettier \"packages/**/*.+(ts|js|tsx)\" --write"
+    "lint": "eslint \"**/*.+(ts|js|tsx)\" --fix",
+    "format": "prettier \"**/*.+(ts|js|tsx)\" --write"
   },
   "lint-staged": {
-    "*.{js, ts, tsx, jsx}": [
+    "*.{js, ts, tsx}": [
       "eslint --quiet --fix"
     ],
-    "*.{json, md, html, js, jsx, ts, tsx}": [
+    "*.{json, md, html, js, ts, tsx}": [
       "prettier --write"
     ]
   },
