@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { featuresContent } from "../content/features-content";
-import { Feature } from "../helper-components/feature";
-import { CtaButton } from "../helper-components/cta-button";
-import { Delayed } from "../helper-components/delayed";
-import { MovingCode } from "../helper-components/moving-code";
-import StepFeature from "../helper-components/step-feature";
-import toast, { Toaster } from "react-hot-toast";
-import DiagramBuild from "../assets/diagram-scaling-build.png";
-import DiagramScale from "../assets/diagram-scaling-scale.png";
-import ReactCompareImage from "react-compare-image";
-import "../css/landing.css";
-import { Accordion, AccordionItem, AccordionPanel } from "./accordion";
+import React, { useState } from 'react';
+import { featuresContent } from '../content/features-content';
+import { Feature } from '../helper-components/feature';
+import { CtaButton } from '../helper-components/cta-button';
+import { Delayed } from '../helper-components/delayed';
+import { MovingCode } from '../helper-components/moving-code';
+import StepFeature from '../helper-components/step-feature';
+import toast, { Toaster } from 'react-hot-toast';
+import DiagramBuild from '../assets/diagram-scaling-build.png';
+import DiagramScale from '../assets/diagram-scaling-scale.png';
+import ReactCompareImage from 'react-compare-image';
+import '../css/landing.css';
+import { Accordion, AccordionItem, AccordionPanel } from './accordion';
 
-const codeText1 = "const app = new EzBackend()";
+const codeText1 = 'const app = new EzBackend()';
 const codeText2 = `const users = new EzModel('Users', {
   name: Type.VARCHAR,
   gender: Type.VARCHAR,
@@ -29,7 +29,7 @@ function LandingHelper() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 place-items-center self-center col-span-full transform md:scale-90">
-        <div className="bg-dracula rounded-lg" style={{ width: "100%" }}>
+        <div className="bg-dracula rounded-lg" style={{ width: '100%' }}>
           <div
             className="rounded-lg text-xs md:text-sm pointer-events-none font-mono"
             style={{ padding: 32, minHeight: 300 }}

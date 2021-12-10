@@ -5,13 +5,13 @@ import {
   ModelOpts,
   ModelSchema,
   Type,
-} from "@ezbackend/common";
-import { EzError } from "@ezbackend/utils";
-import dedent from "dedent-js";
-import providerDict from "./providers";
+} from '@ezbackend/common';
+import { EzError } from '@ezbackend/utils';
+import dedent from 'dedent-js';
+import providerDict from './providers';
 
 // URGENT TODO: Figure out base provider type from abstract class
-export type Providers = Array<"google" | any>;
+export type Providers = Array<'google' | any>;
 
 function addProviderToSchema(providerName: string, schema: ModelSchema) {
   const idCol = `${providerName}Id`;
@@ -40,8 +40,8 @@ function addProviderToSchema(providerName: string, schema: ModelSchema) {
 
 function checkGeneratable(modelSchema: ModelSchema) {
   const nullableError = new EzError(
-    "Columns of EzUser need to either have a default value or be nullable",
-    "When a user is created from logging in, ezbackend needs to either fill all columns in the user table with null or a default value",
+    'Columns of EzUser need to either have a default value or be nullable',
+    'When a user is created from logging in, ezbackend needs to either fill all columns in the user table with null or a default value',
     dedent`
         const user = new EzUser("User",["google"],{
             userVariable = {
@@ -77,7 +77,7 @@ export class EzUser extends EzModel {
 
     // Modify the schema to introduce things required by the providers
     providers.forEach((providerOrProviderName) => {
-      if (typeof providerOrProviderName === "string") {
+      if (typeof providerOrProviderName === 'string') {
         const providerName = providerOrProviderName;
         modelSchema = addProviderToSchema(providerName, modelSchema);
       } else {
@@ -93,7 +93,7 @@ export class EzUser extends EzModel {
     // Add the providers as child apps
     providers.forEach((providerOrProviderName) => {
       try {
-        if (typeof providerOrProviderName === "string") {
+        if (typeof providerOrProviderName === 'string') {
           const providerName = providerOrProviderName;
           // URGENT TODO: Get rid of ts-ignore
           // @ts-ignore
@@ -108,10 +108,10 @@ export class EzUser extends EzModel {
           this.addApp(`${providerName} auth`, provider);
         }
       } catch (e) {
-        if ((e as TypeError).name === "TypeError") {
+        if ((e as TypeError).name === 'TypeError') {
           throw new EzError(
-            "An authentication provider must be either a string or extend BaseProvider",
-            "Read the docs for a list of allowed providers",
+            'An authentication provider must be either a string or extend BaseProvider',
+            'Read the docs for a list of allowed providers',
             dedent`
                         const user = new EzUser('User', ['google']) //GOOD
                         const user = new EzUser('User', [GoogleProvider]) //GOOD

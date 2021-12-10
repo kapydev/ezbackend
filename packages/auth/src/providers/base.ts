@@ -1,21 +1,21 @@
-import { EzApp, EzBackendInstance, EzBackendOpts } from "@ezbackend/common";
+import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common';
 import type {
   FastifyInstance,
   FastifyReply,
   FastifyRequest,
   RouteOptions,
-} from "fastify";
+} from 'fastify';
 
-import { AnyStrategy } from "fastify-passport/dist/strategies";
+import { AnyStrategy } from 'fastify-passport/dist/strategies';
 import {
   DeserializeFunction,
   SerializeFunction,
-} from "fastify-passport/dist/Authenticator";
-import { EzBackendAuthOpts, defaultConfig } from "../auth";
-import fastifyPassport from "fastify-passport";
+} from 'fastify-passport/dist/Authenticator';
+import { EzBackendAuthOpts, defaultConfig } from '../auth';
+import fastifyPassport from 'fastify-passport';
 
 // TODO: Generate this type more programatically to only have types introduced by user
-declare module "fastify" {
+declare module 'fastify' {
   interface PassportUser {
     [index: string]: any;
   }
@@ -71,7 +71,7 @@ export abstract class BaseProvider extends EzApp {
   // abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
   addProvider(instance: EzBackendInstance, fullOpts: EzBackendOpts) {
-    const opts = this.getOpts("auth", fullOpts);
+    const opts = this.getOpts('auth', fullOpts);
 
     // URGENT TODO: Double check edge cases for this
     const providerOpts = {
@@ -102,8 +102,8 @@ export abstract class BaseProvider extends EzApp {
   }
 
   getFullRoutePrefixNoPrePostSlash(server: FastifyInstance) {
-    const encapsulatedPrefix = server.prefix.replace(/^\//, "");
-    if (encapsulatedPrefix === "") {
+    const encapsulatedPrefix = server.prefix.replace(/^\//, '');
+    if (encapsulatedPrefix === '') {
       return this.getRoutePrefixNoPrePostSlash(server);
     } else {
       return `${encapsulatedPrefix}/${this.getRoutePrefixNoPrePostSlash(
@@ -115,7 +115,7 @@ export abstract class BaseProvider extends EzApp {
   getCallbackURL(server: FastifyInstance) {
     const urlPath = `${this.getFullRoutePrefixNoPrePostSlash(server)}/callback`;
     let result;
-    if (process.env.NODE_ENV === "production" && process.env.PRODUCTION_URL) {
+    if (process.env.NODE_ENV === 'production' && process.env.PRODUCTION_URL) {
       const callbackURL = new URL(urlPath, process.env.PRODUCTION_URL).href;
       result = callbackURL;
     } else {
@@ -146,7 +146,7 @@ export abstract class BaseProvider extends EzApp {
         cb(undefined, serializedID);
       },
       (e) => {
-        if (String(e.driverError).toLowerCase().includes("unique")) {
+        if (String(e.driverError).toLowerCase().includes('unique')) {
           // URGENT TODO: Check if this works for all databases
           cb(undefined, serializedID);
         } else {
@@ -181,7 +181,7 @@ export abstract class BaseProvider extends EzApp {
     return async function deserializer(providerAndId: string, req) {
       if (providerAndId.startsWith(`${that.providerName}-`)) {
         // TODO: Consider the security implications of not checking that the replacement starts at 'google-'
-        const id = providerAndId.replace(`${that.providerName}-`, "");
+        const id = providerAndId.replace(`${that.providerName}-`, '');
         const userRepo = instance.orm.getRepository(that.modelName);
         const fullUser = await userRepo.findOne({
           [`${that.providerName}Id`]: id,
@@ -197,7 +197,7 @@ export abstract class BaseProvider extends EzApp {
         // THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
         // tslint:disable-next-line:no-string-throw
         // eslint-disable-next-line no-throw-literal
-        throw "pass";
+        throw 'pass';
       }
     };
   }

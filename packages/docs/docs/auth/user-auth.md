@@ -7,6 +7,7 @@ sidebar_position: 2
 ## Creating the User
 
 EzBackend automatically provides the following:
+
 1. Login Page
 1. Logout route
 1. Federated Auth Provider
@@ -15,17 +16,17 @@ EzBackend automatically provides the following:
 in `2 lines` of code
 
 ```ts {5-7}
-import {EzUser, EzAuth} from '@ezbackend/auth'
+import { EzUser, EzAuth } from '@ezbackend/auth';
 
-const app = new EzBackend()
+const app = new EzBackend();
 
-app.addApp(new EzAuth())
+app.addApp(new EzAuth());
 
-const user = new EzUser('User',['google'])
+const user = new EzUser('User', ['google']);
 
-app.addApp(user,{prefix:'user'})
+app.addApp(user, { prefix: 'user' });
 
-app.start()
+app.start();
 ```
 
 Breaking it down:
@@ -62,7 +63,7 @@ For example, setting up the google provider requires you to set the above enviro
 <!-- TODO: Consider if loading environment variables automatically is a good idea (consider load order as well) -->
 
 ```ts
-app.addApp(user,{prefix:'user'})
+app.addApp(user, { prefix: 'user' });
 ```
 
 `prefix:user` - All of the user routes are under the prefix `user`
@@ -83,7 +84,9 @@ You need to have the openapi plugin and db-ui plugins for this to work
 ### Frontend
 
 On the frontend, when the user logs in you can use login url as either
+
 <!-- TODO: Check if the popup method really works -->
+
 1. A popup
 1. A redirect
 
@@ -91,13 +94,13 @@ In addition, you will have to update the auth config to redirect to your fronten
 
 ```ts
 app.start({
-    auth: {
-        google: {
-            successRedirectURL: "https://<YOUR FRONTEND SUCCESS URL>",
-            failureRedirectURL: "https://<YOUR FRONTEND FAILURE URL>"
-        }
-    }
-})
+  auth: {
+    google: {
+      successRedirectURL: 'https://<YOUR FRONTEND SUCCESS URL>',
+      failureRedirectURL: 'https://<YOUR FRONTEND FAILURE URL>',
+    },
+  },
+});
 ```
 
 ## Logging out
@@ -119,28 +122,31 @@ On the frontend, when the user needs to be logged out, redirect the user to the 
 Different users will probably have different roles within the application. For example, assuming a user can be a premium user, admin user or on the free tier:
 
 ```ts
-const app = new EzBackend()
+const app = new EzBackend();
 
-app.addApp(new EzAuth())
+app.addApp(new EzAuth());
 
 const user = new EzUser('User', ['google'], {
-    isAdmin: { //GOOD
-        type: Type.BOOL,
-        default: false
-    },
-    isPremium: { //GOOD
-        type: Type.BOOL,
-        nullable: true
-    },
-    isFreeTier: Type.BOOL //BAD
-})
+  isAdmin: {
+    //GOOD
+    type: Type.BOOL,
+    default: false,
+  },
+  isPremium: {
+    //GOOD
+    type: Type.BOOL,
+    nullable: true,
+  },
+  isFreeTier: Type.BOOL, //BAD
+});
 
-app.addApp(user,{prefix:'user'})
+app.addApp(user, { prefix: 'user' });
 
-app.start()
+app.start();
 ```
 
 For the EzUser, you must specify either
+
 1. A default value
 1. That the field is nullable
 

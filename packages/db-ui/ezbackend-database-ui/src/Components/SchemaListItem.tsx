@@ -1,15 +1,15 @@
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import removeDbui from "../Utils/removeDbui";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import removeDbui from '../Utils/removeDbui';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() =>
   createStyles({
     listItem: {
-      "&$selected, &$selected:hover": {
-        backgroundColor: "#3B3228",
+      '&$selected, &$selected:hover': {
+        backgroundColor: '#3B3228',
       },
       borderRadius: 6,
     },
@@ -42,10 +42,10 @@ export default function SchemaListItem(props: ISchemaListItem) {
         <Typography variant="body2" noWrap>
           <Box
             component="div"
-            fontFamily={match ? "monospace" : "Inter"}
+            fontFamily={match ? 'monospace' : 'Inter'}
             fontWeight="normal"
             fontSize={match ? 16 : 14}
-            color={match ? "#F5EEEB" : "#404040"}
+            color={match ? '#F5EEEB' : '#404040'}
             overflow="hidden"
             textOverflow="ellipsis"
           >

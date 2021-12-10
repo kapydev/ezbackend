@@ -1,10 +1,10 @@
-import { JsPackageManager } from "./JsPackageManager";
+import { JsPackageManager } from './JsPackageManager';
 
 export class Yarn1Proxy extends JsPackageManager {
-  readonly type = "yarn1";
+  readonly type = 'yarn1';
 
   initPackageJson() {
-    return this.executeCommand("yarn", ["init", "-y"]);
+    return this.executeCommand('yarn', ['init', '-y']);
   }
 
   getRunEzbCommand(): string {
@@ -19,12 +19,12 @@ export class Yarn1Proxy extends JsPackageManager {
     dependencies: string[],
     installAsDevDependencies: boolean,
   ): void {
-    let args = ["--ignore-workspace-root-check", ...dependencies];
+    let args = ['--ignore-workspace-root-check', ...dependencies];
 
     if (installAsDevDependencies) {
-      args = ["-D", ...args];
+      args = ['-D', ...args];
     }
 
-    this.executeCommand("yarn", ["add", ...args], "inherit");
+    this.executeCommand('yarn', ['add', ...args], 'inherit');
   }
 }

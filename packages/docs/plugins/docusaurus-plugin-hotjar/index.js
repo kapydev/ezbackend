@@ -13,18 +13,18 @@ module.exports = function (context) {
 
   if (!siteId) {
     throw new Error(
-      "Error in `themeConfig`. `hotjar` object found but `siteId` prop is missing.",
+      'Error in `themeConfig`. `hotjar` object found but `siteId` prop is missing.',
     );
   }
 
   return {
-    name: "docusaurus-plugin-hotjar",
+    name: 'docusaurus-plugin-hotjar',
 
     injectHtmlTags() {
       return {
         headTags: [
           {
-            tagName: "script",
+            tagName: 'script',
             innerHTML: `
             <!-- Hotjar Tracking Code -->
             (function(h,o,t,j,a,r){

@@ -1,8 +1,8 @@
-import Box from "@material-ui/core/Box";
-import Dialog from "@material-ui/core/Dialog";
-import promiseToast from "../Utils/promiseToast";
-import Form from "@rjsf/material-ui";
-import { getBaseURL } from "../Helpers";
+import Box from '@material-ui/core/Box';
+import Dialog from '@material-ui/core/Dialog';
+import promiseToast from '../Utils/promiseToast';
+import Form from '@rjsf/material-ui';
+import { getBaseURL } from '../Helpers';
 
 // URGENT TODO: Make lerna publish script prepare run react build command
 
@@ -19,8 +19,8 @@ interface IPostRequestDialog {
 export default function PostRequestDialog(props: IPostRequestDialog) {
   const handlePost = (allData: any) => {
     const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(allData.formData),
     };
     const fetchPromise = fetch(`${URL}/${props.selectedItem}/`, requestOptions)

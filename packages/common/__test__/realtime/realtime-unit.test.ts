@@ -1,6 +1,6 @@
-import { EzBackend, EzApp, Type, RuleType } from "../../src";
+import { EzBackend, EzApp, Type, RuleType } from '../../src';
 
-describe("Should be able to get io object", () => {
+describe('Should be able to get io object', () => {
   let app: EzBackend;
   let child: EzApp;
   let nestedChild: EzApp;
@@ -10,10 +10,10 @@ describe("Should be able to get io object", () => {
     child = new EzApp();
     nestedChild = new EzApp();
 
-    app.addApp(child, { prefix: "child" });
-    child.addApp(nestedChild, { prefix: "nested-child" });
+    app.addApp(child, { prefix: 'child' });
+    child.addApp(nestedChild, { prefix: 'nested-child' });
 
-    app.removeHook("_run", "Run Fastify Server");
+    app.removeHook('_run', 'Run Fastify Server');
   });
 
   afterEach(async () => {
@@ -22,12 +22,12 @@ describe("Should be able to get io object", () => {
     await instance._server.close();
   });
 
-  test("Get with namespace", async () => {
+  test('Get with namespace', async () => {
     let handlerRan = false;
 
-    nestedChild.setHandler("Check SocketIO", async (instance, opts) => {
+    nestedChild.setHandler('Check SocketIO', async (instance, opts) => {
       handlerRan = true;
-      expect(nestedChild.getSocketIO().name).toBe("/child/nested-child");
+      expect(nestedChild.getSocketIO().name).toBe('/child/nested-child');
     });
 
     await app.start({
@@ -36,7 +36,7 @@ describe("Should be able to get io object", () => {
           logger: false,
         },
         typeorm: {
-          database: ":memory:",
+          database: ':memory:',
         },
       },
     });
@@ -44,9 +44,9 @@ describe("Should be able to get io object", () => {
     expect(handlerRan).toBe(true);
   });
 
-  test("Get without namespace", async () => {
-    nestedChild.setHandler("Check SocketIO", async (instance, opts) => {
-      expect(nestedChild.getSocketIORaw().name).toBe("/");
+  test('Get without namespace', async () => {
+    nestedChild.setHandler('Check SocketIO', async (instance, opts) => {
+      expect(nestedChild.getSocketIORaw().name).toBe('/');
     });
 
     await app.start({
@@ -55,7 +55,7 @@ describe("Should be able to get io object", () => {
           logger: false,
         },
         typeorm: {
-          database: ":memory:",
+          database: ':memory:',
         },
       },
     });

@@ -1,10 +1,10 @@
-import Layout from "./Components/Layout";
-import { useState } from "react";
-import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
+import Layout from './Components/Layout';
+import { useState } from 'react';
+import { createTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
 
 const theme = createTheme({
   typography: {
-    fontFamily: "Inter, Roboto Mono, monospace",
+    fontFamily: 'Inter, Roboto Mono, monospace',
   },
 });
 

@@ -15,12 +15,11 @@ npm install @ezbackend/auth
 Once installed, you can add the plugin to your app with
 
 ```ts
-import {EzAuth} from "@ezbackend/auth"
+import { EzAuth } from '@ezbackend/auth';
 
-const app = new EzBackend()
+const app = new EzBackend();
 
-app.addApp('ez-auth', new EzAuth())
+app.addApp('ez-auth', new EzAuth());
 
-app.start()
+app.start();
 ```
-

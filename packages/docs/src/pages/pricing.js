@@ -1,7 +1,7 @@
-import React from "react";
-import Layout from "@theme/Layout";
-import IconTick from "../assets/icon-tick.svg";
-import { CtaButton } from "../helper-components/cta-button";
+import React from 'react';
+import Layout from '@theme/Layout';
+import IconTick from '../assets/icon-tick.svg';
+import { CtaButton } from '../helper-components/cta-button';
 
 const freeFeatures = [
   <div>API Documentation (Swagger)</div>,

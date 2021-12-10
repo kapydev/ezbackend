@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Web3 from "web3";
+import React, { useEffect, useState } from 'react';
+import Web3 from 'web3';
 // TODO: Remove ts-ignore after PR for adding types is approved
 // @ts-ignore
-import Web3Token from "web3-token";
+import Web3Token from 'web3-token';
 /*
 IMPORTANT NOTICE
 
@@ -37,7 +37,7 @@ function App() {
 
   async function connectMetamask() {
     if (!(window as EthereumWindow).ethereum) {
-      window.alert("You must have Meta Mask installed to login!");
+      window.alert('You must have Meta Mask installed to login!');
       window.history.back();
     }
     const accounts = await web3.eth.requestAccounts();
@@ -46,7 +46,7 @@ function App() {
 
   async function registerOnAccountChange() {
     (window as EthereumWindow)?.ethereum?.on(
-      "accountsChanged",
+      'accountsChanged',
       function (accounts: Array<string>) {
         setAccounts(accounts);
       },
@@ -59,9 +59,9 @@ function App() {
         web3.eth.personal.sign(
           msg,
           address,
-          "wow a password that literally does nothing (Other than to mess with typescript), if you dont believe me go ahead and change it",
+          'wow a password that literally does nothing (Other than to mess with typescript), if you dont believe me go ahead and change it',
         ),
-      "10m",
+      '10m',
     );
     return signedMsg;
   }
@@ -76,17 +76,17 @@ function App() {
     // TODO: Should we make the tokens one time use?
     // TODO: Is there a better way of not getting the callback URL by relative path
 
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       const callbackURL = window.prompt(
-        "Please enter the callback URL. The callback URL will be programmatically referenced in production",
-        "http://localhost:8000/user/auth/web3/callback",
+        'Please enter the callback URL. The callback URL will be programmatically referenced in production',
+        'http://localhost:8000/user/auth/web3/callback',
       );
       window.location.href = `${callbackURL}?token=${msg}`;
-    } else if (process.env.NODE_ENV === "production") {
-      const slashSeperatedURL = window.location.href.split("/");
+    } else if (process.env.NODE_ENV === 'production') {
+      const slashSeperatedURL = window.location.href.split('/');
       slashSeperatedURL.pop();
       const parentURL = slashSeperatedURL;
-      const callbackURL = parentURL.join("/") + `/callback`;
+      const callbackURL = parentURL.join('/') + `/callback`;
       window.location.href = `${callbackURL}?token=${msg}`;
     }
   }

@@ -1,4 +1,4 @@
-const childProcess = require("child_process");
+const childProcess = require('child_process');
 
 const logger = console;
 
@@ -6,19 +6,19 @@ const logger = console;
 const checkDependenciesAndRun = (run) => {
   let cooldown = 0;
   try {
-    require("prompts");
-    require("commander");
-    require("chalk");
-    require("npmlog");
+    require('prompts');
+    require('commander');
+    require('chalk');
+    require('npmlog');
   } catch (e) {
     logger.log(
-      "🕘 running build on a clean repo, we have to install dependencies",
+      '🕘 running build on a clean repo, we have to install dependencies',
     );
-    childProcess.spawnSync("yarn", ["install", "--ignore-optional"], {
-      stdio: ["inherit", "inherit", "inherit"],
+    childProcess.spawnSync('yarn', ['install', '--ignore-optional'], {
+      stdio: ['inherit', 'inherit', 'inherit'],
     });
-    process.stdout.write("\x07");
-    process.stdout.write("\x1Bc");
+    process.stdout.write('\x07');
+    process.stdout.write('\x1Bc');
 
     // give the filesystem some time
     cooldown = 1000;
@@ -30,7 +30,7 @@ const checkDependenciesAndRun = (run) => {
 const spawn = (command, options = {}) => {
   const out = childProcess.spawnSync(`${command}`, {
     shell: true,
-    stdio: "inherit",
+    stdio: 'inherit',
     ...options,
   });
 

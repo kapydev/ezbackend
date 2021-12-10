@@ -1,35 +1,35 @@
-import { describe, it, expect } from "@jest/globals";
-import { App, PluginScope } from "../src";
+import { describe, it, expect } from '@jest/globals';
+import { App, PluginScope } from '../src';
 
-describe("Default Behaviour", () => {
-  it("Plugins run in order", async () => {
+describe('Default Behaviour', () => {
+  it('Plugins run in order', async () => {
     const app = new App();
     const arr: Array<number> = [];
-    app.setPreInit("preInit", async (instance, opts) => {
+    app.setPreInit('preInit', async (instance, opts) => {
       arr.push(1);
     });
-    app.setInit("init", async (instance, opts) => {
+    app.setInit('init', async (instance, opts) => {
       arr.push(2);
     });
-    app.setPostInit("postInit", async (instance, opts) => {
+    app.setPostInit('postInit', async (instance, opts) => {
       arr.push(3);
     });
-    app.setPreHandler("preHandler", async (instance, opts) => {
+    app.setPreHandler('preHandler', async (instance, opts) => {
       arr.push(4);
     });
-    app.setHandler("handler", async (instance, opts) => {
+    app.setHandler('handler', async (instance, opts) => {
       arr.push(5);
     });
-    app.setPostHandler("postHandler", async (instance, opts) => {
+    app.setPostHandler('postHandler', async (instance, opts) => {
       arr.push(6);
     });
-    app.setPreRun("preRun", async (instance, opts) => {
+    app.setPreRun('preRun', async (instance, opts) => {
       arr.push(7);
     });
-    app.setRun("run", async (instance, opts) => {
+    app.setRun('run', async (instance, opts) => {
       arr.push(8);
     });
-    app.setPostRun("postRun", async (instance, opts) => {
+    app.setPostRun('postRun', async (instance, opts) => {
       arr.push(9);
     });
     await app.start();
@@ -37,56 +37,56 @@ describe("Default Behaviour", () => {
     expect(arr).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
-  it("Plugins in sub app run in order", async () => {
+  it('Plugins in sub app run in order', async () => {
     const app = new App();
     const subApp = new App();
     const arr: Array<number> = [];
-    app.setInit("init", async (instance, opts) => {
+    app.setInit('init', async (instance, opts) => {
       arr.push(1);
     });
-    app.setHandler("handler", async (instance, opts) => {
+    app.setHandler('handler', async (instance, opts) => {
       arr.push(2);
     });
-    app.setRun("run", async (instance, opts) => {
+    app.setRun('run', async (instance, opts) => {
       arr.push(3);
     });
-    subApp.setInit("sub_init", async (instance, opts) => {
+    subApp.setInit('sub_init', async (instance, opts) => {
       arr.push(1.5);
     });
-    app.addApp("subApp", subApp);
+    app.addApp('subApp', subApp);
     await app.start();
 
     expect(arr).toEqual([1, 1.5, 2, 3]);
   });
 
-  it("Encapsulation allows access to only parents", async () => {
+  it('Encapsulation allows access to only parents', async () => {
     const app = new App();
     const subApp = new App();
     const subApp2 = new App();
 
-    app.addApp("subApp", subApp);
-    app.addApp("subApp2", subApp2);
+    app.addApp('subApp', subApp);
+    app.addApp('subApp2', subApp2);
 
-    app.setInit("init", async (instance, opts) => {
-      instance.rootVar = "rootVar";
+    app.setInit('init', async (instance, opts) => {
+      instance.rootVar = 'rootVar';
     });
 
-    subApp.setInit("init", async (instance, opts) => {
-      instance.subApp1Var = "subApp1Var";
-      expect(instance.rootVar).toEqual("rootVar");
+    subApp.setInit('init', async (instance, opts) => {
+      instance.subApp1Var = 'subApp1Var';
+      expect(instance.rootVar).toEqual('rootVar');
       expect(instance.subApp2Var).toEqual(undefined);
     });
 
-    subApp2.setInit("init", async (instance, opts) => {
-      instance.subApp2Var = "subApp2Var";
-      expect(instance.rootVar).toEqual("rootVar");
+    subApp2.setInit('init', async (instance, opts) => {
+      instance.subApp2Var = 'subApp2Var';
+      expect(instance.rootVar).toEqual('rootVar');
       expect(instance.subApp1Var).toEqual(undefined);
     });
 
     await app.start();
   });
 
-  it("An app should not be able to have 2 parents", async () => {
+  it('An app should not be able to have 2 parents', async () => {
     const app1 = new App();
     const app2 = new App();
     const childApp = new App();
@@ -104,12 +104,12 @@ describe("Default Behaviour", () => {
     expect(errored).toBe(true);
   });
 
-  it("addApp syntax must be strictly followed", () => {
+  it('addApp syntax must be strictly followed', () => {
     let errored;
     const app1 = new App();
     try {
       // @ts-ignore
-      app1.addApp("randomString", "randomString", {});
+      app1.addApp('randomString', 'randomString', {});
     } catch (e) {
       expect(e).toMatchSnapshot();
       errored = true;
@@ -118,34 +118,34 @@ describe("Default Behaviour", () => {
     expect(errored).toBe(true);
   });
 
-  it("Encapsulation allows access scope of previous lifecycle hooks", async () => {
+  it('Encapsulation allows access scope of previous lifecycle hooks', async () => {
     const app = new App();
     const subApp = new App();
     const subApp2 = new App();
 
-    app.setInit("init", async (instance, opts) => {
-      instance.rootVar = "rootVar";
+    app.setInit('init', async (instance, opts) => {
+      instance.rootVar = 'rootVar';
     });
 
-    subApp.setInit("init", async (instance, opts) => {
-      instance.subApp1Var = "subApp1Var";
+    subApp.setInit('init', async (instance, opts) => {
+      instance.subApp1Var = 'subApp1Var';
     });
 
-    subApp.setHandler("handler", async (instance, opts) => {
-      expect(instance.rootVar).toEqual("rootVar");
-      expect(instance.subApp1Var).toEqual("subApp1Var");
+    subApp.setHandler('handler', async (instance, opts) => {
+      expect(instance.rootVar).toEqual('rootVar');
+      expect(instance.subApp1Var).toEqual('subApp1Var');
       expect(instance.subApp2Var).toEqual(undefined);
     });
 
-    subApp2.setInit("init", async (instance, opts) => {
-      instance.subApp2Var = "subApp2Var";
+    subApp2.setInit('init', async (instance, opts) => {
+      instance.subApp2Var = 'subApp2Var';
     });
-    app.addApp("subApp", subApp);
-    app.addApp("subApp2", subApp2);
+    app.addApp('subApp', subApp);
+    app.addApp('subApp2', subApp2);
     await app.start();
   });
 
-  it("Using the PARENT scope should allow parents to change encapsulated children variables", async () => {
+  it('Using the PARENT scope should allow parents to change encapsulated children variables', async () => {
     const app = new App();
     const subApp = new App();
 
@@ -153,27 +153,27 @@ describe("Default Behaviour", () => {
 
     app.addApp(subApp);
 
-    subApp.setInit("Create Variable", async (instance, opts) => {
-      instance.myChildVar = "Hello";
+    subApp.setInit('Create Variable', async (instance, opts) => {
+      instance.myChildVar = 'Hello';
     });
 
-    app.setHandler("Check access to child var", async (instance, opts) => {
-      expect(instance.myChildVar).toBe("Hello");
+    app.setHandler('Check access to child var', async (instance, opts) => {
+      expect(instance.myChildVar).toBe('Hello');
     });
 
     await app.start();
   });
 
-  it("Two child apps should not have the same name", async () => {
+  it('Two child apps should not have the same name', async () => {
     const app = new App();
     const child1 = new App();
     const child2 = new App();
 
     let errored = false;
 
-    app.addApp("child", child1);
+    app.addApp('child', child1);
     try {
-      app.addApp("child", child2);
+      app.addApp('child', child2);
     } catch (e) {
       expect(e).toMatchSnapshot();
       errored = true;
@@ -182,18 +182,18 @@ describe("Default Behaviour", () => {
     expect(errored).toBe(true);
   });
 
-  it("Should be able to get app by name", async () => {
+  it('Should be able to get app by name', async () => {
     const app = new App();
     const child1 = new App();
 
-    app.addApp("child", child1);
+    app.addApp('child', child1);
 
-    const theChild = app.getApp("child");
+    const theChild = app.getApp('child');
 
     expect(theChild).toBe(child1);
   });
 
-  it("Should be able to add plugins with undefined prototypes, which occurs in compiled JS code", async () => {
+  it('Should be able to add plugins with undefined prototypes, which occurs in compiled JS code', async () => {
     const app = new App();
 
     const myFunc = async (instance: any, opts: any) => {};
@@ -201,25 +201,25 @@ describe("Default Behaviour", () => {
     // @ts-ignore
     myFunc.prototype = undefined;
 
-    app.setInit("MyFunc", myFunc);
+    app.setInit('MyFunc', myFunc);
 
     await app.start();
   });
 
-  describe("Hooks", () => {
+  describe('Hooks', () => {
     let app: App;
     let flag = false;
     beforeAll(async () => {
       app = new App();
-      app.setInit("Set Flag", async (instance, opts) => {
+      app.setInit('Set Flag', async (instance, opts) => {
         flag = true;
       });
     });
 
-    it("Setting a hook twice should throw an error", () => {
+    it('Setting a hook twice should throw an error', () => {
       let errored = false;
       try {
-        app.setInit("Set Flag", async (instance, opts) => {
+        app.setInit('Set Flag', async (instance, opts) => {
           flag = true;
         });
       } catch (e) {
@@ -229,18 +229,18 @@ describe("Default Behaviour", () => {
 
       expect(errored).toBe(true);
     });
-    it("Removing a hook by name should work", () => {
-      app.removeHook("_init", "Set Flag");
+    it('Removing a hook by name should work', () => {
+      app.removeHook('_init', 'Set Flag');
 
       app.start();
 
       expect(flag).toBe(false);
     });
 
-    it("Removing a non-existent hook should throw an error", () => {
+    it('Removing a non-existent hook should throw an error', () => {
       let errored = false;
       try {
-        app.removeHook("_handler", "non-existent");
+        app.removeHook('_handler', 'non-existent');
       } catch (e) {
         expect(e).toMatchSnapshot();
         errored = true;
@@ -251,9 +251,9 @@ describe("Default Behaviour", () => {
   });
 
   test.todo(
-    "Running app.start() twice should return an EzError, not a normal error",
+    'Running app.start() twice should return an EzError, not a normal error',
   );
-  test("Running app.start() twice should error", async () => {
+  test('Running app.start() twice should error', async () => {
     const app = new App();
     await app.start();
     let errored = false;
@@ -265,12 +265,12 @@ describe("Default Behaviour", () => {
     expect(errored).toBe(true);
   });
 
-  describe("addApp overloads should function as expected", () => {
-    it("Just app", async () => {
+  describe('addApp overloads should function as expected', () => {
+    it('Just app', async () => {
       const app = new App();
       const subApp = new App();
       const arr: Array<number> = [];
-      app.setInit("init", async (instance, opts) => {
+      app.setInit('init', async (instance, opts) => {
         arr.push(1);
       });
       app.addApp(subApp);
@@ -279,12 +279,12 @@ describe("Default Behaviour", () => {
       expect(arr).toEqual([1]);
     });
 
-    it("Just app and Opts", async () => {
-      const opts = { opts: "my custom option" };
+    it('Just app and Opts', async () => {
+      const opts = { opts: 'my custom option' };
       const app = new App();
       const subApp = new App();
       const arr: Array<number> = [];
-      app.setInit("init", async (instance, opts) => {
+      app.setInit('init', async (instance, opts) => {
         arr.push(1);
       });
       app.addApp(subApp, opts);
@@ -294,28 +294,28 @@ describe("Default Behaviour", () => {
       expect(subApp.opts).toEqual(opts);
     });
 
-    it("Just name and app", async () => {
+    it('Just name and app', async () => {
       const app = new App();
       const subApp = new App();
       const arr: Array<number> = [];
-      app.setInit("init", async (instance, opts) => {
+      app.setInit('init', async (instance, opts) => {
         arr.push(1);
       });
-      app.addApp("subApp", subApp);
+      app.addApp('subApp', subApp);
       await app.start();
 
       expect(arr).toEqual([1]);
     });
 
-    it("Name, App and Opts", async () => {
-      const opts = { opts: "my custom option" };
+    it('Name, App and Opts', async () => {
+      const opts = { opts: 'my custom option' };
       const app = new App();
       const subApp = new App();
       const arr: Array<number> = [];
-      app.setInit("init", async (instance, opts) => {
+      app.setInit('init', async (instance, opts) => {
         arr.push(1);
       });
-      app.addApp("subApp", subApp, opts);
+      app.addApp('subApp', subApp, opts);
       await app.start();
 
       expect(arr).toEqual([1]);

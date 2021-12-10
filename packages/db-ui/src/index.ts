@@ -1,1 +1,1 @@
-export * from "./db-ui";
+export * from './db-ui';

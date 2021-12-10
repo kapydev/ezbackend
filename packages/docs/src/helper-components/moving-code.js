@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
-import Editor from "react-simple-code-editor";
-import Highlight, { Prism } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/dracula";
-import { useWindupString } from "windups";
+import React, { Fragment } from 'react';
+import Editor from 'react-simple-code-editor';
+import Highlight, { Prism } from 'prism-react-renderer';
+import theme from 'prism-react-renderer/themes/dracula';
+import { useWindupString } from 'windups';
 
 const originalCode = `const app = new EzBackend()
 

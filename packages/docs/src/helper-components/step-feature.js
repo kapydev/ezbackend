@@ -1,6 +1,6 @@
-import React from "react";
-import { Delayed } from "../helper-components/delayed";
-import IconTick from "../assets/icon-tick.svg";
+import React from 'react';
+import { Delayed } from '../helper-components/delayed';
+import IconTick from '../assets/icon-tick.svg';
 
 function StepFeature(props) {
   return (

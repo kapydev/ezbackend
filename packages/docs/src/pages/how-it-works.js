@@ -1,6 +1,6 @@
-import React from "react";
-import Layout from "@theme/Layout";
-import TechStackImage from "../assets/tech-stack.svg";
+import React from 'react';
+import Layout from '@theme/Layout';
+import TechStackImage from '../assets/tech-stack.svg';
 
 function HowItWorks() {
   return (

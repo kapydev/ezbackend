@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Scrollbars } from "react-custom-scrollbars";
+import React, { Component } from 'react';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 export default class ColoredScrollbars extends Component {
   constructor(props, ...rest) {
@@ -24,7 +24,7 @@ export default class ColoredScrollbars extends Component {
   renderThumb({ style, ...props }) {
     const { top } = this.state;
     const thumbStyle = {
-      backgroundColor: "#3B3B3B",
+      backgroundColor: '#3B3B3B',
       borderRadius: 12,
     };
     return <div style={{ ...style, ...thumbStyle }} {...props} />;

@@ -1,12 +1,12 @@
-import { FastifyInstance, RouteOptions } from "fastify";
+import { FastifyInstance, RouteOptions } from 'fastify';
 
-import { AnyStrategy } from "fastify-passport/dist/strategies";
-import { BaseProvider } from "./base";
-import type { EzBackendInstance } from "@ezbackend/common";
-import { EzError } from "@ezbackend/utils";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { ProviderOptions } from ".";
-import fastifyPassport from "fastify-passport";
+import { AnyStrategy } from 'fastify-passport/dist/strategies';
+import { BaseProvider } from './base';
+import type { EzBackendInstance } from '@ezbackend/common';
+import { EzError } from '@ezbackend/utils';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { ProviderOptions } from '.';
+import fastifyPassport from 'fastify-passport';
 
 interface GoogleProviderOptions extends ProviderOptions {
   googleClientId: string;
@@ -15,7 +15,7 @@ interface GoogleProviderOptions extends ProviderOptions {
   scope: Array<string>;
 }
 
-declare module "../auth" {
+declare module '../auth' {
   interface EzBackendAuthOpts {
     google?: GoogleProviderOptions;
   }
@@ -23,7 +23,7 @@ declare module "../auth" {
 
 export class GoogleProvider extends BaseProvider {
   constructor(modelName: string) {
-    super("google", modelName);
+    super('google', modelName);
   }
 
   // TODO: Figure out why its not getting the types from the abstract class
@@ -39,10 +39,10 @@ export class GoogleProvider extends BaseProvider {
       opts.googleClientSecret === undefined
     ) {
       throw new EzError(
-        "Google Client ID and Client Secret not found",
-        "The Google Client ID and Client Secret are used to authenticate EzBackend to provide the google login",
-        "Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your .env file in the root (Same folder as package.json), or specify the option in app.start({...})",
-        "https://www.ezbackend.io/docs/auth/user-auth#creating-the-user",
+        'Google Client ID and Client Secret not found',
+        'The Google Client ID and Client Secret are used to authenticate EzBackend to provide the google login',
+        'Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your .env file in the root (Same folder as package.json), or specify the option in app.start({...})',
+        'https://www.ezbackend.io/docs/auth/user-auth#creating-the-user',
       );
     }
 
@@ -62,14 +62,14 @@ export class GoogleProvider extends BaseProvider {
 
   getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
     return {
-      method: "GET",
+      method: 'GET',
       url: `/${this.getRoutePrefixNoPrePostSlash(server)}/login`,
       // preValidation: fastifyPassport.authenticate('google', { scope: this.providerOptions.scope }),
-      handler: fastifyPassport.authenticate("google", { scope: opts.scope }),
+      handler: fastifyPassport.authenticate('google', { scope: opts.scope }),
       schema: {
         // TODO: Figure out how to import types for summary
         // @ts-ignore
-        tags: ["Google Auth"],
+        tags: ['Google Auth'],
         // @ts-ignore
         summary: `Login for model '${this.modelName}' with provider ${this.providerName}`,
         description: `# 🔑 [CLICK HERE](/${this.getFullRoutePrefixNoPrePostSlash(
@@ -86,13 +86,13 @@ export class GoogleProvider extends BaseProvider {
   // URGENT TODO: Why does this logout route not seem to be logging the user out?
   getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
     return {
-      method: "GET",
+      method: 'GET',
       url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
       handler: (req, res) => this.defaultLogoutHandler(req, res, opts),
       schema: {
         // TODO: Figure out how to import types for summary
         // @ts-ignore
-        tags: ["Google Auth"],
+        tags: ['Google Auth'],
         // @ts-ignore
         summary: `Logout for model '${this.modelName}' with provider ${this.providerName}`,
         description: `# 🔑 [CLICK HERE](/${this.getFullRoutePrefixNoPrePostSlash(
@@ -107,9 +107,9 @@ export class GoogleProvider extends BaseProvider {
       server,
     )}/callback`;
     return {
-      method: "GET",
+      method: 'GET',
       url: callbackRoute,
-      preValidation: fastifyPassport.authenticate("google", {
+      preValidation: fastifyPassport.authenticate('google', {
         scope: opts.scope,
         successRedirect: opts.successRedirectURL,
         failureRedirect: opts.failureRedirectURL,
@@ -119,7 +119,7 @@ export class GoogleProvider extends BaseProvider {
       },
       schema: {
         // @ts-ignore
-        tags: ["Google Auth"],
+        tags: ['Google Auth'],
         // @ts-ignore
         summary: `Callback Route for model '${this.modelName}' with provider ${this.providerName}`,
         description: `Google redirects to this URL with the user's details. This route must be specified in the google callback URLs`,

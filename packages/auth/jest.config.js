@@ -1,10 +1,12 @@
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
+import parentConfig from '../../jest.config';
+
+const config = {
+  ...parentConfig,
   globals: {
-    "ts-jest": {
+    'ts-jest': {
       mapCoverage: true,
     },
   },
 };
+
+export default config;

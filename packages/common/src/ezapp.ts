@@ -1,17 +1,17 @@
-import { App, PluginScope } from "@ezbackend/core";
-import { EzBackendInstance, EzBackendOpts } from ".";
+import { App, PluginScope } from '@ezbackend/core';
+import { EzBackendInstance, EzBackendOpts } from '.';
 import {
   EzError,
   OverloadParameters,
   OverloadParameters1to5,
   OverloadParameters23,
-} from "@ezbackend/utils";
-import { FastifyInstance, FastifyRegister } from "fastify";
-import { Plugin } from "avvio";
-import dedent from "dedent-js";
-import type { Namespace } from "socket.io";
-import fp from "fastify-plugin";
-import { merge } from "lodash";
+} from '@ezbackend/utils';
+import { FastifyInstance, FastifyRegister } from 'fastify';
+import { Plugin } from 'avvio';
+import dedent from 'dedent-js';
+import type { Namespace } from 'socket.io';
+import fp from 'fastify-plugin';
+import { merge } from 'lodash';
 
 type CallableKeysOf<Type> = {
   [Key in keyof Type]: Type[Key] extends Function ? Key : never;
@@ -36,68 +36,68 @@ function createServer(parent: EzApp) {
     // TODO: Figure out how to get types with overrides
     // Routes
     delete: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["delete"]>
-    >(parent, "delete"),
+      OverloadParameters1to5<FastifyInstance['delete']>
+    >(parent, 'delete'),
     get: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["get"]>
-    >(parent, "get"),
+      OverloadParameters1to5<FastifyInstance['get']>
+    >(parent, 'get'),
     head: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["head"]>
-    >(parent, "head"),
+      OverloadParameters1to5<FastifyInstance['head']>
+    >(parent, 'head'),
     patch: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["patch"]>
-    >(parent, "patch"),
+      OverloadParameters1to5<FastifyInstance['patch']>
+    >(parent, 'patch'),
     post: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["post"]>
-    >(parent, "post"),
+      OverloadParameters1to5<FastifyInstance['post']>
+    >(parent, 'post'),
     put: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["put"]>
-    >(parent, "put"),
+      OverloadParameters1to5<FastifyInstance['put']>
+    >(parent, 'put'),
     options: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["options"]>
-    >(parent, "options"),
+      OverloadParameters1to5<FastifyInstance['options']>
+    >(parent, 'options'),
     all: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["all"]>
-    >(parent, "all"),
+      OverloadParameters1to5<FastifyInstance['all']>
+    >(parent, 'all'),
     route: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["route"]>
-    >(parent, "route"),
+      OverloadParameters1to5<FastifyInstance['route']>
+    >(parent, 'route'),
     // This one specifically uses the 23 overload parameters because otherwise the recursion is too deep for typescript to automatically detect the type
     addHook: generateFastifyFuncWrapper<
-      OverloadParameters23<FastifyInstance["addHook"]>
-    >(parent, "addHook"),
+      OverloadParameters23<FastifyInstance['addHook']>
+    >(parent, 'addHook'),
     addSchema: generateFastifyFuncWrapper<
-      OverloadParameters<FastifyInstance["addSchema"]>
-    >(parent, "addSchema"),
+      OverloadParameters<FastifyInstance['addSchema']>
+    >(parent, 'addSchema'),
     setSerializerCompiler: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["setSerializerCompiler"]>
-    >(parent, "setSerializerCompiler"),
+      OverloadParameters1to5<FastifyInstance['setSerializerCompiler']>
+    >(parent, 'setSerializerCompiler'),
     addContentTypeParser: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["addContentTypeParser"]>
-    >(parent, "addContentTypeParser"),
+      OverloadParameters1to5<FastifyInstance['addContentTypeParser']>
+    >(parent, 'addContentTypeParser'),
     decorate: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["decorate"]>
-    >(parent, "decorate"),
+      OverloadParameters1to5<FastifyInstance['decorate']>
+    >(parent, 'decorate'),
     decorateReply: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["decorateReply"]>
-    >(parent, "decorateReply"),
+      OverloadParameters1to5<FastifyInstance['decorateReply']>
+    >(parent, 'decorateReply'),
     decorateRequest: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["decorateRequest"]>
-    >(parent, "decorateRequest"),
+      OverloadParameters1to5<FastifyInstance['decorateRequest']>
+    >(parent, 'decorateRequest'),
     inject: generateFastifyFuncWrapper<
-      OverloadParameters<FastifyInstance["inject"]>
-    >(parent, "inject"),
+      OverloadParameters<FastifyInstance['inject']>
+    >(parent, 'inject'),
     // TODO: Figure out why the type inference cannot handle async/callback styles
     register: generateFastifyFuncWrapper<any>(
       parent,
-      "register",
+      'register',
     ) as FastifyRegister,
     setNotFoundHandler: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["setNotFoundHandler"]>
-    >(parent, "setNotFoundHandler"),
+      OverloadParameters1to5<FastifyInstance['setNotFoundHandler']>
+    >(parent, 'setNotFoundHandler'),
     setErrorHandler: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance["setErrorHandler"]>
-    >(parent, "setErrorHandler"),
+      OverloadParameters1to5<FastifyInstance['setErrorHandler']>
+    >(parent, 'setErrorHandler'),
   };
 }
 
@@ -136,8 +136,8 @@ export class EzApp extends App {
     }
 
     throw new EzError(
-      "Default opts have not been defined!",
-      "The plugin developer needs to set default opts with setDefaultOpts",
+      'Default opts have not been defined!',
+      'The plugin developer needs to set default opts with setDefaultOpts',
       dedent`
         Instructions for plugin development (Sample plugin called EzPlugin):
 
@@ -168,14 +168,14 @@ export class EzApp extends App {
    */
   constructor() {
     super();
-    this.setHandler("Create Server Stub", async (instance, opts) => {
+    this.setHandler('Create Server Stub', async (instance, opts) => {
       instance.server = createServer(this);
       this.localInstance = instance;
     });
-    this.setHandler("Run all SocketIO Functions", async () => {
+    this.setHandler('Run all SocketIO Functions', async () => {
       this._socketIOfunctions.forEach((func) => func());
     });
-    this.setPostHandler("Remove Server Stub", async (instance, opts) => {
+    this.setPostHandler('Remove Server Stub', async (instance, opts) => {
       // URGENT TODO: Make sure that error message when trying to get decorators that are not present is clear
       // @ts-ignore
       delete instance.server;
@@ -185,81 +185,81 @@ export class EzApp extends App {
   // Make routing with apps easy
   // URGENT TODO: Should we do this within the handler to be part of the plugin tree?
   delete = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["delete"]>
-  >(this, "delete");
+    OverloadParameters1to5<FastifyInstance['delete']>
+  >(this, 'delete');
 
   get = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["get"]>
-  >(this, "get");
+    OverloadParameters1to5<FastifyInstance['get']>
+  >(this, 'get');
 
   head = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["head"]>
-  >(this, "head");
+    OverloadParameters1to5<FastifyInstance['head']>
+  >(this, 'head');
 
   patch = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["patch"]>
-  >(this, "patch");
+    OverloadParameters1to5<FastifyInstance['patch']>
+  >(this, 'patch');
 
   post = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["post"]>
-  >(this, "post");
+    OverloadParameters1to5<FastifyInstance['post']>
+  >(this, 'post');
 
   put = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["put"]>
-  >(this, "put");
+    OverloadParameters1to5<FastifyInstance['put']>
+  >(this, 'put');
 
   options = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["options"]>
-  >(this, "options");
+    OverloadParameters1to5<FastifyInstance['options']>
+  >(this, 'options');
 
   all = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["all"]>
-  >(this, "all");
+    OverloadParameters1to5<FastifyInstance['all']>
+  >(this, 'all');
 
   route = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["route"]>
-  >(this, "route");
+    OverloadParameters1to5<FastifyInstance['route']>
+  >(this, 'route');
 
   addHook = generateFastifyFuncWrapper<any>(
     this,
-    "addHook",
-  ) as FastifyInstance["addHook"];
+    'addHook',
+  ) as FastifyInstance['addHook'];
 
   addSchema = generateFastifyFuncWrapper<
-    OverloadParameters<FastifyInstance["addSchema"]>
-  >(this, "addSchema");
+    OverloadParameters<FastifyInstance['addSchema']>
+  >(this, 'addSchema');
 
   setSerializerCompiler = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["setSerializerCompiler"]>
-  >(this, "setSerializerCompiler");
+    OverloadParameters1to5<FastifyInstance['setSerializerCompiler']>
+  >(this, 'setSerializerCompiler');
 
   addContentTypeParser = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["addContentTypeParser"]>
-  >(this, "addContentTypeParser");
+    OverloadParameters1to5<FastifyInstance['addContentTypeParser']>
+  >(this, 'addContentTypeParser');
 
   decorate = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["decorate"]>
-  >(this, "decorate");
+    OverloadParameters1to5<FastifyInstance['decorate']>
+  >(this, 'decorate');
 
   decorateReply = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["decorateReply"]>
-  >(this, "decorateReply");
+    OverloadParameters1to5<FastifyInstance['decorateReply']>
+  >(this, 'decorateReply');
 
   decorateRequest = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["decorateRequest"]>
-  >(this, "decorateRequest");
+    OverloadParameters1to5<FastifyInstance['decorateRequest']>
+  >(this, 'decorateRequest');
 
   register = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["register"]>
-  >(this, "register"); // TODO: Why is the async one not working?
+    OverloadParameters1to5<FastifyInstance['register']>
+  >(this, 'register'); // TODO: Why is the async one not working?
 
   setNotFoundHandler = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["setNotFoundHandler"]>
-  >(this, "setNotFoundHandler");
+    OverloadParameters1to5<FastifyInstance['setNotFoundHandler']>
+  >(this, 'setNotFoundHandler');
 
   setErrorHandler = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance["setErrorHandler"]>
-  >(this, "setErrorHandler");
+    OverloadParameters1to5<FastifyInstance['setErrorHandler']>
+  >(this, 'setErrorHandler');
   // NOTE: Inject is being used by EzBackend which is why we remove it
   // inject = generateFastifyFuncWrapper(this, 'inject')
 
@@ -332,11 +332,11 @@ export class EzApp extends App {
     }
 
     // Ensure that there is a '/' between the prefixes
-    if (instancePrefix.endsWith("/") && pluginPrefix[0] === "/") {
+    if (instancePrefix.endsWith('/') && pluginPrefix[0] === '/') {
       // Remove the extra '/' to avoid: '/first//second'
       pluginPrefix = pluginPrefix.slice(1);
-    } else if (pluginPrefix[0] !== "/") {
-      pluginPrefix = "/" + pluginPrefix;
+    } else if (pluginPrefix[0] !== '/') {
+      pluginPrefix = '/' + pluginPrefix;
     }
 
     return instancePrefix + pluginPrefix;
@@ -344,31 +344,31 @@ export class EzApp extends App {
 
   getPrefix(): string {
     if (!this.parent) {
-      return "";
+      return '';
     }
     if (this.parent instanceof EzApp) {
       return this.buildRoutePrefix(
         this.parent.getPrefix(),
-        this.opts.prefix ?? "",
+        this.opts.prefix ?? '',
       );
     }
     throw new EzError(
-      "Parent app of an EzApp needs to be instance of EzApp",
-      "If the parent of an EzApp is not an EzApp then it will be impossible to build the route prefix",
+      'Parent app of an EzApp needs to be instance of EzApp',
+      'If the parent of an EzApp is not an EzApp then it will be impossible to build the route prefix',
     );
   }
 
   private getSocketIOByNamespace(namespace?: string) {
     if (!this.localInstance)
       throw new EzError(
-        "Accessing socket IO too early in boot cycle",
-        "Socket IO is only instantiated in the lifecycle hook preHandler. Try using useSocketIO/useSocketIORaw instead",
+        'Accessing socket IO too early in boot cycle',
+        'Socket IO is only instantiated in the lifecycle hook preHandler. Try using useSocketIO/useSocketIORaw instead',
         `app.useSocketIORaw((io) => {/* Your Custom Functionality */})`,
       );
     const io = this.localInstance.socketIO;
 
     if (namespace) return io.of(namespace);
-    else return io.of("/");
+    else return io.of('/');
   }
 
   /**

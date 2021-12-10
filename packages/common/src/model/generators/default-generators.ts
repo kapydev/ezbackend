@@ -1,13 +1,13 @@
-import { getSchemaName } from "../typeorm-helpers";
-import Boom from "@hapi/boom";
+import { getSchemaName } from '../typeorm-helpers';
+import Boom from '@hapi/boom';
 import {
   DeepPartial,
   EntityMetadata,
   ObjectLiteral,
   Repository,
-} from "typeorm";
-import { RouteOptions } from "fastify";
-import type { RouterOptions } from "./ez-router";
+} from 'typeorm';
+import { RouteOptions } from 'fastify';
+import type { RouterOptions } from './ez-router';
 
 /**
  * Returns the primary column name from given metadata
@@ -22,7 +22,7 @@ export function getPrimaryColName(meta: EntityMetadata) {
 // TODO: Check if this function is efficient
 const removeNestedNulls = (obj: any) => {
   Object.keys(obj).forEach((k) => {
-    if (obj[k] && typeof obj[k] === "object") {
+    if (obj[k] && typeof obj[k] === 'object') {
       removeNestedNulls(obj[k]);
     } else if (obj[k] === null) {
       delete obj[k];
@@ -52,8 +52,8 @@ export const getDefaultGenerators = () => {
         .filter((col) => col.isGenerated)
         .map((col) => col.propertyName);
       const routeDetails: RouteOptions = {
-        method: "POST",
-        url: "/",
+        method: 'POST',
+        url: '/',
         schema: {
           // TODO: Figure out how to import types from fastify swagger correctly for this and below
           // @ts-ignore
@@ -64,7 +64,7 @@ export const getDefaultGenerators = () => {
           body: {
             $ref: `${getSchemaName(
               repo.metadata,
-              "createSchema",
+              'createSchema',
               opts?.schemaPrefix,
             )}#`,
           },
@@ -72,7 +72,7 @@ export const getDefaultGenerators = () => {
             200: {
               $ref: `${getSchemaName(
                 repo.metadata,
-                "fullSchema",
+                'fullSchema',
                 opts?.schemaPrefix,
               )}#`,
             },
@@ -95,7 +95,7 @@ export const getDefaultGenerators = () => {
     getOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
       const primaryCol = getPrimaryColName(repo.metadata);
       const routeDetails: RouteOptions = {
-        method: "GET",
+        method: 'GET',
         url: `/:${primaryCol}`,
         schema: {
           // @ts-ignore
@@ -103,16 +103,16 @@ export const getDefaultGenerators = () => {
           tags: [repo.metadata.name],
           description: `If the ${primaryCol} does not contain the value specified in the url parameters, there will be a 'not found' error.`,
           params: {
-            type: "object",
+            type: 'object',
             properties: {
-              [primaryCol]: { type: "number" },
+              [primaryCol]: { type: 'number' },
             },
           },
           response: {
             200: {
               $ref: `${getSchemaName(
                 repo.metadata,
-                "fullSchema",
+                'fullSchema',
                 opts?.schemaPrefix,
               )}#`,
             },
@@ -134,8 +134,8 @@ export const getDefaultGenerators = () => {
     },
     getAll: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
       const routeDetails: RouteOptions = {
-        method: "GET",
-        url: "/",
+        method: 'GET',
+        url: '/',
         schema: {
           // @ts-ignore
           summary: `Get all ${repo.metadata.name} instances`,
@@ -143,11 +143,11 @@ export const getDefaultGenerators = () => {
           description: `If none exist, an empty array is returned`,
           response: {
             200: {
-              type: "array",
+              type: 'array',
               items: {
                 $ref: `${getSchemaName(
                   repo.metadata,
-                  "fullSchema",
+                  'fullSchema',
                   opts?.schemaPrefix,
                 )}#`,
               },
@@ -167,7 +167,7 @@ export const getDefaultGenerators = () => {
         .filter((col) => col.isGenerated)
         .map((col) => col.propertyName);
       const routeDetails: RouteOptions = {
-        method: "PATCH",
+        method: 'PATCH',
         url: `/:${primaryCol}`,
         schema: {
           // @ts-ignore
@@ -180,7 +180,7 @@ export const getDefaultGenerators = () => {
           body: {
             $ref: `${getSchemaName(
               repo.metadata,
-              "updateSchema",
+              'updateSchema',
               opts?.schemaPrefix,
             )}#`,
           },
@@ -188,7 +188,7 @@ export const getDefaultGenerators = () => {
             200: {
               $ref: `${getSchemaName(
                 repo.metadata,
-                "fullSchema",
+                'fullSchema',
                 opts?.schemaPrefix,
               )}#`,
             },
@@ -196,9 +196,9 @@ export const getDefaultGenerators = () => {
             404: { $ref: `ErrorResponse#` },
           },
           params: {
-            type: "object",
+            type: 'object',
             properties: {
-              [primaryCol]: { type: "number" },
+              [primaryCol]: { type: 'number' },
             },
           },
         },
@@ -225,7 +225,7 @@ export const getDefaultGenerators = () => {
     deleteOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
       const primaryCol = getPrimaryColName(repo.metadata);
       const routeDetails: RouteOptions = {
-        method: "DELETE",
+        method: 'DELETE',
         url: `/:${primaryCol}`,
         schema: {
           // @ts-ignore
@@ -233,17 +233,17 @@ export const getDefaultGenerators = () => {
           tags: [repo.metadata.name],
           description: `The ${repo.metadata.name} with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned`,
           params: {
-            type: "object",
+            type: 'object',
             properties: {
-              [primaryCol]: { type: "number" },
+              [primaryCol]: { type: 'number' },
             },
           },
           response: {
             200: {
-              type: "object",
+              type: 'object',
               properties: {
                 success: {
-                  type: "boolean",
+                  type: 'boolean',
                 },
                 // @ts-ignore
                 handler: async (req, res) => {
@@ -260,7 +260,7 @@ export const getDefaultGenerators = () => {
                   };
                 },
               },
-              required: ["success", "id"],
+              required: ['success', 'id'],
             },
             400: { $ref: `ErrorResponse#` },
             404: { $ref: `ErrorResponse#` },

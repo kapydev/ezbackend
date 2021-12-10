@@ -1,12 +1,12 @@
-import { JsPackageManagerFactory } from "./js-package-manager/JsPackageManagerFactory";
-import { ProjectType } from "./project-types";
-import chalk from "chalk";
-import { commandLog, paddedLog } from "./helpers";
-import defaultGenerator from "./generators/DEFAULT";
-import fs from "fs";
-import { isEzbInstalled } from "./detect";
-import path from "path";
-import { readPackageJson } from "./js-package-manager";
+import { JsPackageManagerFactory } from './js-package-manager/JsPackageManagerFactory';
+import { ProjectType } from './project-types';
+import chalk from 'chalk';
+import { commandLog, paddedLog } from './helpers';
+import defaultGenerator from './generators/DEFAULT';
+import fs from 'fs';
+import { isEzbInstalled } from './detect';
+import path from 'path';
+import { readPackageJson } from './js-package-manager';
 
 // TODO: Seperate the cli from the server to reduce load time
 const logger = console;
@@ -24,7 +24,7 @@ export default function initiate(
   pkg: any,
 ) {
   const welcomeMessage =
-    "EzBackend - An extensible backend optimised for the developer experience";
+    'EzBackend - An extensible backend optimised for the developer experience';
   logger.log(chalk.inverse(`\n ${welcomeMessage} \n`));
 
   const ezbInstalled = isEzbInstalled(readPackageJson(), options.force);
@@ -38,7 +38,7 @@ export default function initiate(
     try {
       fs.mkdirSync(dir);
     } catch (e: any) {
-      if (e.code === "EEXIST") {
+      if (e.code === 'EEXIST') {
         throw new Error(
           `Folder "${dir}" already exists.` +
             `The directory "${dir}" needs to be non-existent for ezbackend to create a project there.` +
@@ -60,13 +60,13 @@ const installEzb = (projectType: ProjectType, options: InitiateOptions) => {
       case ProjectType.ALREADY_HAS_EZB:
         logger.log();
         paddedLog(
-          "EzBackend seems to already be available in this project. You can override this with the -f flag",
+          'EzBackend seems to already be available in this project. You can override this with the -f flag',
         );
         logger.log();
         return Promise.resolve();
       case ProjectType.DEFAULT:
         return defaultGenerator(packageManager, options).then(
-          commandLog("Adding EzBackend to your app"),
+          commandLog('Adding EzBackend to your app'),
         );
       default:
         paddedLog(

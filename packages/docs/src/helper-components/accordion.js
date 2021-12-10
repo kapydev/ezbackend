@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 /* Logic */
 
@@ -9,7 +9,7 @@ export function Accordion({ children }) {
 
   const toggleItem = React.useCallback(
     (id) => () => {
-      setSelected((prevState) => (prevState !== id ? id : ""));
+      setSelected((prevState) => (prevState !== id ? id : ''));
     },
     [],
   );

@@ -14,5 +14,3 @@ sidebar_position: 8
 1. Database Editor
 1. One line client side code
 1. Benchmarks (Firebase, AWS Amplify, etc)
-
-

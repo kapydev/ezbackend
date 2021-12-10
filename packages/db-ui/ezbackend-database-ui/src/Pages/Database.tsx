@@ -3,7 +3,7 @@ import {
   GridColDef,
   GridCellEditCommitParams,
   GridCellValue,
-} from "@mui/x-data-grid";
+} from '@mui/x-data-grid';
 import {
   Fade,
   IconButton,
@@ -11,24 +11,24 @@ import {
   Box,
   Grid,
   Hidden,
-} from "@material-ui/core";
-import { Scrollbars } from "react-custom-scrollbars";
-import toast, { Toaster } from "react-hot-toast";
-import { useEffect, useState } from "react";
-import { getBaseURL } from "../Helpers";
-import modelNameCustomRemover from "../Utils/modelNameCustomRemover";
-import replaceCellObject from "../Utils/replaceCellObject";
-import SchemaListItem from "../Components/SchemaListItem";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AddIcon from "@material-ui/icons/Add";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import PostRequestDialog from "../Components/PostRequestDialog";
-import ISchema from "../Interfaces/ISchema";
-import IJsonSchema from "../Interfaces/IJsonSchema";
-import promiseToast from "../Utils/promiseToast";
-import ReactJson from "react-json-view";
-import dotenv from "dotenv";
-import "../App.css";
+} from '@material-ui/core';
+import { Scrollbars } from 'react-custom-scrollbars';
+import toast, { Toaster } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+import { getBaseURL } from '../Helpers';
+import modelNameCustomRemover from '../Utils/modelNameCustomRemover';
+import replaceCellObject from '../Utils/replaceCellObject';
+import SchemaListItem from '../Components/SchemaListItem';
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import PostRequestDialog from '../Components/PostRequestDialog';
+import ISchema from '../Interfaces/ISchema';
+import IJsonSchema from '../Interfaces/IJsonSchema';
+import promiseToast from '../Utils/promiseToast';
+import ReactJson from 'react-json-view';
+import dotenv from 'dotenv';
+import '../App.css';
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ function Database() {
 
   const [rowData, setRowData] = useState<Object[]>([]);
 
-  const [selectedItem, setSelectedItem] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<string>('');
 
   const [openPostRequestDialog, setOpenPostRequestDialog] = useState(false);
 
@@ -70,10 +70,10 @@ function Database() {
         });
 
         const fullschemas: ISchema[] = newData
-          .filter((schema) => schema.schemaName.includes("fullSchema-"))
+          .filter((schema) => schema.schemaName.includes('fullSchema-'))
           .map((schema) => {
             return {
-              schemaName: schema.schemaName.replace("fullSchema-", ""),
+              schemaName: schema.schemaName.replace('fullSchema-', ''),
               properties: schema.properties,
             };
           });
@@ -83,11 +83,11 @@ function Database() {
         });
 
         const createschemas = data.filter((schema: any) =>
-          schema.title.includes("createSchema-"),
+          schema.title.includes('createSchema-'),
         );
 
         createschemas.forEach((schema: IJsonSchema) => {
-          schema.title = schema.title.replace("createSchema-", "");
+          schema.title = schema.title.replace('createSchema-', '');
         });
 
         setFullSchemas(fullschemas);
@@ -101,7 +101,7 @@ function Database() {
         handleGetColumnData(initialSelectedItem, fullschemas);
       })
 
-      .catch((error) => toast("ERROR", error.message));
+      .catch((error) => toast('ERROR', error.message));
   }, []);
 
   function handleListItemClick(clickedItem: string) {
@@ -125,7 +125,7 @@ function Database() {
                 property.length > charLenThreshHold
                   ? maxCellWidth
                   : widthMultiplier * property.length,
-              editable: property !== "id",
+              editable: property !== 'id',
             };
           }),
         );
@@ -162,11 +162,11 @@ function Database() {
   function handleDeleteSelectedRows() {
     const ids = [...deleteRowsIndex];
     if (ids.length === 0) {
-      toast("Please select some rows");
+      toast('Please select some rows');
     }
     ids.forEach((id) => {
       const fetchPromise = fetch(`${URL}/${selectedItem}/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       })
         .then(function (response) {
           if (!response.ok) {
@@ -186,8 +186,8 @@ function Database() {
     const body: any = {};
     body[patchdata.field] = patchdata.value;
     const requestOptions = {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     };
 
@@ -232,15 +232,15 @@ function Database() {
                 <Box
                   style={{
                     borderRadius: 10,
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
                     padding: 24,
-                    overflow: "hidden",
+                    overflow: 'hidden',
                   }}
                 >
                   <Scrollbars
                     autoHide
                     autoHideTimeout={100}
-                    style={{ width: "100%", minHeight: "200px" }}
+                    style={{ width: '100%', minHeight: '200px' }}
                   >
                     {modelNameCustomRemover(modelNames).map((s) => (
                       <SchemaListItem
@@ -257,8 +257,8 @@ function Database() {
                 <Grid item>
                   <Scrollbars
                     style={{
-                      width: "100%",
-                      minHeight: "300px",
+                      width: '100%',
+                      minHeight: '300px',
                       borderRadius: 10,
                     }}
                   >
@@ -318,12 +318,12 @@ function Database() {
               <Grid item>
                 <DataGrid
                   style={{
-                    height: "79vh",
-                    backgroundColor: "#fff",
+                    height: '79vh',
+                    backgroundColor: '#fff',
                     borderRadius: 10,
-                    borderStyle: "hidden",
+                    borderStyle: 'hidden',
                     padding: 12,
-                    fontFamily: "Inter",
+                    fontFamily: 'Inter',
                   }}
                   rows={rowData}
                   columns={columnNames}
@@ -347,7 +347,7 @@ function Database() {
           <Hidden mdUp>
             <Grid item xs={12}>
               <Scrollbars
-                style={{ width: "100%", height: "300px", borderRadius: 10 }}
+                style={{ width: '100%', height: '300px', borderRadius: 10 }}
               >
                 <ReactJson // @ts-ignore
                   src={cellDataValue}

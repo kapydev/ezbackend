@@ -1,6 +1,6 @@
-import { EzRouter, RouterOptions } from "./generators/ez-router";
-import { EzRepo, EzRules, ModelSchema, RepoOptions } from "./repo";
-import dedent from "dedent-js";
+import { EzRouter, RouterOptions } from './generators/ez-router';
+import { EzRepo, EzRules, ModelSchema, RepoOptions } from './repo';
+import dedent from 'dedent-js';
 
 export type ModelOpts = {
   repoOpts?: RepoOptions;
@@ -12,11 +12,11 @@ export type ModelOpts = {
 export class EzModel extends EzRepo {
   // TODO: Figure out automatic typings
   get router(): EzRouter {
-    return this.getApp("router") as EzRouter;
+    return this.getApp('router') as EzRouter;
   }
 
   get rules(): EzRules {
-    return this.getApp("rules") as EzRules;
+    return this.getApp('rules') as EzRules;
   }
 
   constructor(
@@ -30,7 +30,7 @@ export class EzModel extends EzRepo {
 
     const rules = new EzRules(modelName);
 
-    this.addApp("router", router);
-    this.addApp("rules", rules);
+    this.addApp('router', router);
+    this.addApp('rules', rules);
   }
 }

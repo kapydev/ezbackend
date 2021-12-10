@@ -7,24 +7,24 @@ import {
   Typography,
   Box,
   Button,
-} from "@material-ui/core";
-import DrawerItem from "./DrawerItem";
-import MenuIcon from "@material-ui/icons/Menu";
-import Database from "../Pages/Database";
-import Docs from "../Pages/Docs";
-import SocketIODocs from "../Pages/SocketIODocs";
-import openInNewTab from "../Utils/openInNewTab";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+} from '@material-ui/core';
+import DrawerItem from './DrawerItem';
+import MenuIcon from '@material-ui/icons/Menu';
+import Database from '../Pages/Database';
+import Docs from '../Pages/Docs';
+import SocketIODocs from '../Pages/SocketIODocs';
+import openInNewTab from '../Utils/openInNewTab';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 const drawerItems = (
   <>
-    <Link to="/" style={{ textDecoration: "none" }}>
+    <Link to="/" style={{ textDecoration: 'none' }}>
       <DrawerItem name="Database" />
     </Link>
-    <Link to="/api-documentation" style={{ textDecoration: "none" }}>
+    <Link to="/api-documentation" style={{ textDecoration: 'none' }}>
       <DrawerItem name="API Docs" />
     </Link>
-    <Link to="/socket-io-documentation" style={{ textDecoration: "none" }}>
+    <Link to="/socket-io-documentation" style={{ textDecoration: 'none' }}>
       <DrawerItem name="Socket IO Docs" />
     </Link>
   </>
@@ -43,13 +43,13 @@ function Layout(props: ILayout) {
         <Grid
           container
           direction="column"
-          style={{ backgroundColor: "#eee", minHeight: "100vh" }}
+          style={{ backgroundColor: '#eee', minHeight: '100vh' }}
         >
           <Grid item>
             <AppBar
               position="relative"
               elevation={0}
-              style={{ backgroundColor: "#3B3228" }}
+              style={{ backgroundColor: '#3B3228' }}
             >
               <Toolbar>
                 {/* For Mobile Only */}
@@ -64,9 +64,9 @@ function Layout(props: ILayout) {
                 </Hidden>
 
                 <Button
-                  style={{ textTransform: "none" }}
+                  style={{ textTransform: 'none' }}
                   onClick={() => {
-                    openInNewTab("https://www.ezbackend.io/");
+                    openInNewTab('https://www.ezbackend.io/');
                   }}
                 >
                   <Typography variant="h5" align="center">
@@ -88,9 +88,9 @@ function Layout(props: ILayout) {
                 </Hidden>
 
                 <Button
-                  style={{ textTransform: "none" }}
+                  style={{ textTransform: 'none' }}
                   onClick={() => {
-                    openInNewTab("https://www.ezbackend.io/");
+                    openInNewTab('https://www.ezbackend.io/');
                   }}
                 >
                   <Typography variant="h5" align="center">

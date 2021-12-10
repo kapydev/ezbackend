@@ -7,4 +7,4 @@ export type PackageJson = {
 };
 
 export type PackageJsonWithDepsAndDevDeps = PackageJson &
-  Required<Pick<PackageJson, "dependencies" | "devDependencies">>;
+  Required<Pick<PackageJson, 'dependencies' | 'devDependencies'>>;

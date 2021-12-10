@@ -4,9 +4,9 @@ import {
   EzModel,
   RecursivePartial,
   Type,
-} from "../src";
+} from '../src';
 
-describe("Plugin Registering", () => {
+describe('Plugin Registering', () => {
   let app: EzBackend;
 
   const defaultConfig: RecursivePartial<EzBackendOpts> = {
@@ -15,7 +15,7 @@ describe("Plugin Registering", () => {
         logger: false,
       },
       typeorm: {
-        database: ":memory:",
+        database: ':memory:',
       },
     },
   };
@@ -24,7 +24,7 @@ describe("Plugin Registering", () => {
     app = new EzBackend();
 
     // Prevent server from starting
-    app.removeHook("_run", "Run Fastify Server");
+    app.removeHook('_run', 'Run Fastify Server');
   });
 
   afterEach(async () => {
@@ -33,26 +33,26 @@ describe("Plugin Registering", () => {
     await instance._server.close();
   });
 
-  it("router => for => hook syntax should work", async () => {
+  it('router => for => hook syntax should work', async () => {
     const mock1 = jest.fn();
 
-    const testModel = new EzModel("test", {
+    const testModel = new EzModel('test', {
       var1: Type.VARCHAR,
     });
 
-    app.addApp("test", testModel, { prefix: "test" });
+    app.addApp('test', testModel, { prefix: 'test' });
 
-    testModel.router.for("createOne").preHandler(async (req, res) => {
+    testModel.router.for('createOne').preHandler(async (req, res) => {
       mock1();
     });
 
     await app.start(defaultConfig);
 
     await app.inject({
-      method: "POST",
-      url: "/test",
+      method: 'POST',
+      url: '/test',
       payload: {
-        var1: "hello world",
+        var1: 'hello world',
       },
     });
 

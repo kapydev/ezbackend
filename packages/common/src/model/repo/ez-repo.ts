@@ -1,4 +1,4 @@
-import { EzApp } from "../../ezapp";
+import { EzApp } from '../../ezapp';
 import {
   ObjectLiteral,
   Repository,
@@ -6,29 +6,29 @@ import {
   EntitySchemaRelationOptions,
   EntitySchemaColumnOptions,
   EntitySchema,
-} from "typeorm";
-import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
-import { Plugin } from "avvio";
-import { RelationType as TypeORMRelationType } from "typeorm/metadata/types/RelationTypes";
-import { EzError } from "@ezbackend/utils";
+} from 'typeorm';
+import { EntitySchemaOptions } from 'typeorm/entity-schema/EntitySchemaOptions';
+import { Plugin } from 'avvio';
+import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes';
+import { EzError } from '@ezbackend/utils';
 
 enum NormalType {
-  VARCHAR = "VARCHAR",
-  INT = "INT",
-  FLOAT = "FLOAT",
-  DOUBLE = "DOUBLE",
-  REAL = "REAL",
-  DATE = "DATE",
-  JSON = "JSON",
-  BOOL = "BOOL",
-  ENUM = "ENUM",
+  VARCHAR = 'VARCHAR',
+  INT = 'INT',
+  FLOAT = 'FLOAT',
+  DOUBLE = 'DOUBLE',
+  REAL = 'REAL',
+  DATE = 'DATE',
+  JSON = 'JSON',
+  BOOL = 'BOOL',
+  ENUM = 'ENUM',
 }
 
 enum RelationType {
-  ONE_TO_ONE = "ONE_TO_ONE",
-  ONE_TO_MANY = "ONE_TO_MANY",
-  MANY_TO_ONE = "MANY_TO_ONE",
-  MANY_TO_MANY = "MANY_TO_MANY",
+  ONE_TO_ONE = 'ONE_TO_ONE',
+  ONE_TO_MANY = 'ONE_TO_MANY',
+  MANY_TO_ONE = 'MANY_TO_ONE',
+  MANY_TO_MANY = 'MANY_TO_MANY',
 }
 
 export type Type = RelationType | NormalType;
@@ -36,11 +36,11 @@ export const Type = { ...RelationType, ...NormalType };
 
 type NestedRelationType = { type: RelationType } & Omit<
   EntitySchemaRelationOptions,
-  "type"
+  'type'
 >;
 type NestedNormalType = { type: NormalType | ColumnType } & Omit<
   EntitySchemaColumnOptions,
-  "type"
+  'type'
 >;
 
 export type FullType =
@@ -59,27 +59,27 @@ export type ModelSchema = {
 function normalTypeToTypeORMtype(type: NormalType | ColumnType): ColumnType {
   switch (type) {
     case NormalType.VARCHAR:
-      return "varchar";
+      return 'varchar';
     case NormalType.INT:
-      return "integer";
+      return 'integer';
     case NormalType.FLOAT:
-      return "float";
+      return 'float';
     case NormalType.DOUBLE:
-      return "double";
+      return 'double';
     case NormalType.REAL:
-      return "real";
+      return 'real';
     case NormalType.DATE:
-      return "date";
+      return 'date';
     case NormalType.BOOL:
-      return "boolean";
+      return 'boolean';
     case NormalType.JSON:
       // URGENT TODO: Switch between simple json and normal json depending on postgres column?
-      return "simple-json";
+      return 'simple-json';
     case NormalType.ENUM:
       // URGENT URGENT TODO: Test case for this
       // URGENT URGENT TODO: See if 'enum' instead of simple-enum works
       // URGENT URGENT TODO: Good error message when enum values are not specified
-      return "simple-enum";
+      return 'simple-enum';
 
     default:
       return type;
@@ -91,13 +91,13 @@ function relationTypeToTypeORMrelation(
 ): TypeORMRelationType {
   switch (type) {
     case RelationType.ONE_TO_MANY:
-      return "one-to-many";
+      return 'one-to-many';
     case RelationType.ONE_TO_ONE:
-      return "one-to-one";
+      return 'one-to-one';
     case RelationType.MANY_TO_ONE:
-      return "many-to-one";
+      return 'many-to-one';
     case RelationType.MANY_TO_MANY:
-      return "many-to-many";
+      return 'many-to-many';
   }
 }
 
@@ -117,163 +117,163 @@ export function isNormalType(type: FullType): type is NormalType {
 
 export function isNestedNormalType(type: FullType): type is NestedNormalType {
   const ColumnType: Array<ColumnType> = [
-    "int",
-    "int2",
-    "int4",
-    "int8",
-    "integer",
-    "tinyint",
-    "smallint",
-    "mediumint",
-    "bigint",
-    "dec",
-    "decimal",
-    "smalldecimal",
-    "fixed",
-    "numeric",
-    "number",
-    "geometry",
-    "geography",
-    "st_geometry",
-    "st_point",
-    "float",
-    "double",
-    "dec",
-    "decimal",
-    "smalldecimal",
-    "fixed",
-    "numeric",
-    "real",
-    "double precision",
-    "number",
-    "datetime",
-    "datetime2",
-    "datetimeoffset",
-    "time",
-    "time with time zone",
-    "time without time zone",
-    "timestamp",
-    "timestamp without time zone",
-    "timestamp with time zone",
-    "timestamp with local time zone",
-    "character varying",
-    "varying character",
-    "char varying",
-    "nvarchar",
-    "national varchar",
-    "character",
-    "native character",
-    "varchar",
-    "char",
-    "nchar",
-    "national char",
-    "varchar2",
-    "nvarchar2",
-    "alphanum",
-    "shorttext",
-    "raw",
-    "binary",
-    "varbinary",
-    "string",
-    "tinyint",
-    "smallint",
-    "mediumint",
-    "int",
-    "bigint",
-    "simple-array",
-    "simple-json",
-    "simple-enum",
-    "int2",
-    "integer",
-    "int4",
-    "int8",
-    "int64",
-    "unsigned big int",
-    "float",
-    "float4",
-    "float8",
-    "smallmoney",
-    "money",
-    "boolean",
-    "bool",
-    "tinyblob",
-    "tinytext",
-    "mediumblob",
-    "mediumtext",
-    "blob",
-    "text",
-    "ntext",
-    "citext",
-    "hstore",
-    "longblob",
-    "longtext",
-    "alphanum",
-    "shorttext",
-    "bytes",
-    "bytea",
-    "long",
-    "raw",
-    "long raw",
-    "bfile",
-    "clob",
-    "nclob",
-    "image",
-    "timetz",
-    "timestamptz",
-    "timestamp with local time zone",
-    "smalldatetime",
-    "date",
-    "interval year to month",
-    "interval day to second",
-    "interval",
-    "year",
-    "seconddate",
-    "point",
-    "line",
-    "lseg",
-    "box",
-    "circle",
-    "path",
-    "polygon",
-    "geography",
-    "geometry",
-    "linestring",
-    "multipoint",
-    "multilinestring",
-    "multipolygon",
-    "geometrycollection",
-    "st_geometry",
-    "st_point",
-    "int4range",
-    "int8range",
-    "numrange",
-    "tsrange",
-    "tstzrange",
-    "daterange",
-    "enum",
-    "set",
-    "cidr",
-    "inet",
-    "macaddr",
-    "bit",
-    "bit varying",
-    "varbit",
-    "tsvector",
-    "tsquery",
-    "uuid",
-    "xml",
-    "json",
-    "jsonb",
-    "varbinary",
-    "hierarchyid",
-    "sql_variant",
-    "rowid",
-    "urowid",
-    "uniqueidentifier",
-    "rowversion",
-    "array",
-    "cube",
-    "ltree",
+    'int',
+    'int2',
+    'int4',
+    'int8',
+    'integer',
+    'tinyint',
+    'smallint',
+    'mediumint',
+    'bigint',
+    'dec',
+    'decimal',
+    'smalldecimal',
+    'fixed',
+    'numeric',
+    'number',
+    'geometry',
+    'geography',
+    'st_geometry',
+    'st_point',
+    'float',
+    'double',
+    'dec',
+    'decimal',
+    'smalldecimal',
+    'fixed',
+    'numeric',
+    'real',
+    'double precision',
+    'number',
+    'datetime',
+    'datetime2',
+    'datetimeoffset',
+    'time',
+    'time with time zone',
+    'time without time zone',
+    'timestamp',
+    'timestamp without time zone',
+    'timestamp with time zone',
+    'timestamp with local time zone',
+    'character varying',
+    'varying character',
+    'char varying',
+    'nvarchar',
+    'national varchar',
+    'character',
+    'native character',
+    'varchar',
+    'char',
+    'nchar',
+    'national char',
+    'varchar2',
+    'nvarchar2',
+    'alphanum',
+    'shorttext',
+    'raw',
+    'binary',
+    'varbinary',
+    'string',
+    'tinyint',
+    'smallint',
+    'mediumint',
+    'int',
+    'bigint',
+    'simple-array',
+    'simple-json',
+    'simple-enum',
+    'int2',
+    'integer',
+    'int4',
+    'int8',
+    'int64',
+    'unsigned big int',
+    'float',
+    'float4',
+    'float8',
+    'smallmoney',
+    'money',
+    'boolean',
+    'bool',
+    'tinyblob',
+    'tinytext',
+    'mediumblob',
+    'mediumtext',
+    'blob',
+    'text',
+    'ntext',
+    'citext',
+    'hstore',
+    'longblob',
+    'longtext',
+    'alphanum',
+    'shorttext',
+    'bytes',
+    'bytea',
+    'long',
+    'raw',
+    'long raw',
+    'bfile',
+    'clob',
+    'nclob',
+    'image',
+    'timetz',
+    'timestamptz',
+    'timestamp with local time zone',
+    'smalldatetime',
+    'date',
+    'interval year to month',
+    'interval day to second',
+    'interval',
+    'year',
+    'seconddate',
+    'point',
+    'line',
+    'lseg',
+    'box',
+    'circle',
+    'path',
+    'polygon',
+    'geography',
+    'geometry',
+    'linestring',
+    'multipoint',
+    'multilinestring',
+    'multipolygon',
+    'geometrycollection',
+    'st_geometry',
+    'st_point',
+    'int4range',
+    'int8range',
+    'numrange',
+    'tsrange',
+    'tstzrange',
+    'daterange',
+    'enum',
+    'set',
+    'cidr',
+    'inet',
+    'macaddr',
+    'bit',
+    'bit varying',
+    'varbit',
+    'tsvector',
+    'tsquery',
+    'uuid',
+    'xml',
+    'json',
+    'jsonb',
+    'varbinary',
+    'hierarchyid',
+    'sql_variant',
+    'rowid',
+    'urowid',
+    'uniqueidentifier',
+    'rowversion',
+    'array',
+    'cube',
+    'ltree',
   ];
   return (Object.values(NormalType) as Array<NormalType | ColumnType>)
     .concat(ColumnType)
@@ -309,8 +309,8 @@ function schemaToEntityOptions(schema: ModelSchema) {
     if (isNestedNormalType(value)) {
       if (value.primary === true) {
         throw new EzError(
-          "EzBackend currently only supports one Primary Column per entity",
-          "A primary id column is created by default for all models. While typeorm supports composite primary keys, EzBackend currently does not support this feature. If you need it drop us a message in github",
+          'EzBackend currently only supports one Primary Column per entity',
+          'A primary id column is created by default for all models. While typeorm supports composite primary keys, EzBackend currently does not support this feature. If you need it drop us a message in github',
           `
 new EzModel("IllegalModel", {
     mySecondPrimaryColumn: {
@@ -329,8 +329,8 @@ new EzModel("IllegalModel", {
     }
     if (isRelation(value)) {
       throw new EzError(
-        "You currently need to use the full declaration for specifying a relation",
-        "Relations require additional metadata to generate the Database Tables",
+        'You currently need to use the full declaration for specifying a relation',
+        'Relations require additional metadata to generate the Database Tables',
         `
 Replace
 
@@ -365,7 +365,7 @@ myRelation: {
 
 export type RepoOptions = Omit<
   EntitySchemaOptions<any>,
-  "name" | "columns" | "relations"
+  'name' | 'columns' | 'relations'
 >;
 
 // TODO: Think about function naming
@@ -413,8 +413,8 @@ export class EzRepo extends EzApp {
   getRepo(): Repository<ObjectLiteral> {
     if (this._repo === undefined) {
       throw new EzError(
-        "Can only call getRepo() in lifecyle preHandler to postRun",
-        "The repo is only defined in the postInit lifecycle, so it can only be referenced after that",
+        'Can only call getRepo() in lifecyle preHandler to postRun',
+        'The repo is only defined in the postInit lifecycle, so it can only be referenced after that',
         `
 model.setHandler("Handle Repo", async (instance, opts) => {
     const repo = model.getRepo()

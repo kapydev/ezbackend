@@ -1,4 +1,4 @@
 export default function openInNewTab(url: string) {
-  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
   if (newWindow) newWindow.opener = null;
 }

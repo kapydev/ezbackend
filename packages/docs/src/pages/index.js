@@ -1,47 +1,47 @@
-import React, { useEffect, useState } from "react";
-import ReactPlayer from "react-player/youtube";
-import Layout from "@theme/Layout";
-import toast, { Toaster } from "react-hot-toast";
-import { featuresContent } from "../content/features-content";
-import StepFeature from "../helper-components/step-feature";
+import React, { useEffect, useState } from 'react';
+import ReactPlayer from 'react-player/youtube';
+import Layout from '@theme/Layout';
+import toast, { Toaster } from 'react-hot-toast';
+import { featuresContent } from '../content/features-content';
+import StepFeature from '../helper-components/step-feature';
 import {
   Accordion,
   AccordionItem,
   AccordionPanel,
-} from "../helper-components/accordion";
-import ReactCompareImage from "react-compare-image";
-import validator from "validator";
-import FadeIn from "react-fade-in";
-import axios from "axios";
+} from '../helper-components/accordion';
+import ReactCompareImage from 'react-compare-image';
+import validator from 'validator';
+import FadeIn from 'react-fade-in';
+import axios from 'axios';
 
 // CSS
-import "tailwindcss/tailwind.css";
-import "animate.css";
+import 'tailwindcss/tailwind.css';
+import 'animate.css';
 
 // HELPER COMPONENTS
-import { Delayed } from "../helper-components/delayed";
-import { CtaButton } from "../helper-components/cta-button";
-import { MovingCode } from "../helper-components/moving-code";
-import { Feature, MainFeature } from "../helper-components/feature";
+import { Delayed } from '../helper-components/delayed';
+import { CtaButton } from '../helper-components/cta-button';
+import { MovingCode } from '../helper-components/moving-code';
+import { Feature, MainFeature } from '../helper-components/feature';
 
 // SVG IMPORTS
-import IconApiDocs from "../assets/icon-api-docs.svg";
-import IconDatabase from "../assets/icon-database.svg";
-import IconSecurity from "../assets/icon-security.svg";
-import IconWorld from "../assets/icon-world.svg";
-import IconGithub from "../assets/icon-github.svg";
-import IconYoutube from "../assets/icon-youtube.svg";
-import IconDiscord from "../assets/icon-discord.svg";
-import DiagramBuild from "../assets/diagram-scaling-build.png";
-import DiagramScale from "../assets/diagram-scaling-scale.png";
+import IconApiDocs from '../assets/icon-api-docs.svg';
+import IconDatabase from '../assets/icon-database.svg';
+import IconSecurity from '../assets/icon-security.svg';
+import IconWorld from '../assets/icon-world.svg';
+import IconGithub from '../assets/icon-github.svg';
+import IconYoutube from '../assets/icon-youtube.svg';
+import IconDiscord from '../assets/icon-discord.svg';
+import DiagramBuild from '../assets/diagram-scaling-build.png';
+import DiagramScale from '../assets/diagram-scaling-scale.png';
 
-const YT_URL = "https://youtu.be/kQRRckdEFr8";
-const LPBKND_BASEURL = "https://ez-landing-page-backend.herokuapp.com";
+const YT_URL = 'https://youtu.be/kQRRckdEFr8';
+const LPBKND_BASEURL = 'https://ez-landing-page-backend.herokuapp.com';
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimationOver, setIsAnimationOver] = useState(false);
-  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpEmail, setSignUpEmail] = useState('');
 
   const [signUpCount, setSignUpCount] = useState(0);
   const [fomoVisible, setFomoVisible] = useState(false);
@@ -51,21 +51,21 @@ export default function Home() {
 
     if (signUpEmail) {
       return axios
-        .post(LPBKND_BASEURL + "/signUps/", {
+        .post(LPBKND_BASEURL + '/signUps/', {
           email: signUpEmail,
         })
         .catch(function (error) {
           console.log(error);
         })
         .then(function (response) {
-          setSignUpEmail("");
+          setSignUpEmail('');
         });
     }
   };
 
   useEffect(() => {
     axios
-      .get(LPBKND_BASEURL + "/signUps/count")
+      .get(LPBKND_BASEURL + '/signUps/count')
       .then(function (response) {
         setFomoVisible(true);
         setSignUpCount(response.data);
@@ -91,10 +91,10 @@ export default function Home() {
       <Toaster
         toastOptions={{
           style: {
-            padding: "16px",
-            fontWeight: "bold",
-            color: "white",
-            backgroundColor: "#282A36",
+            padding: '16px',
+            fontWeight: 'bold',
+            color: 'white',
+            backgroundColor: '#282A36',
             fontSize: 16,
           },
         }}
@@ -146,7 +146,7 @@ export default function Home() {
             <div className="grid place-items-center lg:place-items-end self-center col-span-full lg:col-span-1">
               <div
                 className="bg-dracula rounded-lg w-full lg:h-320px"
-                style={{ maxWidth: "500px" }}
+                style={{ maxWidth: '500px' }}
               >
                 <div
                   className="rounded-lg text-sm pointer-events-none font-mono"
@@ -186,8 +186,8 @@ export default function Home() {
                         </div>
                       }
                     >
-                      A Node framework focused on <Txty>speed</Txty> and{" "}
-                      <Txty>ease of use,</Txty> while keeping the ability to{" "}
+                      A Node framework focused on <Txty>speed</Txty> and{' '}
+                      <Txty>ease of use,</Txty> while keeping the ability to{' '}
                       <Txty>extend</Txty> and <Txty>customize</Txty>
                     </MainFeature>
                   </div>
@@ -200,8 +200,8 @@ export default function Home() {
                   </StepFeature>
                   <StepFeature delay={4500}>Table Columns Added</StepFeature>
                   <StepFeature delay={9000}>
-                    <span className="text-purple">Name</span>,{" "}
-                    <span className="text-purple">Species</span>,{" "}
+                    <span className="text-purple">Name</span>,{' '}
+                    <span className="text-purple">Species</span>,{' '}
                     <span className="text-purple">Age</span>, Columns Added in
                     Table
                   </StepFeature>
@@ -373,7 +373,7 @@ export default function Home() {
                 </div>
                 <div className="font-monts text-md text-center max-w-lg">
                   Claim <span className="font-bold">100USD</span> Hosting
-                  Credits when you sign up for our{" "}
+                  Credits when you sign up for our{' '}
                   <span className="text-purple">Alpha</span> programme today!
                 </div>
                 <form>
@@ -391,10 +391,10 @@ export default function Home() {
                   islink={false}
                   onClick={(e) => {
                     if (!validator.isEmail(signUpEmail)) {
-                      toast.error("Please fill in your email");
+                      toast.error('Please fill in your email');
                     } else {
                       toast.promise(handleSubmit(e), {
-                        loading: "Waiting for Heroku...",
+                        loading: 'Waiting for Heroku...',
                         success: <b>Submitted</b>,
                         error: <b>Server Error! We are working on it!</b>,
                       });
@@ -406,10 +406,10 @@ export default function Home() {
                 {fomoVisible ? (
                   <FadeIn>
                     <div className="font-monts text-center text-gray-200">
-                      Join{" "}
+                      Join{' '}
                       <span className="font-semibold text-2xl">
                         {signUpCount}
-                      </span>{" "}
+                      </span>{' '}
                       Users in Alpha
                     </div>
                   </FadeIn>
@@ -430,7 +430,7 @@ export default function Home() {
 
 // UTILITIES
 
-const codeText1 = "const app = new EzBackend()";
+const codeText1 = 'const app = new EzBackend()';
 const codeText2 = `const pets = new EzModel('Pets', {
   name: Type.VARCHAR,
   species: Type.VARCHAR,
@@ -441,7 +441,7 @@ const codeText4 = `app.start()`;
 
 function Txty(props) {
   return (
-    <span className="font-semibold" style={{ color: "#BD93F9" }}>
+    <span className="font-semibold" style={{ color: '#BD93F9' }}>
       {props.children}
     </span>
   );

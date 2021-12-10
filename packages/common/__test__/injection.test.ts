@@ -1,6 +1,6 @@
-import { EzBackend, EzBackendOpts, RecursivePartial } from "../src";
+import { EzBackend, EzBackendOpts, RecursivePartial } from '../src';
 
-describe("Plugin Registering", () => {
+describe('Plugin Registering', () => {
   let app: EzBackend;
 
   const defaultConfig: RecursivePartial<EzBackendOpts> = {
@@ -9,7 +9,7 @@ describe("Plugin Registering", () => {
         logger: false,
       },
       typeorm: {
-        database: ":memory:",
+        database: ':memory:',
       },
     },
   };
@@ -18,7 +18,7 @@ describe("Plugin Registering", () => {
     app = new EzBackend();
 
     // Prevent server from starting
-    app.removeHook("_run", "Run Fastify Server");
+    app.removeHook('_run', 'Run Fastify Server');
   });
 
   afterEach(async () => {
@@ -27,13 +27,13 @@ describe("Plugin Registering", () => {
     await instance._server.close();
   });
 
-  it("Injection before starting should fail", async () => {
+  it('Injection before starting should fail', async () => {
     const mock = jest.fn();
 
     try {
       await app.inject({
-        method: "GET",
-        url: "/",
+        method: 'GET',
+        url: '/',
       });
     } catch {
       mock();

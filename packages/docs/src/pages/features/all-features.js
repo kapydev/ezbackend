@@ -1,7 +1,7 @@
-import React from "react";
-import Layout from "@theme/Layout";
-import { Feature } from "../../helper-components/feature";
-import { featuresContent } from "../../content/features-content";
+import React from 'react';
+import Layout from '@theme/Layout';
+import { Feature } from '../../helper-components/feature';
+import { featuresContent } from '../../content/features-content';
 
 function AllFeatures() {
   return (

@@ -6,10 +6,10 @@
  * Note from Philip: Thank you Andrés!
  */
 
-const { existsSync } = require("fs");
-const { constants } = require("os");
-const spawn = require("cross-spawn");
-const concat = require("concat-stream");
+const { existsSync } = require('fs');
+const { constants } = require('os');
+const spawn = require('cross-spawn');
+const concat = require('concat-stream');
 const PATH = process.env.PATH;
 
 /**
@@ -21,17 +21,17 @@ const PATH = process.env.PATH;
 function createProcess(processPath, args = [], env = null) {
   // Ensure that path exists
   if (!processPath || !existsSync(processPath)) {
-    throw new Error("Invalid process path");
+    throw new Error('Invalid process path');
   }
 
   args = [processPath].concat(args);
 
   // This works for node based CLIs, but can easily be adjusted to
   // any other process installed in the system
-  return spawn("node", args, {
+  return spawn('node', args, {
     env: Object.assign(
       {
-        NODE_ENV: "test",
+        NODE_ENV: 'test',
         preventAutoStart: false,
         PATH, // This is needed in order to get all the binaries in your current terminal
       },
@@ -57,7 +57,7 @@ function executeWithInput(processPath, args = [], inputs = [], opts = {}) {
 
   const { env = null, timeout = 100, maxTimeout = 10000 } = opts;
   const childProcess = createProcess(processPath, args, env);
-  childProcess.stdin.setEncoding("utf-8");
+  childProcess.stdin.setEncoding('utf-8');
 
   let currentInputTimeout, killIOTimeout;
 
@@ -75,7 +75,7 @@ function executeWithInput(processPath, args = [], inputs = [], opts = {}) {
       // Set a timeout to wait for CLI response. If CLI takes longer than
       // maxTimeout to respond, kill the childProcess and notify user
       killIOTimeout = setTimeout(() => {
-        console.error("Error: Reached I/O timeout");
+        console.error('Error: Reached I/O timeout');
         childProcess.kill(constants.signals.SIGTERM);
       }, maxTimeout);
 
@@ -86,7 +86,7 @@ function executeWithInput(processPath, args = [], inputs = [], opts = {}) {
       childProcess.stdin.write(inputs[0]);
       // Log debug I/O statements on tests
       if (env && env.DEBUG) {
-        console.log("input:", inputs[0]);
+        console.log('input:', inputs[0]);
       }
       loop(inputs.slice(1));
     }, timeout);
@@ -94,22 +94,22 @@ function executeWithInput(processPath, args = [], inputs = [], opts = {}) {
 
   const promise = new Promise((resolve, reject) => {
     // Get errors from CLI
-    childProcess.stderr.on("data", (data) => {
+    childProcess.stderr.on('data', (data) => {
       // Log debug I/O statements on tests
       if (env && env.DEBUG) {
-        console.log("error:", data.toString());
+        console.log('error:', data.toString());
       }
     });
 
     // Get output from CLI
-    childProcess.stdout.on("data", (data) => {
+    childProcess.stdout.on('data', (data) => {
       // Log debug I/O statements on tests
       if (env && env.DEBUG) {
-        console.log("output:", data.toString());
+        console.log('output:', data.toString());
       }
     });
 
-    childProcess.stderr.once("data", (err) => {
+    childProcess.stderr.once('data', (err) => {
       childProcess.stdin.end();
 
       if (currentInputTimeout) {
@@ -119,7 +119,7 @@ function executeWithInput(processPath, args = [], inputs = [], opts = {}) {
       reject(err.toString());
     });
 
-    childProcess.on("error", reject);
+    childProcess.on('error', reject);
 
     // Kick off the process
     loop(inputs);
@@ -151,8 +151,8 @@ module.exports = {
       execute: fn,
     };
   },
-  DOWN: "\x1B\x5B\x42",
-  UP: "\x1B\x5B\x41",
-  ENTER: "\x0D",
-  SPACE: "\x20",
+  DOWN: '\x1B\x5B\x42',
+  UP: '\x1B\x5B\x41',
+  ENTER: '\x0D',
+  SPACE: '\x20',
 };

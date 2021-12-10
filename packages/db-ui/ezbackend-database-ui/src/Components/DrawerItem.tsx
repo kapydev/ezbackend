@@ -1,4 +1,4 @@
-import { ListItem, Typography, Box } from "@material-ui/core";
+import { ListItem, Typography, Box } from '@material-ui/core';
 
 interface IDrawerItem {
   name: string;

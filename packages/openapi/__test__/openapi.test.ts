@@ -1,7 +1,7 @@
-import { EzBackend, EzModel, Type } from "@ezbackend/common";
+import { EzBackend, EzModel, Type } from '@ezbackend/common';
 
-import { EzOpenAPI } from "../src";
-import type { FastifyInstance } from "fastify";
+import { EzOpenAPI } from '../src';
+import type { FastifyInstance } from 'fastify';
 
 // TODO: Figure if there is a better way of getting this data
 function getInternalInstance(ezb: EzBackend) {
@@ -17,7 +17,7 @@ const defaultConfig = {
       logger: false,
     },
     typeorm: {
-      database: ":memory:",
+      database: ':memory:',
     },
   },
 };
@@ -26,7 +26,7 @@ beforeEach(() => {
   app = new EzBackend();
 
   // Prevent server from starting
-  app.removeHook("_run", "Run Fastify Server");
+  app.removeHook('_run', 'Run Fastify Server');
 });
 
 afterEach(async () => {
@@ -35,8 +35,8 @@ afterEach(async () => {
   await instance._server.close();
 });
 
-describe("Basic Usage", () => {
-  it("Should be able to render the docs", async () => {
+describe('Basic Usage', () => {
+  it('Should be able to render the docs', async () => {
     app.addApp(new EzOpenAPI());
 
     await app.start(defaultConfig);
@@ -44,35 +44,35 @@ describe("Basic Usage", () => {
     const server: FastifyInstance = getInternalInstance(app)._server;
 
     const response = await server.inject({
-      method: "GET",
-      url: "/docs/static/index.html",
+      method: 'GET',
+      url: '/docs/static/index.html',
     });
 
     expect(response.statusCode).toBe(200);
   });
 
-  it("Should have schemas", async () => {
-    app.addApp("openapi", new EzOpenAPI());
+  it('Should have schemas', async () => {
+    app.addApp('openapi', new EzOpenAPI());
 
-    const dummyModel = new EzModel("model", {
+    const dummyModel = new EzModel('model', {
       var1: Type.VARCHAR,
       var2: Type.VARCHAR,
     });
 
-    app.addApp("model", dummyModel);
+    app.addApp('model', dummyModel);
 
     await app.start(defaultConfig);
 
     const server: FastifyInstance = app.getInternalServer();
 
     const response2 = await server.inject({
-      method: "GET",
-      url: "/docs",
+      method: 'GET',
+      url: '/docs',
     });
 
     const response = await server.inject({
-      method: "GET",
-      url: "/docs/json",
+      method: 'GET',
+      url: '/docs/json',
     });
 
     expect(response.statusCode).toBe(200);

@@ -1,6 +1,6 @@
-import "../css/helper.css";
-import React from "react";
-import { useHistory } from "react-router-dom";
+import '../css/helper.css';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 export function CtaButton(props) {
   const history = useHistory();

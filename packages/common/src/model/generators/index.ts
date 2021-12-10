@@ -1,2 +1,2 @@
-export * from "./ez-router";
-export * from "./default-generators";
+export * from './ez-router';
+export * from './default-generators';

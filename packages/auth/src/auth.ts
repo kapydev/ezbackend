@@ -1,22 +1,22 @@
-import { EzApp, EzBackendOpts } from "@ezbackend/common";
+import { EzApp, EzBackendOpts } from '@ezbackend/common';
 import fastifySecureSession, {
   SecureSessionPluginOptions,
-} from "fastify-secure-session";
-import fs, { PathLike } from "fs";
-import fastifyPassport, { Authenticator } from "fastify-passport";
-import "fastify-cookie";
+} from 'fastify-secure-session';
+import fs, { PathLike } from 'fs';
+import fastifyPassport, { Authenticator } from 'fastify-passport';
+import 'fastify-cookie';
 import {
   logIn,
   logOut,
   isAuthenticated,
   isUnauthenticated,
-} from "fastify-passport/dist/decorators";
-import flash from "connect-flash";
-import { AuthenticationRoute } from "fastify-passport/dist/AuthenticationRoute";
-import { EzError } from "@ezbackend/utils";
-import { PluginScope } from "@ezbackend/core";
-import dedent from "dedent-js";
-import path from "path";
+} from 'fastify-passport/dist/decorators';
+import flash from 'connect-flash';
+import { AuthenticationRoute } from 'fastify-passport/dist/AuthenticationRoute';
+import { EzError } from '@ezbackend/utils';
+import { PluginScope } from '@ezbackend/core';
+import dedent from 'dedent-js';
+import path from 'path';
 
 export interface EzBackendAuthOpts {
   secretKey?: string;
@@ -26,25 +26,25 @@ export interface EzBackendAuthOpts {
   fastifySecureSession: SecureSessionPluginOptions;
 }
 
-declare module "@ezbackend/common" {
+declare module '@ezbackend/common' {
   interface EzBackendOpts {
     auth: EzBackendAuthOpts;
   }
 }
 
-export const defaultConfig: EzBackendOpts["auth"] = {
+export const defaultConfig: EzBackendOpts['auth'] = {
   secretKey: process.env.SECRET_KEY ?? undefined,
-  secretKeyPath: path.join(process.cwd(), "secret-key"),
+  secretKeyPath: path.join(process.cwd(), 'secret-key'),
   successRedirectURL:
-    process.env.AUTH_SUCCESS_REDIRECT ?? "http://localhost:8000/db-ui",
+    process.env.AUTH_SUCCESS_REDIRECT ?? 'http://localhost:8000/db-ui',
   failureRedirectURL:
-    process.env.AUTH_FAILURE_REDIRECT ?? "http://localhost:8000/db-ui",
+    process.env.AUTH_FAILURE_REDIRECT ?? 'http://localhost:8000/db-ui',
   fastifySecureSession: {
     // URGENT TODO: Make the process of getting the key type consistent
-    key: "",
+    key: '',
     cookie: {
-      path: "/",
-      sameSite: "none",
+      path: '/',
+      sameSite: 'none',
       secure: true,
       httpOnly: true,
     },
@@ -52,11 +52,11 @@ export const defaultConfig: EzBackendOpts["auth"] = {
   google: {
     googleClientId: process.env.GOOGLE_CLIENT_ID!,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    scope: ["google"],
+    scope: ['google'],
   },
 };
 
-function getKey(opts: EzBackendOpts["auth"]) {
+function getKey(opts: EzBackendOpts['auth']) {
   let key: Buffer = Buffer.alloc(32);
 
   if (
@@ -65,7 +65,7 @@ function getKey(opts: EzBackendOpts["auth"]) {
     fs.existsSync(opts.secretKeyPath)
   ) {
     throw new EzError(
-      "Can only define one secret key!",
+      'Can only define one secret key!',
       "Your secret key can be in the secretKeyPath (default filename 'secret-key') or in your environment variable SECRET_KEY ONLY",
       dedent`
         Pick ONE only:
@@ -79,7 +79,7 @@ function getKey(opts: EzBackendOpts["auth"]) {
     );
   }
 
-  if (typeof opts.secretKey === "string") {
+  if (typeof opts.secretKey === 'string') {
     key.write(opts.secretKey);
   } else if (opts.secretKeyPath && fs.existsSync(opts.secretKeyPath)) {
     key = Buffer.from(fs.readFileSync(opts.secretKeyPath), undefined, 32);
@@ -114,15 +114,15 @@ export class EzAuth extends EzApp {
     this.setDefaultOpts(defaultConfig);
 
     this.setHandler(
-      "Add Fastify Secure Session",
+      'Add Fastify Secure Session',
       async (instance, fullOpts) => {
-        const opts = this.getOpts("auth", fullOpts);
+        const opts = this.getOpts('auth', fullOpts);
 
         const key = getKey(opts);
 
         if (
-          "key" in opts.fastifySecureSession &&
-          opts.fastifySecureSession.key === ""
+          'key' in opts.fastifySecureSession &&
+          opts.fastifySecureSession.key === ''
         ) {
           opts.fastifySecureSession.key = key;
         }
@@ -134,7 +134,7 @@ export class EzAuth extends EzApp {
       },
     );
 
-    this.setHandler("Add Fastify Passport", async (instance, opts) => {
+    this.setHandler('Add Fastify Passport', async (instance, opts) => {
       instance.server.register(fastifyPassport.initialize());
       instance.server.register(fastifyPassport.secureSession());
 
@@ -177,7 +177,7 @@ export class EzAuth extends EzApp {
       ) {
         return (req: any, res: any, next: any) => {
           req.log = { trace: () => {} };
-          new AuthenticationRoute(passport, "session", {})
+          new AuthenticationRoute(passport, 'session', {})
             .handler(req, res)
             .then(() => {
               next();

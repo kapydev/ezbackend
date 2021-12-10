@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
 export function Feature(props) {
   return (
     <a
-      style={{ pointerEvents: props.noClick ? "none" : "auto" }}
+      style={{ pointerEvents: props.noClick ? 'none' : 'auto' }}
       href={props.route}
       className="
       text-gray-100
@@ -42,9 +42,9 @@ export function Feature(props) {
               <div className="text-gray-400 hover:text-white">
                 {props.released
                   ? props.route
-                    ? "Learn More ➜"
-                    : ""
-                  : "Coming Soon"}
+                    ? 'Learn More ➜'
+                    : ''
+                  : 'Coming Soon'}
               </div>
             </div>
           </div>

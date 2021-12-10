@@ -1,15 +1,15 @@
-import { RouteOptions } from "fastify";
-import { ObjectLiteral, Repository } from "typeorm";
-import { EzBackendOpts } from "../..";
-import { EzApp } from "../../ezapp";
+import { RouteOptions } from 'fastify';
+import { ObjectLiteral, Repository } from 'typeorm';
+import { EzBackendOpts } from '../..';
+import { EzApp } from '../../ezapp';
 // TODO: Consider if we should remove the cyclic importing
-import type { EzBackendInstance } from "../../ezbackend";
+import type { EzBackendInstance } from '../../ezbackend';
 import {
   getCreateSchema,
   getFullSchema,
   getUpdateSchema,
-} from "../typeorm-helpers";
-import { getDefaultGenerators } from "./default-generators";
+} from '../typeorm-helpers';
+import { getDefaultGenerators } from './default-generators';
 
 export interface RouterOptions {
   schemaPrefix?: string;
@@ -49,7 +49,7 @@ export function generateRouteFactory(
       });
       // TODO: Figure out why types don't match
       instance.server.route(
-        modifiedRoute as Parameters<typeof instance["server"]["route"]>[0],
+        modifiedRoute as Parameters<typeof instance['server']['route']>[0],
       );
     });
   };
@@ -76,7 +76,7 @@ export class EzRouter extends EzApp {
   _genOpts: RouterOptions;
 
   constructor(
-    opts: RouterOptions = { prefix: "", generators: getDefaultGenerators() },
+    opts: RouterOptions = { prefix: '', generators: getDefaultGenerators() },
   ) {
     super();
     this._genOpts = opts;
@@ -113,7 +113,7 @@ export class EzRouter extends EzApp {
     // TODO: Consider about not using spaces in naming conventions
     const handlerName = `Generate ${generatorName} route`;
     if (override) {
-      this.removeHook("_handler", handlerName);
+      this.removeHook('_handler', handlerName);
     }
     this.setHandler(
       handlerName,
@@ -141,71 +141,71 @@ export class EzRouter extends EzApp {
 
   for(...routeNames: Array<string>) {
     return {
-      method: this._forFactory<RouteOptions["method"]>("method", routeNames),
-      url: this._forFactory<RouteOptions["url"]>("url", routeNames),
-      schema: this._forFactory<RouteOptions["schema"]>("schema", routeNames),
-      exposeHeadRoute: this._forFactory<RouteOptions["exposeHeadRoute"]>(
-        "exposeHeadRoute",
+      method: this._forFactory<RouteOptions['method']>('method', routeNames),
+      url: this._forFactory<RouteOptions['url']>('url', routeNames),
+      schema: this._forFactory<RouteOptions['schema']>('schema', routeNames),
+      exposeHeadRoute: this._forFactory<RouteOptions['exposeHeadRoute']>(
+        'exposeHeadRoute',
         routeNames,
       ),
-      attachValidation: this._forFactory<RouteOptions["attachValidation"]>(
-        "attachValidation",
+      attachValidation: this._forFactory<RouteOptions['attachValidation']>(
+        'attachValidation',
         routeNames,
       ),
-      onRequest: this._forFactory<RouteOptions["onRequest"]>(
-        "onRequest",
+      onRequest: this._forFactory<RouteOptions['onRequest']>(
+        'onRequest',
         routeNames,
       ),
-      preParsing: this._forFactory<RouteOptions["preParsing"]>(
-        "preParsing",
+      preParsing: this._forFactory<RouteOptions['preParsing']>(
+        'preParsing',
         routeNames,
       ),
-      preValidation: this._forFactory<RouteOptions["preValidation"]>(
-        "preValidation",
+      preValidation: this._forFactory<RouteOptions['preValidation']>(
+        'preValidation',
         routeNames,
       ),
-      preHandler: this._forFactory<RouteOptions["preHandler"]>(
-        "preHandler",
+      preHandler: this._forFactory<RouteOptions['preHandler']>(
+        'preHandler',
         routeNames,
       ),
-      preSerialization: this._forFactory<RouteOptions["preSerialization"]>(
-        "preSerialization",
+      preSerialization: this._forFactory<RouteOptions['preSerialization']>(
+        'preSerialization',
         routeNames,
       ),
-      onSend: this._forFactory<RouteOptions["onSend"]>("onSend", routeNames),
-      onResponse: this._forFactory<RouteOptions["onResponse"]>(
-        "onResponse",
+      onSend: this._forFactory<RouteOptions['onSend']>('onSend', routeNames),
+      onResponse: this._forFactory<RouteOptions['onResponse']>(
+        'onResponse',
         routeNames,
       ),
-      handler: this._forFactory<RouteOptions["handler"]>("handler", routeNames),
-      errorHandler: this._forFactory<RouteOptions["errorHandler"]>(
-        "errorHandler",
+      handler: this._forFactory<RouteOptions['handler']>('handler', routeNames),
+      errorHandler: this._forFactory<RouteOptions['errorHandler']>(
+        'errorHandler',
         routeNames,
       ),
-      validatorCompiler: this._forFactory<RouteOptions["validatorCompiler"]>(
-        "validatorCompiler",
+      validatorCompiler: this._forFactory<RouteOptions['validatorCompiler']>(
+        'validatorCompiler',
         routeNames,
       ),
-      serializerCompiler: this._forFactory<RouteOptions["serializerCompiler"]>(
-        "serializerCompiler",
+      serializerCompiler: this._forFactory<RouteOptions['serializerCompiler']>(
+        'serializerCompiler',
         routeNames,
       ),
       schemaErrorFormatter: this._forFactory<
-        RouteOptions["schemaErrorFormatter"]
-      >("schemaErrorFormatter", routeNames),
-      bodyLimit: this._forFactory<RouteOptions["bodyLimit"]>(
-        "bodyLimit",
+        RouteOptions['schemaErrorFormatter']
+      >('schemaErrorFormatter', routeNames),
+      bodyLimit: this._forFactory<RouteOptions['bodyLimit']>(
+        'bodyLimit',
         routeNames,
       ),
-      logLevel: this._forFactory<RouteOptions["logLevel"]>(
-        "logLevel",
+      logLevel: this._forFactory<RouteOptions['logLevel']>(
+        'logLevel',
         routeNames,
       ),
-      config: this._forFactory<RouteOptions["config"]>("config", routeNames),
-      version: this._forFactory<RouteOptions["version"]>("version", routeNames),
+      config: this._forFactory<RouteOptions['config']>('config', routeNames),
+      version: this._forFactory<RouteOptions['version']>('version', routeNames),
       prefixTrailingSlash: this._forFactory<
-        RouteOptions["prefixTrailingSlash"]
-      >("prefixTrailingSlash", routeNames),
+        RouteOptions['prefixTrailingSlash']
+      >('prefixTrailingSlash', routeNames),
     };
   }
 }

@@ -1,11 +1,11 @@
-import { als } from "asynchronous-local-storage";
-import { InsertEvent, LoadEvent, RemoveEvent, UpdateEvent } from "typeorm";
+import { als } from 'asynchronous-local-storage';
+import { InsertEvent, LoadEvent, RemoveEvent, UpdateEvent } from 'typeorm';
 
 export enum REALTIME {
-  RULE_CONTEXT = "RULE_CONTEXT",
-  REQ_CONTEXT = "REQ_CONTEXT",
-  SOCKET_CONTEXT = "SOCKET_CONTEXT",
-  IGNORE_RULES = "IGNORE_RULES",
+  RULE_CONTEXT = 'RULE_CONTEXT',
+  REQ_CONTEXT = 'REQ_CONTEXT',
+  SOCKET_CONTEXT = 'SOCKET_CONTEXT',
+  IGNORE_RULES = 'IGNORE_RULES',
 }
 
 export interface AllowedValues {

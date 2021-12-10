@@ -1,5 +1,5 @@
 // Typescript is truly evil
-import { FastifyInstance, RouteShorthandMethod } from "fastify";
+import { FastifyInstance, RouteShorthandMethod } from 'fastify';
 
 type _Params<T> = T extends {
   (...args: infer A1): unknown;
@@ -186,4 +186,4 @@ export type OverloadParameters6to10<T extends Function> = TupleToArrayUnion<
   _6to10Params<T>
 >;
 
-type Z = OverloadParameters6to10<FastifyInstance["addHook"]>;
+type Z = OverloadParameters6to10<FastifyInstance['addHook']>;

@@ -1,18 +1,18 @@
 /* eslint-disable no-use-before-define */
-import avvio, { Avvio, mixedInstance, Plugin } from "avvio";
-import { kApp, kInstance, kScope } from "./symbols";
+import avvio, { Avvio, mixedInstance, Plugin } from 'avvio';
+import { kApp, kInstance, kScope } from './symbols';
 
 export type PluginType = Plugin<AppInstanceOpts, AppInstance>;
 export type Lifecycle =
-  | "_preInit"
-  | "_init"
-  | "_postInit"
-  | "_preHandler"
-  | "_handler"
-  | "_postHandler"
-  | "_preRun"
-  | "_run"
-  | "_postRun";
+  | '_preInit'
+  | '_init'
+  | '_postInit'
+  | '_preHandler'
+  | '_handler'
+  | '_postHandler'
+  | '_preRun'
+  | '_run'
+  | '_postRun';
 
 export enum PluginScope {
   PARENT,
@@ -20,15 +20,15 @@ export enum PluginScope {
 }
 
 export const LIFECYCLE: Array<Lifecycle> = [
-  "_preInit",
-  "_init",
-  "_postInit",
-  "_preHandler",
-  "_handler",
-  "_postHandler",
-  "_preRun",
-  "_run",
-  "_postRun",
+  '_preInit',
+  '_init',
+  '_postInit',
+  '_preHandler',
+  '_handler',
+  '_postHandler',
+  '_preRun',
+  '_run',
+  '_postRun',
 ];
 
 export class AppInstance {
@@ -37,9 +37,9 @@ export class AppInstance {
 
 export class AppInstanceOpts {}
 
-export type Override = Avvio<AppInstance>["override"];
+export type Override = Avvio<AppInstance>['override'];
 
-export type Overrides = { [name: string]: Avvio<unknown>["override"] };
+export type Overrides = { [name: string]: Avvio<unknown>['override'] };
 
 // TODO: Added safety for overriding instance variables?
 
@@ -92,7 +92,7 @@ export class App {
     this._run = new Map();
     this._postRun = new Map();
     this._instance = avvio(new AppInstance(), { autostart: false });
-    this._name = "Root";
+    this._name = 'Root';
     this._scope = PluginScope.DEFAULT;
     this._overrides = {};
     this.opts = {};
@@ -150,7 +150,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setPreInit(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_preInit", funcName, plugin);
+    this.setHook('_preInit', funcName, plugin);
   }
 
   /**
@@ -159,7 +159,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setInit(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_init", funcName, plugin);
+    this.setHook('_init', funcName, plugin);
   }
 
   /**
@@ -168,7 +168,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setPostInit(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_postInit", funcName, plugin);
+    this.setHook('_postInit', funcName, plugin);
   }
 
   /**
@@ -177,7 +177,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setPreHandler(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_preHandler", funcName, plugin);
+    this.setHook('_preHandler', funcName, plugin);
   }
 
   /**
@@ -186,7 +186,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setHandler(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_handler", funcName, plugin);
+    this.setHook('_handler', funcName, plugin);
   }
 
   /**
@@ -195,7 +195,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setPostHandler(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_postHandler", funcName, plugin);
+    this.setHook('_postHandler', funcName, plugin);
   }
 
   /**
@@ -204,7 +204,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setPreRun(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_preRun", funcName, plugin);
+    this.setHook('_preRun', funcName, plugin);
   }
 
   /**
@@ -213,7 +213,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setRun(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_run", funcName, plugin);
+    this.setHook('_run', funcName, plugin);
   }
 
   /**
@@ -222,7 +222,7 @@ export class App {
    * @param plugin Plugin where function is located
    */
   setPostRun(funcName: string, plugin: Plugin<any, any>) {
-    this.setHook("_postRun", funcName, plugin);
+    this.setHook('_postRun', funcName, plugin);
   }
 
   /**
@@ -249,7 +249,7 @@ export class App {
       throw new Error(`${funcName} already declared for ${lifecycle}`);
     }
     // Override the plugin name
-    Object.defineProperty(plugin, "name", { value: funcName });
+    Object.defineProperty(plugin, 'name', { value: funcName });
     this[lifecycle].set(funcName, plugin);
   }
 
@@ -294,7 +294,7 @@ export class App {
       newApp = arg1;
       opts = arg2 ?? arg3;
     } else if (
-      typeof arg1 === "string" &&
+      typeof arg1 === 'string' &&
       arg2 instanceof App &&
       arg3 instanceof Object
     ) {
@@ -303,7 +303,7 @@ export class App {
       newApp = arg2 as App;
       opts = arg3;
     } else {
-      throw new Error("Invalid function signature for addApp()");
+      throw new Error('Invalid function signature for addApp()');
     }
 
     if (
@@ -371,7 +371,7 @@ export class App {
     appFunc.prototype[kApp] = this;
     appFunc.prototype[kScope] = this.scope;
     // Override the encapsulating function's name
-    Object.defineProperty(appFunc, "name", { value: this.name });
+    Object.defineProperty(appFunc, 'name', { value: this.name });
 
     return appFunc;
   }
@@ -390,7 +390,7 @@ export class App {
     LIFECYCLE.forEach((lifecycle) => {
       const lifecyclePlugin = this.getHookPlugin(lifecycle);
       if (lifecyclePlugin) {
-        Object.defineProperty(lifecyclePlugin, "name", { value: lifecycle });
+        Object.defineProperty(lifecyclePlugin, 'name', { value: lifecycle });
         this._instance.use(lifecyclePlugin, opts);
       }
     });
@@ -404,7 +404,7 @@ export class App {
    * @param varName
    * @param override
    */
-  setCustomOverride(varName: string, override: Avvio<unknown>["override"]) {
+  setCustomOverride(varName: string, override: Avvio<unknown>['override']) {
     this._overrides[varName] = override;
   }
 

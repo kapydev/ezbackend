@@ -1,6 +1,6 @@
-import { EzBackend } from "../src";
+import { EzBackend } from '../src';
 
-describe("Plugin Registering", () => {
+describe('Plugin Registering', () => {
   let app: EzBackend;
 
   const defaultConfig = {
@@ -9,7 +9,7 @@ describe("Plugin Registering", () => {
         logger: false,
       },
       typeorm: {
-        database: ":memory:",
+        database: ':memory:',
       },
     },
   };
@@ -18,7 +18,7 @@ describe("Plugin Registering", () => {
     app = new EzBackend();
 
     // Prevent server from starting
-    app.removeHook("_run", "Run Fastify Server");
+    app.removeHook('_run', 'Run Fastify Server');
   });
 
   afterEach(async () => {
@@ -27,30 +27,30 @@ describe("Plugin Registering", () => {
     await instance._server.close();
   });
 
-  it("Top level plugin should be properly prefixed", async () => {
-    app.setHandler("Register plugin", async (instance, opts) => {
+  it('Top level plugin should be properly prefixed', async () => {
+    app.setHandler('Register plugin', async (instance, opts) => {
       instance.server.register(
         async (server, opts) => {
-          expect(server.prefix).toBe("/prefix");
+          expect(server.prefix).toBe('/prefix');
         },
-        { prefix: "prefix" },
+        { prefix: 'prefix' },
       );
     });
     await app.start(defaultConfig);
   });
 
-  it("Reply decorators should exist", async () => {
-    app.setHandler("Register plugin", async (instance, opts) => {
-      instance.server.decorateReply("decorator1", "test");
+  it('Reply decorators should exist', async () => {
+    app.setHandler('Register plugin', async (instance, opts) => {
+      instance.server.decorateReply('decorator1', 'test');
       // expect(instance.server.hasReplyDecorator('decorator1')).toBe(true)
 
       instance.server.register(async (server, opts) => {
-        server.decorateReply("decorator2", "test");
-        expect(server.hasReplyDecorator("decorator1")).toBe(true);
+        server.decorateReply('decorator2', 'test');
+        expect(server.hasReplyDecorator('decorator1')).toBe(true);
 
         server.register(async (server, opts) => {
-          expect(server.hasReplyDecorator("decorator1")).toBe(true);
-          expect(server.hasReplyDecorator("decorator2")).toBe(true);
+          expect(server.hasReplyDecorator('decorator1')).toBe(true);
+          expect(server.hasReplyDecorator('decorator2')).toBe(true);
         });
       });
     });

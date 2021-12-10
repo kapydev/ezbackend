@@ -4,10 +4,10 @@ import {
   EzModel,
   RecursivePartial,
   Type,
-} from "../src";
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+} from '../src';
+import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 
-import { EzError } from "@ezbackend/utils";
+import { EzError } from '@ezbackend/utils';
 
 const defaultConfig: RecursivePartial<EzBackendOpts> = {
   backend: {
@@ -15,24 +15,24 @@ const defaultConfig: RecursivePartial<EzBackendOpts> = {
       logger: false,
     },
     typeorm: {
-      database: ":memory:",
+      database: ':memory:',
     },
   },
 };
-describe("Illegal Entity Creation", () => {
+describe('Illegal Entity Creation', () => {
   let app: EzBackend;
 
   beforeAll(async () => {
     app = new EzBackend();
-    app.removeHook("_run", "Run Fastify Server");
+    app.removeHook('_run', 'Run Fastify Server');
   });
 
-  test("Creating a relation without the full syntax should be illegal", async () => {
+  test('Creating a relation without the full syntax should be illegal', async () => {
     let errored = false;
 
     try {
       app.addApp(
-        new EzModel("IllegalModel", {
+        new EzModel('IllegalModel', {
           relation: Type.ONE_TO_ONE,
         }),
       );
@@ -48,12 +48,12 @@ describe("Illegal Entity Creation", () => {
     expect(errored).toBe(true);
   });
 
-  test("Creating Model with more than one primary column is illegal", async () => {
+  test('Creating Model with more than one primary column is illegal', async () => {
     let errored = false;
 
     try {
       app.addApp(
-        new EzModel("IllegalModel", {
+        new EzModel('IllegalModel', {
           mySecondPrimaryColumn: {
             type: Type.VARCHAR,
             primary: true,

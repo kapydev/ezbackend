@@ -1,7 +1,7 @@
-import { FastifyRequest } from "fastify";
-import { requestContext } from "fastify-request-context";
-import { socketContext } from "socket-io-event-context";
-import { Socket } from "socket.io";
+import { FastifyRequest } from 'fastify';
+import { requestContext } from 'fastify-request-context';
+import { socketContext } from 'socket-io-event-context';
+import { Socket } from 'socket.io';
 import {
   InsertEvent,
   UpdateEvent,
@@ -9,16 +9,16 @@ import {
   LoadEvent,
   EventSubscriber,
   EntitySubscriberInterface,
-} from "typeorm";
-import { DecorateClass } from "../model";
-import { EzApp } from "../ezapp";
-import { getContext, REALTIME, setContext } from "./context";
+} from 'typeorm';
+import { DecorateClass } from '../model';
+import { EzApp } from '../ezapp';
+import { getContext, REALTIME, setContext } from './context';
 
 export enum RuleType {
-  CREATE = "create",
-  READ = "read",
-  UPDATE = "update",
-  DELETE = "delete",
+  CREATE = 'create',
+  READ = 'read',
+  UPDATE = 'update',
+  DELETE = 'delete',
 }
 
 export type RuleTypes = Array<RuleType>;
@@ -37,7 +37,7 @@ export type GetEventContext<Type extends RuleType> =
 export type AllPossibleEventContexts<T extends RuleTypes = RuleTypes> =
   GetEventContext<T[number]>;
 
-export type AllPossibleRequestTypes = FastifyRequest | Socket["request"] | null;
+export type AllPossibleRequestTypes = FastifyRequest | Socket['request'] | null;
 
 export type RuleFunction<T extends RuleTypes = RuleTypes> = (
   req: AllPossibleRequestTypes,
@@ -62,7 +62,7 @@ export class EzRules<
     this.context = [];
     this.ruleFunctionMetas = [];
 
-    this.setInit("Add Rules Subscriber", async (instance) => {
+    this.setInit('Add Rules Subscriber', async (instance) => {
       instance.subscribers.unshift(createRulesSubscriber(this));
     });
   }
@@ -105,7 +105,7 @@ export function createRulesSubscriber(ezRules: EzRules) {
   }
 
   function getSocketRequest() {
-    return socketContext.get<Socket["request"]>(REALTIME.SOCKET_CONTEXT);
+    return socketContext.get<Socket['request']>(REALTIME.SOCKET_CONTEXT);
   }
 
   class RuleSubscriber implements EntitySubscriberInterface {

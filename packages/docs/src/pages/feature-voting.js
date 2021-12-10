@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Layout from "@theme/Layout";
-import { CtaButton } from "../helper-components/cta-button";
+import React, { useEffect, useState } from 'react';
+import Layout from '@theme/Layout';
+import { CtaButton } from '../helper-components/cta-button';
 
 function FeatureCard() {
   const [isHoveringHeart, setIsHoveringHeart] = useState(false);
@@ -32,7 +32,7 @@ function FeatureCard() {
           }}
           xmlns="http://www.w3.org/2000/svg"
           className="h-11 w-11"
-          fill={isHoveringHeart ? "#dadde1" : "none"}
+          fill={isHoveringHeart ? '#dadde1' : 'none'}
           viewBox="0 0 24 24"
           stroke="#dadde1"
         >

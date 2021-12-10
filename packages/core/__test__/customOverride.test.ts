@@ -1,32 +1,32 @@
 // @ts-nocheck
 // We use nocheck here because its too troublesome to create all the types for the test cases
-import { describe, it, expect } from "@jest/globals";
-import { App } from "../src";
-import fastify from "fastify";
-import override from "fastify/lib/pluginOverride";
-import { kRoutePrefix } from "fastify/lib/symbols";
-import fastq from "fastq";
+import { describe, it, expect } from '@jest/globals';
+import { App } from '../src';
+import fastify from 'fastify';
+import override from 'fastify/lib/pluginOverride';
+import { kRoutePrefix } from 'fastify/lib/symbols';
+import fastq from 'fastq';
 
 let app;
 
 beforeEach(() => {
   app = new App();
 
-  app.setInit("Create Fastify Server", async (instance, opts) => {
+  app.setInit('Create Fastify Server', async (instance, opts) => {
     instance.server = fastify();
   });
 
   // TODO: Switch this with .ready()
-  app.setRun("Run Fastify Server", async (instance, opts) => {
+  app.setRun('Run Fastify Server', async (instance, opts) => {
     await instance.server.listen();
   });
 
-  app.setPostRun("Kill Server", async (instance, opts) => {
+  app.setPostRun('Kill Server', async (instance, opts) => {
     await instance.server.close();
   });
 
   // The location of this function should not matter
-  app.setCustomOverride("server", (old, fn, opts) => {
+  app.setCustomOverride('server', (old, fn, opts) => {
     const newObj = override(old, fn, opts);
 
     type Arg = {
@@ -50,14 +50,14 @@ beforeEach(() => {
           cb(null, null);
           return;
         }
-        throw new Error("All possible cases should be reached by here");
+        throw new Error('All possible cases should be reached by here');
       };
 
       // Run the function with the specified arguments, with the done callback
       const promise = qObj.fn(...qObj.args, done);
 
       // Handling promises so we account for signature (s,opts,done) and async(s,opts)
-      if (promise && typeof promise.then === "function") {
+      if (promise && typeof promise.then === 'function') {
         promise.then(
           () => {
             process.nextTick(done);
@@ -84,19 +84,19 @@ beforeEach(() => {
   });
 });
 
-describe("test with fastify", () => {
-  it("Should share instances between init, handler, run despite custom override", async () => {
+describe('test with fastify', () => {
+  it('Should share instances between init, handler, run despite custom override', async () => {
     const instanceContainer = [];
 
-    app.setHandler("get handler instance", async (instance, opts) => {
+    app.setHandler('get handler instance', async (instance, opts) => {
       instanceContainer.push(instance.server);
     });
 
-    app.setRun("get run instance", async (instance, opts) => {
+    app.setRun('get run instance', async (instance, opts) => {
       instanceContainer.push(instance.server);
     });
 
-    app.setPostRun("get post run instance", async (instance, opts) => {
+    app.setPostRun('get post run instance', async (instance, opts) => {
       instanceContainer.push(instance.server);
     });
 
@@ -108,31 +108,31 @@ describe("test with fastify", () => {
     expect(instanceContainer[0]).toBe(instanceContainer[1]);
     expect(instanceContainer[1]).toBe(instanceContainer[2]);
   });
-  it("Child should have prefix depending on opts it was added with", async () => {
+  it('Child should have prefix depending on opts it was added with', async () => {
     const prefixedChild = new App();
 
-    app.addApp("Prefixed Child", prefixedChild, { prefix: "prefix" });
+    app.addApp('Prefixed Child', prefixedChild, { prefix: 'prefix' });
 
-    prefixedChild.setHandler("Check for prefix", async (instance, opts) => {
-      expect(instance.server[kRoutePrefix]).toBe("/prefix");
+    prefixedChild.setHandler('Check for prefix', async (instance, opts) => {
+      expect(instance.server[kRoutePrefix]).toBe('/prefix');
     });
 
     await app.start();
   });
 
-  it("Child should have same server instance in different lifecycle states", async () => {
+  it('Child should have same server instance in different lifecycle states', async () => {
     const prefixedChild = new App();
 
-    app.addApp("Prefixed Child", prefixedChild, { prefix: "prefix" });
+    app.addApp('Prefixed Child', prefixedChild, { prefix: 'prefix' });
 
     const instanceContainer = [];
 
-    prefixedChild.setHandler("add handler server", async (instance, opts) => {
+    prefixedChild.setHandler('add handler server', async (instance, opts) => {
       instanceContainer.push(instance.server);
     });
 
     prefixedChild.setPostHandler(
-      "add post handler server",
+      'add post handler server',
       async (instance, opts) => {
         instanceContainer.push(instance.server);
       },
@@ -145,100 +145,100 @@ describe("test with fastify", () => {
     expect(instanceContainer[0]).toBe(instanceContainer[1]);
   });
 
-  it("Stuff in parent should be found in child, but not vice versa", async () => {
+  it('Stuff in parent should be found in child, but not vice versa', async () => {
     const prefixedChild = new App();
 
-    app.addApp("Prefixed Child", prefixedChild, { prefix: "prefix" });
+    app.addApp('Prefixed Child', prefixedChild, { prefix: 'prefix' });
 
-    prefixedChild.setInit("create child var", async (instance, opts) => {
-      instance.server.childVar = "childVar";
+    prefixedChild.setInit('create child var', async (instance, opts) => {
+      instance.server.childVar = 'childVar';
     });
 
-    app.setHandler("create parent var", async (instance, opts) => {
-      instance.server.parentVar = "parentVar";
+    app.setHandler('create parent var', async (instance, opts) => {
+      instance.server.parentVar = 'parentVar';
       expect(instance.server.childVar).toBeUndefined();
     });
 
-    prefixedChild.setHandler("check child var", async (instance, opts) => {
-      expect(instance.server.parentVar).toBe("parentVar");
-      expect(instance.server.childVar).toBe("childVar");
+    prefixedChild.setHandler('check child var', async (instance, opts) => {
+      expect(instance.server.parentVar).toBe('parentVar');
+      expect(instance.server.childVar).toBe('childVar');
     });
 
     await app.start();
   });
 
-  describe("Schema testing", () => {
+  describe('Schema testing', () => {
     let prefixedChild;
 
     const schema = {
-      $id: "schemaId",
-      type: "object",
+      $id: 'schemaId',
+      type: 'object',
       properties: {
-        hello: { type: "string" },
+        hello: { type: 'string' },
       },
     };
 
     const schema2 = {
-      $id: "schemaId2",
-      type: "object",
+      $id: 'schemaId2',
+      type: 'object',
       properties: {
-        hello: { type: "string" },
+        hello: { type: 'string' },
       },
     };
 
     beforeEach(() => {
       prefixedChild = new App();
 
-      app.addApp("Prefixed Child", prefixedChild, { prefix: "prefix" });
+      app.addApp('Prefixed Child', prefixedChild, { prefix: 'prefix' });
 
-      app.setPreHandler("create schema", async (instance, opts) => {
+      app.setPreHandler('create schema', async (instance, opts) => {
         instance.server.addSchema(schema);
       });
     });
-    it("Schema in parent should be found in child", async () => {
-      prefixedChild.setHandler("check schema", async (instance, opts) => {
-        expect(instance.server.getSchema("schemaId")).toEqual(schema);
+    it('Schema in parent should be found in child', async () => {
+      prefixedChild.setHandler('check schema', async (instance, opts) => {
+        expect(instance.server.getSchema('schemaId')).toEqual(schema);
       });
 
       await app.start();
     });
 
-    it("Manually registered plugins should have parent schemas", async () => {
+    it('Manually registered plugins should have parent schemas', async () => {
       prefixedChild.setHandler(
-        "check schema in manual plugin",
+        'check schema in manual plugin',
         async (instance, opts) => {
           instance.server.register(async (server, opts) => {
-            expect(server.getSchema("schemaId")).toEqual(schema);
+            expect(server.getSchema('schemaId')).toEqual(schema);
           });
         },
       );
     });
 
-    it("Plugins two levels deep should share schemas", async () => {
+    it('Plugins two levels deep should share schemas', async () => {
       const v1 = new App();
       const modelStub = new App();
       const routerStub = new App();
 
-      app.addApp("v1", v1);
-      v1.addApp("model", modelStub);
-      modelStub.addApp("router", routerStub);
+      app.addApp('v1', v1);
+      v1.addApp('model', modelStub);
+      modelStub.addApp('router', routerStub);
 
       const schema2 = {
-        $id: "schemaId2",
-        type: "object",
+        $id: 'schemaId2',
+        type: 'object',
         properties: {
-          hello: { type: "string" },
+          hello: { type: 'string' },
         },
       };
 
       const combinedSchema = { schemaId: schema, schemaId2: schema2 };
 
-      modelStub.setPreHandler("Add Create Schema", async (instance, opts) => {
+      modelStub.setPreHandler('Add Create Schema', async (instance, opts) => {
         instance.server.addSchema(schema2);
       });
 
       modelStub.setHandler(
-        "Simulate Route Generation",
+        'Simulate Route Generation',
         async (instance, opts) => {
           expect(instance.server.getSchemas()).toEqual(combinedSchema);
         },
@@ -247,23 +247,23 @@ describe("test with fastify", () => {
       await app.start();
     });
 
-    it("Instance two levels deep should be the same", async () => {
+    it('Instance two levels deep should be the same', async () => {
       const v1 = new App();
       const modelStub = new App();
       const routerStub = new App();
 
-      app.addApp("v1", v1);
-      v1.addApp("model", modelStub);
-      modelStub.addApp("router", routerStub);
+      app.addApp('v1', v1);
+      v1.addApp('model', modelStub);
+      modelStub.addApp('router', routerStub);
 
       let preHandlerServer;
 
-      modelStub.setPreHandler("Add Create Schema", async (instance, opts) => {
+      modelStub.setPreHandler('Add Create Schema', async (instance, opts) => {
         preHandlerServer = instance.server;
       });
 
       modelStub.setHandler(
-        "Simulate Route Generation",
+        'Simulate Route Generation',
         async (instance, opts) => {
           expect(instance.server).toBe(preHandlerServer);
         },
@@ -271,14 +271,14 @@ describe("test with fastify", () => {
     });
 
     // URGENT TODO: Move this test to common
-    it("Manually registered plugins should load in the correct order", async () => {
+    it('Manually registered plugins should load in the correct order', async () => {
       function sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
       }
 
       const order = [];
 
-      app.setHandler("Test custom register", async (instance, opts) => {
+      app.setHandler('Test custom register', async (instance, opts) => {
         instance.server.register(async (server, opts) => {
           server.register(async (server, opts) => {
             server.register((server, opts, done) => {
@@ -301,42 +301,42 @@ describe("test with fastify", () => {
     });
 
     // URGENT TODO: Move this test to common
-    it("Manually registered plugins two levels deep should share schemas", async () => {
+    it('Manually registered plugins two levels deep should share schemas', async () => {
       const v1 = new App();
       const modelStub = new App();
       const routerStub = new App();
 
-      app.addApp("v1", v1, { prefix: "v1" });
-      v1.addApp("model", modelStub, { prefix: "model" });
-      modelStub.addApp("router", routerStub);
+      app.addApp('v1', v1, { prefix: 'v1' });
+      v1.addApp('model', modelStub, { prefix: 'model' });
+      modelStub.addApp('router', routerStub);
 
       let preHandlerSchema;
 
-      v1.setPreHandler("Add v1 schema", async (instance, opts) => {
+      v1.setPreHandler('Add v1 schema', async (instance, opts) => {
         instance.server.addSchema({
-          $id: "v1Schema",
-          type: "object",
+          $id: 'v1Schema',
+          type: 'object',
           properties: {
-            hello: { type: "string" },
+            hello: { type: 'string' },
           },
         });
       });
 
-      modelStub.setPreHandler("Add Create Schema", async (instance, opts) => {
+      modelStub.setPreHandler('Add Create Schema', async (instance, opts) => {
         instance.server.addSchema(schema2);
         preHandlerSchema = instance.server.getSchemas();
       });
 
       // URGENT TODO: Make important Error message regarding encapsulation vs fastify encapsulation (override register function)
       v1.setHandler(
-        "Print some server instance to see difference",
+        'Print some server instance to see difference',
         async (instance, opts) => {
           // console.dir(instance.server,{depth:4})
         },
       );
 
       modelStub.setHandler(
-        "Simulate Route Generation",
+        'Simulate Route Generation',
         async (instance, opts) => {
           instance.server.register(async (server, opts) => {
             expect(server.getSchemas()).toEqual(preHandlerSchema);

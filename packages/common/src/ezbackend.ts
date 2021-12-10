@@ -1,30 +1,30 @@
-import { PluginScope } from "@ezbackend/core";
-import { EzError, ezWarning } from "@ezbackend/utils";
-import dedent from "dedent-js";
-import dotenv from "dotenv";
-import fastify, { FastifyInstance, FastifyPluginCallback } from "fastify";
-import fp from "fastify-plugin";
+import { PluginScope } from '@ezbackend/core';
+import { EzError, ezWarning } from '@ezbackend/utils';
+import dedent from 'dedent-js';
+import dotenv from 'dotenv';
+import fastify, { FastifyInstance, FastifyPluginCallback } from 'fastify';
+import fp from 'fastify-plugin';
 import {
   fastifyRequestContextPlugin,
   requestContext,
-} from "fastify-request-context";
-import { InjectOptions } from "light-my-request";
-import { Server, ServerOptions } from "socket.io";
+} from 'fastify-request-context';
+import { InjectOptions } from 'light-my-request';
+import { Server, ServerOptions } from 'socket.io';
 import {
   Connection,
   createConnection,
   EntitySchema,
   ObjectLiteral,
   Repository,
-} from "typeorm";
-import { REALTIME } from ".";
-import { EzApp, EzBackendServer } from "./ezapp";
+} from 'typeorm';
+import { REALTIME } from '.';
+import { EzApp, EzBackendServer } from './ezapp';
 import {
   attachSocketIO,
   createModelSubscriber,
   createSocketIO,
-} from "./realtime";
-import { outgoingPacketMiddleware } from "./realtime/socket-io-outgoing-packet-middleware";
+} from './realtime';
+import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;
@@ -75,7 +75,7 @@ export interface EzBackendOpts {
     fastify: Parameters<typeof fastify>[0];
     typeorm: Parameters<typeof createConnection>[0];
   };
-  ["socket.io"]: Partial<ServerOptions>;
+  ['socket.io']: Partial<ServerOptions>;
 }
 
 // TODO: Check if emojis will break instance names
@@ -85,12 +85,12 @@ async function addErrorSchema(
   opts: EzBackendOpts,
 ) {
   instance.server.addSchema({
-    $id: "ErrorResponse",
-    type: "object",
+    $id: 'ErrorResponse',
+    type: 'object',
     properties: {
-      statusCode: { type: "number" },
-      error: { type: "string" },
-      message: { type: "string" },
+      statusCode: { type: 'number' },
+      error: { type: 'string' },
+      message: { type: 'string' },
     },
   });
 }
@@ -98,16 +98,16 @@ async function addErrorSchema(
 // URGENT TODO: Make running this optional in the default config
 dotenv.config();
 
-const defaultConfig: EzBackendOpts["backend"] = {
+const defaultConfig: EzBackendOpts['backend'] = {
   listen: {
     port: process.env.PORT || 8000,
-    address: process.env.ADDRESS || "127.0.0.1",
+    address: process.env.ADDRESS || '127.0.0.1',
   },
   fastify: {
     logger: {
       prettyPrint: {
-        translateTime: "SYS:HH:MM:ss",
-        ignore: "pid,hostname,reqId,responseTime,req,res",
+        translateTime: 'SYS:HH:MM:ss',
+        ignore: 'pid,hostname,reqId,responseTime,req,res',
         // @ts-ignore
         messageFormat: (log, messageKey, levelLabel) => {
           const method = log.req?.method;
@@ -116,10 +116,10 @@ const defaultConfig: EzBackendOpts["backend"] = {
           const resTime = log.responseTime?.toFixed(2);
           const msg = log[messageKey];
           if (method && url) {
-            return `${`[${method} ${url}`.padEnd(25, ".")}] ${msg}`;
+            return `${`[${method} ${url}`.padEnd(25, '.')}] ${msg}`;
           }
           if (status && resTime) {
-            return `${`[${status} ${resTime}ms`.padEnd(25, ".")}] ${msg}`;
+            return `${`[${status} ${resTime}ms`.padEnd(25, '.')}] ${msg}`;
           }
           return msg;
         },
@@ -127,15 +127,15 @@ const defaultConfig: EzBackendOpts["backend"] = {
     },
   },
   typeorm: {
-    type: "better-sqlite3",
-    database: "tmp/db.sqlite",
+    type: 'better-sqlite3',
+    database: 'tmp/db.sqlite',
     synchronize: true,
   },
-  "socket.io": {
+  'socket.io': {
     cors: {
       origin: true,
       credentials: true,
-      methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
+      methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     },
   },
 };
@@ -155,7 +155,7 @@ const ezbErrorPage: FastifyPluginCallback<{}> = (fastify, options, next) => {
     if (error && error.isBoom) {
       reply
         .code(error.output.statusCode)
-        .type("application/json")
+        .type('application/json')
         .headers(error.output.headers)
         .send(error.output.payload);
 
@@ -177,21 +177,21 @@ export class EzBackend extends EzApp {
 
     this.setDefaultOpts(defaultConfig);
 
-    this.setInit("Create Entities Container", async (instance, opts) => {
+    this.setInit('Create Entities Container', async (instance, opts) => {
       instance.entities = [];
     });
 
-    this.setInit("Manage Event Subscriptions", async (instance, opts) => {
+    this.setInit('Manage Event Subscriptions', async (instance, opts) => {
       instance.subscribers = [];
       instance.subscribers.push(createModelSubscriber(instance));
     });
 
-    this.setPostInit("Create Database Connection", async (instance, opts) => {
-      const ormOpts = opts.orm ?? this.getOpts("backend", opts)?.typeorm;
+    this.setPostInit('Create Database Connection', async (instance, opts) => {
+      const ormOpts = opts.orm ?? this.getOpts('backend', opts)?.typeorm;
 
       if (ormOpts.entities) {
         ezWarning(
-          "Defining your own entities outside of the EzBackend orm wrapper may result in unexpected interactions. The EzBackend orm wrapper provides the full capability of typeorm so that should be used instead.",
+          'Defining your own entities outside of the EzBackend orm wrapper may result in unexpected interactions. The EzBackend orm wrapper provides the full capability of typeorm so that should be used instead.',
         );
       }
 
@@ -205,49 +205,49 @@ export class EzBackend extends EzApp {
       });
     });
 
-    this.setPreHandler("Add SocketIO", createSocketIO);
+    this.setPreHandler('Add SocketIO', createSocketIO);
 
-    this.setHandler("Add Fastify Boom", async (instance, opts) => {
+    this.setHandler('Add Fastify Boom', async (instance, opts) => {
       instance.server.register(fp(ezbErrorPage));
     });
 
-    this.setHandler("Add Error Schema", addErrorSchema);
+    this.setHandler('Add Error Schema', addErrorSchema);
 
-    this.setPostHandler("Create Fastify Server", async (instance, opts) => {
-      const fastifyOpts = opts.server ?? this.getOpts("backend", opts)?.fastify;
+    this.setPostHandler('Create Fastify Server', async (instance, opts) => {
+      const fastifyOpts = opts.server ?? this.getOpts('backend', opts)?.fastify;
 
       instance._server = fastify(fastifyOpts);
     });
 
-    this.setPostHandler("Attach Socket IO", attachSocketIO);
+    this.setPostHandler('Attach Socket IO', attachSocketIO);
 
-    this.setPostHandler("Register Fastify Plugins", async (instance, opts) => {
+    this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
       this.registerFastifyPlugins(instance._server, this);
     });
 
     this.setPostHandler(
-      "Add Request Context Plugin",
+      'Add Request Context Plugin',
       async (instance, opts) => {
         instance._server.register(fastifyRequestContextPlugin);
       },
     );
 
     this.setPostHandler(
-      "Set Request Context For Global Access",
+      'Set Request Context For Global Access',
       async (instance, opts) => {
-        instance._server.addHook("onRequest", async (req, res) => {
+        instance._server.addHook('onRequest', async (req, res) => {
           requestContext.set(REALTIME.REQ_CONTEXT, req);
         });
       },
     );
 
     this.setPostHandler(
-      "Add middleware to authenticate outgoing packets",
+      'Add middleware to authenticate outgoing packets',
       outgoingPacketMiddleware,
     );
 
-    this.setRun("Run Fastify Server", async (instance, opts) => {
-      const listenOpts = this.getOpts("backend", opts);
+    this.setRun('Run Fastify Server', async (instance, opts) => {
+      const listenOpts = this.getOpts('backend', opts);
       const port = opts.port ?? listenOpts?.listen.port;
       const address = opts.address ?? listenOpts?.listen.address;
       const backlog = listenOpts?.listen.backlog;
@@ -264,7 +264,7 @@ export class EzBackend extends EzApp {
     const lastPlugin = this.instance._lastUsed;
     if (lastPlugin === null) {
       throw new Error(
-        "Server is still undefined, have you called app.start() yet?",
+        'Server is still undefined, have you called app.start() yet?',
       );
     }
     return lastPlugin.server as EzBackendInstance;
@@ -281,10 +281,10 @@ export class EzBackend extends EzApp {
 
   verifyStarted(funcName?: string) {
     if (!this.instance.started) {
-      const additionalMsg = funcName ? `before running ${funcName}` : "";
+      const additionalMsg = funcName ? `before running ${funcName}` : '';
 
       throw new EzError(
-        "Instance not yet started",
+        'Instance not yet started',
         `The EzBackend instance must be started ${additionalMsg}`,
         dedent`
                 await app.start()
@@ -296,17 +296,17 @@ export class EzBackend extends EzApp {
   }
 
   printRoutes() {
-    this.verifyStarted("printRoutes");
+    this.verifyStarted('printRoutes');
     return this.getInternalServer().printRoutes();
   }
 
   printPlugins() {
-    this.verifyStarted("printPlugins");
+    this.verifyStarted('printPlugins');
     return this.getInternalServer().printPlugins();
   }
 
   prettyPrint() {
-    this.verifyStarted("prettyPrint");
+    this.verifyStarted('prettyPrint');
     return this.instance.prettyPrint();
   }
 

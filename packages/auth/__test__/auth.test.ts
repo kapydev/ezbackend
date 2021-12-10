@@ -1,10 +1,10 @@
 /* eslint-disable no-new */
-import { EzBackend, EzModel, Type } from "@ezbackend/common";
-import dotenv from "dotenv";
-import { FastifyReply, FastifyRequest } from "fastify";
-import { DeserializeFunction } from "fastify-passport/dist/Authenticator";
-import path from "path";
-import { EzAuth, EzUser, GoogleProvider } from "../src";
+import { EzBackend, EzModel, Type } from '@ezbackend/common';
+import dotenv from 'dotenv';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { DeserializeFunction } from 'fastify-passport/dist/Authenticator';
+import path from 'path';
+import { EzAuth, EzUser, GoogleProvider } from '../src';
 
 class Flag {
   private resolver: undefined | ((value: unknown) => void);
@@ -26,8 +26,8 @@ class Flag {
   }
 }
 
-describe("Plugin Registering", () => {
-  const envPath = path.resolve(__dirname, "../../../.env");
+describe('Plugin Registering', () => {
+  const envPath = path.resolve(__dirname, '../../../.env');
 
   dotenv.config({ path: envPath });
 
@@ -46,7 +46,7 @@ describe("Plugin Registering", () => {
         logger: false,
       },
       typeorm: {
-        database: ":memory:",
+        database: ':memory:',
       },
     },
   };
@@ -57,7 +57,7 @@ describe("Plugin Registering", () => {
     app.addApp(new EzAuth());
 
     // Prevent server from starting
-    app.removeHook("_run", "Run Fastify Server");
+    app.removeHook('_run', 'Run Fastify Server');
   });
 
   afterEach(async () => {
@@ -66,28 +66,28 @@ describe("Plugin Registering", () => {
     await instance._server.close();
   });
 
-  it("Should be able to create a user object", async () => {
-    const testUser = new EzUser("user", ["google"]);
+  it('Should be able to create a user object', async () => {
+    const testUser = new EzUser('user', ['google']);
 
-    app.addApp("user", testUser, { prefix: "user" });
-
-    await app.start(defaultConfig);
-  });
-
-  it("Should be able to create a user object using the Provider", async () => {
-    const testUser = new EzUser("user", [GoogleProvider]);
-
-    app.addApp("user", testUser, { prefix: "user" });
+    app.addApp('user', testUser, { prefix: 'user' });
 
     await app.start(defaultConfig);
   });
 
-  it("Should not be able to create a user object using an unknown Provider", async () => {
+  it('Should be able to create a user object using the Provider', async () => {
+    const testUser = new EzUser('user', [GoogleProvider]);
+
+    app.addApp('user', testUser, { prefix: 'user' });
+
+    await app.start(defaultConfig);
+  });
+
+  it('Should not be able to create a user object using an unknown Provider', async () => {
     let errorThrown = false;
     try {
-      const testUser = new EzUser("user", ["hahahaha"]);
+      const testUser = new EzUser('user', ['hahahaha']);
 
-      app.addApp("user", testUser, { prefix: "user" });
+      app.addApp('user', testUser, { prefix: 'user' });
 
       await app.start(defaultConfig);
     } catch {
@@ -98,8 +98,8 @@ describe("Plugin Registering", () => {
     }
   });
 
-  it("Should be able to create user object with additional metadata", async () => {
-    new EzUser("user", ["google"], {
+  it('Should be able to create user object with additional metadata', async () => {
+    new EzUser('user', ['google'], {
       isAdmin: {
         type: Type.BOOL,
         default: false,
@@ -129,11 +129,11 @@ describe("Plugin Registering", () => {
   //     })
   // })
 
-  it("Should not create user with non-nullable non-defaultable metadata", async () => {
+  it('Should not create user with non-nullable non-defaultable metadata', async () => {
     let errorThrown = false;
 
     try {
-      new EzUser("user", ["google"], {
+      new EzUser('user', ['google'], {
         isAdmin: Type.BOOL,
       });
     } catch {
@@ -144,11 +144,11 @@ describe("Plugin Registering", () => {
     }
   });
 
-  it("Should not create user with non-nullable non-defaultable metadata (2nd Method)", async () => {
+  it('Should not create user with non-nullable non-defaultable metadata (2nd Method)', async () => {
     let errorThrown = false;
 
     try {
-      new EzUser("user", ["google"], {
+      new EzUser('user', ['google'], {
         isAdmin: {
           type: Type.BOOL,
         },
@@ -161,11 +161,11 @@ describe("Plugin Registering", () => {
     }
   });
 
-  it("User must not create a column with googleId, because it is auto-generated", async () => {
+  it('User must not create a column with googleId, because it is auto-generated', async () => {
     let errorThrown = false;
 
     try {
-      new EzUser("user", ["google"], {
+      new EzUser('user', ['google'], {
         googleId: {
           type: Type.INT,
           nullable: true,
@@ -179,11 +179,11 @@ describe("Plugin Registering", () => {
     }
   });
 
-  it("User must not create a column with googleData, because it is auto-generated", async () => {
+  it('User must not create a column with googleData, because it is auto-generated', async () => {
     let errorThrown = false;
 
     try {
-      new EzUser("user", ["google"], {
+      new EzUser('user', ['google'], {
         googleData: {
           type: Type.JSON,
           nullable: true,
@@ -197,12 +197,12 @@ describe("Plugin Registering", () => {
     }
   });
 
-  it("Should have the correct callback URL in production", async () => {
-    const googleProvider = new GoogleProvider("test");
+  it('Should have the correct callback URL in production', async () => {
+    const googleProvider = new GoogleProvider('test');
     process.env = {
       ...process.env,
-      NODE_ENV: "production",
-      PRODUCTION_URL: "https://mywebsite.com",
+      NODE_ENV: 'production',
+      PRODUCTION_URL: 'https://mywebsite.com',
     };
 
     await app.start(defaultConfig);
@@ -216,16 +216,16 @@ describe("Plugin Registering", () => {
 
     process.env = {
       ...process.env,
-      NODE_ENV: "test",
-      PRODUCTION_URL: "https://mywebsite.com",
+      NODE_ENV: 'test',
+      PRODUCTION_URL: 'https://mywebsite.com',
     };
   });
 
-  it("Should have the correct callbackURL in development", async () => {
-    const googleProvider = new GoogleProvider("test");
+  it('Should have the correct callbackURL in development', async () => {
+    const googleProvider = new GoogleProvider('test');
     process.env = {
       ...process.env,
-      PRODUCTION_URL: "https://mywebsite.com",
+      PRODUCTION_URL: 'https://mywebsite.com',
     };
 
     await app.start(defaultConfig);
@@ -237,14 +237,14 @@ describe("Plugin Registering", () => {
     expect(callbackURL).toBe(`/auth/google/callback`);
   });
 
-  it.todo("Test that the callbackURL is correct even for child apps");
+  it.todo('Test that the callbackURL is correct even for child apps');
 
-  describe("Logout Handler", () => {
-    it("The logout handler should logout and redirect the user", async () => {
-      const googleProvider = new GoogleProvider("test");
+  describe('Logout Handler', () => {
+    it('The logout handler should logout and redirect the user', async () => {
+      const googleProvider = new GoogleProvider('test');
 
       let loggedOut = false;
-      let redirectedURL = "";
+      let redirectedURL = '';
 
       const flag = new Flag();
 
@@ -262,7 +262,7 @@ describe("Plugin Registering", () => {
       };
 
       const mockOpts = {
-        successRedirectURL: "https://myfrontend.com",
+        successRedirectURL: 'https://myfrontend.com',
       };
 
       googleProvider.defaultLogoutHandler(
@@ -273,15 +273,15 @@ describe("Plugin Registering", () => {
 
       await flag.isDone();
       expect(loggedOut).toBe(true);
-      expect(redirectedURL).toBe("https://myfrontend.com");
+      expect(redirectedURL).toBe('https://myfrontend.com');
 
       await app.start(defaultConfig);
     });
   });
 
-  describe("User Serialization", () => {
-    it("User serializer should just return the same value", async () => {
-      const googleProvider = new GoogleProvider("test");
+  describe('User Serialization', () => {
+    it('User serializer should just return the same value', async () => {
+      const googleProvider = new GoogleProvider('test');
 
       // TODO: Split the functions according to those that require the server to run and those that don't
       await app.start(defaultConfig);
@@ -302,11 +302,11 @@ describe("Plugin Registering", () => {
     });
   });
 
-  describe("Callback Handler", () => {
+  describe('Callback Handler', () => {
     let mockUserModel;
 
     beforeEach(() => {
-      mockUserModel = new EzModel("MockUser", {
+      mockUserModel = new EzModel('MockUser', {
         googleId: {
           type: Type.INT,
           nullable: true,
@@ -321,8 +321,8 @@ describe("Plugin Registering", () => {
       app.addApp(mockUserModel);
     });
 
-    it("Callback Handler should properly serialize a user", async () => {
-      const googleProvider = new GoogleProvider("MockUser");
+    it('Callback Handler should properly serialize a user', async () => {
+      const googleProvider = new GoogleProvider('MockUser');
 
       await app.start(defaultConfig);
 
@@ -330,17 +330,17 @@ describe("Plugin Registering", () => {
         googleProvider.defaultCallbackHandler(
           app.getInternalInstance(),
           1,
-          { displayName: "Thomas" },
+          { displayName: 'Thomas' },
           (err: any, user: any) => resolve({ err, user }),
         );
       });
 
       expect(err).toBe(undefined);
-      expect(user).toBe("google-1");
+      expect(user).toBe('google-1');
     });
 
-    it("A user who already has an account should be serialized properly", async () => {
-      const googleProvider = new GoogleProvider("MockUser");
+    it('A user who already has an account should be serialized properly', async () => {
+      const googleProvider = new GoogleProvider('MockUser');
 
       await app.start(defaultConfig);
 
@@ -348,7 +348,7 @@ describe("Plugin Registering", () => {
         googleProvider.defaultCallbackHandler(
           app.getInternalInstance(),
           1,
-          { displayName: "Thomas" },
+          { displayName: 'Thomas' },
           (err: any, user: any) => resolve({ err, user }),
         );
       });
@@ -357,28 +357,28 @@ describe("Plugin Registering", () => {
         googleProvider.defaultCallbackHandler(
           app.getInternalInstance(),
           1,
-          { displayName: "Thomas" },
+          { displayName: 'Thomas' },
           (err: any, user: any) => resolve({ err, user }),
         );
       });
 
       expect(err).toBe(undefined);
-      expect(user).toBe("google-1");
+      expect(user).toBe('google-1');
     });
 
-    describe("User Deserializing", () => {
+    describe('User Deserializing', () => {
       let googleProvider: GoogleProvider;
       let deserializer: DeserializeFunction;
       const mockReq = {} as FastifyRequest;
       const userDetails = {
         googleId: 1,
         googleData: {
-          displayName: "Thomas",
+          displayName: 'Thomas',
         },
       };
 
       beforeEach(async () => {
-        googleProvider = new GoogleProvider("MockUser");
+        googleProvider = new GoogleProvider('MockUser');
 
         await app.start(defaultConfig);
 
@@ -397,31 +397,31 @@ describe("Plugin Registering", () => {
         );
       });
 
-      it("Should get a user already in the database", async () => {
-        const user = await deserializer("google-1", mockReq);
+      it('Should get a user already in the database', async () => {
+        const user = await deserializer('google-1', mockReq);
         expect(user).toEqual({
           id: 1,
           ...userDetails,
         });
       });
 
-      it("Should return null for a user not in the database", async () => {
-        const user = await deserializer("google-99999", mockReq);
+      it('Should return null for a user not in the database', async () => {
+        const user = await deserializer('google-99999', mockReq);
         expect(user).toBe(null);
       });
 
-      it("Should not get wrong even if there are dashes in the ID", async () => {
-        const user = await deserializer("google-1-1", mockReq);
+      it('Should not get wrong even if there are dashes in the ID', async () => {
+        const user = await deserializer('google-1-1', mockReq);
         expect(user).toBe(null);
       });
 
       it("Should throw the string 'pass' when the provider name is different", async () => {
         let errored = false;
         try {
-          const user = await deserializer("facebook-1", mockReq);
+          const user = await deserializer('facebook-1', mockReq);
         } catch (e) {
           // THIS NEEDS TO BE EXACTLY THE STRING PASS, according to the fastify passport specification
-          expect(e).toBe("pass");
+          expect(e).toBe('pass');
           errored = true;
         } finally {
           expect(errored).toBe(true);

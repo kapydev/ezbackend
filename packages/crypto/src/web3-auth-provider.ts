@@ -1,22 +1,22 @@
-import { BaseProvider } from "@ezbackend/auth";
-import { EzBackendInstance } from "@ezbackend/common";
-import { FastifyInstance, RouteOptions } from "fastify";
-import fastifyPassport from "fastify-passport";
+import { BaseProvider } from '@ezbackend/auth';
+import { EzBackendInstance } from '@ezbackend/common';
+import { FastifyInstance, RouteOptions } from 'fastify';
+import fastifyPassport from 'fastify-passport';
 import {
   DeserializeFunction,
   SerializeFunction,
-} from "fastify-passport/dist/Authenticator";
-import { Strategy as CustomStrategy } from "passport-custom";
-import fastifyStatic from "fastify-static";
-import Boom from "@hapi/boom";
-import path from "path";
+} from 'fastify-passport/dist/Authenticator';
+import { Strategy as CustomStrategy } from 'passport-custom';
+import fastifyStatic from 'fastify-static';
+import Boom from '@hapi/boom';
+import path from 'path';
 // @ts-ignore
-import Web3Token from "web3-token";
+import Web3Token from 'web3-token';
 
 export class Web3Provider extends BaseProvider {
   constructor(modelName: string) {
     // @ts-ignore
-    super("web3", modelName);
+    super('web3', modelName);
   }
 
   addStrategy(
@@ -29,7 +29,7 @@ export class Web3Provider extends BaseProvider {
     server.register(fastifyStatic, {
       // TODO: Make this not relative if possible
       // URGENT TODO: Modify this to prevent conflict with existing routes
-      root: path.join(__dirname, "../web3-login-ui/build"),
+      root: path.join(__dirname, '../web3-login-ui/build'),
     });
 
     const EthStrategy = new CustomStrategy(async function (req, callback) {
@@ -60,7 +60,7 @@ export class Web3Provider extends BaseProvider {
           callback(null, serializedID);
         },
         (e) => {
-          if (String(e.driverError).toLowerCase().includes("unique")) {
+          if (String(e.driverError).toLowerCase().includes('unique')) {
             // URGENT TODO: Check if this works for all databases
             callback(null, serializedID);
           } else {
@@ -76,10 +76,10 @@ export class Web3Provider extends BaseProvider {
   getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
     const that = this;
     return {
-      method: "GET",
+      method: 'GET',
       url: `/${this.getRoutePrefixNoPrePostSlash(server)}/login`,
       handler: (req, res) => {
-        res.sendFile("index.html");
+        res.sendFile('index.html');
       },
       schema: {
         // TODO: Figure out how to import types for summary
@@ -98,7 +98,7 @@ export class Web3Provider extends BaseProvider {
 
   getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
     return {
-      method: "GET",
+      method: 'GET',
       url: `/${this.getRoutePrefixNoPrePostSlash(server)}/logout`,
       handler: function (req, res) {
         req.logOut().then(() => {
@@ -121,7 +121,7 @@ export class Web3Provider extends BaseProvider {
   getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
     const that = this;
     return {
-      method: "GET",
+      method: 'GET',
       url: `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`,
       preValidation: fastifyPassport.authenticate(that.providerName),
       handler: function (req, res) {
@@ -155,7 +155,7 @@ export class Web3Provider extends BaseProvider {
     return async function deserializer(providerAndId: string, req) {
       if (providerAndId.startsWith(`${that.providerName}-`)) {
         // TODO: Consider the security implications of not checking that the replacement starts at 'google-'
-        const id = providerAndId.replace(`${that.providerName}-`, "");
+        const id = providerAndId.replace(`${that.providerName}-`, '');
         const userRepo = instance.orm.getRepository(that.modelName);
         const fullUser = await userRepo.findOne({
           [`${that.providerName}Id`]: id,
@@ -170,7 +170,7 @@ export class Web3Provider extends BaseProvider {
         // THIS NEEDS TO BE EXACTLY THE STRING PASS, OTHERWISE IT WILL FAIL
         // tslint:disable-next-line:no-string-throw
         // eslint-disable-next-line no-throw-literal
-        throw "pass";
+        throw 'pass';
       }
     };
   }

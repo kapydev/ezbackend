@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
-import { useEffect } from "react";
-import { io } from "socket.io-client";
-import { getBaseURL } from "../Helpers";
+import dotenv from 'dotenv';
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { getBaseURL } from '../Helpers';
 
 dotenv.config();
 
@@ -11,14 +11,14 @@ const logger = console;
 
 function SocketIODocs() {
   useEffect(() => {
-    logger.log("CONNECTING SOCKET IO");
+    logger.log('CONNECTING SOCKET IO');
     const socket = io(URL!, {
       withCredentials: true,
-      transports: ["websocket"],
+      transports: ['websocket'],
     });
 
-    socket.on("connect", () => {
-      logger.log("Socket IO Connected!");
+    socket.on('connect', () => {
+      logger.log('Socket IO Connected!');
     });
   }, []);
 

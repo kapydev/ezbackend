@@ -1,13 +1,13 @@
-import { PackageJson, PackageJsonWithDepsAndDevDeps } from "./PackageJson";
-import { readPackageJson, writePackageJson } from "./PackageJsonHelper";
+import { PackageJson, PackageJsonWithDepsAndDevDeps } from './PackageJson';
+import { readPackageJson, writePackageJson } from './PackageJsonHelper';
 
-import { commandLog } from "../helpers";
-import { sync as spawnSync } from "cross-spawn";
+import { commandLog } from '../helpers';
+import { sync as spawnSync } from 'cross-spawn';
 
 const logger = console;
 
 export abstract class JsPackageManager {
-  public abstract readonly type: "npm" | "yarn1" | "yarn2";
+  public abstract readonly type: 'npm' | 'yarn1' | 'yarn2';
 
   public abstract initPackageJson(): void;
 
@@ -19,7 +19,7 @@ export abstract class JsPackageManager {
    * Install dependecies listed in package.json
    */
   public installDependencies(): void {
-    commandLog("Installing dependencies");
+    commandLog('Installing dependencies');
   }
 
   public addEzbCommandInScripts() {
@@ -29,7 +29,7 @@ export abstract class JsPackageManager {
       ezb: ezbCmd,
       start: ezbCmd,
       build: `tsc`,
-      "build:watch": "tsc -w",
+      'build:watch': 'tsc -w',
     });
   }
 
@@ -68,18 +68,18 @@ export abstract class JsPackageManager {
   public executeCommand(
     command: string,
     args: string[],
-    stdio?: "pipe" | "inherit",
+    stdio?: 'pipe' | 'inherit',
   ): string {
     const commandResult = spawnSync(command, args, {
-      stdio: stdio ?? "pipe",
-      encoding: "utf-8",
+      stdio: stdio ?? 'pipe',
+      encoding: 'utf-8',
     });
 
     if (commandResult.status !== 0) {
-      throw new Error(commandResult.stderr ?? "");
+      throw new Error(commandResult.stderr ?? '');
     }
 
-    return commandResult.stdout ?? "";
+    return commandResult.stdout ?? '';
   }
 
   /**
@@ -128,7 +128,7 @@ export abstract class JsPackageManager {
       try {
         this.runAddDeps(dependencies, options.installAsDevDependencies ?? true);
       } catch (e: any) {
-        logger.error("An error occurred while installing dependencies.");
+        logger.error('An error occurred while installing dependencies.');
         logger.log(e.message);
         process.exit(1);
       }
@@ -142,7 +142,7 @@ export abstract class JsPackageManager {
 }
 
 export function getPackageDetails(pkg: string): [string, string?] {
-  const idx = pkg.lastIndexOf("@");
+  const idx = pkg.lastIndexOf('@');
   // If the only `@` is the first character, it is a scoped package
   // If it isn't in the string, it will be -1
   if (idx <= 0) {

@@ -1,14 +1,14 @@
-import { convert } from "../src";
-import { EntitySchema, createConnection, Connection } from "typeorm";
-import Ajv from "ajv";
+import { convert } from '../src';
+import { EntitySchema, createConnection, Connection } from 'typeorm';
+import Ajv from 'ajv';
 
-describe("TypeORM to JSON Schema", () => {
+describe('TypeORM to JSON Schema', () => {
   let CategoryEntity: EntitySchema;
   let connection: Connection;
 
   beforeAll(async () => {
     CategoryEntity = new EntitySchema({
-      name: "category",
+      name: 'category',
       columns: {
         id: {
           type: Number,
@@ -22,13 +22,13 @@ describe("TypeORM to JSON Schema", () => {
     });
 
     connection = await createConnection({
-      type: "better-sqlite3",
-      database: ":memory:",
+      type: 'better-sqlite3',
+      database: ':memory:',
       synchronize: true,
       entities: [CategoryEntity],
     });
   });
-  it("Convert should create valid json schemas from Entity Metadata", () => {
+  it('Convert should create valid json schemas from Entity Metadata', () => {
     const entityMeta = connection.getMetadata(CategoryEntity);
     const { updateSchema, createSchema, fullSchema } = convert(entityMeta);
 

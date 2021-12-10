@@ -1,6 +1,6 @@
-import { ColumnType, EntityMetadata } from "typeorm";
-import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
-import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
+import { ColumnType, EntityMetadata } from 'typeorm';
+import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata';
+import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
 
 // TODO: See if there is a json schema library that can help with this... (fluent schema?)
 /**
@@ -12,7 +12,7 @@ import { RelationMetadata } from "typeorm/metadata/RelationMetadata";
  */
 export function getSchemaName(
   meta: EntityMetadata,
-  type: "createSchema" | "updateSchema" | "fullSchema",
+  type: 'createSchema' | 'updateSchema' | 'fullSchema',
   prefix?: string,
 ) {
   // Uncomment this to support getting schema name for relation metadata
@@ -29,18 +29,18 @@ export function getSchemaName(
   //   baseName = meta.name
   // }
   const baseName = meta.name;
-  const resolvedPrefix = prefix ? prefix + "/" : "";
+  const resolvedPrefix = prefix ? prefix + '/' : '';
   const schemaName = `${resolvedPrefix}${type}-${baseName}`;
   return schemaName;
 }
 
 function colMetaToSchemaProps(colMeta: ColumnMetadata) {
   const type = colTypeToJsonSchemaType(colMeta.type);
-  if (type === "object") {
+  if (type === 'object') {
     // TODO: Consider if this is the best way of accepting additional properties for simple json, especially if the simple json needs to have a coerced data structure
     return {
       additionalProperties: true,
-      type: "object",
+      type: 'object',
     };
   }
   return {
@@ -52,7 +52,7 @@ function colMetaToSchemaProps(colMeta: ColumnMetadata) {
 // Not applicable to programId => <Number>
 function isRelationCol(col: ColumnMetadata) {
   // URGENT TODO: Confirm there are no edge cases for property names not ending in Id
-  if (col.propertyName.endsWith("Id")) {
+  if (col.propertyName.endsWith('Id')) {
     return false;
   }
   if (col.relationMetadata) {
@@ -67,28 +67,28 @@ function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
   } else {
     // URGENT TODO: Figure out if typeorm has a way of getting the js type from the sql type (Or extend the types below but thats kinda scary)
     switch (colType) {
-      case "varchar":
-        return "string";
-      case "simple-json":
-        return "object";
-      case "integer":
-        return "number";
-      case "float":
-        return "number";
-      case "double":
-        return "number";
-      case "real":
-        return "number";
-      case "date":
-        return "string";
-      case "boolean":
-        return "boolean";
-      case "simple-enum":
-        return "string";
+      case 'varchar':
+        return 'string';
+      case 'simple-json':
+        return 'object';
+      case 'integer':
+        return 'number';
+      case 'float':
+        return 'number';
+      case 'double':
+        return 'number';
+      case 'real':
+        return 'number';
+      case 'date':
+        return 'string';
+      case 'boolean':
+        return 'boolean';
+      case 'simple-enum':
+        return 'string';
     }
   }
   // If we don't know the type, return any possible json schema type
-  return ["number", "string", "boolean", "object", "array", "null"];
+  return ['number', 'string', 'boolean', 'object', 'array', 'null'];
 }
 
 function checkColIsGenerated(col: ColumnMetadata) {
@@ -122,13 +122,13 @@ export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
         };
       },
       {
-        $id: getSchemaName(meta, "updateSchema", prefix),
-        type: "object",
+        $id: getSchemaName(meta, 'updateSchema', prefix),
+        type: 'object',
         properties: {},
       },
     );
   // Add cascade update columns
-  const eagerMeta = getNestedMetadata(meta, "update");
+  const eagerMeta = getNestedMetadata(meta, 'update');
   updateSchema = eagerMeta.reduce((jsonSchema, meta) => {
     const nestedSchema = removeId(getUpdateSchema(meta.data));
 
@@ -173,14 +173,14 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
         };
       },
       {
-        $id: getSchemaName(meta, "createSchema", prefix),
-        type: "object",
+        $id: getSchemaName(meta, 'createSchema', prefix),
+        type: 'object',
         properties: {},
         required: [] as Array<string>,
       },
     );
   // Add cascade created columns
-  const eagerMeta = getNestedMetadata(meta, "create");
+  const eagerMeta = getNestedMetadata(meta, 'create');
   createSchema = eagerMeta.reduce((jsonSchema, meta) => {
     const nestedSchema = removeId(getCreateSchema(meta.data));
     return {
@@ -210,7 +210,7 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
 
 function makeArray(schema: any) {
   return {
-    type: "array",
+    type: 'array',
     items: schema,
   };
 }
@@ -238,13 +238,13 @@ export function getFullSchema(meta: EntityMetadata, prefix?: string) {
         };
       },
       {
-        $id: getSchemaName(meta, "fullSchema", prefix),
-        type: "object",
+        $id: getSchemaName(meta, 'fullSchema', prefix),
+        type: 'object',
         properties: {},
       },
     );
   // Add eagerly loaded columns
-  const eagerMeta = getNestedMetadata(meta, "read");
+  const eagerMeta = getNestedMetadata(meta, 'read');
   fullSchema = eagerMeta.reduce((jsonSchema, meta) => {
     const nestedSchema = removeId(getFullSchema(meta.data));
     return {
@@ -271,18 +271,18 @@ function removeId(object: any) {
 
 function getNestedMetadata(
   meta: EntityMetadata,
-  type: "create" | "update" | "read",
+  type: 'create' | 'update' | 'read',
 ) {
   return (
     meta.relations
       // eslint-disable-next-line array-callback-return
       .filter((relation) => {
         switch (type) {
-          case "create":
+          case 'create':
             return relation.isCascadeInsert;
-          case "update":
+          case 'update':
             return relation.isCascadeUpdate;
-          case "read":
+          case 'read':
             return relation.isEager;
         }
       })

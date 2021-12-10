@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { CtaButton } from "../helper-components/cta-button";
-import toast, { Toaster } from "react-hot-toast";
-import LandingHelper from "../helper-components/landing-helper";
-import "../css/landing.css";
-import Scrollbars from "../helper-components/colored-scrollbars";
-import validator from "validator";
-import FadeIn from "react-fade-in";
-import { Helmet } from "react-helmet";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { CtaButton } from '../helper-components/cta-button';
+import toast, { Toaster } from 'react-hot-toast';
+import LandingHelper from '../helper-components/landing-helper';
+import '../css/landing.css';
+import Scrollbars from '../helper-components/colored-scrollbars';
+import validator from 'validator';
+import FadeIn from 'react-fade-in';
+import { Helmet } from 'react-helmet';
+import axios from 'axios';
 
-const LPBKND_BASEURL = "https://ez-landing-page-backend.herokuapp.com";
+const LPBKND_BASEURL = 'https://ez-landing-page-backend.herokuapp.com';
 
 function Landing() {
   const [signUpCount, setSignUpCount] = useState(0);
   const [fomoVisible, setFomoVisible] = useState(false);
 
-  let signUpEmail = "";
+  let signUpEmail = '';
   const setSignUpEmail = (newEmail) => {
     signUpEmail = newEmail;
   };
 
   useEffect(() => {
     axios
-      .get(LPBKND_BASEURL + "/signUps/count")
+      .get(LPBKND_BASEURL + '/signUps/count')
       .then(function (response) {
         setFomoVisible(true);
         setSignUpCount(response.data);
@@ -36,30 +36,30 @@ function Landing() {
   const sendValidatedEmail = () => {
     if (signUpEmail) {
       return axios
-        .post(LPBKND_BASEURL + "/signUps/", {
+        .post(LPBKND_BASEURL + '/signUps/', {
           email: signUpEmail,
         })
         .catch(function (error) {
           console.log(error);
         })
         .then(function (response) {
-          setSignUpEmail("");
+          setSignUpEmail('');
         });
     }
   };
 
   const validateAndSendEmail = () => {
     if (!validator.isEmail(signUpEmail)) {
-      toast.error("Please fill in your email");
+      toast.error('Please fill in your email');
     } else {
       toast
         .promise(sendValidatedEmail(), {
-          loading: "Waiting for Heroku...",
+          loading: 'Waiting for Heroku...',
           success: <b>Submitted</b>,
           error: <b>Server Error! We are working on it!</b>,
         })
         .then(() => {
-          window.open("/");
+          window.open('/');
         });
     }
   };
@@ -69,7 +69,7 @@ function Landing() {
       <>
         <div className="font-monts text-lg font-semibold">
           Claim <span className="font-bold">100USD</span> Hosting Credits when
-          you sign up for our <span className="text-purple">Alpha</span>{" "}
+          you sign up for our <span className="text-purple">Alpha</span>{' '}
           programme today!
         </div>
         <form>
@@ -91,8 +91,8 @@ function Landing() {
           {fomoVisible ? (
             <FadeIn>
               <div className="font-monts pl-4 text-gray-200">
-                Join{" "}
-                <span className="font-semibold text-2xl">{signUpCount}</span>{" "}
+                Join{' '}
+                <span className="font-semibold text-2xl">{signUpCount}</span>{' '}
                 Users in Alpha
               </div>
             </FadeIn>
@@ -112,10 +112,10 @@ function Landing() {
       <Toaster
         toastOptions={{
           style: {
-            padding: "16px",
-            fontWeight: "bold",
-            color: "white",
-            backgroundColor: "#282A36",
+            padding: '16px',
+            fontWeight: 'bold',
+            color: 'white',
+            backgroundColor: '#282A36',
             fontSize: 16,
           },
         }}

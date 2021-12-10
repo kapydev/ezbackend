@@ -22,31 +22,31 @@ npm run ezb
 
 Get the full details from the [official documentation](https://www.ezbackend.io/docs/intro)
 
-----
+---
 
 ## Getting Started
 
-A default schema is generated for you. You can edit this schema or create your own. 
+A default schema is generated for you. You can edit this schema or create your own.
 Running this will automatically create POST, GET, PUT, and DELETE endpoints that you can test on [localhost:8888/docs](http://localhost:8888/docs/static/index.html)
 
 ```ts title=".ezb/index.ts"
-import { EzBackend, EzModel, Type } from "@ezbackend/common";
+import { EzBackend, EzModel, Type } from '@ezbackend/common';
 
-const app = new EzBackend()
+const app = new EzBackend();
 
 const pets = new EzModel('Pets', {
-    name: Type.VARCHAR, //String
-    species: Type.VARCHAR,
-    age: Type.INT //Integer
-})
+  name: Type.VARCHAR, //String
+  species: Type.VARCHAR,
+  age: Type.INT, //Integer
+});
 
 app.addApp(
-    "pets", //Name of App
-    pets, //App
-    { prefix: "pets" } //URL Prefix
-)
+  'pets', //Name of App
+  pets, //App
+  { prefix: 'pets' }, //URL Prefix
+);
 
-app.start()
+app.start();
 ```
 
 ## What it does
@@ -78,4 +78,4 @@ app.start()
 ## Contact Us
 
 > If you are keen on contributing/using EzBackend contact us at we.are.kapydev@gmail.com
-Or submit a pull request to the main repo
+> Or submit a pull request to the main repo
