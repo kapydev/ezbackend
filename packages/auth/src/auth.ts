@@ -52,7 +52,7 @@ export const defaultConfig: EzBackendOpts['auth'] = {
   google: {
     googleClientId: process.env.GOOGLE_CLIENT_ID!,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    scope: ['google'],
+    scope: ['profile', 'email'],
   },
 };
 

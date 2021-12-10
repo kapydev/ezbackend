@@ -245,20 +245,7 @@ export const getDefaultGenerators = () => {
                 success: {
                   type: 'boolean',
                 },
-                // @ts-ignore
-                handler: async (req, res) => {
-                  const id = req.params[primaryCol];
-                  try {
-                    const result = await repo.findOneOrFail(id);
-                    await repo.remove(result);
-                  } catch (e) {
-                    res.status(404).send(e);
-                  }
-                  return {
-                    success: true,
-                    id: id,
-                  };
-                },
+                id: { type: ['integer', 'string'] },
               },
               required: ['success', 'id'],
             },

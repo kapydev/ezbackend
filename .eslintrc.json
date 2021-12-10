@@ -26,7 +26,11 @@
   },
   "overrides": [
     {
-      "files": ["**/scripts/**/*.js", "packages/crypto/web3-login-ui/config/**/*.js", "packages/docs/**/*.js"],
+      "files": [
+        "**/scripts/**/*.js",
+        "packages/crypto/web3-login-ui/config/**/*.js",
+        "packages/docs/**/*.js"
+      ],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       }
