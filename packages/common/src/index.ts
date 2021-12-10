@@ -9,4 +9,4 @@ export type {
 export * from './model'
 export * from './ezapp'
 export * from "./rules"
-import "../declarations/socket-io-declarations"
+import "./declarations/socket-io-declarations"
