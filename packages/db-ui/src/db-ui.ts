@@ -36,7 +36,7 @@ function getDbUIGenerators() {
     type GeneratorKey = keyof typeof generators
     Object.entries(generators).forEach(([key, oldGenerator]) => {
         generators[key as GeneratorKey] = (repo, opts) => {
-            const routeDetails = oldGenerator(repo, opts)
+            const routeDetails = oldGenerator(repo, opts) as RouteOptions
             const oldHandler = routeDetails.handler as RouteOptions['handler']
             //URGENT TODO: See if function invocation fails when read/writes are performed in prehandler
             //URGENT TODO: Apply rule that old generator MUST be async(req,res) => {} format

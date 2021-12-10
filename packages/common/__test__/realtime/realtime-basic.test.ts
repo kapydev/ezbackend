@@ -49,6 +49,7 @@ describe("All realtime listeners should run as expected", () => {
             }
         })
 
+
         clientSocket = clientIO(`http://localhost:${PORT}`, {
             reconnectionDelay: 0,
             forceNew: true,
@@ -82,6 +83,7 @@ describe("All realtime listeners should run as expected", () => {
             url: '/user',
             payload: userPayload
         })
+
 
     })
 

@@ -3,6 +3,7 @@ import Boom from '@hapi/boom'
 import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import type { RouterOptions } from './ez-router'
+import { EzBackendInstance } from "../..";
 
 /**
  * Returns the primary column name from given metadata
@@ -41,7 +42,22 @@ const removeNestedNulls = (obj: any) => {
  *
  * @returns
  */
-export const getDefaultGenerators = () => {
+
+export interface Generator {
+    (repo: Repository<ObjectLiteral>, opts?: RouterOptions): RouteOptions | Array<RouteOptions>
+}
+
+export interface Generators {
+    [index:string]: Generator
+}
+
+export type GetDefaultGenerators = {
+
+    (): Generators
+
+}
+
+export const getDefaultGenerators: GetDefaultGenerators = () => {
     return {
         createOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
             const generatedCols = repo.metadata.columns.filter(col => col.isGenerated).map(col => col.propertyName)
@@ -65,6 +81,7 @@ export const getDefaultGenerators = () => {
                     try {
                         const data = req.body as DeepPartial<ObjectLiteral>
                         const newObj = await repo.save(data);
+                        req.io?.emit("entity_created",repo.metadata.name, newObj)
                         return removeNestedNulls(newObj);
                     } catch (e: any) {
                         //Assumption: If it fails, it is because of a bad request, not the code breaking
@@ -127,6 +144,7 @@ export const getDefaultGenerators = () => {
                 handler: async (req, res) => {
                     const newObj = await repo.find();
                     return removeNestedNulls(newObj);
+
                 },
             };
             return routeDetails;
@@ -160,18 +178,21 @@ export const getDefaultGenerators = () => {
                     //@ts-ignore
                     const id = req.params[primaryCol]
                     try {
-                        await repo.findOneOrFail(id);
+                        const oldObj = await repo.findOneOrFail(id);
+                        const updatedObj = await repo.save({
+                            id: id,
+                            ...oldObj,
+                            //@ts-ignore
+                            ...req.body,
+                        });
+                        req.io?.emit("entity_updated",repo.metadata.name, updatedObj);
+                        return updatedObj;
                     } catch (e: any) {
                         throw Boom.notFound(e)
                     }
                     //URGENT TODO: Currently this causes race conditions, need to do within one request
 
-                    const updatedObj = await repo.save({
-                        id: id,
-                        //@ts-ignore
-                        ...req.body,
-                    });
-                    return updatedObj;
+                    
 
                 },
             };
@@ -216,6 +237,7 @@ export const getDefaultGenerators = () => {
                     const id = req.params[primaryCol]
                     try {
                         const result = await repo.findOneOrFail(id);
+                        req.io?.emit("entity_deleted",repo.metadata.name, result);
                         await repo.remove(result);
                     } catch (e) {
                         res.status(404).send(e);

@@ -5,16 +5,16 @@ import { EzApp } from "../../ezapp";
 //TODO: Consider if we should remove the cyclic importing
 import type { EzBackendInstance } from '../../ezbackend';
 import { getCreateSchema, getFullSchema, getUpdateSchema } from "../typeorm-helpers";
-import { getDefaultGenerators } from "./default-generators";
+import { Generators, Generator, getDefaultGenerators } from "./default-generators";
+import { merge } from "lodash";
 
 
 export interface RouterOptions {
     schemaPrefix?: string
     prefix?: string
-    generators?: { [name: string]: IGenerator }
+    generators?: { [index: string]: Generator }
 }
 
-type IGenerator = (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => RouteOptions | Array<RouteOptions>;
 
 export type Middleware = (oldRoute: RouteOptions) => RouteOptions
 
@@ -26,7 +26,7 @@ export type Middleware = (oldRoute: RouteOptions) => RouteOptions
  * @param middlewares
  * @returns
  */
-export function generateRouteFactory(genOpts:RouterOptions, generator: IGenerator, middlewares: Array<Middleware> = []) {
+export function generateRouteFactory(genOpts: RouterOptions, generator: Generator, middlewares: Array<Middleware> = []) {
     return async (instance: EzBackendInstance, opts: EzBackendOpts) => {
         const routes = ([] as Array<RouteOptions>).concat(generator(instance.repo, genOpts))
         routes.forEach((route) => {
@@ -41,7 +41,7 @@ export function generateRouteFactory(genOpts:RouterOptions, generator: IGenerato
     }
 }
 
-export function middlewareFactory(optName:string, newValue: any): Middleware {
+export function middlewareFactory(optName: string, newValue: any): Middleware {
 
     const newMiddleware: Middleware = (oldRoute) => {
         const newRoute = oldRoute
@@ -61,7 +61,7 @@ export function middlewareFactory(optName:string, newValue: any): Middleware {
  */
 export class EzRouter extends EzApp {
 
-    _generators: { [key: string]: IGenerator }
+    _generators: { [index: string]: Generator }
     _genOpts: RouterOptions
 
     constructor(opts: RouterOptions = { prefix: '', generators: getDefaultGenerators() }) {
@@ -70,7 +70,6 @@ export class EzRouter extends EzApp {
         this._generators = opts.generators ?? {}
 
         this.setHandler(`Add Create Schema`, async (instance, opts) => {
-
             const schema = getCreateSchema(instance.repo.metadata)
             instance.server.addSchema(schema)
         })
@@ -93,7 +92,7 @@ export class EzRouter extends EzApp {
     }
 
     //TODO: Refactor so that its not such a nested affair of functions
-    addRouteFromGenerator(generatorName: string, generator: IGenerator, middlewares: Array<Middleware> = [], override: boolean = false) {
+    addRouteFromGenerator(generatorName: string, generator: Generator, middlewares: Array<Middleware> = [], override: boolean = false) {
         //TODO: Consider about not using spaces in naming conventions
         const handlerName = `Generate ${generatorName} route`
         if (override) {
@@ -105,7 +104,7 @@ export class EzRouter extends EzApp {
     }
 
     //URGENT TODO: Make it such that invalid routeNames throw error which informs of possible route names
-    
+
     _forFactory<KeyType>(overrideName: string, routeNames: Array<string>) {
         return (newVal: KeyType) => {
             const middleware = middlewareFactory(overrideName, newVal)
