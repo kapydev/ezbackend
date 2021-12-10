@@ -74,8 +74,8 @@ export interface EzBackendOpts {
     };
     fastify: Parameters<typeof fastify>[0];
     typeorm: Parameters<typeof createConnection>[0];
+    ['socket.io']: Partial<ServerOptions>;
   };
-  ['socket.io']: Partial<ServerOptions>;
 }
 
 // TODO: Check if emojis will break instance names

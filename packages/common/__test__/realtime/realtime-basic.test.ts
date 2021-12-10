@@ -143,11 +143,7 @@ describe('All realtime listeners should run as expected', () => {
     'Running Database Reads before database start should not result in hook errors',
   );
 
-  test.todo(
-    'Having multiple read/write contexts in a single request should not result in the first hooks being overwritten',
-  );
-
-  test.todo('Socket IO should be namespaced');
+  test.todo('Socket.io Config should be passed io instance correctly');
 
   test.todo('Rule Override Should work');
 });
