@@ -8,6 +8,14 @@ EzBackend uses socket.io for realtime functionality under the hood.
 
 You can access the socket io instance from any `EzApp` or class that extends `EzApp`, for example `EzBackend`
 
+### From Request
+
+You can get the non-namespaced [io object](https://socket.io/docs/v4/server-instance/) from `req`
+
+```ts
+
+```
+
 ### Non Namespaced
 
 You can get the equivalent of the [io object](https://socket.io/docs/v4/server-instance/) from any EzApp with

@@ -3,7 +3,6 @@ import Boom from '@hapi/boom'
 import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import type { RouterOptions } from './ez-router'
-import { EzBackendInstance } from "../..";
 
 /**
  * Returns the primary column name from given metadata

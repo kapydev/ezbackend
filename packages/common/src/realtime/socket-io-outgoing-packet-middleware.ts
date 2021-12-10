@@ -2,6 +2,8 @@ import { socketContext } from "socket-io-event-context"
 import type { LoadEvent } from "typeorm"
 import { EzBackend, EzBackendInstance } from '..'
 import { getContext, REALTIME } from '../rules/context'
+import {Server} from "socket.io"
+import "../declarations/socket-io-declarations"
 
 const checkReadRules = (instance: EzBackendInstance) => {
     const event = getContext(REALTIME.RULE_CONTEXT)
@@ -16,7 +18,8 @@ const checkReadRules = (instance: EzBackendInstance) => {
 
 export const outgoingPacketMiddleware: Parameters<EzBackend["setPostHandler"]>[1] = async (instance, opts) => {
     instance._server.addHook("onReady", async () => {
-        instance._server.io.use((socket, next) => {
+        //TODO: Figure out why this needs the `as Server` type
+        (instance._server.io as Server).use((socket, next) => {
 
             //This is a monkey patch in order to ensure outgoing packets are secure u
             //@ts-ignore
