@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "build:clean": "npx rimraf dist && tsc",
+    "build:clean": "npx rimraf dist && yarn build",
     "watch": "tsc -w"
   },
   "files": [
