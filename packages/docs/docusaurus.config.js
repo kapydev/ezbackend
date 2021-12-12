@@ -21,7 +21,7 @@ module.exports = {
     'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;600;700&display=swap',
   ],
   themeConfig: {
-    metadatas: [
+    metadata: [
       {
         name: 'description',
         content: 'A Node framework focused on speed and ease of use, while keeping the ability to extend and customize'

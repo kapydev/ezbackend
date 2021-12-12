@@ -14,7 +14,7 @@ EzBackend saves you time and effort by reducing the time you spend writing boile
 
 ## How EzBackend saves you time
 
-EzBackend saves you time with convention over configuration - EzBackend comes with strong defaults that are <!--[built to scale](built-to-scale) and--> [fully configurable](../docs/basics/configuration).
+EzBackend saves you time with convention over configuration - EzBackend comes with strong defaults that are <!--[built to scale](built-to-scale) and--> [fully configurable](../docs/configuration).
 
 <!-- TODO: CROP -->
 

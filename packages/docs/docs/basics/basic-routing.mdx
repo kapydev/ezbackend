@@ -5,6 +5,7 @@ sidebar_position: 0.9
 # EzApp - Basic Routing
 
 import CodeSnippet from "../CodeSnippet";
+import AllEndpointFormats from "../AllEndpointFormats"
 
 ## Overview
 
@@ -96,94 +97,37 @@ There are three ways each route can be created:
 2. Sync shorthand
 3. Full Declaration
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-import CodeBlock from "@theme/CodeBlock";
 
-export const ShowAllWays = ({ method, options, contents, returns, url }) => (
-  <Tabs
-    defaultValue="async"
-    values={[
-      { label: "Async", value: "async" },
-      { label: "Sync", value: "sync" },
-      { label: "Full", value: "full" },
-    ]}
-  >
-    <TabItem value="async">
-      <CodeBlock className="language-ts">
-        {`app.${method.toLowerCase()}("${url ?? "/"}",${
-          options
-            ? `{
-${options.replace(/^/gm, "    ")}
-  },`
-            : ""
-        } async (req,res) => {\n`}
-        {contents.replace(/^/gm, "  ")}
-        {contents != "" ? "\n  " : ""}
-        {`return ${returns}`}
-        {`\n});`}
-      </CodeBlock>
-    </TabItem>
-    <TabItem value="sync">
-      <CodeBlock className="language-ts">
-        {`app.${method.toLowerCase()}("${url ?? "/"}",${
-          options
-            ? `{
-${options.replace(/^/gm, "    ")}
-  },`
-            : ""
-        } function (req,res) {\n`}
-        {contents.replace(/^/gm, "  ")}
-        {contents != "" ? "\n  " : ""}
-        {`res.send(${returns})`}
-        {`\n});`}
-      </CodeBlock>
-    </TabItem>
-    <TabItem value="full">
-      <CodeBlock className="language-ts">
-        {`app.route({
-  method: ${method.toUpperCase()}, //Can be array of methods
-  url: '${url ?? "/"}',
-  handler: async => (req, res) { //sync version works too
-    ${
-      contents.replace(/^/gm, "") + (contents != "" ? "\n    " : "")
-    }return ${returns}
-  }${options ? `,\n${options.replace(/^/gm, "  ")}` : ""}
-})`}
-      </CodeBlock>
-    </TabItem>
-  </Tabs>
-);
 
 ### Get
 
 Create an endpoint on the app which returns a json when a `GET` request is performed
 
-<ShowAllWays method="get" contents="" returns={`{data: "data"}`} />
+<AllEndpointFormats method="get" contents="" returns={`{data: "data"}`} />
 
 ### Post
 
 Create an endpoint on the app which returns a json when a `POST` request is performed
 
-<ShowAllWays method="post" contents="" returns={`{data: req.body}`} />
+<AllEndpointFormats method="post" contents="" returns={`{data: req.body}`} />
 
 ### Put
 
 Create an endpoint on the app which returns a json when a `PUT` request is performed
 
-<ShowAllWays method="put" contents="" returns={`{data: req.body}`} />
+<AllEndpointFormats method="put" contents="" returns={`{data: req.body}`} />
 
 ### Patch
 
 Create an endpoint on the app which returns a json when a `PATCH` request is performed
 
-<ShowAllWays method="patch" contents="" returns={`{data: req.body}`} />
+<AllEndpointFormats method="patch" contents="" returns={`{data: req.body}`} />
 
 ### Delete
 
 Create an endpoint on the app which returns a json when a `DELETE` request is performed
 
-<ShowAllWays method="delete" contents="" returns={`{data: req.body}`} />
+<AllEndpointFormats method="delete" contents="" returns={`{data: req.body}`} />
 
 ## Route options
 
@@ -205,7 +149,7 @@ The schemas provided must be in [JSON Schema](https://json-schema.org/) format.
 
 Defining these values will also populate the documentation automatically
 
-<ShowAllWays
+<AllEndpointFormats
   method="post"
   contents=""
   options={`schema:{
@@ -228,7 +172,7 @@ prefixTrailingSlash: string used to determine how to handle passing / as a route
 
 `no-slash`: Will register only /prefix.
 
-<ShowAllWays
+<AllEndpointFormats
   url="/prefix"
   method="post"
   contents=""
@@ -238,36 +182,7 @@ prefixTrailingSlash: string used to determine how to handle passing / as a route
 
 ## Documenting Routes
 
-### Summary
-
-You can provide a summary of what your route does under schema, which will be reflected in the `Db-UI`
-
-![summary](../assets/summary.png)
-
-<ShowAllWays
-  method="get"
-  contents="const time = new Date().toLocaleTimeString()"
-  options={`schema:{
-  summary: "Server Time"
-}`}
-  returns={`{time: time}`}
-/>
-
-### Description
-
-You can provide a detailed description of what your route does under schema, which will be reflected in the `Db-UI`
-
-![description](../assets/description.png)
-
-<ShowAllWays
-  method="get"
-  contents="const time = new Date().toLocaleTimeString()"
-  options={`schema:{
-  summary: "Server Time",
-  description: "This method returns the current server time"
-}`}
-  returns={`{time: time}`}
-/>
+You can refer to the [DB UI](../db-ui/testing-endpoints#documenting-routes) documentation for specifying how your documentation should look like in the DB-UI or OpenAPI specification
 
 ## Route Prefixing
 
