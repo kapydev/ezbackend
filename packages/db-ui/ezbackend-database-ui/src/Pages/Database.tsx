@@ -328,9 +328,9 @@ function Database() {
                   rows={rowData}
                   columns={columnNames}
                   checkboxSelection
-                  disableSelectionOnClick // @ts-ignore
+                  disableSelectionOnClick
                   onSelectionModelChange={(newSelections) => {
-                    setDeleteRowsIndex(newSelections);
+                    setDeleteRowsIndex(newSelections as number[]);
                   }}
                   onCellEditCommit={(cellData) => {
                     handlePatchSelectedCell(cellData);

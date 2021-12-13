@@ -26,6 +26,7 @@
     "husky": "^7.0.4",
     "lerna": "^4.0.0",
     "lint-staged": "^12.1.2",
+    "ora": "^5.4.1",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",
@@ -34,8 +35,9 @@
   },
   "scripts": {
     "build": "node ./scripts/build-package.js",
+    "build:full": "node ./scripts/build-full-package",
     "test": "jest --runInBand",
-    "prepare": "husky install && lerna run prepare",
+    "prepare": "node ./scripts/welcome-message.js",
     "lint": "eslint --ignore-path .gitignore \"**/*.+(ts|js|tsx)\"",
     "format": "prettier --ignore-path .gitignore \"**/*.+(json|md|html|js|ts|tsx)\" --write"
   },

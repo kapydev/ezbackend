@@ -7,9 +7,9 @@
     "ezb": "./bin/index.js"
   },
   "scripts": {
-    "test": "echo \"Testing server with version: $npm_package_version",
+    "test": "jest",
     "build": "tsc",
-    "build:clean": "npx rimraf dist && tsc",
+    "build:clean": "npx rimraf dist && yarn build",
     "watch": "tsc -w"
   },
   "files": [

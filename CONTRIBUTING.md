@@ -12,7 +12,11 @@ When participating in the project please follow the [code of conduct](./CODE_OF_
 
 ## Getting Started
 
-You can start by cloning the repository, and running `yarn build` in the monorepo root to build the packages. You can watch the packages while they are being built
+Start by running `yarn` to install all the necessary dependencies
+
+And run `yarn build:full` to setup your development environment
+
+Running `yarn` in the monorepo root also gives a common list of commands that will be useful for development
 
 After implementing your changes you can run `yarn test` in the monorepo root to ensure that no breaking changes were introduced
 
