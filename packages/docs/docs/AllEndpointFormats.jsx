@@ -3,7 +3,7 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import CodeBlock from "@theme/CodeBlock";
 
-//TODO: Make this code less disgusting
+// TODO: Make this code less disgusting
 export const AllEndpointFormats = ({ method, options, contents, returns, url }) => (
   <Tabs
     defaultValue="async"
