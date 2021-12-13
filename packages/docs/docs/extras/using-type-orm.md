@@ -19,14 +19,13 @@ It lets you connect to any of the databases with the same code. Want to change f
 You can get the TypeORM connection within the lifecycle hooks with `instance.orm`
 
 ```ts title=".ezb/index.ts"
-const app = new EzBackend()
+const app = new EzBackend();
 
-app.setHandler("Check TypeORM Connection", async(instance,opts) => {
-    console.log(instance.orm)
-})
+app.setHandler('Check TypeORM Connection', async (instance, opts) => {
+  console.log(instance.orm);
+});
 
-app.start()
-
+app.start();
 ```
 
 :::caution
@@ -42,18 +41,18 @@ Now that we have the TypeORM connection, we can solve all our problems by asking
 Both the classes `EzModel` and `EzRepo` decorate the instance with a repository directly linked to the model created. The repository is a TypeORM Repository
 
 ```ts
-const app = new EzBackend()
+const app = new EzBackend();
 
-const model = new EzModel('Model',{ //Or EzRepo
-    var1: Type.VARCHAR,
-    var2: Type.DATE
-})
+const model = new EzModel('Model', {
+  //Or EzRepo
+  var1: Type.VARCHAR,
+  var2: Type.DATE,
+});
 
-model.setHandler("Check TypeORM Repo", async(instance,opts) => {
-    console.log(instance.repo)
-})
+model.setHandler('Check TypeORM Repo', async (instance, opts) => {
+  console.log(instance.repo);
+});
 
-app.addApp("model",model,{prefix:'model'})
-app.start()
+app.addApp('model', model, { prefix: 'model' });
+app.start();
 ```
-

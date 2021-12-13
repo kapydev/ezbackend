@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-const Expire = props => {
+const Expire = (props) => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {

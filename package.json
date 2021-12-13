@@ -10,20 +10,44 @@
   "devDependencies": {
     "@swc/core": "^1.2.108",
     "@swc/jest": "^0.2.5",
-    "@types/node": "^16.10.2",
+    "@types/node": "^16.11.12",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
     "esbuild": "^0.13.14",
     "esbuild-jest": "^0.5.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-react": "^7.27.1",
+    "husky": "^7.0.4",
     "lerna": "^4.0.0",
+    "lint-staged": "^12.1.2",
+    "ora": "^5.4.1",
+    "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2",
     "window-size": "^1.1.1"
   },
   "scripts": {
     "build": "node ./scripts/build-package.js",
+    "build:full": "node ./scripts/build-full-package",
     "test": "jest --runInBand",
-    "prepare": "lerna run prepare"
+    "prepare": "node ./scripts/welcome-message.js",
+    "lint": "eslint --ignore-path .gitignore \"**/*.+(ts|js|tsx)\"",
+    "format": "prettier --ignore-path .gitignore \"**/*.+(json|md|html|js|ts|tsx)\" --write"
   },
-  "dependencies": {
-    "typescript": "^4.3.5"
+  "lint-staged": {
+    "*.{js, ts, tsx}": [
+      "eslint --ignore-path .gitignore --quiet --fix"
+    ],
+    "*.{json, md, html, js, ts, tsx}": [
+      "prettier --ignore-path .gitignore --write"
+    ]
   },
   "version": "0.0.0"
 }

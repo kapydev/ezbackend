@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import IconTick from '../assets/icon-tick.svg'
+import IconTick from '../assets/icon-tick.svg';
 import { CtaButton } from '../helper-components/cta-button';
 
 const freeFeatures = [
@@ -9,9 +9,9 @@ const freeFeatures = [
   <div>Database (SQLite, Postgres, etc)</div>,
   <div>CRUD Endpoints Generation</div>,
   <div>Database GUI</div>,
-  <div>File Storage (Multer)</div>, //coming soon
-  <div>Realtime Database (SocketIO)</div> //coming soon
-]
+  <div>File Storage (Multer)</div>, // coming soon
+  <div>Realtime Database (SocketIO)</div>, // coming soon
+];
 
 const oneClickDeployFeatures = [
   <div>All Free Features</div>,
@@ -19,26 +19,24 @@ const oneClickDeployFeatures = [
   <div>Automatic Scaling</div>,
   <div>SSL Encryption</div>,
   <div>Content Caching</div>,
-]
+];
 
 const enterpriseFeatures = [
   <div>All Free and One-Click-Deploy Features</div>,
   <div>Custom-Made Features</div>,
   <div>Technical Guidance & Code Reviews</div>,
   <div>Long-term Support & Upgrade Assistance</div>,
-]
+];
 
 function ListItem(props) {
   return (
     <span className="flex text-gray-200 text-left text-sm pt-5">
       <span className="material-icons align-middle">
-        <IconTick className='w-6 h-6' />
+        <IconTick className="w-6 h-6" />
       </span>
-      <span className="pl-2 font-medium font-monts">
-        {props.children}
-      </span>
+      <span className="pl-2 font-medium font-monts">{props.children}</span>
     </span>
-  )
+  );
 }
 
 function PricingCard(props) {
@@ -50,32 +48,26 @@ function PricingCard(props) {
       <hr className="mt-4 border-1" />
       <div>
         {props.listItems.map((listItem) => {
-          return (
-            <ListItem>
-              {listItem}
-            </ListItem>
-          )
+          return <ListItem>{listItem}</ListItem>;
         })}
         <br />
         <a href={props.href}>
           <div className="pt-8 flex flex-col">
-            <CtaButton>
-              {props.button_text}
-            </CtaButton>
+            <CtaButton>{props.button_text}</CtaButton>
           </div>
         </a>
       </div>
     </div>
-  )
+  );
 }
-
 
 function Pricing() {
   return (
     <Layout title="Pricing">
       <div id="tailwind">
-        <div className='grid place-items-center'>
-          <div className="
+        <div className="grid place-items-center">
+          <div
+            className="
           grid
 
           grid-cols-1 
@@ -103,51 +95,44 @@ function Pricing() {
               </div>
             </div>
 
-            <div className='col-span-1'>
+            <div className="col-span-1">
               <PricingCard
                 title={
                   <div>
-                    <div className='text-4xl'>
-                      Free
-                    </div>
-                    <div className='pt-6 text-xl'>
-                      Open Source
-                    </div>
+                    <div className="text-4xl">Free</div>
+                    <div className="pt-6 text-xl">Open Source</div>
                   </div>
                 }
                 listItems={freeFeatures}
-                button_text='Get Started'
-                href='/docs/intro'
+                button_text="Get Started"
+                href="/docs/intro"
               />
             </div>
 
-            <div className='col-span-1'>
+            <div className="col-span-1">
               <PricingCard
                 title={
                   <div>
-                    <div className='text-4xl'>
-                      $25<span className='text-xl'>/month</span>
+                    <div className="text-4xl">
+                      $25<span className="text-xl">/month</span>
                     </div>
-                    <div className='pt-6 text-xl'>
-                      One-Click-Deploy
-                    </div>
+                    <div className="pt-6 text-xl">One-Click-Deploy</div>
                   </div>
                 }
                 listItems={oneClickDeployFeatures}
-                button_text='Contact Us'
-                href='https://calendly.com/ezbackend/30min'
+                button_text="Contact Us"
+                href="https://calendly.com/ezbackend/30min"
               />
             </div>
 
-            <div className='col-span-1'>
+            <div className="col-span-1">
               <PricingCard
-                title='Enterprise'
+                title="Enterprise"
                 listItems={enterpriseFeatures}
-                button_text='Contact Us'
-                href='https://calendly.com/ezbackend/30min'
+                button_text="Contact Us"
+                href="https://calendly.com/ezbackend/30min"
               />
             </div>
-
           </div>
         </div>
       </div>

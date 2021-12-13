@@ -15,7 +15,10 @@ export class Yarn2Proxy extends JsPackageManager {
     return `yarn ${command}`;
   }
 
-  protected runAddDeps(dependencies: string[], installAsDevDependencies: boolean): void {
+  protected runAddDeps(
+    dependencies: string[],
+    installAsDevDependencies: boolean,
+  ): void {
     let args = [...dependencies];
 
     if (installAsDevDependencies) {
@@ -24,6 +27,4 @@ export class Yarn2Proxy extends JsPackageManager {
 
     this.executeCommand('yarn', ['add', ...args], 'inherit');
   }
-
-
 }

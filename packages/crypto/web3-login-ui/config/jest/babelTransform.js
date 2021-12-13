@@ -1,5 +1,3 @@
-
-
 const babelJest = require('babel-jest');
 
 const hasJsxRuntime = (() => {

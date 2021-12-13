@@ -1,2 +1,2 @@
-export * from './ez-repo'
-export * from '../../rules/ez-rules'
+export * from './ez-repo';
+export * from '../../rules/ez-rules';

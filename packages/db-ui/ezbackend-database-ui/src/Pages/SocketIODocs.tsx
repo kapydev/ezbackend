@@ -1,32 +1,28 @@
-import dotenv from 'dotenv'
-import { useEffect } from 'react'
-import {io} from "socket.io-client"
-import { getBaseURL } from '../Helpers'
+import dotenv from 'dotenv';
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { getBaseURL } from '../Helpers';
 
-dotenv.config()
+dotenv.config();
 
-const URL = getBaseURL()
+const URL = getBaseURL();
 
-const logger = console
-
+const logger = console;
 
 function SocketIODocs() {
+  useEffect(() => {
+    logger.log('CONNECTING SOCKET IO');
+    const socket = io(URL!, {
+      withCredentials: true,
+      transports: ['websocket'],
+    });
 
-    useEffect(()=>{
-        logger.log("CONNECTING SOCKET IO")
-        const socket = io(URL!,{
-            withCredentials: true,
-            transports: ["websocket"]
-        })
-        
-        socket.on("connect", () => {
-            logger.log("Socket IO Connected!")
-        })
-    },[])
+    socket.on('connect', () => {
+      logger.log('Socket IO Connected!');
+    });
+  }, []);
 
-    return (
-        <div>Development in Progress</div>
-    )
+  return <div>Development in Progress</div>;
 }
 
-export default SocketIODocs
+export default SocketIODocs;

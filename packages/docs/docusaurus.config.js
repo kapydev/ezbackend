@@ -1,8 +1,8 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-const path = require('path')
+const path = require('path');
 
-const githubLink = 'https://bit.ly/3CMVaNs'
+const githubLink = 'https://bit.ly/3CMVaNs';
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
   tagline: 'Simplified Backend Setup',
   url: 'https://www.ezbackend.io/',
   baseUrl: '/',
-  onBrokenLinks: 'warn', //Not sure if this will break
+  onBrokenLinks: 'warn', // Not sure if this will break
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'kapydev', // Usually your GitHub org/user name.
@@ -24,15 +24,16 @@ module.exports = {
     metadata: [
       {
         name: 'description',
-        content: 'A Node framework focused on speed and ease of use, while keeping the ability to extend and customize'
-      }
+        content:
+          'A Node framework focused on speed and ease of use, while keeping the ability to extend and customize',
+      },
     ],
     hotjar: {
       siteId: '2653159',
     },
     colorMode: {
       defaultMode: 'dark',
-      disableSwitch: true
+      disableSwitch: true,
     },
     gtag: {
       trackingID: 'G-NYKC5QB870',
@@ -67,12 +68,12 @@ module.exports = {
             },
             {
               label: 'Github',
-              href: 'https://github.com/kapydev/ezbackend'
+              href: 'https://github.com/kapydev/ezbackend',
             },
             {
               label: 'CodeSandbox',
               href: 'https://codesandbox.io/s/ezbackend-demo-ensk1?file=/src/index.ts',
-            }
+            },
           ],
         },
         {
@@ -86,15 +87,15 @@ module.exports = {
             },
             {
               label: 'Discord',
-              href: 'https://discord.gg/RwgdruFJHc'
+              href: 'https://discord.gg/RwgdruFJHc',
             },
             {
               label: 'Youtube',
               href: 'https://www.youtube.com/channel/UCXFyio7c5EWBGLknUJZjIzQ',
-            }
+            },
           ],
-        }
-      ]
+        },
+      ],
     },
     footer: {
       style: 'dark',
@@ -103,14 +104,14 @@ module.exports = {
           title: 'Contact Us',
           items: [
             {
-              html: 'Email: ezbackend@gmail.com'
+              html: 'Email: ezbackend@gmail.com',
             },
             {
-              html: "Phone: +65 9650 3241"
+              html: 'Phone: +65 9650 3241',
             },
             {
-              html: 'Telegram: @StepKab00m'
-            }
+              html: 'Telegram: @StepKab00m',
+            },
           ],
         },
         {
@@ -132,7 +133,7 @@ module.exports = {
             {
               label: 'Pricing',
               to: '/pricing',
-            }
+            },
           ],
         },
       ],
@@ -146,8 +147,6 @@ module.exports = {
       indexName: 'ezbackend',
       contextualSearch: false,
     },
-
-
   },
   presets: [
     [
@@ -157,7 +156,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/kapydev/ezbackend/edit/master/packages/docs/'
+            'https://github.com/kapydev/ezbackend/edit/master/packages/docs/',
         },
         blog: {
           showReadingTime: true,
@@ -171,7 +170,5 @@ module.exports = {
       },
     ],
   ],
-  plugins: [
-    path.resolve(__dirname, "plugins/docusaurus-plugin-hotjar")
-  ],
+  plugins: [path.resolve(__dirname, 'plugins/docusaurus-plugin-hotjar')],
 };

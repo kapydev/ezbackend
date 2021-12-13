@@ -1,1 +1,1 @@
-declare module 'fastify-boom'
+declare module 'fastify-boom';

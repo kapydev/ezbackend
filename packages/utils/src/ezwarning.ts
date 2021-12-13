@@ -1,5 +1,5 @@
-import chalk from 'chalk'
+import chalk from 'chalk';
 
-export function ezWarning(msg:string) {
-    console.log('⚠️ ',chalk.yellow(msg))
+export function ezWarning(msg: string) {
+  console.log('⚠️ ', chalk.yellow(msg));
 }

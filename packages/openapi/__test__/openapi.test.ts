@@ -1,84 +1,81 @@
-import { EzBackend, EzModel, Type } from "@ezbackend/common";
+import { EzBackend, EzModel, Type } from '@ezbackend/common';
 
-import { EzOpenAPI } from '../src'
-import type { FastifyInstance } from 'fastify'
+import { EzOpenAPI } from '../src';
+import type { FastifyInstance } from 'fastify';
 
-//TODO: Figure if there is a better way of getting this data
+// TODO: Figure if there is a better way of getting this data
 function getInternalInstance(ezb: EzBackend) {
-    //@ts-ignore
-    return ezb.instance._lastUsed.server
+  // @ts-ignore
+  return ezb.instance._lastUsed.server;
 }
 
-let app: EzBackend
+let app: EzBackend;
 
 const defaultConfig = {
-    backend: {
-        fastify: {
-            logger: false
-        },
-        typeorm: {
-            database: ':memory:'
-        }
-    }
-}
+  backend: {
+    fastify: {
+      logger: false,
+    },
+    typeorm: {
+      database: ':memory:',
+    },
+  },
+};
 
 beforeEach(() => {
-    app = new EzBackend()
+  app = new EzBackend();
 
-    //Prevent server from starting
-    app.removeHook("_run", "Run Fastify Server")
-})
-
-afterEach(async () => {
-    const instance = getInternalInstance(app)
-    await instance.orm.close();
-    await instance._server.close();
+  // Prevent server from starting
+  app.removeHook('_run', 'Run Fastify Server');
 });
 
-describe("Basic Usage", () => {
-    it("Should be able to render the docs", async () => {
-        app.addApp(new EzOpenAPI())
+afterEach(async () => {
+  const instance = getInternalInstance(app);
+  await instance.orm.close();
+  await instance._server.close();
+});
 
-        await app.start(defaultConfig)
+describe('Basic Usage', () => {
+  it('Should be able to render the docs', async () => {
+    app.addApp(new EzOpenAPI());
 
-        const server: FastifyInstance = getInternalInstance(app)._server
+    await app.start(defaultConfig);
 
-        const response = await server.inject({
-            method: "GET",
-            url: "/docs/static/index.html",
-        })
+    const server: FastifyInstance = getInternalInstance(app)._server;
 
-        expect(response.statusCode).toBe(200)
-    })
+    const response = await server.inject({
+      method: 'GET',
+      url: '/docs/static/index.html',
+    });
 
-    it("Should have schemas", async () => {
+    expect(response.statusCode).toBe(200);
+  });
 
-        app.addApp('openapi', new EzOpenAPI())
+  it('Should have schemas', async () => {
+    app.addApp('openapi', new EzOpenAPI());
 
-        const dummyModel = new EzModel('model', {
-            var1: Type.VARCHAR,
-            var2: Type.VARCHAR
-        })
+    const dummyModel = new EzModel('model', {
+      var1: Type.VARCHAR,
+      var2: Type.VARCHAR,
+    });
 
-        app.addApp('model', dummyModel)
+    app.addApp('model', dummyModel);
 
-        await app.start(defaultConfig)
+    await app.start(defaultConfig);
 
-        const server: FastifyInstance = app.getInternalServer()
+    const server: FastifyInstance = app.getInternalServer();
 
-        const response2 = await server.inject({
-            method: "GET",
-            url: "/docs",
-        })
+    const response2 = await server.inject({
+      method: 'GET',
+      url: '/docs',
+    });
 
-        const response = await server.inject({
-            method: "GET",
-            url: "/docs/json",
-        })
+    const response = await server.inject({
+      method: 'GET',
+      url: '/docs/json',
+    });
 
-
-        expect(response.statusCode).toBe(200)
-        expect(JSON.parse(response.body)['components']).toMatchSnapshot()
-    })
-
-})
+    expect(response.statusCode).toBe(200);
+    expect(JSON.parse(response.body).components).toMatchSnapshot();
+  });
+});

@@ -22,9 +22,9 @@
     "url": "git+https://github.com/kapydev/ezbackend.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
-    "build:clean": "npx rimraf dist && tsc",
+    "test": "jest",
     "build": "tsc",
+    "build:clean": "npx rimraf dist && yarn build",
     "watch": "tsc -w"
   },
   "bugs": {
