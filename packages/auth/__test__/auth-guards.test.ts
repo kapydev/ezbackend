@@ -27,8 +27,8 @@ describe('Plugin Registering', () => {
       successRedirectURL: 'http://localhost:8888/docs',
       failureRedirectURL: 'http://localhost:8888/docs',
       google: {
-        googleClientId: process.env.GOOGLE_CLIENT_ID!,
-        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        googleClientId: process.env.GOOGLE_CLIENT_ID,
+        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
         scope: ['profile'],
       },
     },

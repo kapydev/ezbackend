@@ -38,7 +38,7 @@ ${options.replace(/^/gm, "    ")}
             : ""
         } function (req,res) {\n`}
         {contents.replace(/^/gm, "  ")}
-        {contents != "" ? "\n  " : ""}
+        {contents !== "" ? "\n  " : ""}
         {`res.send(${returns})`}
         {`\n});`}
       </CodeBlock>
@@ -50,7 +50,7 @@ ${options.replace(/^/gm, "    ")}
   url: '${url ?? "/"}',
   handler: async => (req, res) { //sync version works too
     ${
-      contents.replace(/^/gm, "") + (contents != "" ? "\n    " : "")
+      contents.replace(/^/gm, "") + (contents !== "" ? "\n    " : "")
     }return ${returns}
   }${options ? `,\n${options.replace(/^/gm, "  ")}` : ""}
 })`}

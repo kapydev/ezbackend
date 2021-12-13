@@ -9,8 +9,8 @@ import { ProviderOptions } from '.';
 import fastifyPassport from 'fastify-passport';
 
 interface GoogleProviderOptions extends ProviderOptions {
-  googleClientId: string;
-  googleClientSecret: string;
+  googleClientId?: string;
+  googleClientSecret?: string;
   // TODO: Strict typechecking for allowed google scopes
   scope: Array<string>;
 }

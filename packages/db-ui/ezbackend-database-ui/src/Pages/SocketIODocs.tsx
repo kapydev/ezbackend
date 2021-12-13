@@ -12,7 +12,8 @@ const logger = console;
 function SocketIODocs() {
   useEffect(() => {
     logger.log('CONNECTING SOCKET IO');
-    const socket = io(URL!, {
+    if (!URL) return
+    const socket = io(URL, {
       withCredentials: true,
       transports: ['websocket'],
     });
