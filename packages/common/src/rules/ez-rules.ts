@@ -98,6 +98,7 @@ export function createRulesSubscriber(ezRules: EzRules) {
 
         afterLoad(entity: any, event: LoadEvent<any>) {
             if (getContext(REALTIME.IGNORE_RULES) === true) return
+            if (getContext(REALTIME.USED_BY_EZB) !== true) return
             setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.READ)) return
@@ -109,6 +110,7 @@ export function createRulesSubscriber(ezRules: EzRules) {
         }
         beforeUpdate(event: UpdateEvent<any>) {
             if (getContext(REALTIME.IGNORE_RULES) === true) return
+            if (getContext(REALTIME.USED_BY_EZB) !== true) return
             setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.UPDATE)) return
@@ -120,6 +122,7 @@ export function createRulesSubscriber(ezRules: EzRules) {
         }
         beforeInsert(event: InsertEvent<any>) {
             if (getContext(REALTIME.IGNORE_RULES) === true) return
+            if (getContext(REALTIME.USED_BY_EZB) !== true) return
             setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.CREATE)) return
@@ -131,6 +134,7 @@ export function createRulesSubscriber(ezRules: EzRules) {
         }
         beforeRemove(event: RemoveEvent<any>) {
             if (getContext(REALTIME.IGNORE_RULES) === true) return
+            if (getContext(REALTIME.USED_BY_EZB) !== true) return
             setContext(REALTIME.RULE_CONTEXT, event)
             ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
                 if (!isRelevantRule(event, ruleMeta, RuleType.DELETE)) return

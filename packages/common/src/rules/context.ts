@@ -5,7 +5,8 @@ export enum REALTIME {
     RULE_CONTEXT = "RULE_CONTEXT",
     REQ_CONTEXT = "REQ_CONTEXT",
     SOCKET_CONTEXT = "SOCKET_CONTEXT",
-    IGNORE_RULES = "IGNORE_RULES"
+    IGNORE_RULES = "IGNORE_RULES",
+    USED_BY_EZB = "USED_BY_EZB"
 }
 
 export interface AllowedValues {
@@ -14,6 +15,11 @@ export interface AllowedValues {
     //TODO: Set Request context and socket context types
     [REALTIME.REQ_CONTEXT]: any
     [REALTIME.SOCKET_CONTEXT]: any
+    [REALTIME.USED_BY_EZB]: boolean
+}
+
+export function setUsedByEzb() {
+    setContext(REALTIME.USED_BY_EZB, true)
 }
 
 export function ignoreRules() {

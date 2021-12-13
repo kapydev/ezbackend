@@ -3,6 +3,7 @@ import Boom from '@hapi/boom'
 import { DeepPartial, EntityMetadata, ObjectLiteral, Repository } from "typeorm";
 import { RouteOptions } from "fastify";
 import type { RouterOptions } from './ez-router'
+import { setUsedByEzb } from "../../rules";
 
 /**
  * Returns the primary column name from given metadata
@@ -77,6 +78,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
                     },
                 },
                 handler: async (req, res) => {
+                    setUsedByEzb()
                     try {
                         const data = req.body as DeepPartial<ObjectLiteral>
                         const newObj = await repo.save(data);
@@ -112,6 +114,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
                     },
                 },
                 handler: async (req, res) => {
+                    setUsedByEzb()
                     try {
                         //@ts-ignore
                         const id = req.params[primaryCol]
@@ -141,6 +144,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
                     },
                 },
                 handler: async (req, res) => {
+                    setUsedByEzb()
                     const newObj = await repo.find();
                     return removeNestedNulls(newObj);
 
@@ -174,6 +178,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
                     },
                 },
                 handler: async (req, res) => {
+                    setUsedByEzb()
                     //@ts-ignore
                     const id = req.params[primaryCol]
                     try {
@@ -232,6 +237,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
                     },
                 },
                 handler: async (req, res) => {
+                    setUsedByEzb()
                     //@ts-ignore
                     const id = req.params[primaryCol]
                     try {
