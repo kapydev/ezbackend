@@ -24,12 +24,19 @@ function buildReactApps() {
 
   for (const buildPath of reactBuildPaths) {
     const appPath = path.join(process.cwd(), 'packages', ...buildPath);
-    const result = sync('yarn && yarn build', {
+    const installResult = sync('yarn', {
       stdio: 'inherit',
       cwd: appPath,
     });
-    if (result.status !== 0) {
-      return result;
+    if (installResult.status !== 0) {
+      return installResult;
+    }
+    const buildResult = sync('yarn', ['build'], {
+      stdio: 'inherit',
+      cwd: appPath,
+    });
+    if (buildResult.status !== 0) {
+      return buildResult;
     }
   }
 
