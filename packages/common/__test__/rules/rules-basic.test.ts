@@ -140,7 +140,7 @@ describe("All row level hooks should run as expected", () => {
 
         let ruleRan = false
 
-        fakeUser.rules.for(RuleType.READ).check((req, event) => {
+        fakeUser.rules.for(RuleType.DELETE).check((req, event) => {
             ruleRan = true
             expect(req?.method).toBe("DELETE")
             expect(req?.url).toBe("/user/1")
@@ -172,4 +172,15 @@ describe("All row level hooks should run as expected", () => {
     })
 
     test.todo("Rules should not affect custom endpoints made by the end user")
+
+    test.todo("ignoreRules() should prevent rules from blocking requests")
+
+    test.todo("Rules should work with more than one Model")
+
+    describe("Rules should work on outgoing socket packets", () => {
+        test.todo("create")
+        test.todo("read")
+        test.todo("update")
+        test.todo("delete")
+    })
 })

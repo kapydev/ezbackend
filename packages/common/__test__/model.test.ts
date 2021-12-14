@@ -60,5 +60,7 @@ describe("Plugin Registering", () => {
 
             expect(errored).toBe(true)
         })
+
+        test.todo("Should throw an error if an EzModel is defined with more than one primary column")
     })
 })
