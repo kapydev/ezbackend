@@ -1,7 +1,10 @@
 const { sync } = require('cross-spawn');
 
 function huskyInstall() {
-  return sync('npx husky install', { stdio: 'inherit', cwd: process.cwd() });
+  return sync('npx', ['husky', 'install'], {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+  });
 }
 
 module.exports = {
