@@ -24,7 +24,7 @@ function buildReactApps() {
 
   for (const buildPath of reactBuildPaths) {
     const appPath = path.join(process.cwd(), 'packages', ...buildPath);
-    const result = sync('yarn',['&& yarn build'], {
+    const result = sync('yarn', ['&&', 'yarn', 'build'], {
       stdio: 'inherit',
       cwd: appPath,
     });
