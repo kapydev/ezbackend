@@ -4,11 +4,11 @@ const path = require('path');
 const chalk = require('chalk');
 
 const buildSteps = [
-  // 'yarn-check',
+  'yarn-check',
   'husky-install',
-  // 'run-build',
-  // 'build-react-apps',
-  // 'print-env-setup-instructions',
+  'run-build',
+  'build-react-apps',
+  'print-env-setup-instructions',
 ];
 
 function runBuild() {
