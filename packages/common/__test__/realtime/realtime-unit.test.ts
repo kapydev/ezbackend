@@ -1,5 +1,16 @@
 import { EzBackend, EzApp, Type, RuleType } from "../../src"
 
+
+const defaultConfig = {
+    backend: {
+        fastify: {
+            logger: false
+        },
+        typeorm: {
+            database: ':memory:'
+        }
+    }
+}
 describe("Should be able to get io object", () => {
 
     let app: EzBackend
@@ -24,8 +35,40 @@ describe("Should be able to get io object", () => {
     })
 
     describe("Use socket IO", () => {
-        test.todo("Get with namespace")
-        test.todo("Get without namespace")
+        test("Use with namespace", async () => {
+
+            let socketUsed = false
+
+            const childApp = new EzApp()
+
+            childApp.useSocketIO((socket) => {
+                expect(socket.name).toBe('/child-app')
+                socketUsed = true
+            })
+
+            app.addApp(childApp, { prefix: "child-app" })
+
+            await app.start(defaultConfig)
+
+            expect(socketUsed).toBe(true)
+        })
+        test("Use without namespace", async () => {
+            const childApp = new EzApp()
+
+            let socketUsed = false
+
+
+            childApp.useSocketIORaw((socket) => {
+                expect(socket.name).toBe('/')
+                socketUsed = true
+            })
+
+            app.addApp(childApp, { prefix: "child-app" })
+
+            await app.start(defaultConfig)
+
+            expect(socketUsed).toBe(true)
+        })
     })
 
     describe("Get Socket IO", () => {
@@ -38,16 +81,7 @@ describe("Should be able to get io object", () => {
                 expect(nestedChild.getSocketIO().name).toBe("/child/nested-child")
             })
 
-            await app.start({
-                backend: {
-                    fastify: {
-                        logger: false
-                    },
-                    typeorm: {
-                        database: ':memory:'
-                    }
-                }
-            })
+            await app.start(defaultConfig)
 
             expect(handlerRan).toBe(true)
         })
@@ -57,16 +91,7 @@ describe("Should be able to get io object", () => {
                 expect(nestedChild.getSocketIORaw().name).toBe('/')
             })
 
-            await app.start({
-                backend: {
-                    fastify: {
-                        logger: false
-                    },
-                    typeorm: {
-                        database: ':memory:'
-                    }
-                }
-            })
+            await app.start(defaultConfig)
 
         })
     })

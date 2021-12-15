@@ -305,8 +305,9 @@ export class EzBackend extends EzApp {
 
     async close() {
         const instance = this.getInternalInstance()
-        await instance.orm.close()
-        await instance._server.close()
+        const server = this.getInternalServer()
+        instance.orm && await instance.orm.close()
+        server && await server.close()
     }
 
 }

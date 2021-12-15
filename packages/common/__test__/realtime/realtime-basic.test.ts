@@ -150,8 +150,6 @@ describe("All realtime listeners should run as expected", () => {
 
     test.todo("Having multiple read/write contexts in a single request should not result in the first hooks being overwritten")
 
-    test.todo("Socket IO should be namespaced")
-
     test.todo("Rule Override Should work")
 
     test.todo("Socket.io Config should be passed io instance correctly")

@@ -43,9 +43,7 @@ describe("All realtime listeners should run as expected", () => {
     afterEach(async () => {
         clientSocket.close()
         clientSocket2.close()
-        const instance = app.getInternalInstance()
-        await instance.orm.close();
-        await instance._server.close();
+        await app.close()
     });
 
     test("Should be able to receive create events", async () => {
