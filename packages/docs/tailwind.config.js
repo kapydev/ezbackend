@@ -18,6 +18,7 @@ module.exports = {
       },
       height: {
         '320px': '320px',
+        '750px': '750px',
       },
       colors: {
         dracula: '#282A36',

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Prism } from 'prism-react-renderer';
 import theme from 'prism-react-renderer/themes/dracula';
-import { useWindupString } from 'windups';
+import { useWindupString} from 'windups';
 
 const originalCode = `const app = new EzBackend()
 
@@ -36,7 +36,6 @@ const highlightCode = (code) => (
 );
 
 export function MovingCode(props) {
-  // const [code, setCode] = useState(originalCode)
 
   const [code] = useWindupString(props.text, { pace: () => 50 });
 
@@ -44,7 +43,6 @@ export function MovingCode(props) {
     <div>
       <Editor
         value={code}
-        // onValueChange={(code) => {}}
         highlight={highlightCode}
         padding={10}
       />
