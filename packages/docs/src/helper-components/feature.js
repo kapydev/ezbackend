@@ -56,7 +56,7 @@ export function Feature(props) {
 
 export function MainFeature(props) {
   return (
-    <div id="tailwind">
+    <div>
       <div className="flex justify-start">
         {/* <div className='grid place-items-center mr-2'>
           {props.icon}
