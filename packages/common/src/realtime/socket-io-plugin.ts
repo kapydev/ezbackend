@@ -27,7 +27,7 @@ export const attachSocketIO = async (instance: EzBackendInstance, opts: any) => 
   instance._server.decorateRequest('io', {getter: () => instance.socketIO})
 
   instance._server.addHook('onClose', (fastify, done) => {
-    fastify.io.close()
+    instance.socketIO.close()
     done()
   })
 }

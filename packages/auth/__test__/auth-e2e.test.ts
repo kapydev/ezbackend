@@ -6,16 +6,15 @@ import { EzUser, EzAuth } from "../src"
 import dotenv from 'dotenv'
 import setCookie from 'set-cookie-parser'
 
-describe("Plugin Registering", () => {
+describe("User Deserialization", () => {
 
   dotenv.config()
 
   let app: EzBackend
+  let user: EzUser
 
-  const PORT = 8003
 
   const defaultConfig = {
-    port: PORT,
     backend: {
       fastify: {
         logger: false
@@ -38,7 +37,7 @@ describe("Plugin Registering", () => {
 
     app.addApp(new EzAuth())
 
-    const user = new EzUser("User", ['google'])
+    user = new EzUser("User", ['google'])
 
     user.get('/me', async (req, res) => {
       return { user: req.user }
@@ -62,6 +61,56 @@ describe("Plugin Registering", () => {
     await app.close()
   });
 
+  test("A proper session should hold the user in req.user", async () => {
+
+    //Seed the database
+    await app.inject({
+      method: "POST",
+      url: '/user',
+      payload: {
+        googleId: '1',
+        googleData: {
+          name: "Robert"
+        }
+      }
+    })
+
+    const sessionResult = await app.inject({
+      method: "POST",
+      url: '/body-to-session',
+      payload: {
+        data: "google-1"
+      }
+    })
+
+
+    const cookies = setCookie.parse(
+      sessionResult.headers['set-cookie'] as string,
+      {
+        decodeValues: true
+      }
+    )
+
+
+    const result = await app.inject({
+      method: "GET",
+      url: '/user/me',
+      cookies: {
+        session: cookies[0].value
+      },
+
+    })
+
+    expect(result.json()).toMatchObject({
+      user: {
+        id: 1,
+        googleId: '1',
+        googleData:
+          { name: 'Robert' }
+      }
+    })
+
+  })
   test("Login Route should redirect to google login", async () => {
 
     const result = await app.inject({
@@ -83,70 +132,17 @@ describe("Plugin Registering", () => {
     expect(redirectUrl.searchParams.get('scope')).toMatchInlineSnapshot(`"profile email"`)
   })
 
-  describe("Cookie Desrializing", () => {
 
-    test("If user is not logged in it should not return anything", async () => {
+  test("If user is not logged in it should not return anything", async () => {
 
-      const result = await app.inject({
-        method: "GET",
-        url: '/user/me'
-      })
-
-      expect(result.json()).toMatchObject({ user: null })
+    const result = await app.inject({
+      method: "GET",
+      url: '/user/me'
     })
 
-    test.todo("If user session is malformed it should return null")
-
-    test("A proper session should hold the user in req.user", async () => {
-
-      //Seed the database
-      await app.inject({
-        method: "POST",
-        url: '/user',
-        payload: {
-          googleId: '1',
-          googleData: {
-            name: "Robert"
-          }
-        }
-      })
-
-      const sessionResult = await app.inject({
-        method: "POST",
-        url: '/body-to-session',
-        payload: {
-          data: "google-1"
-        }
-      })
-
-
-      const cookies = setCookie.parse(
-        sessionResult.headers['set-cookie'] as string,
-        {
-          decodeValues: true
-        }
-      )
-
-
-      const result = await app.inject({
-        method: "GET",
-        url: '/user/me',
-        cookies: {
-          session: cookies[0].value
-        },
-
-      })
-
-      expect(result.json()).toMatchObject({
-        user: {
-          id: 1,
-          googleId: '1',
-          googleData:
-            { name: 'Robert' }
-        }
-      })
-
-    })
+    expect(result.json()).toMatchObject({ user: null })
   })
+
+  test.todo("If user session is malformed it should return null")
 
 })
