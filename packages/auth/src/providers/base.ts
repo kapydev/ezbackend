@@ -1,18 +1,18 @@
 import { EzApp, EzBackendInstance, EzBackendOpts } from '@ezbackend/common';
 import type {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  RouteOptions,
+    FastifyInstance,
+    FastifyReply,
+    FastifyRequest,
+    RouteOptions
 } from 'fastify';
-
-import { AnyStrategy } from 'fastify-passport/dist/strategies';
-import {
-  DeserializeFunction,
-  SerializeFunction,
-} from 'fastify-passport/dist/Authenticator';
-import { EzBackendAuthOpts, defaultConfig } from '../auth';
 import fastifyPassport from 'fastify-passport';
+import {
+    DeserializeFunction,
+    SerializeFunction
+} from 'fastify-passport/dist/Authenticator';
+import { AnyStrategy } from 'fastify-passport/dist/strategies';
+import { defaultConfig, EzBackendAuthOpts } from '../auth';
+
 
 // TODO: Generate this type more programatically to only have types introduced by user
 declare module 'fastify' {

@@ -1,6 +1,7 @@
 import { socketContext } from 'socket-io-event-context';
 import type { LoadEvent } from 'typeorm';
 import { EzBackend, EzBackendInstance } from '..';
+import "../declarations/socket-io-declarations";
 import { getContext, REALTIME } from '../rules/context';
 
 const checkReadRules = (instance: EzBackendInstance) => {
@@ -32,7 +33,7 @@ export const outgoingPacketMiddleware: Parameters<
           }
 
           oldWriteToEngine(...args);
-        } catch {}
+        } catch { }
       };
 
       next();
