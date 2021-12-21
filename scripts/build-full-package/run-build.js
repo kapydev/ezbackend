@@ -1,9 +1,12 @@
 const { sync } = require('cross-spawn');
 
-console.log(process.cwd())
+console.log(process.cwd());
 
 function runBuild() {
-  return sync('yarn',['build','--all'], { stdio: 'inherit', cwd: process.cwd() })
+  return sync('yarn', ['build', '--all'], {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+  });
 }
 
 module.exports = {

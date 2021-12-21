@@ -35,9 +35,9 @@ describe('All realtime listeners should run as expected', () => {
   });
 
   afterEach(async () => {
-    clientSocket.close()
-    clientSocket2.close()
-    await app.close()
+    clientSocket.close();
+    clientSocket2.close();
+    await app.close();
   });
 
   test('Should be able to receive create events', async () => {
@@ -105,9 +105,8 @@ describe('All realtime listeners should run as expected', () => {
     await app.inject({
       method: 'POST',
       url: '/user',
-      payload: userPayload
-    })
-
+      payload: userPayload,
+    });
 
     await doneFlag;
 

@@ -1,48 +1,47 @@
-//URGENT TODO: Figure out why github actions is throwing req has 'any' type even though locally there is no issue
+// URGENT TODO: Figure out why github actions is throwing req has 'any' type even though locally there is no issue
 
-import { EzApp, EzBackend } from "@ezbackend/common";
-import Boom from '@hapi/boom'
-import { RouteShorthandOptionsWithHandler } from "fastify";
-import dotenv from 'dotenv'
-import path from 'path'
+import { EzApp, EzBackend } from '@ezbackend/common';
+import Boom from '@hapi/boom';
+import { RouteShorthandOptionsWithHandler } from 'fastify';
+import dotenv from 'dotenv';
+import path from 'path';
 
-describe("Plugin Registering", () => {
+describe('Plugin Registering', () => {
+  dotenv.config();
 
-  dotenv.config()
-
-  let app: EzBackend
+  let app: EzBackend;
 
   const defaultConfig = {
     port: 3000,
     backend: {
       fastify: {
-        logger: false
+        logger: false,
       },
       typeorm: {
-        database: ':memory:'
-      }
+        database: ':memory:',
+      },
     },
     auth: {
-      secretKeyPath: path.resolve(__dirname, "./testing-not-secret-key"),
-      successRedirectURL: "http://localhost:8888/docs",
-      failureRedirectURL: "http://localhost:8888/docs",
+      secretKeyPath: path.resolve(__dirname, './testing-not-secret-key'),
+      successRedirectURL: 'http://localhost:8888/docs',
+      failureRedirectURL: 'http://localhost:8888/docs',
       google: {
         googleClientId: process.env.GOOGLE_CLIENT_ID!,
         googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         scope: ['profile'],
-      }
-    }
-  }
+      },
+    },
+  };
 
   beforeEach(() => {
-    app = new EzBackend()
+    app = new EzBackend();
 
-    //Prevent server from starting
-    app.removeHook("_run", "Run Fastify Server")
-  })
+    // Prevent server from starting
+    app.removeHook('_run', 'Run Fastify Server');
+  });
 
   afterEach(async () => {
-    await app.close()
+    await app.close();
   });
 
   it('Should be able to guard on the same app', async () => {
@@ -104,5 +103,4 @@ describe("Plugin Registering", () => {
 
     expect(result.statusCode).toBe(401);
   });
-})
-
+});

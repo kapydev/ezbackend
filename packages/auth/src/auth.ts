@@ -5,7 +5,7 @@ import dedent from 'dedent-js';
 import 'fastify-cookie';
 import fastifyPassport from 'fastify-passport';
 import fastifySecureSession, {
-  SecureSessionPluginOptions
+  SecureSessionPluginOptions,
 } from 'fastify-secure-session';
 import fs, { PathLike } from 'fs';
 import path from 'path';
@@ -24,11 +24,10 @@ declare module '@ezbackend/common' {
   }
 }
 
-declare module "socket.io" {
+declare module 'socket.io' {
   interface Socket {
-    user: any
+    user: any;
   }
-
 }
 
 export const defaultConfig: EzBackendOpts['auth'] = {
@@ -51,16 +50,20 @@ export const defaultConfig: EzBackendOpts['auth'] = {
   google: {
     googleClientId: process.env.GOOGLE_CLIENT_ID!,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    scope: ['profile', 'email']
-  }
-}
+    scope: ['profile', 'email'],
+  },
+};
 
 function getKey(opts: EzBackendOpts['auth']) {
-  let key: Buffer = Buffer.alloc(32)
+  let key: Buffer = Buffer.alloc(32);
 
-  if (opts.secretKey && (opts.secretKeyPath && fs.existsSync(opts.secretKeyPath))) {
-
-    throw new EzError("Can only define one secret key!",
+  if (
+    opts.secretKey &&
+    opts.secretKeyPath &&
+    fs.existsSync(opts.secretKeyPath)
+  ) {
+    throw new EzError(
+      'Can only define one secret key!',
       "Your secret key can be in the secretKeyPath (default filename 'secret-key') or in your environment variable SECRET_KEY ONLY",
       dedent`
         Pick ONE only:
@@ -98,26 +101,34 @@ function getKey(opts: EzBackendOpts['auth']) {
 
 export class EzAuth extends EzApp {
   constructor() {
-    super()
+    super();
 
-    this.setDefaultOpts(defaultConfig)
+    this.setDefaultOpts(defaultConfig);
 
-    this.setHandler("Add Fastify Secure Session", async (instance, fullOpts) => {
+    this.setHandler(
+      'Add Fastify Secure Session',
+      async (instance, fullOpts) => {
+        const opts = this.getOpts('auth', fullOpts);
 
-      const opts = this.getOpts('auth', fullOpts)
+        const key = getKey(opts);
 
-      const key = getKey(opts)
+        if (
+          'key' in opts.fastifySecureSession &&
+          opts.fastifySecureSession.key === ''
+        ) {
+          opts.fastifySecureSession.key = key;
+        }
 
-      if ('key' in opts.fastifySecureSession && opts.fastifySecureSession.key === '') {
-        opts.fastifySecureSession.key = key
-      }
+        instance.server.register(
+          fastifySecureSession,
+          opts.fastifySecureSession,
+        );
+      },
+    );
 
-      instance.server.register(fastifySecureSession, opts.fastifySecureSession)
-    })
-
-    this.setHandler("Add Fastify Passport", async (instance, fullOpts) => {
-      instance.server.register(fastifyPassport.initialize())
-      instance.server.register(fastifyPassport.secureSession())
+    this.setHandler('Add Fastify Passport', async (instance, fullOpts) => {
+      instance.server.register(fastifyPassport.initialize());
+      instance.server.register(fastifyPassport.secureSession());
 
       // this.getSocketIORaw().use((socket, next) => {
       //     if (socket.request.headers.cookie) {
@@ -131,41 +142,40 @@ export class EzAuth extends EzApp {
 
       //     next()
       // })
-    })
+    });
 
-    this.setHandler("Add Passport User Deserializer to Socket.io", async (instance, fullOpts) => {
-      const opts = this.getOpts('auth', fullOpts)
+    this.setHandler(
+      'Add Passport User Deserializer to Socket.io',
+      async (instance, fullOpts) => {
+        const opts = this.getOpts('auth', fullOpts);
 
-      this.getSocketIORaw().use((socket, next) => {
-        const headers = socket.request.headers
-        const cookieString = headers[opts.fastifySecureSession.cookieName ?? 'session']
+        this.getSocketIORaw().use((socket, next) => {
+          const headers = socket.request.headers;
+          const cookieString =
+            headers[opts.fastifySecureSession.cookieName ?? 'session'];
 
-        if (typeof cookieString !== 'string') return next()
+          if (typeof cookieString !== 'string') return next();
 
-        const session = instance._server.decodeSecureSession(cookieString)
+          const session = instance._server.decodeSecureSession(cookieString);
 
-        if (session === null) return next()
+          if (session === null) return next();
 
-        const serializedUser = session.get('passport')
+          const serializedUser = session.get('passport');
 
-        //URGENT TODO: Since types don't sufficiently overlap we should think of how we can make it cleaner
-        fastifyPassport.deserializeUser(serializedUser, socket.request as any)
-          .then((deserializedUser) => {
-            socket.user = deserializedUser
-            next()
+          // URGENT TODO: Since types don't sufficiently overlap we should think of how we can make it cleaner
+          fastifyPassport
+            .deserializeUser(serializedUser, socket.request as any)
+            .then((deserializedUser) => {
+              socket.user = deserializedUser;
+              next();
+            })
+            .catch((e) => {
+              next(e);
+            });
+        });
+      },
+    );
 
-          })
-          .catch(e => {
-            next(e)
-          })
-
-
-      })
-    })
-
-
-
-    this.scope = PluginScope.PARENT
-
+    this.scope = PluginScope.PARENT;
   }
 }

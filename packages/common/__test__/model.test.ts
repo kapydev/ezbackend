@@ -2,7 +2,6 @@ import stripAnsi from 'strip-ansi';
 import { Repository } from 'typeorm';
 import { EzBackend, EzModel, Type } from '../src';
 
-
 describe('Plugin Registering', () => {
   let app: EzBackend;
 
@@ -25,7 +24,7 @@ describe('Plugin Registering', () => {
   });
 
   afterEach(async () => {
-    app.close()
+    app.close();
   });
 
   describe('Get Repo', () => {
@@ -57,32 +56,31 @@ describe('Plugin Registering', () => {
       });
       await app.start(defaultConfig);
 
-      expect(errored).toBe(true)
-    })
+      expect(errored).toBe(true);
+    });
 
-    test("Should throw an error if an EzModel is defined with more than one primary column", async () => {
-      const model = new EzModel("TestModel", {
+    test('Should throw an error if an EzModel is defined with more than one primary column', async () => {
+      const model = new EzModel('TestModel', {
         theOtherId: {
           type: Type.VARCHAR,
-          primary: true
-        }
-      })
+          primary: true,
+        },
+      });
 
-      app.addApp(model, { prefix: "model" })
+      app.addApp(model, { prefix: 'model' });
 
-      let errored = false
+      let errored = false;
 
       try {
-        await app.start(defaultConfig)
+        await app.start(defaultConfig);
       } catch (e) {
-        //We strip the ansi characters because I think ansi characters don't appear in github actions during tests
-        const noAnsiErr = stripAnsi(String(e))
-        expect(noAnsiErr).toMatchSnapshot()
-        errored = true
+        // We strip the ansi characters because I think ansi characters don't appear in github actions during tests
+        const noAnsiErr = stripAnsi(String(e));
+        expect(noAnsiErr).toMatchSnapshot();
+        errored = true;
       }
 
-      expect(errored).toBe(true)
-
-    })
-  })
-})
+      expect(errored).toBe(true);
+    });
+  });
+});

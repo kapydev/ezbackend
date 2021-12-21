@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("./build-full-package.js")
+require('./build-full-package.js');

@@ -3,7 +3,12 @@ import { requestContext } from 'fastify-request-context';
 import { socketContext } from 'socket-io-event-context';
 import { Socket } from 'socket.io';
 import {
-  EntitySubscriberInterface, EventSubscriber, InsertEvent, LoadEvent, RemoveEvent, UpdateEvent
+  EntitySubscriberInterface,
+  EventSubscriber,
+  InsertEvent,
+  LoadEvent,
+  RemoveEvent,
+  UpdateEvent,
 } from 'typeorm';
 import { EzApp } from '../ezapp';
 import { DecorateClass } from '../model';
@@ -20,14 +25,14 @@ export type RuleTypes = Array<RuleType>;
 
 export type GetEventContext<Type extends RuleType> =
   Type extends RuleType.CREATE
-  ? InsertEvent<any>
-  : Type extends RuleType.READ
-  ? LoadEvent<any>
-  : Type extends RuleType.UPDATE
-  ? UpdateEvent<any>
-  : Type extends RuleType.DELETE
-  ? RemoveEvent<any>
-  : never;
+    ? InsertEvent<any>
+    : Type extends RuleType.READ
+    ? LoadEvent<any>
+    : Type extends RuleType.UPDATE
+    ? UpdateEvent<any>
+    : Type extends RuleType.DELETE
+    ? RemoveEvent<any>
+    : never;
 
 export type AllPossibleEventContexts<T extends RuleTypes = RuleTypes> =
   GetEventContext<T[number]>;
@@ -46,7 +51,7 @@ export type RuleFunctionMeta = {
 
 export class EzRules<
   CurrentRuleTypes extends RuleTypes = RuleTypes,
-  > extends EzApp {
+> extends EzApp {
   modelName: string;
   context: RuleTypes;
   ruleFunctionMetas: Array<RuleFunctionMeta>;
@@ -103,58 +108,58 @@ export function createRulesSubscriber(ezRules: EzRules) {
     return socketContext.get<Socket['request']>(REALTIME.SOCKET_CONTEXT);
   }
 
-
   class RuleSubscriber implements EntitySubscriberInterface {
-
     afterLoad(entity: any, event: LoadEvent<any>) {
-      if (getContext(REALTIME.IGNORE_RULES) === true) return
-      if (getContext(REALTIME.USED_BY_EZB) !== true) return
-      setContext(REALTIME.RULE_CONTEXT, event)
+      if (getContext(REALTIME.IGNORE_RULES) === true) return;
+      if (getContext(REALTIME.USED_BY_EZB) !== true) return;
+      setContext(REALTIME.RULE_CONTEXT, event);
       ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
-        if (!isRelevantRule(event, ruleMeta, RuleType.READ)) return
-        const fastifyReq = getFastifyRequest()
-        if (fastifyReq) ruleMeta.rule(fastifyReq, event)
-        const socketReq = getSocketRequest()
-        if (socketReq) ruleMeta.rule(socketReq, event)
-      })
+        if (!isRelevantRule(event, ruleMeta, RuleType.READ)) return;
+        const fastifyReq = getFastifyRequest();
+        if (fastifyReq) ruleMeta.rule(fastifyReq, event);
+        const socketReq = getSocketRequest();
+        if (socketReq) ruleMeta.rule(socketReq, event);
+      });
     }
+
     beforeUpdate(event: UpdateEvent<any>) {
-      if (getContext(REALTIME.IGNORE_RULES) === true) return
-      if (getContext(REALTIME.USED_BY_EZB) !== true) return
-      setContext(REALTIME.RULE_CONTEXT, event)
+      if (getContext(REALTIME.IGNORE_RULES) === true) return;
+      if (getContext(REALTIME.USED_BY_EZB) !== true) return;
+      setContext(REALTIME.RULE_CONTEXT, event);
       ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
-        if (!isRelevantRule(event, ruleMeta, RuleType.UPDATE)) return
-        const fastifyReq = getFastifyRequest()
-        if (fastifyReq) ruleMeta.rule(fastifyReq, event)
-        const socketReq = getSocketRequest()
-        if (socketReq) ruleMeta.rule(socketReq, event)
-      })
+        if (!isRelevantRule(event, ruleMeta, RuleType.UPDATE)) return;
+        const fastifyReq = getFastifyRequest();
+        if (fastifyReq) ruleMeta.rule(fastifyReq, event);
+        const socketReq = getSocketRequest();
+        if (socketReq) ruleMeta.rule(socketReq, event);
+      });
     }
+
     beforeInsert(event: InsertEvent<any>) {
-      if (getContext(REALTIME.IGNORE_RULES) === true) return
-      if (getContext(REALTIME.USED_BY_EZB) !== true) return
-      setContext(REALTIME.RULE_CONTEXT, event)
+      if (getContext(REALTIME.IGNORE_RULES) === true) return;
+      if (getContext(REALTIME.USED_BY_EZB) !== true) return;
+      setContext(REALTIME.RULE_CONTEXT, event);
       ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
-        if (!isRelevantRule(event, ruleMeta, RuleType.CREATE)) return
-        const fastifyReq = getFastifyRequest()
-        if (fastifyReq) ruleMeta.rule(fastifyReq, event)
-        const socketReq = getSocketRequest()
-        if (socketReq) ruleMeta.rule(socketReq, event)
-      })
+        if (!isRelevantRule(event, ruleMeta, RuleType.CREATE)) return;
+        const fastifyReq = getFastifyRequest();
+        if (fastifyReq) ruleMeta.rule(fastifyReq, event);
+        const socketReq = getSocketRequest();
+        if (socketReq) ruleMeta.rule(socketReq, event);
+      });
     }
+
     beforeRemove(event: RemoveEvent<any>) {
-      if (getContext(REALTIME.IGNORE_RULES) === true) return
-      if (getContext(REALTIME.USED_BY_EZB) !== true) return
-      setContext(REALTIME.RULE_CONTEXT, event)
+      if (getContext(REALTIME.IGNORE_RULES) === true) return;
+      if (getContext(REALTIME.USED_BY_EZB) !== true) return;
+      setContext(REALTIME.RULE_CONTEXT, event);
       ezRules.ruleFunctionMetas.forEach((ruleMeta) => {
-        if (!isRelevantRule(event, ruleMeta, RuleType.DELETE)) return
-        const fastifyReq = getFastifyRequest()
-        if (fastifyReq) ruleMeta.rule(fastifyReq, event)
-        const socketReq = getSocketRequest()
-        if (socketReq) ruleMeta.rule(socketReq, event)
-      })
+        if (!isRelevantRule(event, ruleMeta, RuleType.DELETE)) return;
+        const fastifyReq = getFastifyRequest();
+        if (fastifyReq) ruleMeta.rule(fastifyReq, event);
+        const socketReq = getSocketRequest();
+        if (socketReq) ruleMeta.rule(socketReq, event);
+      });
     }
   }
   return DecorateClass(EventSubscriber(), RuleSubscriber);
 }
-

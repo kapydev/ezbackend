@@ -29,7 +29,7 @@ function runBuild() {
     if (result?.status === 0) {
       spinner.succeed();
     } else {
-      console.error(result)
+      console.error(result);
       spinner.fail();
       process.exit(1);
     }

@@ -6,7 +6,7 @@ import fastify, { FastifyInstance, FastifyPluginCallback } from 'fastify';
 import fp from 'fastify-plugin';
 import {
   fastifyRequestContextPlugin,
-  requestContext
+  requestContext,
 } from 'fastify-request-context';
 import { InjectOptions } from 'light-my-request';
 import { Server, ServerOptions } from 'socket.io';
@@ -15,16 +15,12 @@ import {
   createConnection,
   EntitySchema,
   ObjectLiteral,
-  Repository
+  Repository,
 } from 'typeorm';
 import { REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
-import {
-  attachSocketIO,
-  createSocketIO
-} from './realtime';
+import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
-
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;

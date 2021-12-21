@@ -23,19 +23,19 @@ import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:8000/'); //Or your backend url
 
-socket.on("entity_created", (entityName, entity) => {
-  console.log("Entity Name:", entityName);
-  console.log("Entity:", entity);
+socket.on('entity_created', (entityName, entity) => {
+  console.log('Entity Name:', entityName);
+  console.log('Entity:', entity);
 });
 
-socket.on("entity_updated", (entityName, entity) => {
-  console.log("Entity Name:", entityName);
-  console.log("Entity:", entity);
+socket.on('entity_updated', (entityName, entity) => {
+  console.log('Entity Name:', entityName);
+  console.log('Entity:', entity);
 });
 
-socket.on("entity_deleted", (entityName, entity) => {
-  console.log("Entity Name:", entityName);
-  console.log("Entity:", entity);
+socket.on('entity_deleted', (entityName, entity) => {
+  console.log('Entity Name:', entityName);
+  console.log('Entity:', entity);
 });
 ```
 

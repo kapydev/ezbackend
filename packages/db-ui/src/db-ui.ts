@@ -38,30 +38,30 @@ export function buildRoutePrefix(instancePrefix: string, pluginPrefix: string) {
 }
 
 function getDbUIGenerators() {
-  const generators = getDefaultGenerators()
-  type GeneratorKey = keyof typeof generators
+  const generators = getDefaultGenerators();
+  type GeneratorKey = keyof typeof generators;
   Object.entries(generators).forEach(([key, oldGenerator]) => {
     generators[key as GeneratorKey] = (repo, opts) => {
-      const routeDetails = oldGenerator(repo, opts) as RouteOptions
-      const oldHandler = routeDetails.handler as RouteOptions['handler']
-      //URGENT TODO: See if function invocation fails when read/writes are performed in prehandler
-      //URGENT TODO: Apply rule that old generator MUST be async(req,res) => {} format
+      const routeDetails = oldGenerator(repo, opts) as RouteOptions;
+      const oldHandler = routeDetails.handler as RouteOptions['handler'];
+      // URGENT TODO: See if function invocation fails when read/writes are performed in prehandler
+      // URGENT TODO: Apply rule that old generator MUST be async(req,res) => {} format
       return {
         ...routeDetails,
         handler: async function (req, res) {
-          ignoreRules()
-          return oldHandler.bind(this)(req, res)
+          ignoreRules();
+          return oldHandler.bind(this)(req, res);
         },
         schema: {
           ...routeDetails.schema,
           summary: `Used internally by database UI`,
           tags: ['db-ui'],
-          hide: true
-        }
-      }
-    }
-  })
-  return generators
+          hide: true,
+        },
+      };
+    };
+  });
+  return generators;
 }
 
 async function addDBSchemas(instance: EzBackendInstance, opts: EzBackendOpts) {
@@ -155,7 +155,7 @@ export class EzDbUI extends EzApp {
       if (port && process.env.NODE_ENV !== 'test') {
         console.log(
           chalk.greenBright(`Use the database UI at `) +
-          chalk.yellow.underline(`http://localhost:${port}/db-ui/`),
+            chalk.yellow.underline(`http://localhost:${port}/db-ui/`),
         );
       }
     });
