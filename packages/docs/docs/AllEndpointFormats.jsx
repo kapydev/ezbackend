@@ -23,7 +23,7 @@ ${options.replace(/^/gm, "    ")}
             : ""
         } async (req,res) => {\n`}
         {contents.replace(/^/gm, "  ")}
-        {contents != "" ? "\n  " : ""}
+        {contents !== "" ? "\n  " : ""}
         {`return ${returns}`}
         {`\n});`}
       </CodeBlock>

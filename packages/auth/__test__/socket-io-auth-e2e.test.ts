@@ -29,8 +29,8 @@ describe('User Deserialization', () => {
     },
     auth: {
       google: {
-        googleClientId: process.env.GOOGLE_CLIENT_ID!,
-        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        googleClientId: process.env.GOOGLE_CLIENT_ID,
+        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
         scope: ['profile'],
       },
     },
