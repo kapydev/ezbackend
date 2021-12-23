@@ -1,41 +1,43 @@
-//@ts-ignore
-import { create } from '../__test-helpers__/cmd'
-import path from 'path'
-import fs from 'fs'
-import util from 'util'
+// @ts-ignore
+import { create } from '../__test-helpers__/cmd';
+import path from 'path';
+import fs from 'fs';
+import util from 'util';
 
-const tmpFolderPath = path.join(__dirname, "../__tmp__")
+const tmpFolderPath = path.join(__dirname, '../__tmp__');
 
+describe('Run', () => {
+  it('Should be able to install ezbackend', async () => {
+    // Remove the tmp folder if it exists
+    fs.access(tmpFolderPath, fs.constants.F_OK, async (err) => {
+      if (!err) {
+        await util.promisify(fs.rmdir)(tmpFolderPath, { recursive: true });
+      }
+    });
 
-describe("Run", () => {
-    it("Should be able to install ezbackend", async () => {
+    const processPath = path.join(__dirname, '../bin/index.js');
 
-        // Remove the tmp folder if it exists
-        const exists = await util.promisify(fs.exists)(tmpFolderPath)
-        if (exists) {
-            await util.promisify(fs.rmdir)(tmpFolderPath, { recursive: true })
-        }
+    await create(processPath).execute([
+      'init',
+      '--no-install',
+      '-f',
+      tmpFolderPath,
+    ]);
 
-        const processPath = path.join(__dirname, "../bin/index.js")
+    // Remove the tmp folder
+    await util.promisify(fs.rmdir)(tmpFolderPath, { recursive: true });
+  });
 
-        await create(processPath).execute(["init", "--no-install", "-f", tmpFolderPath])
+  it.todo(
+    'Should not be able to install ezbackend if the folder already exists',
+  );
 
-        // Remove the tmp folder
-        await util.promisify(fs.rmdir)(tmpFolderPath, { recursive: true })
-    })
+  it.todo('Should test all the possible options for installation');
 
-    it.todo("Should not be able to install ezbackend if the folder already exists")
+  // This test requires additional work
+  it.skip('Should be able run ezbackend after installing', async () => {
+    const indexPath = path.join(tmpFolderPath, 'src/index.ts');
 
-    it.todo("Should test all the possible options for installation")
-
-    //This test requires additional work
-    it.skip("Should be able run ezbackend after installing", async () => {
-
-        const indexPath = path.join(tmpFolderPath, "src/index.ts")
-
-        require(indexPath)
-
-    })
-
-
-})
+    require(indexPath);
+  });
+});

@@ -1,64 +1,86 @@
-import { EzBackend, EzModel } from '../src'
+import stripAnsi from 'strip-ansi';
+import { Repository } from 'typeorm';
+import { EzBackend, EzModel, Type } from '../src';
 
-import { Repository } from 'typeorm'
+describe('Plugin Registering', () => {
+  let app: EzBackend;
 
-describe("Plugin Registering", () => {
-    let app: EzBackend
+  const defaultConfig = {
+    backend: {
+      fastify: {
+        logger: false,
+      },
+      typeorm: {
+        database: ':memory:',
+      },
+    },
+  };
 
-    const defaultConfig = {
-        backend: {
-            fastify: {
-                logger: false
-            },
-            typeorm: {
-                database: ':memory:'
-            }
-        }
-    }
+  beforeEach(() => {
+    app = new EzBackend();
 
-    beforeEach(() => {
-        app = new EzBackend()
+    // Prevent server from starting
+    app.removeHook('_run', 'Run Fastify Server');
+  });
 
-        //Prevent server from starting
-        app.removeHook("_run", "Run Fastify Server")
-    })
+  afterEach(async () => {
+    app.close();
+  });
 
-    afterEach(async () => {
-        const instance = app.getInternalInstance()
-        await instance.orm.close();
-        await instance._server.close();
+  describe('Get Repo', () => {
+    test('Should be able to get repo in the handler hook', async () => {
+      const model = new EzModel('TestModel', {});
+
+      app.addApp('model', model, { prefix: 'model' });
+
+      app.setHandler('getRepo', async () => {
+        const repo = model.getRepo();
+        expect(repo instanceof Repository).toBe(true);
+      });
+      await app.start(defaultConfig);
     });
 
-    describe("Get Repo", () => {
-        test("Should be able to get repo in the handler hook", async () => {
-            const model = new EzModel("TestModel", {})
+    test('Should not be able to get repo in the init hook', async () => {
+      const model = new EzModel('TestModel', {});
 
-            app.addApp('model', model, { prefix: "model" })
+      app.addApp('model', model, { prefix: 'model' });
 
-            app.setHandler("getRepo", async () => {
-                const repo = model.getRepo()
-                expect(repo instanceof Repository).toBe(true)
-            })
-            await app.start(defaultConfig)
-        })
+      let errored = false;
 
-        test("Should not be able to get repo in the init hook", async () => {
-            const model = new EzModel("TestModel", {})
+      app.setInit('getRepo', async () => {
+        try {
+          model.getRepo();
+        } catch {
+          errored = true;
+        }
+      });
+      await app.start(defaultConfig);
 
-            app.addApp('model', model, { prefix: "model" })
+      expect(errored).toBe(true);
+    });
 
-            let errored = false
+    test('Should throw an error if an EzModel is defined with more than one primary column', async () => {
+      const model = new EzModel('TestModel', {
+        theOtherId: {
+          type: Type.VARCHAR,
+          primary: true,
+        },
+      });
 
-            app.setInit("getRepo", async () => {
-                try {
-                    model.getRepo()
-                } catch {
-                    errored = true
-                }
-            })
-            await app.start(defaultConfig)
+      app.addApp(model, { prefix: 'model' });
 
-            expect(errored).toBe(true)
-        })
-    })
-})
+      let errored = false;
+
+      try {
+        await app.start(defaultConfig);
+      } catch (e) {
+        // We strip the ansi characters because I think ansi characters don't appear in github actions during tests
+        const noAnsiErr = stripAnsi(String(e));
+        expect(noAnsiErr).toMatchSnapshot();
+        errored = true;
+      }
+
+      expect(errored).toBe(true);
+    });
+  });
+});

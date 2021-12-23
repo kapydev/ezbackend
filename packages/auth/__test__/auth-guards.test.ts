@@ -1,153 +1,106 @@
-//URGENT TODO: Figure out why github actions is throwing req has 'any' type even though locally there is no issue
+// URGENT TODO: Figure out why github actions is throwing req has 'any' type even though locally there is no issue
 
-import { EzApp, EzBackend } from "../../common/src";
+import { EzApp, EzBackend } from '@ezbackend/common';
+import Boom from '@hapi/boom';
+import { RouteShorthandOptionsWithHandler } from 'fastify';
+import dotenv from 'dotenv';
+import path from 'path';
 
-import Boom from '@hapi/boom'
-import { RouteShorthandOptionsWithHandler } from "fastify";
-import dotenv from 'dotenv'
-import path from 'path'
+describe('Plugin Registering', () => {
+  dotenv.config();
 
-describe("Plugin Registering", () => {
+  let app: EzBackend;
 
-    dotenv.config()
+  const defaultConfig = {
+    port: 3000,
+    backend: {
+      fastify: {
+        logger: false,
+      },
+      typeorm: {
+        database: ':memory:',
+      },
+    },
+    auth: {
+      secretKeyPath: path.resolve(__dirname, './testing-not-secret-key'),
+      successRedirectURL: 'http://localhost:8888/docs',
+      failureRedirectURL: 'http://localhost:8888/docs',
+      google: {
+        googleClientId: process.env.GOOGLE_CLIENT_ID,
+        googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        scope: ['profile'],
+      },
+    },
+  };
 
-    let app: EzBackend
+  beforeEach(() => {
+    app = new EzBackend();
 
-    const defaultConfig = {
-        port: 3000,
-        backend: {
-            fastify: {
-                logger:false
-            },
-            typeorm: {
-                database: ':memory:'
-            }
-        },
-        auth: {
-            secretKeyPath: path.resolve(__dirname, "./testing-not-secret-key"),
-            successRedirectURL: "http://localhost:8888/docs",
-            failureRedirectURL: "http://localhost:8888/docs",
-            google: {
-                googleClientId: process.env.GOOGLE_CLIENT_ID!,
-                googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-                scope: ['profile'],
-            }
-        }
-    }
+    // Prevent server from starting
+    app.removeHook('_run', 'Run Fastify Server');
+  });
 
-    beforeEach(() => {
-        app = new EzBackend()
+  afterEach(async () => {
+    await app.close();
+  });
 
-        //Prevent server from starting
-        app.removeHook("_run", "Run Fastify Server")
-    })
+  it('Should be able to guard on the same app', async () => {
+    const v1Namespace = new EzApp();
 
-    afterEach(async () => {
-        const instance = app.getInternalInstance()
-        await instance.orm.close();
-        await instance._server.close();
+    app.addApp('v1', v1Namespace, { prefix: 'v1' });
+
+    const testApp = new EzApp();
+
+    testApp.addHook('preHandler', async (req, res) => {
+      // @ts-ignore
+      if (req.user === undefined) {
+        throw Boom.unauthorized();
+      }
     });
 
-    it("Should be able to guard using an app", async () => {
+    testApp.get('/', async (req, res) => {
+      return { hello: 'world' };
+    });
 
-        const v1Namespace = new EzApp()
+    v1Namespace.addApp('testApp', testApp, { prefix: 'test' });
 
-        app.addApp('v1', v1Namespace, { prefix: 'v1' })
+    await app.start(defaultConfig);
 
-        const guard = new EzApp()
-        guard.addHook('onRequest',async (req,res) => {})
+    const result = await app.inject({
+      method: 'GET',
+      url: 'v1/test',
+    });
 
-        guard.addHook('preHandler', async(req,res) => {
-            //@ts-ignore
-            if (req.user === undefined) {
-                throw Boom.unauthorized()
-            }
-        })
+    expect(result.statusCode).toBe(401);
+  });
 
-        const testApp = new EzApp()
+  it('Should be able to guard specific model routes', async () => {
+    const v1Namespace = new EzApp();
 
-        type x = RouteShorthandOptionsWithHandler
+    app.addApp('v1', v1Namespace, { prefix: 'v1' });
 
-        testApp.get('/', async(req,res) => {
-            return {hello: 'world'}
-        })
+    const testApp = new EzApp();
 
-        v1Namespace.addApp('guard', guard)
-        guard.addApp('testApp', testApp, {prefix: 'test'})
+    testApp.addHook('preHandler', async (req, res) => {
+      // @ts-ignore
+      if (req.user === undefined) {
+        throw Boom.unauthorized();
+      }
+    });
 
-        await app.start(defaultConfig)
+    testApp.get('/', async (req, res) => {
+      return { hello: 'world' };
+    });
 
-        const result = await app.inject({
-            method: "GET",
-            url: "v1/test",
-        })
+    v1Namespace.addApp('testApp', testApp, { prefix: 'test' });
 
-        expect(result.statusCode).toBe(401)
+    await app.start(defaultConfig);
 
-    })
+    const result = await app.inject({
+      method: 'GET',
+      url: 'v1/test',
+    });
 
-    it("Should be able to guard on the same app", async () => {
-
-        const v1Namespace = new EzApp()
-
-        app.addApp('v1', v1Namespace, { prefix: 'v1' })
-
-        const testApp = new EzApp()
-        
-        testApp.addHook('preHandler', async(req,res) => {
-            //@ts-ignore
-            if (req.user === undefined) {
-                throw Boom.unauthorized()
-            }
-        })
-
-        testApp.get('/', async(req,res) => {
-            return {hello: 'world'}
-        })
-
-        v1Namespace.addApp('testApp', testApp, {prefix: 'test'})
-
-        await app.start(defaultConfig)
-
-        const result = await app.inject({
-            method: "GET",
-            url: "v1/test",
-        })
-
-        expect(result.statusCode).toBe(401)
-
-    })
-
-    it("Should be able to guard specific model routes", async () => {
-
-        const v1Namespace = new EzApp()
-
-        app.addApp('v1', v1Namespace, { prefix: 'v1' })
-
-        const testApp = new EzApp()
-
-        testApp.addHook('preHandler', async(req,res) => {
-            //@ts-ignore
-            if (req.user === undefined) {
-                throw Boom.unauthorized()
-            }
-        })
-
-        testApp.get('/', async(req,res) => {
-            return {hello: 'world'}
-        })
-
-        v1Namespace.addApp('testApp', testApp, {prefix: 'test'})
-
-        await app.start(defaultConfig)
-
-        const result = await app.inject({
-            method: "GET",
-            url: "v1/test",
-        })
-
-        expect(result.statusCode).toBe(401)
-
-    })
-
-})
+    expect(result.statusCode).toBe(401);
+  });
+});

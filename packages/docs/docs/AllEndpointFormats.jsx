@@ -3,7 +3,7 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import CodeBlock from "@theme/CodeBlock";
 
-//TODO: Make this code less disgusting
+// TODO: Make this code less disgusting
 export const AllEndpointFormats = ({ method, options, contents, returns, url }) => (
   <Tabs
     defaultValue="async"
@@ -23,7 +23,7 @@ ${options.replace(/^/gm, "    ")}
             : ""
         } async (req,res) => {\n`}
         {contents.replace(/^/gm, "  ")}
-        {contents != "" ? "\n  " : ""}
+        {contents !== "" ? "\n  " : ""}
         {`return ${returns}`}
         {`\n});`}
       </CodeBlock>
@@ -38,7 +38,7 @@ ${options.replace(/^/gm, "    ")}
             : ""
         } function (req,res) {\n`}
         {contents.replace(/^/gm, "  ")}
-        {contents != "" ? "\n  " : ""}
+        {contents !== "" ? "\n  " : ""}
         {`res.send(${returns})`}
         {`\n});`}
       </CodeBlock>
@@ -50,7 +50,7 @@ ${options.replace(/^/gm, "    ")}
   url: '${url ?? "/"}',
   handler: async => (req, res) { //sync version works too
     ${
-      contents.replace(/^/gm, "") + (contents != "" ? "\n    " : "")
+      contents.replace(/^/gm, "") + (contents !== "" ? "\n    " : "")
     }return ${returns}
   }${options ? `,\n${options.replace(/^/gm, "  ")}` : ""}
 })`}

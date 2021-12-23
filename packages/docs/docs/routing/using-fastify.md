@@ -17,16 +17,16 @@ Hence, it is possible that you need to access the underlying fastify functionali
 For every `EzApp`, fastify instance functions are exposed for your usage, for example:
 
 ```ts
-const app = new EzBackend()
-const base = new EzApp()
+const app = new EzBackend();
+const base = new EzApp();
 
-base.get('/',async(req,res) => {
-    return {hello:'world'}
-})
+base.get('/', async (req, res) => {
+  return { hello: 'world' };
+});
 
-app.addApp('base', base)
+app.addApp('base', base);
 
-app.start()
+app.start();
 ```
 
 This creates a route `/` which returns `{hello:'world'}` when a `GET` request is performed
@@ -44,26 +44,26 @@ However, we may want access to our encapsulated instance, for example when we ha
 We can do this action within the setHandler lifecyle, by accessing instance.server
 
 ```ts
-const app = new EzBackend()
-const base = new EzApp()
+const app = new EzBackend();
+const base = new EzApp();
 
-app.setHandler("Create Repo", async (instance,opts) => {
-    instance.repo = {
-        getOne : () => {
-            return 'This is a repo'
-        }
-    }
-})
+app.setHandler('Create Repo', async (instance, opts) => {
+  instance.repo = {
+    getOne: () => {
+      return 'This is a repo';
+    },
+  };
+});
 
-base.setHandler("Use Repo", async(instance,opts) => {
-    instance.server.get('/', async(req,res) => {
-        return {repo:instance.repo.getOne()}
-    })
-})
+base.setHandler('Use Repo', async (instance, opts) => {
+  instance.server.get('/', async (req, res) => {
+    return { repo: instance.repo.getOne() };
+  });
+});
 
-app.addApp('base', base)
+app.addApp('base', base);
 
-app.start()
+app.start();
 ```
 
 In this way, we have the access to the encapsulated context of the ancestors of the instance, whereas in the previous case we were unable to create routes based on the encapsulated state of the instance
@@ -71,10 +71,10 @@ In this way, we have the access to the encapsulated context of the ancestors of 
 However, `instance.server` does not contain information about the current state of the server, which means that although it emulates many of the FastifyInstance commands, it does not access to stateful commands, such as `getSchemas()` or `.prefix`
 
 ```ts
-base.setHandler("Get Prefix", async(instance,opts) => {
-    console.log(instance.server.prefix) //undefined
-    console.log(instance.server.getSchemas()) //undefined
-})
+base.setHandler('Get Prefix', async (instance, opts) => {
+  console.log(instance.server.prefix); //undefined
+  console.log(instance.server.getSchemas()); //undefined
+});
 ```
 
 ### From registered plugin (With instance and Fastify Instance)
@@ -82,32 +82,31 @@ base.setHandler("Get Prefix", async(instance,opts) => {
 If you need access to the actual state of the server, then you have to register a plugin as shown below
 
 ```ts
-const app = new EzBackend()
-const base = new EzApp()
+const app = new EzBackend();
+const base = new EzApp();
 
-base.setHandler("Create Hello World", async(instance,opts) => {
-    instance.server.register(async(server,opts) => {
-        console.log(server.prefix) // base
-        console.log(server.getSchemas()) // Error Response Schema
-    })
-})
+base.setHandler('Create Hello World', async (instance, opts) => {
+  instance.server.register(async (server, opts) => {
+    console.log(server.prefix); // base
+    console.log(server.getSchemas()); // Error Response Schema
+  });
+});
 
-app.addApp('base', base, {prefix: 'base'})
+app.addApp('base', base, { prefix: 'base' });
 
-app.start()
+app.start();
 ```
-
 
 ## Understanding Fastify in the lifecycle
 
 EzBackend utilises fastify in the lifecycle like this:
 
-|lifecycle|action|
-|-|-|
-|postHandler (1)| Create fastify instance in `instance._server`|
-|postHandler (2)| Recursively register fastify plugins|
+| lifecycle       | action                                        |
+| --------------- | --------------------------------------------- |
+| postHandler (1) | Create fastify instance in `instance._server` |
+| postHandler (2) | Recursively register fastify plugins          |
 
-As a result, the methods from `EzApp` or the `instance.server` in handler lifecycle result do not run at the time of definition. 
+As a result, the methods from `EzApp` or the `instance.server` in handler lifecycle result do not run at the time of definition.
 
 Instead, the calling of the functions is deferred to the postHandler lifecycle, which is why you are unable to access the server state.
 

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Plugin Registering Get Repo Should throw an error if an EzModel is defined with more than one primary column 1`] = `
+"Error: 
+
+ Err  : EzBackend currently only supports one Primary Column per entity
+ Desc : A primary id column is created by default for all models. While typeorm supports composite primary keys, EzBackend currently does not support this feature. If you need it drop us a message in github
+ Fix  : 
+new EzModel(\\"IllegalModel\\", {
+    mySecondPrimaryColumn: {
+        type: Type.VARCHAR,
+        primary: true //This is illegal
+    }
+})
+"
+`;

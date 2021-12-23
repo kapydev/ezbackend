@@ -1,9 +1,8 @@
-/* eslint-disable global-require, no-octal-escape */
 const childProcess = require('child_process');
 
 const logger = console;
 
-//TODO: Figure out why this is not installing the dependencies
+// TODO: Figure out why this is not installing the dependencies
 const checkDependenciesAndRun = (run) => {
   let cooldown = 0;
   try {
@@ -12,12 +11,14 @@ const checkDependenciesAndRun = (run) => {
     require('chalk');
     require('npmlog');
   } catch (e) {
-    logger.log('🕘 running build on a clean repo, we have to install dependencies');
+    logger.log(
+      '🕘 running build on a clean repo, we have to install dependencies',
+    );
     childProcess.spawnSync('yarn', ['install', '--ignore-optional'], {
       stdio: ['inherit', 'inherit', 'inherit'],
     });
     process.stdout.write('\x07');
-    process.stdout.write('\033c');
+    process.stdout.write('\x1Bc');
 
     // give the filesystem some time
     cooldown = 1000;

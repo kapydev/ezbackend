@@ -1,1 +1,1 @@
-export * from './web3-auth-provider'
+export * from './web3-auth-provider';

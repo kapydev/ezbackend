@@ -1,10 +1,11 @@
-export {
-    EzBackend,
-} from './ezbackend'
+import './declarations/socket-io-declarations';
+
+export * from './ezapp';
+export { EzBackend } from './ezbackend';
 export type {
-    EzBackendInstance,
-    EzBackendOpts,
-    RecursivePartial
-} from "./ezbackend"
-export * from './model'
-export * from './ezapp'
+  EzBackendInstance,
+  EzBackendOpts,
+  RecursivePartial,
+} from './ezbackend';
+export * from './model';
+export * from './rules';

@@ -1,0 +1,61 @@
+# Socket IO
+
+import CodeSnippet from "../CodeSnippet.jsx";
+
+EzBackend uses socket.io for realtime functionality under the hood.
+
+## Accessing Socket IO
+
+You can access the socket io instance from any `EzApp` or class that extends `EzApp`, for example `EzBackend`
+
+### From Request
+
+You can get the non-namespaced [io object](https://socket.io/docs/v4/server-instance/) from `req`
+
+```ts
+
+```
+
+### Non Namespaced
+
+You can get the equivalent of the [io object](https://socket.io/docs/v4/server-instance/) from any EzApp with
+
+<CodeSnippet
+  sample={`app.useSocketIORaw((io) => {/* Your Custom Functionality */})`}
+  fullCode={`import { EzBackend } from "@ezbackend/common"\n
+const app = new EzBackend()\n
+app.useSocketIORaw((io) => {
+    io.on("connect", (socket) => {
+        console.log("Client Connected: ", socket.id)
+    })
+})\n
+app.start()`}
+/>
+
+### Namespaced
+
+An EzApp's prefix affects the namespacing of subsequent commands. the below `io` instance is under the namespace `/users`
+
+<CodeSnippet
+  sample={`users.useSocketIO((io) => {/* Your Custom Functionality */})
+app.addApp(users, {prefix: "users"})`}
+  fullCode={`import { EzBackend,EzApp } from "@ezbackend/common"\n
+const app = new EzBackend()
+const users = new EzApp()\n
+users.useSocketIO((io) => {
+    io.on("connect", (socket) => {
+        console.log("Client Connected to Users Namespace: ", socket.id)
+    })
+})\n
+app.addApp(users, {prefix: "users"})\n
+app.start()`}
+/>
+
+For more information on socket io namespacing refer to the [socket io docs](https://socket.io/docs/v4/namespaces/)
+
+## Why Socket IO
+
+We chose socket.io instead of websockets or long polling because it is
+
+1. More opinionated. Socket IO comes with the concept of namespaces and rooms, meaning that you don't have to come up with your own system that is probably not as good
+2. Browser Support. Socket IO comes with fallbacks to long polling if the browser does not support websockets, which in turn means that EzBackend can support requests from more browsers.

@@ -3,78 +3,92 @@
 exports[`Test Utils Functionality test Should be able to print all fastify plugins nicely 1`] = `
 "bound root 
 ├── bound _after 
-└─┬ childFunc 
-  ├── ezbErrorPage 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  ├─┬ childFunc 
-  │ └─┬ childFunc 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   ├── bound _after 
-  │   └── bound _after 
-  └─┬ childFunc 
-    └─┬ childFunc 
-      ├── bound _after 
-      ├── bound _after 
-      ├── bound _after 
-      ├── bound _after 
-      └── bound _after 
+├─┬ childFunc 
+│ ├── ezbErrorPage 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ └─┬ childFunc 
+│   ├─┬ childFunc 
+│   │ ├── bound _after 
+│   │ ├── bound _after 
+│   │ ├── bound _after 
+│   │ ├── bound _after 
+│   │ └── bound _after 
+│   └── childFunc 
+├─┬ plugin 
+│ ├── bound _after 
+│ └── bound _after 
+└── bound _after 
 "
 `;
 
@@ -158,26 +172,47 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 "bound root 
 ├─┬ _init 
 │ ├── Create Entities Container 
+│ ├── Manage Event Subscriptions 
 │ ├─┬ UnnamedApp1 
-│ │ └── Create \\"SampleNullable\\" Entity 
+│ │ ├── Create \\"SampleNullable\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp2 
-│ │ └── Create \\"user\\" Entity 
+│ │ ├── Create \\"user\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp3 
-│ │ └── Create \\"noCascadeUser\\" Entity 
+│ │ ├── Create \\"noCascadeUser\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp4 
-│ │ └── Create \\"detail\\" Entity 
+│ │ ├── Create \\"detail\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp5 
-│ │ └── Create \\"noCascadeProgram\\" Entity 
+│ │ ├── Create \\"noCascadeProgram\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp6 
-│ │ └── Create \\"program\\" Entity 
+│ │ ├── Create \\"program\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp7 
-│ │ └── Create \\"sample\\" Entity 
+│ │ ├── Create \\"sample\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp8 
-│ │ └── Create \\"SampleUnique\\" Entity 
+│ │ ├── Create \\"SampleUnique\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ ├─┬ UnnamedApp9 
-│ │ └── Create \\"User2\\" Entity 
+│ │ ├── Create \\"User2\\" Entity 
+│ │ └─┬ rules 
+│ │   └── Add Rules Subscriber 
 │ └─┬ UnnamedApp10 
-│   └── Create \\"Program2\\" Entity 
+│   ├── Create \\"Program2\\" Entity 
+│   └─┬ rules 
+│     └── Add Rules Subscriber 
 ├─┬ _postInit 
 │ ├── Create Database Connection 
 │ ├─┬ UnnamedApp1 
@@ -200,173 +235,250 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ └── Obtain User2 Repository 
 │ └─┬ UnnamedApp10 
 │   └── Obtain Program2 Repository 
+├─┬ _preHandler 
+│ └── Add SocketIO 
 ├─┬ _handler 
 │ ├── Create Server Stub 
+│ ├── Run all SocketIO Functions 
 │ ├── Add Fastify Boom 
 │ ├── Add Error Schema 
 │ ├─┬ UnnamedApp1 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp2 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp3 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp4 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp5 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp6 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp7 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp8 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ ├─┬ UnnamedApp9 
 │ │ ├── Create Server Stub 
-│ │ └─┬ router 
+│ │ ├── Run all SocketIO Functions 
+│ │ ├─┬ router 
+│ │ │ ├── Create Server Stub 
+│ │ │ ├── Run all SocketIO Functions 
+│ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Update Schema 
+│ │ │ ├── Add Full Schema 
+│ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getAll route 
+│ │ │ ├── Generate updateOne route 
+│ │ │ └── Generate deleteOne route 
+│ │ └─┬ rules 
 │ │   ├── Create Server Stub 
-│ │   ├── Add Create Schema 
-│ │   ├── Add Update Schema 
-│ │   ├── Add Full Schema 
-│ │   ├── Generate createOne route 
-│ │   ├── Generate getOne route 
-│ │   ├── Generate getAll route 
-│ │   ├── Generate updateOne route 
-│ │   └── Generate deleteOne route 
+│ │   └── Run all SocketIO Functions 
 │ └─┬ UnnamedApp10 
 │   ├── Create Server Stub 
-│   └─┬ router 
+│   ├── Run all SocketIO Functions 
+│   ├─┬ router 
+│   │ ├── Create Server Stub 
+│   │ ├── Run all SocketIO Functions 
+│   │ ├── Add Create Schema 
+│   │ ├── Add Update Schema 
+│   │ ├── Add Full Schema 
+│   │ ├── Generate createOne route 
+│   │ ├── Generate getOne route 
+│   │ ├── Generate getAll route 
+│   │ ├── Generate updateOne route 
+│   │ └── Generate deleteOne route 
+│   └─┬ rules 
 │     ├── Create Server Stub 
-│     ├── Add Create Schema 
-│     ├── Add Update Schema 
-│     ├── Add Full Schema 
-│     ├── Generate createOne route 
-│     ├── Generate getOne route 
-│     ├── Generate getAll route 
-│     ├── Generate updateOne route 
-│     └── Generate deleteOne route 
+│     └── Run all SocketIO Functions 
 └─┬ _postHandler 
   ├── Remove Server Stub 
   ├── Create Fastify Server 
+  ├── Attach Socket IO 
   ├── Register Fastify Plugins 
+  ├── Add Request Context Plugin 
+  ├── Set Request Context For Global Access 
+  ├── Add middleware to authenticate outgoing packets 
   ├─┬ UnnamedApp1 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp2 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp3 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp4 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp5 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp6 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp7 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp8 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   ├─┬ UnnamedApp9 
   │ ├── Remove Server Stub 
-  │ └─┬ router 
+  │ ├─┬ router 
+  │ │ └── Remove Server Stub 
+  │ └─┬ rules 
   │   └── Remove Server Stub 
   └─┬ UnnamedApp10 
     ├── Remove Server Stub 
-    └─┬ router 
+    ├─┬ router 
+    │ └── Remove Server Stub 
+    └─┬ rules 
       └── Remove Server Stub 
 "
 `;
