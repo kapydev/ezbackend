@@ -17,7 +17,7 @@ type CallableKeysOf<Type> = {
   [Key in keyof Type]: Type[Key] extends Function ? Key : never;
 }[keyof Type];
 
-function generateFastifyFuncWrapper<Params extends Array<unknown>>(
+function generateFastifyFuncWrapper<Params extends Array<unknown> = Array<unknown>>(
   parent: EzApp,
   funcName: CallableKeysOf<FastifyInstance>,
 ) {
@@ -35,69 +35,26 @@ function createServer(parent: EzApp) {
   return {
     // TODO: Figure out how to get types with overrides
     // Routes
-    delete: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['delete']>
-    >(parent, 'delete'),
-    get: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['get']>
-    >(parent, 'get'),
-    head: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['head']>
-    >(parent, 'head'),
-    patch: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['patch']>
-    >(parent, 'patch'),
-    post: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['post']>
-    >(parent, 'post'),
-    put: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['put']>
-    >(parent, 'put'),
-    options: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['options']>
-    >(parent, 'options'),
-    all: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['all']>
-    >(parent, 'all'),
-    route: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['route']>
-    >(parent, 'route'),
-    // This one specifically uses the 23 overload parameters because otherwise the recursion is too deep for typescript to automatically detect the type
-    addHook: generateFastifyFuncWrapper<
-      OverloadParameters23<FastifyInstance['addHook']>
-    >(parent, 'addHook'),
-    addSchema: generateFastifyFuncWrapper<
-      OverloadParameters<FastifyInstance['addSchema']>
-    >(parent, 'addSchema'),
-    setSerializerCompiler: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['setSerializerCompiler']>
-    >(parent, 'setSerializerCompiler'),
-    addContentTypeParser: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['addContentTypeParser']>
-    >(parent, 'addContentTypeParser'),
-    decorate: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['decorate']>
-    >(parent, 'decorate'),
-    decorateReply: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['decorateReply']>
-    >(parent, 'decorateReply'),
-    decorateRequest: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['decorateRequest']>
-    >(parent, 'decorateRequest'),
-    inject: generateFastifyFuncWrapper<
-      OverloadParameters<FastifyInstance['inject']>
-    >(parent, 'inject'),
-    // TODO: Figure out why the type inference cannot handle async/callback styles
-    register: generateFastifyFuncWrapper<any>(
-      parent,
-      'register',
-    ) as FastifyRegister,
-    setNotFoundHandler: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['setNotFoundHandler']>
-    >(parent, 'setNotFoundHandler'),
-    setErrorHandler: generateFastifyFuncWrapper<
-      OverloadParameters1to5<FastifyInstance['setErrorHandler']>
-    >(parent, 'setErrorHandler'),
+    delete: generateFastifyFuncWrapper(parent, 'delete') as FastifyInstance['delete'],
+    get: generateFastifyFuncWrapper(parent, 'get') as FastifyInstance['get'],
+    head: generateFastifyFuncWrapper(parent, 'head') as FastifyInstance['head'],
+    patch: generateFastifyFuncWrapper(parent, 'patch') as FastifyInstance['patch'],
+    post: generateFastifyFuncWrapper(parent, 'post') as FastifyInstance['post'],
+    put: generateFastifyFuncWrapper(parent, 'put') as FastifyInstance['put'],
+    options: generateFastifyFuncWrapper(parent, 'options') as FastifyInstance['options'],
+    all: generateFastifyFuncWrapper(parent, 'all') as FastifyInstance['all'],
+    route: generateFastifyFuncWrapper(parent, 'route') as FastifyInstance['route'],
+    addHook: generateFastifyFuncWrapper(parent, 'addHook') as FastifyInstance['addHook'],
+    addSchema: generateFastifyFuncWrapper(parent, 'addSchema') as FastifyInstance['addSchema'],
+    setSerializerCompiler: generateFastifyFuncWrapper(parent, 'setSerializerCompiler') as FastifyInstance['setSerializerCompiler'],
+    addContentTypeParser: generateFastifyFuncWrapper(parent, 'addContentTypeParser') as FastifyInstance['addContentTypeParser'],
+    decorate: generateFastifyFuncWrapper(parent, 'decorate') as FastifyInstance['decorate'],
+    decorateReply: generateFastifyFuncWrapper(parent, 'decorateReply') as FastifyInstance['decorateReply'],
+    decorateRequest: generateFastifyFuncWrapper(parent, 'decorateRequest') as FastifyInstance['decorateRequest'],
+    inject: generateFastifyFuncWrapper(parent, 'inject') as FastifyInstance['inject'],
+    register: generateFastifyFuncWrapper(parent, 'register') as FastifyRegister,
+    setNotFoundHandler: generateFastifyFuncWrapper(parent, 'setNotFoundHandler') as FastifyInstance['setNotFoundHandler'],
+    setErrorHandler: generateFastifyFuncWrapper(parent, 'setErrorHandler') as FastifyInstance['setErrorHandler'],
   };
 }
 
@@ -184,82 +141,25 @@ export class EzApp extends App {
 
   // Make routing with apps easy
   // URGENT TODO: Should we do this within the handler to be part of the plugin tree?
-  delete = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['delete']>
-  >(this, 'delete');
-
-  get = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['get']>
-  >(this, 'get');
-
-  head = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['head']>
-  >(this, 'head');
-
-  patch = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['patch']>
-  >(this, 'patch');
-
-  post = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['post']>
-  >(this, 'post');
-
-  put = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['put']>
-  >(this, 'put');
-
-  options = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['options']>
-  >(this, 'options');
-
-  all = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['all']>
-  >(this, 'all');
-
-  route = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['route']>
-  >(this, 'route');
-
-  addHook = generateFastifyFuncWrapper<any>(
-    this,
-    'addHook',
-  ) as FastifyInstance['addHook'];
-
-  addSchema = generateFastifyFuncWrapper<
-    OverloadParameters<FastifyInstance['addSchema']>
-  >(this, 'addSchema');
-
-  setSerializerCompiler = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['setSerializerCompiler']>
-  >(this, 'setSerializerCompiler');
-
-  addContentTypeParser = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['addContentTypeParser']>
-  >(this, 'addContentTypeParser');
-
-  decorate = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['decorate']>
-  >(this, 'decorate');
-
-  decorateReply = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['decorateReply']>
-  >(this, 'decorateReply');
-
-  decorateRequest = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['decorateRequest']>
-  >(this, 'decorateRequest');
-
-  register = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['register']>
-  >(this, 'register'); // TODO: Why is the async one not working?
-
-  setNotFoundHandler = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['setNotFoundHandler']>
-  >(this, 'setNotFoundHandler');
-
-  setErrorHandler = generateFastifyFuncWrapper<
-    OverloadParameters1to5<FastifyInstance['setErrorHandler']>
-  >(this, 'setErrorHandler');
+  delete = generateFastifyFuncWrapper(this, 'delete') as FastifyInstance['delete'];
+  get = generateFastifyFuncWrapper(this, 'get') as FastifyInstance['get'];
+  head = generateFastifyFuncWrapper(this, 'head') as FastifyInstance['head'];
+  patch = generateFastifyFuncWrapper(this, 'patch') as FastifyInstance['patch'];
+  post = generateFastifyFuncWrapper(this, 'post') as FastifyInstance['post'];
+  put = generateFastifyFuncWrapper(this, 'put') as FastifyInstance['put'];
+  options = generateFastifyFuncWrapper(this, 'options') as FastifyInstance['options'];
+  all = generateFastifyFuncWrapper(this, 'all') as FastifyInstance['all'];
+  route = generateFastifyFuncWrapper(this, 'route') as FastifyInstance['route'];
+  addHook = generateFastifyFuncWrapper(this, 'addHook') as FastifyInstance['addHook'];
+  addSchema = generateFastifyFuncWrapper(this, 'addSchema') as FastifyInstance['addSchema'];
+  setSerializerCompiler = generateFastifyFuncWrapper(this, 'setSerializerCompiler') as FastifyInstance['setSerializerCompiler'];
+  addContentTypeParser = generateFastifyFuncWrapper(this, 'addContentTypeParser') as FastifyInstance['addContentTypeParser'];
+  decorate = generateFastifyFuncWrapper(this, 'decorate') as FastifyInstance['decorate'];
+  decorateReply = generateFastifyFuncWrapper(this, 'decorateReply') as FastifyInstance['decorateReply'];
+  decorateRequest = generateFastifyFuncWrapper(this, 'decorateRequest') as FastifyInstance['decorateRequest'];
+  register = generateFastifyFuncWrapper(this, 'register') as FastifyInstance['register'];
+  setNotFoundHandler = generateFastifyFuncWrapper(this, 'setNotFoundHandler') as FastifyInstance['setNotFoundHandler'];
+  setErrorHandler = generateFastifyFuncWrapper(this, 'setErrorHandler') as FastifyInstance['setErrorHandler'];
   // NOTE: Inject is being used by EzBackend which is why we remove it
   // inject = generateFastifyFuncWrapper(this, 'inject')
 
