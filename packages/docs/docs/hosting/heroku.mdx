@@ -1,0 +1,161 @@
+# Heroku
+
+## Overview
+
+For EzBackend to be compatible with hosting on Heroku, there needs to be some additional configuration.
+
+The below configuration is for the recommended configuration on Heroku, `EzBackend` + `Postgres`. You will probably need to configure all the items below for EzBackend to work as expected
+
+## Avoid Exposing DB-UI and OpenAPI in production
+
+### Fix
+
+```ts
+if (process.env.NODE_ENV !== 'production') {
+  import('@ezbackend/db-ui').then(({ EzDbUI }) => app.addApp(new EzDbUI()));
+  import('@ezbackend/openapi').then(({ EzOpenAPI }) =>
+    app.addApp(new EzOpenAPI()),
+  );
+}
+```
+
+### Explanation
+
+By default Heroku does not install `devDependencies`. Furthermore, exposing your OpenAPI endpoints and db-ui increases the attack surface area for potential attackers.
+
+Heroku also sets the environment variable `NODE_ENV` to `production` by default, so we can use this flag to conditionally import `openapi` and `db-ui` conditionally to prevent production builds from failing and reducing the attack surface area.
+
+## Port Binding
+
+### Fix
+
+In `app.start`
+
+```ts
+app.start({
+  backend: {
+    listen: {
+      address: '0.0.0.0',
+    },
+  },
+});
+```
+
+### Explanation
+
+By default, EzBackend will only listen on address `127.0.0.1`. Since Heroku assigns a random-ish port to each instance, it will throw the error
+
+```
+Error R10 (Boot timeout) -> Web process failed to bind to $PORT within 60 seconds of launch
+```
+
+To fix this, we need to listen on all addresses, or address `0.0.0.0`
+
+## Auth Callback Route
+
+### Fix
+
+In `.env`
+
+```bash
+PRODUCTION_URL=<Your heroku endpoint e.g. https://my-app.herokuapp.com>
+```
+
+### Explanation
+
+By default, EzBackend tries to obtain your url in order to properly set the callback URL for authentication callback routes. However, this results in EzBackend detecting the url without `https`
+
+We can however specify the `PRODUCTION_URL` manually in order to override the automated URL detection, which will allow authentication to properly work
+
+## Database Persistence
+
+### Fix
+
+In `Heroku Web`
+
+1. Attach a postgres addon to your ezbackend instance
+
+The above step automatically sets the environment variable `DATABASE_URL`
+
+In `app.start`
+
+```ts
+app.start({
+  backend: {
+    typeorm: {
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      extra: { ssl: { rejectUnauthorized: false } },
+    },
+  },
+});
+```
+
+### Explanation
+
+Heroku may spin up and down your instances at any time, and EzBackend by default stores data in SQLite, with files stored in the instance itself.
+
+While this is good for getting started quickly, it is not optimal for production workloads because you will lose your data whenever an instance is restarted and your data is lost.
+
+Hence, it is best to create a `heroku postgres` instance and connect your database to there instead
+
+The `ssl:true` is to tell the driver to connect to the postgres database with ssl, which is the default for heroku `postgres`
+
+### Alternative Fix
+
+In `Heroku`
+
+1. Create an instance of Heroku postgres
+2. Share the instance of Heroku postgres with your EzBackend deployment
+3. Share the URL of the Heroku postgres instance as an environment variable `DATABASE_URL`
+4. Turn on SSL for Heroku postgres
+
+In `app.start`
+
+```ts
+app.start({
+  backend: {
+    typeorm: {
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      ssl: true,
+    },
+  },
+});
+```
+
+## Changing build and start scripts
+
+### Fix
+
+In `package.json`
+
+```json
+{
+  .
+  .
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx ts-node-dev src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc"
+  }
+  .
+  .
+}
+```
+
+::: info
+After the above change, to develop locally use `npm run dev` or `yarn dev` instead
+:::
+
+### Explanation
+
+Heroku's default build process for `node` applications is:
+
+1. `npm run build`
+2. `npm start`
+
+However, the default start script uses `ts-node-dev` which may add some additional overhead and is not optimal for running in production.
+
+To circumvent this, we change the `build` script to compile the typescript to `js` and change the `start` script to run the `js` file instead.
