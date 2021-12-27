@@ -3,7 +3,7 @@ import { SwaggerOptions, fastifySwagger } from 'fastify-swagger';
 import { EzApp, EzBackendOpts } from '@ezbackend/common';
 import type { FastifyRegisterOptions } from 'fastify';
 import { PluginScope } from '@ezbackend/core';
-
+import { merge } from 'lodash'
 declare module '@ezbackend/common' {
   interface EzBackendOpts {
     openAPI: FastifyRegisterOptions<SwaggerOptions> | undefined;
@@ -27,7 +27,38 @@ const defaultConfig: EzBackendOpts['openAPI'] = {
       description: 'Find more info here',
     },
   },
+  transform: (schema: any) => {
+    // Recursively search for custom properties and add them in
+    const result = recursiveCustomPropertyReplacement(schema)
+    return result
+  }
 };
+
+function recursiveCustomPropertyReplacement(schema: any): any {
+  if (typeof schema === 'object') {
+
+    if (schema.customSwaggerProps !== undefined) {
+      // Update with the custom swagger props, if any
+      schema = merge(schema, schema.customSwaggerProps)
+      delete schema.customSwaggerProps
+    }
+    // Recursively replace properties on children if required
+    const fullyReplaced = Object.fromEntries(
+      Object.entries(schema).map(([key, value]) => {
+        // A reliable way of ensuring it is an object (May not be performant but only used in openapi)
+        if (Object.prototype.toString.call(value) === '[object Object]') {
+          return [key, recursiveCustomPropertyReplacement(value)]
+        }
+
+        return [key, value]
+      })
+    )
+    return fullyReplaced
+  } else {
+    // No further children, return 
+    return schema
+  }
+}
 
 export class EzOpenAPI extends EzApp {
   constructor() {

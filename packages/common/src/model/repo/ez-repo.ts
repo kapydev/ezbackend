@@ -24,6 +24,7 @@ enum NormalType {
   JSON = 'JSON',
   BOOL = 'BOOL',
   ENUM = 'ENUM',
+  FILE = 'FILE'
 }
 
 enum RelationType {
@@ -60,6 +61,10 @@ export type ModelSchema = {
 
 function normalTypeToTypeORMtype(type: NormalType | ColumnType): ColumnType {
   switch (type) {
+    case NormalType.FILE:
+      // URGENT TODO: Make this a virtual column instead?
+      // When the user specifies a file, we only store the download URL in the database
+      return 'varchar'
     case NormalType.VARCHAR:
       return 'varchar';
     case NormalType.INT:

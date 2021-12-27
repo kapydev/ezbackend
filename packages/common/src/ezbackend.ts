@@ -21,6 +21,7 @@ import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
+import { Ajv, Options as AjvOptions } from 'ajv'
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;
@@ -95,6 +96,16 @@ async function addErrorSchema(
 // URGENT TODO: Make running this optional in the default config
 dotenv.config();
 
+function ajvAllowFileType(ajv: Ajv, opts: AjvOptions) {
+  ajv.addKeyword('isFileType', {
+    compile: (schema, parent, it) => {
+      return () => true
+    }
+  })
+  return ajv
+}
+
+
 const defaultConfig: EzBackendOpts['backend'] = {
   listen: {
     port: process.env.PORT || 8000,
@@ -122,6 +133,9 @@ const defaultConfig: EzBackendOpts['backend'] = {
         },
       },
     },
+    ajv: {
+      plugins: [ajvAllowFileType]
+    }
   },
   typeorm: {
     type: 'better-sqlite3',
