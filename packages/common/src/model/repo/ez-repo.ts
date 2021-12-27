@@ -11,7 +11,7 @@ import { EntitySchemaOptions } from 'typeorm/entity-schema/EntitySchemaOptions';
 import { Plugin } from 'avvio';
 import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes';
 import { EzError } from '@ezbackend/utils';
-import { colTypeToJsonSchemaType } from '..';
+import { generateSchemaName, colTypeToJsonSchemaType } from '..';
 import { JSONSchema6 } from 'json-schema';
 
 enum NormalType {
@@ -408,6 +408,10 @@ export class EzRepo extends EzApp {
     EzRepo.ezRepos[repoName] = repo
   }
 
+  static getAllEzRepos() {
+    return EzRepo.ezRepos
+  }
+
   private static getEzRepo(name: string) {
     if (!Object.keys(EzRepo.ezRepos).includes(name)) {
       throw new EzError(`EzRepo with name ${name} not found`,
@@ -439,6 +443,7 @@ export class EzRepo extends EzApp {
     this.setPostInit(
       `Obtain ${modelName} Repository`,
       async (instance, opts) => {
+        instance.ezRepo = this
         instance.repo = instance.orm.getRepository(modelName);
         this._repo = instance.repo;
       },
@@ -461,7 +466,7 @@ export class EzRepo extends EzApp {
       };
     },
       {
-        $id: getSchemaName(this._modelName, schemaType, prefix),
+        $id: generateSchemaName(this._modelName, schemaType, prefix),
         type: 'object',
         properties: {},
       })
@@ -606,30 +611,6 @@ function isGeneratedCol(col: EntitySchemaColumnOptions) {
 function removeId(object: any) {
   delete object.$id;
   return object;
-}
-
-function getSchemaName(
-  name: string,
-  type: 'createSchema' | 'updateSchema' | 'fullSchema',
-  prefix?: string,
-) {
-  // Uncomment this to support getting schema name for relation metadata
-  // let baseName
-  // if (meta instanceof RelationMetadata) {
-
-  //   if (typeof meta.type === 'string') {
-  //     baseName = meta.type
-  //   } else {
-  //     baseName = meta.type['name']
-  //   }
-
-  // } else {
-  //   baseName = meta.name
-  // }
-  const baseName = name;
-  const resolvedPrefix = prefix ? prefix + '/' : '';
-  const schemaName = `${resolvedPrefix}${type}-${baseName}`;
-  return schemaName;
 }
 
 function columnOptionsToSchemaProps(colOpts: EntitySchemaColumnOptions) {

@@ -1,65 +1,5 @@
 import { ColumnType, EntityMetadata } from 'typeorm';
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata';
-import { RelationMetadata } from 'typeorm/metadata/RelationMetadata';
-
-// TODO: See if there is a json schema library that can help with this... (fluent schema?)
-/**
- * Retrieves the schema name for given metadata, type, and prefix
- * @param meta
- * @param type
- * @param prefix
- * @returns
- */
-export function getSchemaName(
-  meta: EntityMetadata,
-  type: 'createSchema' | 'updateSchema' | 'fullSchema',
-  prefix?: string,
-) {
-  // Uncomment this to support getting schema name for relation metadata
-  // let baseName
-  // if (meta instanceof RelationMetadata) {
-
-  //   if (typeof meta.type === 'string') {
-  //     baseName = meta.type
-  //   } else {
-  //     baseName = meta.type['name']
-  //   }
-
-  // } else {
-  //   baseName = meta.name
-  // }
-  const baseName = meta.name;
-  const resolvedPrefix = prefix ? prefix + '/' : '';
-  const schemaName = `${resolvedPrefix}${type}-${baseName}`;
-  return schemaName;
-}
-
-function colMetaToSchemaProps(colMeta: ColumnMetadata) {
-  const type = colTypeToJsonSchemaType(colMeta.type);
-  if (type === 'object') {
-    // TODO: Consider if this is the best way of accepting additional properties for simple json, especially if the simple json needs to have a coerced data structure
-    return {
-      additionalProperties: true,
-      type: 'object',
-    };
-  }
-  return {
-    type: colTypeToJsonSchemaType(colMeta.type),
-  };
-}
-
-// NOTE: This relation col basically means that the column is a true relation, like program => <Object>
-// Not applicable to programId => <Number>
-function isRelationCol(col: ColumnMetadata) {
-  // URGENT TODO: Confirm there are no edge cases for property names not ending in Id
-  if (col.propertyName.endsWith('Id')) {
-    return false;
-  }
-  if (col.relationMetadata) {
-    return true;
-  }
-  return false;
-}
 
 export function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
   if (colType instanceof Function) {
@@ -91,6 +31,108 @@ export function colTypeToJsonSchemaType(colType: ColumnType | string | Function)
   return ['number', 'string', 'boolean', 'object', 'array', 'null'];
 }
 
+
+export function generateSchemaName(
+  name: string,
+  type: 'createSchema' | 'updateSchema' | 'fullSchema',
+  prefix?: string,
+) {
+  // Uncomment this to support getting schema name for relation metadata
+  // let baseName
+  // if (meta instanceof RelationMetadata) {
+
+  //   if (typeof meta.type === 'string') {
+  //     baseName = meta.type
+  //   } else {
+  //     baseName = meta.type['name']
+  //   }
+
+  // } else {
+  //   baseName = meta.name
+  // }
+  const baseName = name;
+  const resolvedPrefix = prefix ? prefix + '/' : '';
+  const schemaName = `${resolvedPrefix}${type}-${baseName}`;
+  return schemaName;
+}
+/**
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * EVERYTHING BELOW IS DEPRECATED, FUNCTIONALITY HAS BEEN MOVED TO EZREPO
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+// TODO: See if there is a json schema library that can help with this... (fluent schema?)
+/**
+ * @deprecated Use Generate Schema Name instead and pass in the name yourself instead of the EntityMetadata
+ */
+ export function getSchemaName(
+  meta: EntityMetadata,
+  type: 'createSchema' | 'updateSchema' | 'fullSchema',
+  prefix?: string,
+) {
+  return generateSchemaName(meta.name,type,prefix)
+}
+
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
+ */
+function colMetaToSchemaProps(colMeta: ColumnMetadata) {
+  const type = colTypeToJsonSchemaType(colMeta.type);
+  if (type === 'object') {
+    // TODO: Consider if this is the best way of accepting additional properties for simple json, especially if the simple json needs to have a coerced data structure
+    return {
+      additionalProperties: true,
+      type: 'object',
+    };
+  }
+  return {
+    type: colTypeToJsonSchemaType(colMeta.type),
+  };
+}
+
+
+
+
+// NOTE: This relation col basically means that the column is a true relation, like program => <Object>
+// Not applicable to programId => <Number>
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
+ */
+function isRelationCol(col: ColumnMetadata) {
+  // URGENT TODO: Confirm there are no edge cases for property names not ending in Id
+  if (col.propertyName.endsWith('Id')) {
+    return false;
+  }
+  if (col.relationMetadata) {
+    return true;
+  }
+  return false;
+}
+
+
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
+ */
 function checkColIsGenerated(col: ColumnMetadata) {
   return (
     col.isGenerated || col.isCreateDate || col.isUpdateDate || col.isDeleteDate
@@ -103,6 +145,9 @@ function checkColIsGenerated(col: ColumnMetadata) {
  * @param meta
  * @param prefix
  * @returns
+ */
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
  */
 export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
   const nonGeneratedColumns = meta.columns.filter(
@@ -122,7 +167,7 @@ export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
         };
       },
       {
-        $id: getSchemaName(meta, 'updateSchema', prefix),
+        $id: generateSchemaName(meta.name, 'updateSchema', prefix),
         type: 'object',
         properties: {},
       },
@@ -153,6 +198,9 @@ export function getUpdateSchema(meta: EntityMetadata, prefix?: string) {
  * @param prefix
  * @returns
  */
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
+ */
 export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
   const nonGeneratedColumns = meta.columns.filter(
     (col) => !checkColIsGenerated(col),
@@ -173,7 +221,7 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
         };
       },
       {
-        $id: getSchemaName(meta, 'createSchema', prefix),
+        $id: generateSchemaName(meta.name, 'createSchema', prefix),
         type: 'object',
         properties: {},
         required: [] as Array<string>,
@@ -208,6 +256,9 @@ export function getCreateSchema(meta: EntityMetadata, prefix?: string) {
   return createSchema;
 }
 
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
+ */
 function makeArray(schema: any) {
   return {
     type: 'array',
@@ -216,6 +267,7 @@ function makeArray(schema: any) {
 }
 
 /**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
  * Retrives full JSON Schema for PATCH requests for given metadata and prefix.
  * Note: This also the schema used for the database ui.
  * @param meta
@@ -238,7 +290,7 @@ export function getFullSchema(meta: EntityMetadata, prefix?: string) {
         };
       },
       {
-        $id: getSchemaName(meta, 'fullSchema', prefix),
+        $id: generateSchemaName(meta.name, 'fullSchema', prefix),
         type: 'object',
         properties: {},
       },
@@ -265,11 +317,17 @@ export function getFullSchema(meta: EntityMetadata, prefix?: string) {
 }
 
 // TODO: See if there is a way to not use any and instead ensure the obejct has '$id'
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
+ */
 function removeId(object: any) {
   delete object.$id;
   return object;
 }
 
+/**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
+ */
 function getNestedMetadata(
   meta: EntityMetadata,
   type: 'create' | 'update' | 'read',
@@ -298,6 +356,7 @@ function getNestedMetadata(
 }
 
 /**
+ * @deprecated Functionality has been shifted directly to EzRepo to reduce coupling with typeorm
  * Top-level function to convert {@link EntityMetaData} from typeOrm to {@link jsonSchema} format to return the {@link createSchema}, {@link createSchema}, and {@link fullSchema}
  * @param meta
  * @param prefix

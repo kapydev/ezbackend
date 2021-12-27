@@ -7,7 +7,7 @@ import {
   Repository,
 } from 'typeorm';
 import { setUsedByEzb } from '../../rules';
-import { getSchemaName } from '../typeorm-helpers';
+import { generateSchemaName } from '../typeorm-helpers';
 import type { RouterOptions } from './ez-router';
 
 /**
@@ -78,16 +78,16 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
           description: `During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()}).
         All non nullable columns must be specified on creation`,
           body: {
-            $ref: `${getSchemaName(
-              repo.metadata,
+            $ref: `${generateSchemaName(
+              repo.metadata.name,
               'createSchema',
               opts?.schemaPrefix,
             )}#`,
           },
           response: {
             200: {
-              $ref: `${getSchemaName(
-                repo.metadata,
+              $ref: `${generateSchemaName(
+                repo.metadata.name,
                 'fullSchema',
                 opts?.schemaPrefix,
               )}#`,
@@ -128,8 +128,8 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
           },
           response: {
             200: {
-              $ref: `${getSchemaName(
-                repo.metadata,
+              $ref: `${generateSchemaName(
+                repo.metadata.name,
                 'fullSchema',
                 opts?.schemaPrefix,
               )}#`,
@@ -164,8 +164,8 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
             200: {
               type: 'array',
               items: {
-                $ref: `${getSchemaName(
-                  repo.metadata,
+                $ref: `${generateSchemaName(
+                  repo.metadata.name,
                   'fullSchema',
                   opts?.schemaPrefix,
                 )}#`,
@@ -198,16 +198,16 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
           } with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned
         During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()})`,
           body: {
-            $ref: `${getSchemaName(
-              repo.metadata,
+            $ref: `${generateSchemaName(
+              repo.metadata.name,
               'updateSchema',
               opts?.schemaPrefix,
             )}#`,
           },
           response: {
             200: {
-              $ref: `${getSchemaName(
-                repo.metadata,
+              $ref: `${generateSchemaName(
+                repo.metadata.name,
                 'fullSchema',
                 opts?.schemaPrefix,
               )}#`,

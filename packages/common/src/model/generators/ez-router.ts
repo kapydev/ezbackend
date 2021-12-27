@@ -4,11 +4,6 @@ import { EzBackendOpts } from '../..';
 import { EzApp } from '../../ezapp';
 // TODO: Consider if we should remove the cyclic importing
 import type { EzBackendInstance } from '../../ezbackend';
-import {
-  getCreateSchema,
-  getFullSchema,
-  getUpdateSchema,
-} from '../typeorm-helpers';
 import { getDefaultGenerators } from './default-generators';
 
 export interface RouterOptions {
@@ -83,17 +78,17 @@ export class EzRouter extends EzApp {
     this._generators = opts.generators ?? {};
 
     this.setHandler(`Add Create Schema`, async (instance, opts) => {
-      const schema = getCreateSchema(instance.repo.metadata);
+      const schema = instance.ezRepo.getCreateSchema()
       instance.server.addSchema(schema);
     });
 
     this.setHandler(`Add Update Schema`, async (instance, opts) => {
-      const schema = getUpdateSchema(instance.repo.metadata);
+      const schema = instance.ezRepo.getUpdateSchema()
       instance.server.addSchema(schema);
     });
 
     this.setHandler(`Add Full Schema`, async (instance, opts) => {
-      const schema = getFullSchema(instance.repo.metadata);
+      const schema = instance.ezRepo.getFullSchema()
       instance.server.addSchema(schema);
     });
 
