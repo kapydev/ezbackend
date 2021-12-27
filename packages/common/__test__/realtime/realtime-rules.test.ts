@@ -22,7 +22,7 @@ describe('All realtime listeners should run as expected', () => {
   let clientSocket: ClientSocket;
   let clientSocket2: ClientSocket;
 
-  const PORT = 8002;
+  const PORT = 8003;
 
   beforeEach(async () => {
     app = new EzBackend();

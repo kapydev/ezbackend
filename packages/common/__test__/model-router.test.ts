@@ -28,9 +28,8 @@ describe('Plugin Registering', () => {
   });
 
   afterEach(async () => {
-    const instance = app.getInternalInstance();
-    await instance.orm.close();
-    await instance._server.close();
+    await app.close()
+
   });
 
   it('router => for => hook syntax should work', async () => {

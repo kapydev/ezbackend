@@ -61,7 +61,7 @@ function isRelationCol(col: ColumnMetadata) {
   return false;
 }
 
-function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
+export function colTypeToJsonSchemaType(colType: ColumnType | string | Function) {
   if (colType instanceof Function) {
     return colType.name.toLocaleLowerCase();
   } else {
@@ -259,6 +259,7 @@ export function getFullSchema(meta: EntityMetadata, prefix?: string) {
       },
     };
   }, fullSchema);
+
 
   return fullSchema;
 }

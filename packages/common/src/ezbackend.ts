@@ -17,7 +17,7 @@ import {
   ObjectLiteral,
   Repository,
 } from 'typeorm';
-import { REALTIME } from '.';
+import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
@@ -266,7 +266,7 @@ export class EzBackend extends EzApp {
   }
 
   getInternalServer() {
-    return this.getInternalInstance()._server;
+    return this.getInternalInstance()?._server;
   }
 
   async inject(injectOpts: string | InjectOptions) {
@@ -310,9 +310,15 @@ export class EzBackend extends EzApp {
     await super.start(opts);
   }
 
+  async closeInternals() {
+    EzRepo.unregisterEzRepos()
+  }
+
   async close() {
     const instance = this.getInternalInstance();
-    await instance.orm.close();
-    await instance._server.close();
+    const internalServer = this.getInternalServer();
+    instance?.orm && await instance.orm.close();
+    internalServer && await internalServer.close();
+    await this.closeInternals()
   }
 }

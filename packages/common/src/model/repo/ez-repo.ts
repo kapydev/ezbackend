@@ -11,6 +11,8 @@ import { EntitySchemaOptions } from 'typeorm/entity-schema/EntitySchemaOptions';
 import { Plugin } from 'avvio';
 import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes';
 import { EzError } from '@ezbackend/utils';
+import { colTypeToJsonSchemaType } from '..';
+import { JSONSchema6 } from 'json-schema';
 
 enum NormalType {
   VARCHAR = 'VARCHAR',
@@ -388,7 +390,36 @@ function entityGeneratorFactory(
 }
 
 export class EzRepo extends EzApp {
-  _repo: Repository<ObjectLiteral> | undefined;
+
+  // NOTE: We are creating global application state in terms of repos. Happy to debate if you can think of a better way for the same use case
+  private static ezRepos: { [key: string]: EzRepo } = {}
+
+  // URGENT TODO : Think if there is a better way of unregistering the repos
+  static unregisterEzRepos() {
+    EzRepo.ezRepos = {}
+  }
+
+  private static registerEzRepo(repo: EzRepo, name?: string) {
+    const repoName = name ?? repo._modelName
+    if (Object.keys(EzRepo.ezRepos).includes(repoName)) {
+      throw new EzError("EzRepo Name has already been used",
+        `Each EzRepo needs to have a unique name, a EzRepo with the name ${repoName} has already been registered`)
+    }
+    EzRepo.ezRepos[repoName] = repo
+  }
+
+  private static getEzRepo(name: string) {
+    if (!Object.keys(EzRepo.ezRepos).includes(name)) {
+      throw new EzError(`EzRepo with name ${name} not found`,
+        `Each EzRepo is registered with a unique name in the constructor. Are you sure EzRepo: ${name} has been registered yet?`)
+    }
+    return EzRepo.ezRepos[name]
+  }
+
+  protected _modelName: string
+  protected _modelSchema: ModelSchema
+  protected _repoOpts: RepoOptions
+  protected _repo: Repository<ObjectLiteral> | undefined;
 
   constructor(
     modelName: string,
@@ -396,6 +427,10 @@ export class EzRepo extends EzApp {
     repoOpts: RepoOptions = {},
   ) {
     super();
+    EzRepo.registerEzRepo(this, modelName)
+    this._modelName = modelName
+    this._modelSchema = modelSchema
+    this._repoOpts = repoOpts
     this.setInit(
       `Create "${modelName}" Entity`,
       entityGeneratorFactory(modelName, modelSchema, repoOpts),
@@ -408,6 +443,102 @@ export class EzRepo extends EzApp {
         this._repo = instance.repo;
       },
     );
+  }
+
+  generateNonNestedSchema(
+    schemaType: 'updateSchema' | 'createSchema' | 'fullSchema',
+    columns: [string, EntitySchemaColumnOptions][],
+    prefix?: string,
+  ) : JSONSchema6 {
+    return columns.reduce((jsonSchema, [key, value]) => {
+      return {
+        $id: jsonSchema.$id,
+        type: jsonSchema.type,
+        properties: {
+          ...jsonSchema.properties,
+          [key]: columnOptionsToSchemaProps(value),
+        },
+      };
+    },
+      {
+        $id: getSchemaName(this._modelName, schemaType, prefix),
+        type: 'object',
+        properties: {},
+      })
+  }
+
+  addNestedSchemas(originalSchema: JSONSchema6,
+    relevantRelationColumns: {
+      data: EntitySchemaRelationOptions;
+      isMany: boolean;
+      propertyName: string;
+    }[],
+    recursiveFunctionName: keyof EzRepo) {
+
+    const schemaWithNestedRelations = relevantRelationColumns.reduce((jsonSchema, relationData) => {
+      if (typeof relationData.data.target !== 'string') {
+        throw new EzError("target of type function not supported",
+
+          "Currently EzBackend does not support functions for the target of relations. Raise an issue on github if you require this functionality")
+      }
+      const nestedSchema = removeId(EzRepo.getEzRepo(relationData.data.target)[recursiveFunctionName]())
+      return {
+        $id: jsonSchema.$id,
+        type: jsonSchema.type,
+        properties: {
+          ...jsonSchema.properties,
+          // TODO: Make this work with ref schemas PLEASE
+          [relationData.propertyName]: relationData.isMany
+            ? makeArray(nestedSchema)
+            : nestedSchema,
+        },
+      };
+    }, originalSchema)
+
+    return schemaWithNestedRelations
+
+  }
+
+  getUpdateSchema(prefix?: string) {
+    const entityOptions = schemaToEntityOptions(this._modelSchema)
+    const nonGeneratedColumns = Object.entries(entityOptions.columns).filter(([colName, colData]) => {
+      return !isGeneratedCol(colData)
+    })
+    const updateSchema = this.generateNonNestedSchema('updateSchema', nonGeneratedColumns, prefix)
+    // Add cascade update columns
+    const cascadeUpdateRelations = getRelevantNestedRelations(entityOptions.relations, 'update')
+    const updateSchemaWithRelations = this.addNestedSchemas(updateSchema,cascadeUpdateRelations,'getUpdateSchema')
+    return updateSchemaWithRelations
+  }
+
+  getCreateSchema(prefix?: string) {
+    const entityOptions = schemaToEntityOptions(this._modelSchema)
+    const nonGeneratedColumns = Object.entries(entityOptions.columns).filter(([colName, colData]) => {
+      return !isGeneratedCol(colData)
+    })
+    const createSchema = this.generateNonNestedSchema('createSchema', nonGeneratedColumns, prefix)
+    // Add cascade update columns
+    const cascadeUpdateRelations = getRelevantNestedRelations(entityOptions.relations, 'create')
+    const createSchemaWithRelations = this.addNestedSchemas(createSchema,cascadeUpdateRelations,'getCreateSchema')
+    const requiredPropertyNames = Object.entries(entityOptions.columns)
+    .filter(([colName,colData]) => {
+      return !colData.generated && !colData.nullable && colData.default === undefined
+    })
+    .map(([colName,colData]) => {
+      return colName
+    })
+    createSchemaWithRelations.required = requiredPropertyNames
+    return createSchemaWithRelations
+  }
+
+  getFullSchema(prefix?: string) {
+    const entityOptions = schemaToEntityOptions(this._modelSchema)
+    const columns = Object.entries(entityOptions.columns)
+    const fullSchema = this.generateNonNestedSchema('fullSchema', columns, prefix)
+    // Add eagerly loaded columns
+    const eagerRelations = getRelevantNestedRelations(entityOptions.relations, 'read')
+    const fullSchemaWithRelations = this.addNestedSchemas(fullSchema,eagerRelations,'getFullSchema')
+    return fullSchemaWithRelations
   }
 
   getRepo(): Repository<ObjectLiteral> {
@@ -424,4 +555,91 @@ model.setHandler("Handle Repo", async (instance, opts) => {
     }
     return this._repo;
   }
+}
+
+function getRelevantNestedRelations(
+  relations: { [key: string]: EntitySchemaRelationOptions },
+  type: 'create' | 'update' | 'read'
+) {
+  const relevantRelations = Object.entries(relations).filter(([relationKey, relationData]) => {
+
+    switch (type) {
+      case 'create':
+        return (Array.isArray(relationData.cascade) && relationData.cascade.includes('insert')) || relationData.cascade === true
+      case 'update':
+        return (Array.isArray(relationData.cascade) && relationData.cascade.includes('update')) || relationData.cascade === true
+      case 'read':
+        return relationData.eager === true
+    }
+
+    return new EzError("Unexpected Nested Relation Type",
+      "For the function getRelevantNestedRelations, only types 'create','update' and 'read' are supported")
+
+  })
+
+  // Morph the data into a more usable format
+
+  const formattedRelevantRelations = relevantRelations.map(([relationKey, relationData]) => {
+    return {
+      data: relationData,
+      isMany: relationData.type === 'one-to-many' || relationData.type === 'many-to-many',
+      propertyName: relationKey
+    }
+  })
+
+
+  return formattedRelevantRelations
+}
+
+function makeArray(schema: any) {
+  return {
+    type: 'array',
+    items: schema,
+  };
+}
+
+function isGeneratedCol(col: EntitySchemaColumnOptions) {
+  if (col.generated || col.createDate || col.updateDate || col.deleteDate) return true
+  else return false
+}
+
+function removeId(object: any) {
+  delete object.$id;
+  return object;
+}
+
+function getSchemaName(
+  name: string,
+  type: 'createSchema' | 'updateSchema' | 'fullSchema',
+  prefix?: string,
+) {
+  // Uncomment this to support getting schema name for relation metadata
+  // let baseName
+  // if (meta instanceof RelationMetadata) {
+
+  //   if (typeof meta.type === 'string') {
+  //     baseName = meta.type
+  //   } else {
+  //     baseName = meta.type['name']
+  //   }
+
+  // } else {
+  //   baseName = meta.name
+  // }
+  const baseName = name;
+  const resolvedPrefix = prefix ? prefix + '/' : '';
+  const schemaName = `${resolvedPrefix}${type}-${baseName}`;
+  return schemaName;
+}
+
+function columnOptionsToSchemaProps(colOpts: EntitySchemaColumnOptions) {
+  const type = colTypeToJsonSchemaType(colOpts.type)
+  if (type === 'object') {
+    // TODO: Consider if this is the best way of accepting additional properties for simple json, especially if the simple json needs to have a coerced data structure
+    return {
+      additionalProperties: true,
+      type: 'object',
+    };
+  }
+  return { type };
 }

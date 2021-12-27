@@ -16,18 +16,17 @@ describe('Plugin Registering', () => {
     },
   };
 
-  beforeEach(() => {
-    app = new EzBackend();
-
-    // Prevent server from starting
-    app.removeHook('_run', 'Run Fastify Server');
-  });
-
-  afterEach(async () => {
-    app.close();
-  });
-
   describe('Get Repo', () => {
+    beforeEach(() => {
+      app = new EzBackend();
+  
+      // Prevent server from starting
+      app.removeHook('_run', 'Run Fastify Server');
+    });
+  
+    afterEach(async () => {
+      await app.close();
+    });
     test('Should be able to get repo in the handler hook', async () => {
       const model = new EzModel('TestModel', {});
 
