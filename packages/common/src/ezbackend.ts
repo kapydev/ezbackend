@@ -23,6 +23,7 @@ import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
+import { StorageEngine } from './storage';
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;
@@ -39,6 +40,7 @@ export interface EzBackendInstance {
 export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
 
 export interface EzBackendOpts {
   /**
@@ -74,6 +76,9 @@ export interface EzBackendOpts {
     fastify: Parameters<typeof fastify>[0];
     typeorm: Parameters<typeof createConnection>[0];
     ['socket.io']: Partial<ServerOptions>;
+    storage: {
+      engine: StorageEngine
+    }
   };
 }
 

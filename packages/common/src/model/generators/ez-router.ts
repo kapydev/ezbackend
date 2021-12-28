@@ -4,6 +4,7 @@ import { EzBackendOpts } from '../..';
 import { EzApp } from '../../ezapp';
 // TODO: Consider if we should remove the cyclic importing
 import type { EzBackendInstance } from '../../ezbackend';
+import type { StorageEngine } from '../../storage';
 import { getDefaultGenerators } from './default-generators';
 
 export interface RouterOptions {
@@ -11,6 +12,9 @@ export interface RouterOptions {
   prefix?: string;
   // eslint-disable-next-line no-use-before-define
   generators?: { [name: string]: IGenerator };
+  storage?: {
+    engine?: StorageEngine
+  }
 }
 
 type IGenerator = (

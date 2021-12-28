@@ -18,12 +18,6 @@ import path from 'path'
 // Temporary import for testing
 import { diskEngine, File } from '../../storage'
 
-const pump = util.promisify(pipeline)
-
-function generateId() {
-  return crypto.randomBytes(16).toString('hex')
-}
-
 /**
  * Returns the primary column name from given metadata
  * @param meta
@@ -138,12 +132,15 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
               if (part.truncated) {
                 throw Boom.badRequest(`The file ${part.filename} is too big`)
               }
-              const storer = diskEngine({
-                destination: path.join('tmp/uploads', part.fieldname),
+              const storer = opts?.storage?.engine ??
+              req.ezbOpts.backend?.storage?.engine ??
+              diskEngine({
+                destination: 'tmp/uploads',
                 filename: (req, file, cb) => {
-                  return cb(null, generateId() + '-' + part.filename)
+                  return cb(null, file.fieldname + '-' + crypto.randomBytes(16).toString('hex') + '-' + file.originalname)
                 }
               })
+
               await new Promise((resolve) => {
                 // Morph multipart 'part' to multer 'file'
                 const file: File = {
