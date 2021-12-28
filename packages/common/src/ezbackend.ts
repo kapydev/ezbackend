@@ -1,12 +1,14 @@
 import { PluginScope } from '@ezbackend/core';
 import { EzError, ezWarning } from '@ezbackend/utils';
+import { Ajv, Options as AjvOptions } from 'ajv';
 import dedent from 'dedent-js';
 import dotenv from 'dotenv';
 import fastify, { FastifyInstance, FastifyPluginCallback } from 'fastify';
+import fastifyMultipart from 'fastify-multipart';
 import fp from 'fastify-plugin';
 import {
   fastifyRequestContextPlugin,
-  requestContext,
+  requestContext
 } from 'fastify-request-context';
 import { InjectOptions } from 'light-my-request';
 import { Server, ServerOptions } from 'socket.io';
@@ -15,13 +17,12 @@ import {
   createConnection,
   EntitySchema,
   ObjectLiteral,
-  Repository,
+  Repository
 } from 'typeorm';
 import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
-import { Ajv, Options as AjvOptions } from 'ajv'
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;
@@ -217,9 +218,13 @@ export class EzBackend extends EzApp {
 
     this.setPreHandler('Add SocketIO', createSocketIO);
 
-    this.setHandler('Add Fastify Boom', async (instance, opts) => {
+    this.setHandler('Add Custom Fastify Boom', async (instance, opts) => {
       instance.server.register(fp(ezbErrorPage));
     });
+
+    this.setHandler('Add Fastify Multipart', async(instance,opts) => {
+      instance.server.register(fastifyMultipart)
+    })
 
     this.setHandler('Add Error Schema', addErrorSchema);
 

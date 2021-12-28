@@ -9,6 +9,20 @@ import {
 import { setUsedByEzb } from '../../rules';
 import { generateSchemaName } from '../typeorm-helpers';
 import type { RouterOptions } from './ez-router';
+// File Storage, Streaming related
+import fs from 'fs'
+import util from 'util'
+import { pipeline } from 'stream'
+import crypto from 'crypto'
+import path from 'path'
+// Temporary import for testing
+import { diskEngine, File } from '../../storage'
+
+const pump = util.promisify(pipeline)
+
+function generateId() {
+  return crypto.randomBytes(16).toString('hex')
+}
 
 /**
  * Returns the primary column name from given metadata
@@ -110,6 +124,56 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
       };
       return routeDetails;
     },
+    createOneMultipart: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
+      const routeDetails: RouteOptions = {
+        method: 'POST',
+        url: '/multipart',
+        handler: async (req, res) => {
+
+          const parts = req.parts()
+          for await (const part of parts) {
+
+            if (part.file) {
+              // @ts-ignore
+              if (part.truncated) {
+                throw Boom.badRequest(`The file ${part.filename} is too big`)
+              }
+              const storer = diskEngine({
+                destination: path.join('tmp/uploads', part.fieldname),
+                filename: (req, file, cb) => {
+                  return cb(null, generateId() + '-' + part.filename)
+                }
+              })
+              await new Promise((resolve) => {
+                // Morph multipart 'part' to multer 'file'
+                const file: File = {
+                  fieldname: part.fieldname,
+                  originalname: part.filename,
+                  encoding: part.encoding,
+                  mimetype: part.mimetype,
+                  stream: part.file
+                }
+                storer._handleFile(req, file, resolve)
+              })
+            } else {
+              // TODO: Fix types
+              // @ts-ignore
+              if (part.fieldnameTruncated) {
+                throw Boom.badRequest(`The fieldname ${part.fieldname} is too long`)
+              }
+              // @ts-ignore
+              if (part.valueTruncated) {
+                // @ts-ignore
+                throw Boom.badRequest(`The value ${part.value} is too long`)
+              }
+            }
+          }
+          return { success: true }
+        }
+      }
+
+      return routeDetails
+    },
     getOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
       const primaryCol = getPrimaryColName(repo.metadata);
       const routeDetails: RouteOptions = {
@@ -193,9 +257,8 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
           // @ts-ignore
           summary: `Update ${repo.metadata.name} by ${primaryCol}`,
           tags: [repo.metadata.name],
-          description: `The ${
-            repo.metadata.name
-          } with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned
+          description: `The ${repo.metadata.name
+            } with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned
         During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()})`,
           body: {
             $ref: `${generateSchemaName(
