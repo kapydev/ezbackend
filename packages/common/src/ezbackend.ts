@@ -222,7 +222,7 @@ export class EzBackend extends EzApp {
       instance.server.register(fp(ezbErrorPage));
     });
 
-    this.setHandler('Add Fastify Multipart', async(instance,opts) => {
+    this.setHandler('Add Fastify Multipart', async (instance, opts) => {
       instance.server.register(fastifyMultipart)
     })
 
@@ -234,7 +234,17 @@ export class EzBackend extends EzApp {
       instance._server = fastify(fastifyOpts);
     });
 
+    this.setPostHandler('Attach EzBackend Instance to req', async (instance, opts) => {
+      instance._server.decorate('ezbInstance', instance)
+      instance._server.decorate('ezbOpts', opts)
+
+      instance._server.decorateRequest('ezbInstance', { getter: () => instance });
+      instance._server.decorateRequest('ezbOpts', { getter: () => opts });
+
+    })
+
     this.setPostHandler('Attach Socket IO', attachSocketIO);
+
 
     this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
       this.registerFastifyPlugins(instance._server, this);
