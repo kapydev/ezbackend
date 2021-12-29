@@ -72,9 +72,13 @@ async function addDBSchemas(instance: EzBackendInstance, opts: EzBackendOpts) {
     const createSchema = repo.getCreateSchema(prefix)
     const updateSchema = repo.getUpdateSchema(prefix)
     const fullSchema = repo.getFullSchema(prefix)
+    const formCreateSchema = repo.getFormCreateSchema(prefix)
+    const formUpdateSchema = repo.getFormUpdateSchema(prefix)
     instance.server.addSchema(createSchema);
     instance.server.addSchema(updateSchema);
     instance.server.addSchema(fullSchema);
+    instance.server.addSchema(formCreateSchema);
+    instance.server.addSchema(formUpdateSchema);
   })
 
 }

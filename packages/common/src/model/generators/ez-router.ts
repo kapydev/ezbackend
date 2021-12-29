@@ -86,6 +86,16 @@ export class EzRouter extends EzApp {
       instance.server.addSchema(schema);
     });
 
+    this.setHandler(`Add Form Create Schema`, async (instance, opts) => {
+      const schema = instance.ezRepo.getFormCreateSchema()
+      instance.server.addSchema(schema);
+    });
+
+    this.setHandler(`Add Form Update Schema`, async (instance, opts) => {
+      const schema = instance.ezRepo.getFormUpdateSchema()
+      instance.server.addSchema(schema);
+    });
+
     this.setHandler(`Add Update Schema`, async (instance, opts) => {
       const schema = instance.ezRepo.getUpdateSchema()
       instance.server.addSchema(schema);

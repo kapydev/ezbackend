@@ -34,7 +34,7 @@ export function colTypeToJsonSchemaType(colType: ColumnType | string | Function)
 
 export function generateSchemaName(
   name: string,
-  type: 'createSchema' | 'updateSchema' | 'fullSchema',
+  type: 'createSchema' | 'updateSchema' | 'fullSchema' | 'formCreateSchema' | 'formUpdateSchema',
   prefix?: string,
 ) {
   // Uncomment this to support getting schema name for relation metadata

@@ -1,10 +1,11 @@
 import { FastifyRequest } from 'fastify'
-import { createWriteStream, unlink, mkdirSync } from 'fs'
+import { createWriteStream, createReadStream, unlink, mkdirSync } from 'fs'
 import os from 'os'
 import { join } from 'path'
 import crypto from 'crypto'
 
 import { GetFileName, GetDestination, DiskStorageOptions, File, StorageEngine } from '../interfaces'
+import { Readable } from 'stream'
 
 const getFilename: GetFileName = (_req, _file, cb) => {
   crypto.randomBytes(16, function (err, raw) {
@@ -78,6 +79,29 @@ class DiskStorage implements StorageEngine {
     delete file.path
 
     unlink(path, cb)
+  }
+
+  _readFile(
+    req: FastifyRequest,
+    file: File,
+    cb: (error: Error | null, readStrean?: Readable) => void,
+  ): void {
+    this.getDestination(req, file, (err, destination) => {
+      if (err) {
+        return cb(err)
+      }
+
+      if (!file.filename) {
+        return cb(Error('Filename must be specified!'))
+      }
+
+
+      const finalPath = join(destination, file.filename)
+      const readStream = createReadStream(finalPath)
+
+      cb(null, readStream)
+
+    })
   }
 }
 

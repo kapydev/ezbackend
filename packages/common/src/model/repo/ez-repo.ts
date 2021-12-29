@@ -12,7 +12,7 @@ import { Plugin } from 'avvio';
 import { RelationType as TypeORMRelationType } from 'typeorm/metadata/types/RelationTypes';
 import { EzError } from '@ezbackend/utils';
 import { generateSchemaName, colTypeToJsonSchemaType } from '..';
-import { JSONSchema6 } from 'json-schema';
+import { JSONSchema6, JSONSchema6Definition } from 'json-schema';
 
 enum NormalType {
   VARCHAR = 'VARCHAR',
@@ -64,7 +64,7 @@ function normalTypeToTypeORMtype(type: NormalType | ColumnType): ColumnType {
     case NormalType.FILE:
       // URGENT TODO: Make this a virtual column instead?
       // When the user specifies a file, we only store the download URL in the database
-      return 'varchar'
+      return 'simple-json'
     case NormalType.VARCHAR:
       return 'varchar';
     case NormalType.INT:
@@ -417,7 +417,7 @@ export class EzRepo extends EzApp {
     return EzRepo.ezRepos
   }
 
-  private static getEzRepo(name: string) {
+  static getEzRepo(name: string) {
     if (!Object.keys(EzRepo.ezRepos).includes(name)) {
       throw new EzError(`EzRepo with name ${name} not found`,
         `Each EzRepo is registered with a unique name in the constructor. Are you sure EzRepo: ${name} has been registered yet?`)
@@ -459,7 +459,7 @@ export class EzRepo extends EzApp {
     schemaType: 'updateSchema' | 'createSchema' | 'fullSchema',
     columns: [string, EntitySchemaColumnOptions][],
     prefix?: string,
-  ) : JSONSchema6 {
+  ): JSONSchema6 {
     return columns.reduce((jsonSchema, [key, value]) => {
       return {
         $id: jsonSchema.$id,
@@ -517,7 +517,7 @@ export class EzRepo extends EzApp {
     const updateSchema = this.generateNonNestedSchema('updateSchema', nonGeneratedColumns, prefix)
     // Add cascade update columns
     const cascadeUpdateRelations = getRelevantNestedRelations(entityOptions.relations, 'update')
-    const updateSchemaWithRelations = this.addNestedSchemas(updateSchema,cascadeUpdateRelations,'getUpdateSchema')
+    const updateSchemaWithRelations = this.addNestedSchemas(updateSchema, cascadeUpdateRelations, 'getUpdateSchema')
     return updateSchemaWithRelations
   }
 
@@ -529,14 +529,14 @@ export class EzRepo extends EzApp {
     const createSchema = this.generateNonNestedSchema('createSchema', nonGeneratedColumns, prefix)
     // Add cascade update columns
     const cascadeUpdateRelations = getRelevantNestedRelations(entityOptions.relations, 'create')
-    const createSchemaWithRelations = this.addNestedSchemas(createSchema,cascadeUpdateRelations,'getCreateSchema')
+    const createSchemaWithRelations = this.addNestedSchemas(createSchema, cascadeUpdateRelations, 'getCreateSchema')
     const requiredPropertyNames = Object.entries(entityOptions.columns)
-    .filter(([colName,colData]) => {
-      return !colData.generated && !colData.nullable && colData.default === undefined
-    })
-    .map(([colName,colData]) => {
-      return colName
-    })
+      .filter(([colName, colData]) => {
+        return !colData.generated && !colData.nullable && colData.default === undefined
+      })
+      .map(([colName, colData]) => {
+        return colName
+      })
     createSchemaWithRelations.required = requiredPropertyNames
     return createSchemaWithRelations
   }
@@ -547,8 +547,67 @@ export class EzRepo extends EzApp {
     const fullSchema = this.generateNonNestedSchema('fullSchema', columns, prefix)
     // Add eagerly loaded columns
     const eagerRelations = getRelevantNestedRelations(entityOptions.relations, 'read')
-    const fullSchemaWithRelations = this.addNestedSchemas(fullSchema,eagerRelations,'getFullSchema')
+    const fullSchemaWithRelations = this.addNestedSchemas(fullSchema, eagerRelations, 'getFullSchema')
     return fullSchemaWithRelations
+  }
+
+  getFormCreateSchema(prefix?: string) {
+    const newSchema = this.getCreateSchema(prefix)
+    newSchema.$id = generateSchemaName(this._modelName, 'formCreateSchema', prefix)
+    const filePropertyNames = Object.entries(this._modelSchema)
+      .reduce((previousValue, [key, value]) => {
+        if (value === Type.FILE) {
+          previousValue.push(key)
+          return previousValue
+        } else {
+          return previousValue
+        }
+      }, [] as Array<string>)
+    filePropertyNames.forEach(filePropertyName => {
+      if (!newSchema.properties) return
+
+      newSchema.properties[filePropertyName] = {
+        type: 'object',
+        // @ts-ignore
+        customSwaggerProps: {
+          type: 'file'
+        }
+      }
+    })
+
+    // URGENT TODO: Handle nested properties
+
+    return newSchema
+  }
+
+  getFormUpdateSchema(prefix?: string) {
+    // URGENT TODO: Code below and above is the same, can we keep it DRY
+    const newSchema = this.getUpdateSchema(prefix)
+    newSchema.$id = generateSchemaName(this._modelName, 'formUpdateSchema', prefix)
+    const filePropertyNames = Object.entries(this._modelSchema)
+      .reduce((previousValue, [key, value]) => {
+        if (value === Type.FILE) {
+          previousValue.push(key)
+          return previousValue
+        } else {
+          return previousValue
+        }
+      }, [] as Array<string>)
+    filePropertyNames.forEach(filePropertyName => {
+      if (!newSchema.properties) return
+
+      newSchema.properties[filePropertyName] = {
+        type: 'object',
+        // @ts-ignore
+        customSwaggerProps: {
+          type: 'file'
+        }
+      }
+    })
+
+    // URGENT TODO: Handle nested properties
+
+    return newSchema
   }
 
   getRepo(): Repository<ObjectLiteral> {

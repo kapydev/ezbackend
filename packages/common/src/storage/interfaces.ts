@@ -1,4 +1,5 @@
 import { FastifyRequest } from 'fastify'
+import { Readable } from 'stream'
 
 export type FilesObject = {
   [fieldname: string]: Partial<File>[]
@@ -75,6 +76,11 @@ export interface StorageEngine {
     callback: (error?: Error | null, info?: Partial<File>) => void,
   ): void
   _removeFile(req: FastifyRequest, file: File, callback: (error?: Error | null) => void): void
+  _readFile(
+    req: FastifyRequest,
+    file: File,
+    cb: (error: Error | null, readStrean?: Readable) => void,
+  ): void
 }
 
 export type GetFileName = (
