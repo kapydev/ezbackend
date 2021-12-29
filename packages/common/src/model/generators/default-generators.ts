@@ -341,6 +341,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
         schema: {
           // @ts-ignore
           summary: `Download files for ${repo.metadata.name} by ${primaryCol} and property name`,
+          // URGENT TODO: Add in description why the swagger documentation doesn't work
           tags: [repo.metadata.name],
           description: `If the ${primaryCol} does not contain the value specified in the url parameters, there will be a 'not found' error.`,
           params: {
