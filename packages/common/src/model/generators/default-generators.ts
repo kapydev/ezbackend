@@ -418,9 +418,6 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
     },
     updateOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
       const primaryCol = getPrimaryColName(repo.metadata);
-      const generatedCols = repo.metadata.columns
-        .filter((col) => col.isGenerated)
-        .map((col) => col.propertyName);
       const routeDetails: RouteOptions = {
         method: 'PATCH',
         url: `/:${primaryCol}`,
@@ -428,9 +425,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
           // @ts-ignore
           summary: `Update ${repo.metadata.name} by ${primaryCol}`,
           tags: [repo.metadata.name],
-          description: `The ${repo.metadata.name
-            } with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned
-        During creation, you are not allowed to specify the values of generated columns (e.g. ${generatedCols.toString()})`,
+          description: `The ${repo.metadata.name} with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned`,
           body: {
             $ref: `${generateSchemaName(
               repo.metadata.name,
@@ -469,6 +464,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
               ...req.body,
             });
             req.io?.emit('entity_updated', repo.metadata.name, updatedObj);
+            // URGENT TODO: Figure out why there is no remove nested nulls here
             return updatedObj;
           } catch (e: any) {
             throw Boom.notFound(e);
@@ -478,7 +474,195 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
       };
       return routeDetails;
     },
-    deleteOne: (repo: Repository<ObjectLiteral>, opts?: RouterOptions) => {
+    updateOneMultipart: (repo: Repository<ObjectLiteral>, opts: RouterOptions = {}) => {
+      // Type coercion is required because multipart/form-data has no associated types
+      const ajv = new Ajv({ coerceTypes: true })
+      const validationSchema = EzRepo.getEzRepo(repo.metadata.name).getFormUpdateSchema()
+      const validateData = ajv.compile(validationSchema)
+      const primaryCol = getPrimaryColName(repo.metadata);
+      const routeDetails: RouteOptions = {
+        method: 'PATCH',
+        url: `/:${primaryCol}/multipart`,
+        schema: {
+          // @ts-ignore
+          summary: `Update ${repo.metadata.name} using the format multipart/form-data`,
+          tags: [repo.metadata.name],
+          description: `The ${repo.metadata.name} with the ${primaryCol} specified must exist, otherwise a 'not found' error is returned
+        All fields inserted will be coerced to their respective types using ajv. For example, if you have a boolean field and supply the value 'false', it will be coerced to the boolean value false.
+        `,
+          consumes: ['multipart/form-data'],
+          // URGENT TODO: Consider edge case if repo name is possibly not ezrepo name
+          body: validationSchema,
+          params: {
+            type: 'object',
+            properties: {
+              [primaryCol]: { type: 'number' },
+            },
+          },
+          response: {
+            200: {
+              $ref: `${generateSchemaName(
+                repo.metadata.name,
+                'fullSchema',
+                opts?.schemaPrefix,
+              )}#`,
+            },
+            400: { $ref: `ErrorResponse#` },
+          }
+        } as FastifySchema
+        ,
+        preValidation: async (req, res) => {
+          // Validation Hack is required because body is empty in fastify when schema consumes multipart/form-data
+          req.body = {}
+        },
+        validatorCompiler: function () {
+          // Always return the data as 'validated'. Actual validation takes place in the handler after the multipart data is parsed
+          return () => true
+        },
+        handler: async (req, res) => {
+
+          const parts = req.parts()
+
+          const storageEngine = getStorageEngine(opts, req)
+
+          // URGENT TODO: Refactor away reused code
+          // URGENT TODO: Split default-generators.ts into multiple smaller files
+          async function removeFile(file: File) {
+            const result = await new Promise((resolve) => {
+              storageEngine._removeFile(req, file, (...result) => resolve(result))
+            })
+            return result
+          }
+
+          async function handleFile(part: MultipartFile) {
+            // @ts-ignore
+            if (part.truncated) {
+              throw Boom.badRequest(`The file ${part.filename} is too big`)
+            }
+            // URGENT TODO: Switch this to resolve reject style, resolving the error is very strange
+            try {
+              const value = await new Promise<Partial<File>>((resolve, reject) => {
+                // Morph multipart 'part' to multer 'file'
+                const file: File = {
+                  fieldname: part.fieldname,
+                  originalname: part.filename,
+                  encoding: part.encoding,
+                  mimetype: part.mimetype,
+                  stream: part.file
+                }
+                storageEngine._handleFile(req, file, (err, info) => {
+                  if (err) return reject(err)
+                  resolve({
+                    ...info,
+                    mimetype: part.mimetype,
+                    originalname: part.filename,
+                    fieldname: part.fieldname,
+                    encoding: part.encoding
+                  })
+                })
+              })
+              return {
+                name: part.fieldname,
+                value: value
+              }
+            } catch (e) {
+              throw Boom.badRequest(String(e))
+            }
+
+          }
+
+          async function handleField(part: MultipartFile) {
+            // TODO: Fix types
+            // @ts-ignore
+            if (part.fieldnameTruncated) {
+              throw Boom.badRequest(`The fieldname ${part.fieldname} is too long`)
+            }
+            // @ts-ignore
+            if (part.valueTruncated) {
+              // @ts-ignore
+              throw Boom.badRequest(`The value ${part.value} is too long`)
+            }
+            // @ts-ignore
+            if (!part.value) {
+              // @ts-ignore
+              part.value = undefined
+            }
+            return {
+              name: part.fieldname,
+              // @ts-ignore
+              value: part.value
+            }
+
+          }
+
+          const fullData: {
+            [key: string]: unknown
+          } = {}
+
+          const fileKeys = []
+          const files = []
+
+          for await (const part of parts) {
+
+            if (part.file) {
+              const fileData = await handleFile(part)
+              // URGENT TODO: Handle edge case of same key being sent twice
+              fullData[fileData.name] = fileData.value
+              fileKeys.push(fileData.name)
+              files.push(fileData.value)
+            } else {
+              const fieldData = await handleField(part)
+              if (fieldData.value) {
+                fullData[fieldData.name] = fieldData.value
+              }
+            }
+          }
+
+          setUsedByEzb();
+          // @ts-ignore
+          const id = req.params[primaryCol];
+
+          try {
+            const validationResult = validateData(fullData)
+            if (validationResult === false) {
+              throw ajv.errorsText(validateData.errors)
+            }
+            const oldObj = await repo.findOneOrFail(id);
+            const updatedObj = await repo.save({
+              id: id,
+              ...oldObj,
+              ...fullData,
+            });
+            // Remove the old saved file(s)
+            for await (const fileKey of fileKeys) {
+              try {
+                await removeFile(oldObj[fileKey] as File)
+              } catch (e) {
+
+              }
+            }
+
+            req.io?.emit('entity_updated', repo.metadata.name, updatedObj);
+            return updatedObj;
+          } catch (e: any) {
+            // Assumption: If it fails, it is because of a bad request, not the code breaking
+            for await (const file of files) {
+              // URGENT TODO: Add this edge case handling for create side as well, because file may stop uploading halfway
+              try {
+                await removeFile(file as File)
+              } catch (e) {
+
+              }
+            }
+            throw Boom.badRequest(e);
+          }
+
+        }
+      }
+
+      return routeDetails
+    },
+    deleteOne: (repo: Repository<ObjectLiteral>, opts: RouterOptions = {}) => {
       const primaryCol = getPrimaryColName(repo.metadata);
       const routeDetails: RouteOptions = {
         method: 'DELETE',
@@ -510,13 +694,33 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
           },
         },
         handler: async (req, res) => {
+
+          const storageEngine = getStorageEngine(opts, req)
+
+          // URGENT TODO: Refactor away reused code
+          // URGENT TODO: Split default-generators.ts into multiple smaller files
+          async function removeFile(file: File) {
+            const result = await new Promise((resolve) => {
+              storageEngine._removeFile(req, file, (...result) => resolve(result))
+            })
+            return result
+          }
+
           setUsedByEzb();
           // @ts-ignore
           const id = req.params[primaryCol];
           try {
+            // URGENT TODO: Consider edge cases for nested data
+            // URGENT TODO: Consider if file deletion fail and entity deletion succeed or vice versa
             const result = await repo.findOneOrFail(id);
-            req.io?.emit('entity_deleted', repo.metadata.name, result);
+            for await(const key of Object.keys(result)) {
+              // URGENT TODO: Consider edge case when use has his own property 'filename'
+              if (typeof result[key] !== 'object') continue
+              if (!Object.keys(result[key]).includes('filename')) continue
+              await removeFile(result[key])
+            }
             await repo.remove(result);
+            req.io?.emit('entity_deleted', repo.metadata.name, result);
           } catch (e) {
             res.status(404).send(e);
           }
