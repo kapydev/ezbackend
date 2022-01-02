@@ -6,6 +6,8 @@ import { EzApp } from '../../ezapp';
 import type { EzBackendInstance } from '../../ezbackend';
 import type { StorageEngine } from '../../storage';
 import { getDefaultGenerators } from './default-generators';
+import type { FastifyMultipartOptions } from 'fastify-multipart';
+import { merge } from 'lodash'
 
 export interface RouterOptions {
   schemaPrefix?: string;
@@ -14,6 +16,7 @@ export interface RouterOptions {
   generators?: { [name: string]: IGenerator };
   storage?: {
     engine?: StorageEngine
+    multipartOpts?: FastifyMultipartOptions
   }
 }
 
@@ -65,19 +68,24 @@ export function middlewareFactory(optName: string, newValue: any): Middleware {
   return newMiddleware;
 }
 
+const defaultOpts = { prefix: '', generators: getDefaultGenerators() }
+
 // TODO: Think about function naming
 // TODO: Figure out what the heck this genOpts done and if its useless remove it
 /**
- * Child of EzApp. Handles route generation for
+ * Child of EzApp. Handles route generation for EzModel
  */
 export class EzRouter extends EzApp {
   _generators: { [key: string]: IGenerator };
   _genOpts: RouterOptions;
 
   constructor(
-    opts: RouterOptions = { prefix: '', generators: getDefaultGenerators() },
+    opts: RouterOptions = defaultOpts,
   ) {
     super();
+
+    opts = merge({},defaultOpts,opts)
+
     this._genOpts = opts;
     this._generators = opts.generators ?? {};
 
@@ -112,7 +120,6 @@ export class EzRouter extends EzApp {
     });
   }
 
-  // TODO: Refactor so that its not such a nested affair of functions
   addRouteFromGenerator(
     generatorName: string,
     generator: IGenerator,
@@ -130,7 +137,7 @@ export class EzRouter extends EzApp {
     );
   }
 
-  // URGENT TODO: Make it such that invalid routeNames throw error which informs of possible route names
+  // TODO: Make it such that invalid routeNames throw error which informs of possible route names
 
   _forFactory<KeyType>(overrideName: string, routeNames: Array<string>) {
     return (newVal: KeyType) => {

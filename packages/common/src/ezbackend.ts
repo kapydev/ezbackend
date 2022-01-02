@@ -23,7 +23,7 @@ import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
-import { StorageEngine } from './storage';
+import type { RouterOptions } from '.';
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;
@@ -76,9 +76,7 @@ export interface EzBackendOpts {
     fastify: Parameters<typeof fastify>[0];
     typeorm: Parameters<typeof createConnection>[0];
     ['socket.io']: Partial<ServerOptions>;
-    storage: {
-      engine: StorageEngine
-    }
+    storage: RouterOptions['storage']
   };
 }
 
@@ -155,6 +153,7 @@ const defaultConfig: EzBackendOpts['backend'] = {
       methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     },
   },
+  storage: {}
 };
 
 // Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
@@ -228,7 +227,9 @@ export class EzBackend extends EzApp {
     });
 
     this.setHandler('Add Fastify Multipart', async (instance, opts) => {
-      instance.server.register(fastifyMultipart)
+      const multipartOpts = this.getOpts('backend', opts)?.storage?.multipartOpts;
+
+      instance.server.register(fastifyMultipart, multipartOpts)
     })
 
     this.setHandler('Add Error Schema', addErrorSchema);

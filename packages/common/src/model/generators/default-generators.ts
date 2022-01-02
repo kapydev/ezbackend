@@ -71,18 +71,22 @@ export type GetDefaultGenerators = {
   (): Generators;
 };
 
-const defaultStorage = diskEngine({
-  // URGENT TODO: make destination dependent on environement variable for tmp file destination
-  destination: 'tmp/uploads',
-  filename: (req, file, cb) => {
-    return cb(null, crypto.randomBytes(16).toString('hex') + '-' + file.originalname)
-  }
-})
 
-function getStorageEngine(routerOpts: RouterOptions, req: FastifyRequest, storage: StorageEngine = defaultStorage) {
+function getDefaultEngine() {
+  return diskEngine({
+    // URGENT TODO: make destination dependent on environement variable for tmp file destination
+    destination: 'tmp/uploads',
+    filename: (req, file, cb) => {
+      return cb(null, crypto.randomBytes(16).toString('hex') + '-' + file.originalname)
+    }
+  })
+}
+
+function getStorageEngine(routerOpts: RouterOptions, req: FastifyRequest) {
+
   const storageEngine = routerOpts?.storage?.engine ??
     req.ezbOpts.backend?.storage?.engine ??
-    storage
+    getDefaultEngine()
   return storageEngine
 }
 
@@ -181,7 +185,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
         },
         handler: async (req, res) => {
 
-          const parts = req.parts()
+          const parts = req.parts(opts.storage?.multipartOpts)
 
           const storageEngine = getStorageEngine(opts, req)
 
@@ -521,7 +525,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
         },
         handler: async (req, res) => {
 
-          const parts = req.parts()
+          const parts = req.parts(opts.storage?.multipartOpts)
 
           const storageEngine = getStorageEngine(opts, req)
 
@@ -713,7 +717,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
             // URGENT TODO: Consider edge cases for nested data
             // URGENT TODO: Consider if file deletion fail and entity deletion succeed or vice versa
             const result = await repo.findOneOrFail(id);
-            for await(const key of Object.keys(result)) {
+            for await (const key of Object.keys(result)) {
               // URGENT TODO: Consider edge case when use has his own property 'filename'
               if (typeof result[key] !== 'object') continue
               if (!Object.keys(result[key]).includes('filename')) continue

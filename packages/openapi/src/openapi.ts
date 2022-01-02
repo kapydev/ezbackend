@@ -39,7 +39,7 @@ function recursiveCustomPropertyReplacement(schema: any): any {
 
     if (schema.customSwaggerProps !== undefined) {
       // Update with the custom swagger props, if any
-      schema = merge(schema, schema.customSwaggerProps)
+      schema = merge({},schema, schema.customSwaggerProps)
       delete schema.customSwaggerProps
     }
     // Recursively replace properties on children if required

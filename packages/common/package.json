@@ -25,6 +25,7 @@
     "@types/node": "^16.4.13",
     "@types/passport-google-oauth20": "^2.0.10",
     "@types/pino": "^7.0.5",
+    "form-auto-content": "^2.2.0",
     "jest": "^27.0.6",
     "lodash": "^4.17.21",
     "socket.io-client": "^4.3.2",
