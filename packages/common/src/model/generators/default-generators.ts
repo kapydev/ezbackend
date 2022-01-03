@@ -382,6 +382,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
               })
             })
             res.type(file.mimetype)
+            res.header('content-disposition',`attachment; filename="${file.originalname}"`)
             return res.send(readableStream);
           } catch (e: any) {
             throw Boom.badRequest(e);

@@ -12,9 +12,32 @@ You can access the socket io instance from any `EzApp` or class that extends `Ez
 
 You can get the non-namespaced [io object](https://socket.io/docs/v4/server-instance/) from `req`
 
-```ts
-
-```
+<CodeSnippet
+sample={`const socketIOtester = new EzApp()\n
+socketIOtester.post('/hello-world', async (req, res) => {
+  const io = req.io
+  {/* Your Custom Functionality */}
+})`}
+fullCode={`import { EzBackend, EzModel, Type, EzApp } from '@ezbackend/common';
+import { EzOpenAPI } from '@ezbackend/openapi';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzCors } from '@ezbackend/cors';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+const socketIOtester = new EzApp()\n
+socketIOtester.post('/hello-world', async (req, res) => {
+  const io = req.io
+  io.emit("hello", "world")
+  return {success: true}
+})\n
+app.addApp(socketIOtester, {prefix: 'socket-io-tester'})
+app.start()`}
+/>
 
 ### Non Namespaced
 
