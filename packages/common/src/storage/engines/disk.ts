@@ -17,11 +17,12 @@ const getDestination: GetDestination = (_req, _file, cb) => {
   cb(null, os.tmpdir())
 }
 
-class DiskStorage implements StorageEngine {
+class DiskStorage extends StorageEngine {
   getFilename: GetFileName
   getDestination: GetDestination
 
   constructor(opts: DiskStorageOptions) {
+    super()
     this.getFilename = opts.filename || getFilename
 
     if (typeof opts.destination === 'string') {

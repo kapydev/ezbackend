@@ -69,17 +69,20 @@ export interface Options {
   fileFilter?: FileFilter
 }
 
-export interface StorageEngine {
-  _handleFile(
+export abstract class StorageEngine {
+
+  abstract _handleFile(
     req: FastifyRequest,
     file: File,
     callback: (error?: Error | null, info?: Partial<File>) => void,
   ): void
-  _removeFile(req: FastifyRequest, file: File, callback: (error?: Error | null) => void): void
-  _readFile(
+
+  abstract _removeFile(req: FastifyRequest, file: File, callback: (error?: Error | null) => void): void
+
+  abstract _readFile(
     req: FastifyRequest,
     file: File,
-    cb: (error: Error | null, readStrean?: Readable) => void,
+    callback: (error: Error | null, readStrean?: Readable) => void,
   ): void
 }
 
