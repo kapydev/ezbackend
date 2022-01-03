@@ -17,6 +17,7 @@ import 'fastify-multipart'
 import { EzRepo } from '..';
 // URGENT TODO: Can we use the in built fastify AJV instead for consistency?
 import Ajv from 'ajv'
+import { merge } from 'lodash';
 
 
 
@@ -88,6 +89,15 @@ function getStorageEngine(routerOpts: RouterOptions, req: FastifyRequest) {
     req.ezbOpts.backend?.storage?.engine ??
     getDefaultEngine()
   return storageEngine
+}
+
+function getStorageOpts(routerOpts: RouterOptions, req: FastifyRequest) {
+  const storageOpts = merge(
+    {},
+    routerOpts.storage?.multipartOpts,
+    req.ezbOpts.backend.storage?.multipartOpts
+  )
+  return storageOpts
 }
 
 export const getDefaultGenerators: GetDefaultGenerators = () => {
@@ -185,7 +195,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
         },
         handler: async (req, res) => {
 
-          const parts = req.parts(opts.storage?.multipartOpts)
+          const parts = req.parts(getStorageOpts(opts,req))
 
           const storageEngine = getStorageEngine(opts, req)
 
@@ -382,7 +392,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
               })
             })
             res.type(file.mimetype)
-            res.header('content-disposition',`attachment; filename="${file.originalname}"`)
+            res.header('content-disposition', `attachment; filename="${file.originalname}"`)
             return res.send(readableStream);
           } catch (e: any) {
             throw Boom.badRequest(e);
@@ -526,7 +536,7 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
         },
         handler: async (req, res) => {
 
-          const parts = req.parts(opts.storage?.multipartOpts)
+          const parts = req.parts(getStorageOpts(opts,req))
 
           const storageEngine = getStorageEngine(opts, req)
 

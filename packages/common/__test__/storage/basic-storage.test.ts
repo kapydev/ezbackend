@@ -471,4 +471,6 @@ describe("Basic Storage Tests", () => {
   })
 
   it.todo("Should use streams instead of storing in RAM")
+
+  it.todo("Router option precedence should merge with global options")
 })

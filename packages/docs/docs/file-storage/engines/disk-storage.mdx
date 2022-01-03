@@ -4,16 +4,16 @@ import CodeSnippet from "../../CodeSnippet"
 
 ## Introduction
 
-The Disk Storage Provider automatically is used by default to store files on your system. By default it stores files in `{rootDir}/tmp/uploads/{hash}-{originalFileName}`
+The Disk Storage Engine automatically is used by default to store files on your system. By default it stores files in `{rootDir}/tmp/uploads/{hash}-{originalFileName}`
 
 
 ## Usage
 
-The Disk Storage Provider is enabled by default, but can be configured to custom needs.
+The Disk Storage Engine is enabled by default, but can be configured to custom needs.
 
-### Customising the Provider
+### Customising the Engine
 
-You can add options to the disk storage provider creating a new `diskEngine`
+You can add options to the disk storage engine creating a new `diskEngine`
 
 <CodeSnippet
 sample={`const customDiskEngine = diskEngine({
@@ -67,6 +67,6 @@ app.start({
 
 ## Caveats
 
-The Disk Storage Provider should not be used in production, because as a principle backend instances should be stateless to allow for easier horizontal scaling.
+The Disk Storage Engine should not be used in production, because as a principle backend instances should be stateless to allow for easier horizontal scaling.
 
-Hence, to keep the development and testing environments more consistent with the production environment, an `S3 provider` or another cloud storage provider should be used instead.
+Hence, to keep the development and testing environments more consistent with the production environment, an `S3 Engine` or another cloud storage engine should be used instead.

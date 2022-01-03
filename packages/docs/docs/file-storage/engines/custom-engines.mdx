@@ -1,13 +1,13 @@
 ---
 sidebar_position: 1
 ---
-# Making Custom Providers
+# Custom Engines
 
 import CodeSnippet from '../../CodeSnippet';
 
 ## Introduction
 
-Custom providers are extensions of [multer compatible `storage engines`](https://github.com/expressjs/multer/blob/master/StorageEngine.md)
+Custom engines are extensions of [multer compatible `storage engines`](https://github.com/expressjs/multer/blob/master/StorageEngine.md)
 
 However, EzBackend requires a third exposed function, `_readFile` that returns a `Readable` stream in the callback in order to allow users to download files.
 

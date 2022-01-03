@@ -272,6 +272,51 @@ Under the hood, type coercion and validation is done with [AJV](https://ajv.js.o
 
 ## Configuration
 
+File Storage can be configured globally or at the router level.
+
+There are two components that can be configured, the `engine` and `multipartOpts`
+
+The order of preference in which the configuration is merged is
+
+1. `router setting`
+2. `global setting`
+3. `default setting`
+
+e.g If the configuration is defined both at the global level and router level, the router level configuration will take precedence.
+
+### Global Configuration
+
+The global setting can be set in `app.start()`. See [Configuration](../configuration#backendstorage) for more details
+
+### Router Level Configuration
+
+You can configure the options for the generated routes in `EzModel` by using the `routerOpts`
+
+```ts
+const sampleModel = new EzModel(
+  'SampleModel',
+  {
+    avatar: Type.FILE,
+  },
+  {
+    routerOpts: {
+      storage: {
+        engine: customEngine,
+        multipartOpts: {
+          limits: {
+            fileSize: 1024,
+          },
+        },
+      },
+    },
+  },
+);
+```
+
+### Default Configuration
+
+By default EzBackend uses the [diskEngine](./engines/disk-storage), which can be customised to your needs and pass to the global configuration or the router level configuration.
+
 ## How it works
 
 For a property with `Type.FILE` is specified in an EzModel
@@ -281,16 +326,16 @@ For a property with `Type.FILE` is specified in an EzModel
 
 Under the hood, EzBackend uses [fastify-multipart](https://github.com/fastify/fastify-multipart) to handle file uploads.
 
-As for providers, it uses [multer](https://github.com/expressjs/multer) compatible [storage engines](https://github.com/expressjs/multer/blob/master/StorageEngine.md) in order to provide `file upload` and `file deleting` functionality.
+As for engines, it uses [multer](https://github.com/expressjs/multer) compatible [storage engines](https://github.com/expressjs/multer/blob/master/StorageEngine.md) in order to provide `file upload` and `file deleting` functionality.
 
 However, EzBackend requires an additional custom `file download` functionality in order to serve files to the end user.
 
 ## Caveats
 
-Since all file uploads and downloads are streamed through `EzBackend`, this results in additional bandwidth used when using providers such as `AWS S3`.
+Since all file uploads and downloads are streamed through `EzBackend`, this results in additional bandwidth used when using engines such as `AWS S3`.
 
 For example, the data travels through the path
 
 AWS -> EzBackend -> User
 
-If this becomes a concern, you can reduce bandwidth usage by generating presigned URLs with your storage provider in order to allow users to directly download large files from your storage provider.
+If this becomes a concern, you can reduce bandwidth usage by generating presigned URLs with your storage engine in order to allow users to directly download large files from your storage engine.
