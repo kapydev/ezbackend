@@ -82,7 +82,7 @@ export class EzUser extends EzModel {
         modelSchema = addProviderToSchema(providerName, modelSchema);
       } else {
         // eslint-disable-next-line new-cap
-        const tempProvider = new providerOrProviderName();
+        const tempProvider = new providerOrProviderName(modelName);
         const providerName = tempProvider.providerName;
         modelSchema = addProviderToSchema(providerName, modelSchema);
       }
