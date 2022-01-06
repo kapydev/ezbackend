@@ -58,6 +58,11 @@ module.exports = {
           label: 'Pricing',
         },
         {
+          to: 'showcase',
+          position: 'left',
+          label: 'Showcase',
+        },
+        {
           type: 'dropdown',
           label: 'Developers',
           position: 'left',
