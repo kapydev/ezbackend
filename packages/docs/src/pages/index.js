@@ -87,19 +87,19 @@ export default function Home() {
   }, []);
 
   return (
-    <Layout>
-      <Toaster
-        toastOptions={{
-          style: {
-            padding: '16px',
-            fontWeight: 'bold',
-            color: 'white',
-            backgroundColor: '#282A36',
-            fontSize: 16,
-          },
-        }}
-      />
-      <div id="tailwind">
+    <div id="tailwind">
+      <Layout>
+        <Toaster
+          toastOptions={{
+            style: {
+              padding: '16px',
+              fontWeight: 'bold',
+              color: 'white',
+              backgroundColor: '#282A36',
+              fontSize: 16,
+            },
+          }}
+        />
         <div className="grid place-items-center">
           <div
             className="
@@ -418,13 +418,13 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
 
-      <br />
-      <br />
-      <br />
-      <br />
-    </Layout>
+        <br />
+        <br />
+        <br />
+        <br />
+      </Layout>
+    </div>
   );
 }
 

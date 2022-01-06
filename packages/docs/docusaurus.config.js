@@ -170,5 +170,7 @@ module.exports = {
       },
     ],
   ],
-  plugins: [path.resolve(__dirname, 'plugins/docusaurus-plugin-hotjar')],
+  plugins: [
+    path.resolve(__dirname, 'plugins/docusaurus-plugin-hotjar'),
+  ],
 };
