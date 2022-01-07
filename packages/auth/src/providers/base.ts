@@ -65,7 +65,7 @@ export abstract class BaseProvider extends EzApp {
 
   abstract getLoginRoute(server: FastifyInstance, opts: any): RouteOptions;
   abstract getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions;
-  abstract getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions;
+  getCallbackRoute?(server: FastifyInstance, opts: any): RouteOptions;
   // TODO: Implement this security scheme in the swagger spec
   // abstract getSecurityScheme():{[name:string]:OpenAPIV3.SecuritySchemeObject}
 
@@ -91,7 +91,9 @@ export abstract class BaseProvider extends EzApp {
       // TODO: Fix these typescript errors
       server.route(this.getLoginRoute(server as any, providerOpts) as any);
       server.route(this.getLogoutRoute(server as any, providerOpts) as any);
-      server.route(this.getCallbackRoute(server as any, providerOpts) as any);
+      if (this.getCallbackRoute) {
+        server.route(this.getCallbackRoute(server as any, providerOpts) as any);
+      }
     });
   }
 
