@@ -1,0 +1,556 @@
+# Custom Auth Providers
+
+import CodeSnippet from '../CodeSnippet';
+
+EzBackend is designed to be able to work with any [passport.js](https://www.passportjs.org/) supported strategy. However, there is a small layer of configuration required over the original passport.js strategy required to configure the strategy.
+
+The documentation below will use `passport-local` as a running example, although lessons learnt here are applicable to any `passport-js` strategy.
+
+## Overview
+
+To implement custom authentication, you need to create a custom provider that:
+
+1. Adds the custom passport strategy
+2. A Login Route
+3. A Logout Route
+4. A Callback Route (Optional) 
+
+In addition, if you are using typescript you will need to handle the typescript module augmentation.
+
+## Implementing the BaseProvider
+
+### Using Custom Providers
+
+You can use the custom provider by adding it to the `providerArray` in `EzUser`.
+
+<CodeSnippet
+sample={`const user = new EzUser('User', [LocalProvider]);`}
+fullCode={`import { EzBackend } from '@ezbackend/common';
+import { EzOpenAPI } from '@ezbackend/openapi';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzCors } from '@ezbackend/cors';
+import { EzAuth, EzUser } from "@ezbackend/auth"
+import { LocalProvider } from './auth-providers/local.provider';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+app.addApp(new EzAuth());
+// ---Plugins---\n
+// Models are also ezapps in ezbackend
+const user = new EzUser('User', [LocalProvider]);\n
+app.start();
+`}/>
+
+The instructions to implement the custom provider is below.
+
+### Extending the class
+
+The class `BaseProvider` is exported from `@ezbackend/auth`, which is the class to extend in order to implement a custom authentication provider.
+
+We can create a new authentication provider with:
+
+<CodeSnippet
+  sample={`export class LocalProvider extends BaseProvider {\n
+  constructor(modelName: string) {
+    super('local', modelName)
+  }\n
+  addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: LocalProviderOptions): [name: string, Strategy: any] {
+  }\n
+  getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+  getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+  getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+}`}
+  fullCode={`import { BaseProvider } from "@ezbackend/auth";
+import { EzBackendInstance } from "@ezbackend/common";
+import { FastifyInstance, RouteOptions } from "fastify";\n
+interface LocalProviderOptions {
+}\n
+declare module "@ezbackend/auth" {
+  interface EzBackendAuthOpts {
+    local?: LocalProviderOptions
+  }
+}\n
+export class LocalProvider extends BaseProvider {\n
+  constructor(modelName: string) {
+    super('local', modelName)
+  }\n
+  addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: LocalProviderOptions): [name: string, Strategy: any] {
+  }\n
+  getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+  getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+  getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+}`}
+/>
+
+Note that in the constructor, we run the parent `constructor` with the arguments `'local'` and `modelName`
+
+```ts
+constructor(modelName: string) {
+    super('local', modelName)
+  }
+```
+
+| Argument Index | Property Name  | Description                                                                                                 |
+| -------------- | -------------- | ----------------------------------------------------------------------------------------------------------- |
+| `0`            | `providerName` | Used interally by EzBackend to reference the provider, will be stored under `this.providerName`.             |
+| `1`            | `modelName`    | The name of the `EzRepo` that the model is saved in. It will be the name of the model provided to `EzUser`. |
+
+For example, when you create a new `EzUser`, the name provided to `EzUser` will be passed to the `BaseProvider` constructor.
+
+Each of the methods on `BaseProvider` are used internally by EzBackend, and when implemented correctly will properly serialize and deserialize the user.
+
+### constructor
+
+### addStrategy
+
+The method `addStrategy` requires you to return the following values:
+
+1. The name of your custom provider.
+2. The custom passport.js strategy used
+
+For example, if we wanted to add the `passport-local` strategy, we need to be able to:
+
+1. Check if the user exists
+2. If the user exists, check his/her password is correct
+3. If the user does not exist, create an account for them
+
+By default EzBackend creates two columns, based on the `providerName` specified in the constructor.
+
+| Column Name           | Purpose                                                                                                                             | Example Column Name | Example Contents                        |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------- | --------------------------------------- |
+| `${providerName}Id`   | A unique identifier for the particular strategy.                                                                                     | `googleId`          | `thomas93`                              |
+| `${providerName}Data` | All metadata associated with your provider. For example if you wanted to store the user's password, you should do it in this column. | `googleData`        | `{username: 'xyz', password: someHash}` |
+
+Since in the example our provider is called `local`, our columns will be `localId` and `localData`.
+
+Hence, we can implement a `passport-local` strategy:
+
+<CodeSnippet
+  sample={`addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: LocalProviderOptions): [name: string, Strategy: any] {\n
+    const that = this\n
+    const localStrategy = new LocalStrategy(
+      async function (username, password, done) {
+        const idColumn = \`\${that.providerName}Id\`
+        const dataColumn = \`\${that.providerName}Data\`
+        const repo = instance.orm.getRepository(that.modelName)
+        const user = await repo.findOne({
+          where: {
+            [idColumn]: username
+          }
+        })\n
+        if (!user) {
+          //New User
+          const userProfile = {
+            username: username,
+            password: await argon2.hash(password)
+          }
+          that.defaultCallbackHandler(instance, username, userProfile, done)
+        } else if (await argon2.verify(user[dataColumn].password, password)) {
+          //Correct password
+          that.defaultCallbackHandler(instance, username, user, done)
+        } else {
+          //Wrong Password
+          done(new Error("Wrong username or password"))
+        }\n
+      }
+    )\n
+    return [this.providerName, localStrategy]
+  }`}
+  fullCode={`import { BaseProvider } from "@ezbackend/auth";
+import { EzBackendInstance } from "@ezbackend/common";
+import argon2 from 'argon2';
+import { FastifyInstance, RouteOptions } from "fastify";
+import { Strategy as LocalStrategy } from 'passport-local';\n
+interface LocalProviderOptions {
+}\n
+declare module "@ezbackend/auth" {
+  interface EzBackendAuthOpts {
+    local?: LocalProviderOptions
+  }
+}\n
+export class LocalProvider extends BaseProvider {\n
+  constructor(modelName: string) {
+    super('local', modelName)
+  }\n
+  addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: LocalProviderOptions): [name: string, Strategy: any] {\n    
+    const that = this\n
+    const localStrategy = new LocalStrategy(
+      async function (username, password, done) {
+        const idColumn = \`\${that.providerName}Id\`
+        const dataColumn = \`\${that.providerName}Data\`
+        const repo = instance.orm.getRepository(that.modelName)
+        const user = await repo.findOne({
+          where: {
+            [idColumn]: username
+          }
+        })\n
+        if (!user) {
+          //New User
+          const userProfile = {
+            username: username,
+            password: await argon2.hash(password)
+          }
+          that.defaultCallbackHandler(instance, username, userProfile, done)
+        } else if (await argon2.verify(user[dataColumn].password, password)) {
+          //Correct password
+          that.defaultCallbackHandler(instance, username, user, done)
+        } else {
+          //Wrong Password
+          done(new Error("Wrong username or password"))
+        }\n
+      }
+    )\n
+    return [this.providerName, localStrategy]
+  }\n
+  getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+  getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+  getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+}`}
+/>
+
+The way this works is:
+
+1. When a user submits his/her username and password
+2. We obtain the `Repository` for the corresponding `EzRepo`
+3. We search for a database row for a user where the `idColumn` is equal to the user's username
+4. If the user does not exist, we create a userProfile and save it to the database (Which is handled by the `defaultCallbackHandler`)
+5. If the user does exist, we return the user's profile (Which is handled by `defaultCallbackHandler`)
+6. If the user exists but the password is wrong, we return an error
+
+### defaultCallbackHandler
+
+The `defaultCallbackHandler` accepts four arguments:
+
+1. instance (The EzBackend instance)
+2. The value to be saved as the user's id in the idColumn
+3. The value to be saved as the user's data in the dataColumn
+4. done (The callback for the passport strategy)
+
+After receiving the arguments, what `defaultCallbackHandler` does is:
+
+1. Save the user's data in the database
+2. Create a serializedID in the form `${this.providerName}-${id}`
+3. Run the callback, which encrypts the serializedID and stores it in a `session` cookie on the user's browser
+
+### getLoginRoute
+
+The login route is a route that users should use in order to log into your application. This can either:
+
+1. Redirect to actual login page
+2. Be an endpoint for users to send data to
+
+For the `passport-local` strategy, we can make this into a POST endpoint for users to login with.
+
+<CodeSnippet
+  sample={`getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
+    return {
+      method: 'POST',
+      url: \`/\${this.getRoutePrefixNoPrePostSlash(server)}/login\`,
+      preHandler: fastifyPassport.authenticate('local', { scope: opts.scope }),
+      handler: async (req, res) => {
+        return {loggedIn: true}
+      },
+      schema: {
+        body: {
+          type: 'object',
+          properties: {
+            username: { type: 'string' },
+            password: { type: 'string' }
+          }
+        }
+      },
+    };
+  }`}
+  fullCode={`import { BaseProvider, ProviderOptions } from "@ezbackend/auth";
+import { EzBackendInstance } from "@ezbackend/common";
+import { FastifyInstance } from "fastify";
+import { Strategy as LocalStrategy } from 'passport-local'
+import { RouteOptions } from 'fastify'
+import fastifyPassport from 'fastify-passport'
+import argon2 from 'argon2'\n
+interface LocalProviderOptions {
+}\n
+declare module "@ezbackend/auth" {
+  interface EzBackendAuthOpts {
+    local?: LocalProviderOptions
+  }
+}\n
+export class LocalProvider extends BaseProvider {\n
+  constructor(modelName: string) {
+    super('local', modelName)
+  }\n
+  addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: LocalProviderOptions): [name: string, Strategy: any] {\n
+    const that = this\n
+    const localStrategy = new LocalStrategy(
+      async function (username, password, done) {
+        const idColumn = \`\${that.providerName}Id\`
+        const dataColumn = \`\${that.providerName}Data\`
+        const repo = instance.orm.getRepository(that.modelName)
+        const user = await repo.findOne({
+          where: {
+            [idColumn]: username
+          }
+        })\n
+        if (!user) {
+          const userProfile = {
+            username: username,
+            password: await argon2.hash(password)
+          }
+          that.defaultCallbackHandler(instance, username, userProfile, done)
+        } else if (await argon2.verify(user[dataColumn].password, password)) {
+          that.defaultCallbackHandler(instance, username, user, done)
+        } else {
+          done(new Error("Wrong username or password"))
+        }\n
+      }
+    )\n
+    return [this.providerName, localStrategy]
+  }\n
+  getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
+    return {
+      method: 'POST',
+      url: \`/\${this.getRoutePrefixNoPrePostSlash(server)}/login\`,
+      preHandler: fastifyPassport.authenticate('local', { scope: opts.scope }),
+      handler: async (req, res) => {
+        return {loggedIn: true}
+      },
+      schema: {
+        body: {
+          type: 'object',
+          properties: {
+            username: { type: 'string' },
+            password: { type: 'string' }
+          }
+        }
+      },
+    };
+  }\n
+  getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
+  }\n
+}`}
+/>
+
+| Code                                                                     | Explanation                                                                                                                                |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `method: 'POST'`                                                         | The HTTP method for the endpoint.                                                                                                           |
+| url: \`/${this.getRoutePrefixNoPrePostSlash(server)}/login`              | The extension of the Login URL from the root URL.                                                                                           |
+| preHandler: fastifyPassport.authenticate('local', { scope: opts.scope }) | Use the passport strategy with the name `local`.                                                                                            |
+| handler: async (req, res) => {return {loggedIn: true}}                   | Return a response. This is required in order to set the `session` cookie for users.                                                           |
+| schema: {...}                                                            | The schema for the POST request made. Users must send a `username` and `password` in the `req.body` to login for the `passport-local` strategy. |
+
+:::info
+`this.getRoutePrefixNoPrePostSlash(server)` returns the prefix for the associated `EzApp`. In this example, it will be `user/auth/local`.
+:::
+
+:::warning
+You should use SSL (Or rather TLS) for transferring data, especially sensitive data like passwords.
+
+You should also hash the passwords on the frontend before sending it to the backend to prevent man-in-the-middle attacks.
+:::
+
+### getLogoutRoute
+
+The logout route simply needs to remove the `session` cookie. You can do this in any route using `await req.logOut()`. After that you must also return a response in order to set the `session` cookie on the client appropriately.
+
+<CodeSnippet
+sample={`getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
+    return {
+      method: 'GET',
+      url: \`/\${this.getRoutePrefixNoPrePostSlash(server)}/logout\`,
+      handler: async (req, res) => {
+        await req.logOut()
+        return {loggedIn: false}
+      },
+      schema: {
+        tags: ['Google Auth'],
+        summary: \`Logout for model '\${this.modelName}' with provider \${this.providerName}\`,
+        description: \`Getting this route will remove the session cookie\`,
+      },
+    };
+  }`}
+fullCode={`import { BaseProvider, ProviderOptions } from "@ezbackend/auth";
+import { EzBackendInstance } from "@ezbackend/common";
+import { FastifyInstance } from "fastify";
+import { Strategy as LocalStrategy } from 'passport-local'
+import { RouteOptions } from 'fastify'
+import fastifyPassport from 'fastify-passport'
+import argon2 from 'argon2'\n
+interface LocalProviderOptions {
+}\n
+declare module "@ezbackend/auth" {
+  interface EzBackendAuthOpts {
+    local?: LocalProviderOptions
+  }
+}\n
+export class LocalProvider extends BaseProvider {\n
+  constructor(modelName: string) {
+    super('local', modelName)
+  }\n
+  addStrategy(instance: EzBackendInstance, server: FastifyInstance, opts: LocalProviderOptions): [name: string, Strategy: any] {\n
+    const that = this\n
+    const localStrategy = new LocalStrategy(
+      async function (username, password, done) {
+        const idColumn = \`\${that.providerName}Id\`
+        const dataColumn = \`\${that.providerName}Data\`
+        const repo = instance.orm.getRepository(that.modelName)
+        const user = await repo.findOne({
+          where: {
+            [idColumn]: username
+          }
+        })\n
+        if (!user) {
+          const userProfile = {
+            username: username,
+            password: await argon2.hash(password)
+          }
+          that.defaultCallbackHandler(instance, username, userProfile, done)
+        } else if (await argon2.verify(user[dataColumn].password, password)) {
+          that.defaultCallbackHandler(instance, username, user, done)
+        } else {
+          done(new Error("Wrong username or password"))
+        }\n
+      }
+    )\n
+    return [this.providerName, localStrategy]
+  }\n
+  getLoginRoute(server: FastifyInstance, opts: any): RouteOptions {
+    return {
+      method: 'POST',
+      url: \`/\${this.getRoutePrefixNoPrePostSlash(server)}/login\`,
+      preHandler: fastifyPassport.authenticate('local', { scope: opts.scope }),
+      handler: async (req, res) => {
+        return {loggedIn: true}
+      },
+      schema: {
+        body: {
+          type: 'object',
+          properties: {
+            username: { type: 'string' },
+            password: { type: 'string' }
+          }
+        }
+      },
+    };
+  }\n
+  getLogoutRoute(server: FastifyInstance, opts: any): RouteOptions {
+    return {
+      method: 'GET',
+      url: \`/\${this.getRoutePrefixNoPrePostSlash(server)}/logout\`,
+      handler: async (req, res) => {
+        await req.logOut()
+        return {loggedIn: false}
+      },
+      schema: {
+        tags: ['Google Auth'],
+        summary: \`Logout for model '\${this.modelName}' with provider \${this.providerName}\`,
+        description: \`Getting this route will remove the session cookie\`,
+      },
+    };
+  }\n
+}`}
+/>
+
+### getCallbackRoute (optional)
+
+The callback route is meant for receiving callbacks from federated authentication providers. While this is not required for the `passport-local` strategy (Since verifying the user is correct is done locally), a sample implementation for `google` authentication is shown below.
+
+```ts
+getCallbackRoute(server: FastifyInstance, opts: any): RouteOptions {
+    const callbackRoute = `/${this.getRoutePrefixNoPrePostSlash(server)}/callback`;
+    return {
+      method: 'GET',
+      url: callbackRoute,
+      preValidation: fastifyPassport.authenticate('google', {
+        scope: opts.scope,
+        successRedirect: opts.successRedirectURL,
+        failureRedirect: opts.failureRedirectURL,
+      }),
+      handler: function (req, res) {
+        res.redirect(opts.successRedirectURL);
+      }
+    };
+  }
+```
+
+## Typescript Module Augmentation
+
+You can pass options to your custom auth provider with:
+
+<CodeSnippet
+  sample={`app.start({
+  auth: {
+    local: {/*Custom Options*/}
+  }
+});`}
+  fullCode={`import { EzBackend } from '@ezbackend/common';
+import { EzOpenAPI } from '@ezbackend/openapi';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzCors } from '@ezbackend/cors';
+import { EzAuth, EzUser } from "@ezbackend/auth"
+import { LocalProvider } from './auth-providers/local.provider'; //To Be Implemented further below\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+app.addApp(new EzAuth());
+// ---Plugins---\n
+// Models are also ezapps in ezbackend
+const user = new EzUser('User', [LocalProvider]);\n
+app.start({
+  auth: {
+    local: {/*Custom Options*/}
+  }
+});`}
+/>
+
+For Typescript to accept your custom provider, you need to extend the default types of EzBackend.
+
+1. Create a new folder `auth-providers` in `src`
+2. Create a new file `local.provider.ts`
+3. In `local.provider.ts`
+
+```ts title='src/auth-providers/local.provider.ts'
+import { ProviderOptions } from '@ezbackend/auth';
+
+interface LocalProviderOptions {}
+
+declare module '@ezbackend/auth' {
+  interface EzBackendAuthOpts {
+    local?: LocalProviderOptions;
+  }
+}
+```
+
+By declaring that the interface `EzBackendAuthOpts` has the property `local`, you will now be able to specify options for your auth provider in `app.start()`.
+
+:::info
+`LocalProviderOptions` does not need to extend `ProviderOptions`, `ProviderOptions` is deprecated.
+:::
+
+## Best Practices
+
+Ideally, we strongly recommend against storing user's passwords and personal details yourself. Instead we recommend using federated login providers like google, auth0, facebook, aws cognito etc to offload the responsibility of security and reduce the risk of accidentally leaking personal info.
+
+## Samples
+
+You can view some of the full samples below. The implementation described in the above tutorial is under `Passport Local Authentication`.
+
+| Name                                                                                                                | Description                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [Google Authentication](https://github.com/kapydev/ezbackend/blob/next/packages/auth/src/providers/google.ts)       | Built in provider for logging in with Google.                                                            |
+| [Metamask Authentication](https://github.com/kapydev/ezbackend/blob/next/packages/crypto/src/web3-auth-provider.ts) | Built in provider for logging in with Metamask. Not officially supported, only to be used as a reference |
+| [Passport Local Authentication](https://github.com/kapydev/ezbackend-local-provider-sample)                         | Provider for logging in with passport-local. Not officially supported, only to be used as a reference    |
