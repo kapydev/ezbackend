@@ -13,7 +13,7 @@ describe('User Deserialization', () => {
   let app: EzBackend;
   let user: EzUser;
 
-  const PORT = 8003;
+  const PORT = 8004;
 
   const defaultConfig = {
     backend: {

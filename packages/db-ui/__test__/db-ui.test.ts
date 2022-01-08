@@ -71,9 +71,8 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  const instance = app.getInternalInstance();
-  await instance.orm.close();
-  await instance._server.close();
+  await app.close()
+
 });
 
 describe('DB UI Endpoints', () => {

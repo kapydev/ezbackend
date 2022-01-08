@@ -1,12 +1,14 @@
 import { PluginScope } from '@ezbackend/core';
 import { EzError, ezWarning } from '@ezbackend/utils';
+import { Ajv, Options as AjvOptions } from 'ajv';
 import dedent from 'dedent-js';
 import dotenv from 'dotenv';
 import fastify, { FastifyInstance, FastifyPluginCallback } from 'fastify';
+import fastifyMultipart from 'fastify-multipart';
 import fp from 'fastify-plugin';
 import {
   fastifyRequestContextPlugin,
-  requestContext,
+  requestContext
 } from 'fastify-request-context';
 import { InjectOptions } from 'light-my-request';
 import { Server, ServerOptions } from 'socket.io';
@@ -15,18 +17,20 @@ import {
   createConnection,
   EntitySchema,
   ObjectLiteral,
-  Repository,
+  Repository
 } from 'typeorm';
-import { REALTIME } from '.';
+import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
+import type { RouterOptions } from '.';
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;
   server: EzBackendServer;
   _server: FastifyInstance;
   repo: Repository<ObjectLiteral>;
+  ezRepo: EzRepo;
   orm: Connection;
   // TODO: Find correct type for subscriber
   subscribers: Array<Function>;
@@ -36,6 +40,7 @@ export interface EzBackendInstance {
 export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
 
 export interface EzBackendOpts {
   /**
@@ -71,6 +76,7 @@ export interface EzBackendOpts {
     fastify: Parameters<typeof fastify>[0];
     typeorm: Parameters<typeof createConnection>[0];
     ['socket.io']: Partial<ServerOptions>;
+    storage: RouterOptions['storage']
   };
 }
 
@@ -93,6 +99,16 @@ async function addErrorSchema(
 
 // URGENT TODO: Make running this optional in the default config
 dotenv.config();
+
+function ajvAllowFileType(ajv: Ajv, opts: AjvOptions) {
+  ajv.addKeyword('isFileType', {
+    compile: (schema, parent, it) => {
+      return () => true
+    }
+  })
+  return ajv
+}
+
 
 const defaultConfig: EzBackendOpts['backend'] = {
   listen: {
@@ -121,6 +137,9 @@ const defaultConfig: EzBackendOpts['backend'] = {
         },
       },
     },
+    ajv: {
+      plugins: [ajvAllowFileType]
+    }
   },
   typeorm: {
     type: 'better-sqlite3',
@@ -134,6 +153,7 @@ const defaultConfig: EzBackendOpts['backend'] = {
       methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     },
   },
+  storage: {}
 };
 
 // Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
@@ -202,9 +222,15 @@ export class EzBackend extends EzApp {
 
     this.setPreHandler('Add SocketIO', createSocketIO);
 
-    this.setHandler('Add Fastify Boom', async (instance, opts) => {
+    this.setHandler('Add Custom Fastify Boom', async (instance, opts) => {
       instance.server.register(fp(ezbErrorPage));
     });
+
+    this.setHandler('Add Fastify Multipart', async (instance, opts) => {
+      const multipartOpts = this.getOpts('backend', opts)?.storage?.multipartOpts;
+
+      instance.server.register(fastifyMultipart, multipartOpts)
+    })
 
     this.setHandler('Add Error Schema', addErrorSchema);
 
@@ -214,7 +240,17 @@ export class EzBackend extends EzApp {
       instance._server = fastify(fastifyOpts);
     });
 
+    this.setPostHandler('Attach EzBackend Instance to req', async (instance, opts) => {
+      instance._server.decorate('ezbInstance', instance)
+      instance._server.decorate('ezbOpts', opts)
+
+      instance._server.decorateRequest('ezbInstance', { getter: () => instance });
+      instance._server.decorateRequest('ezbOpts', { getter: () => opts });
+
+    })
+
     this.setPostHandler('Attach Socket IO', attachSocketIO);
+
 
     this.setPostHandler('Register Fastify Plugins', async (instance, opts) => {
       this.registerFastifyPlugins(instance._server, this);
@@ -266,7 +302,7 @@ export class EzBackend extends EzApp {
   }
 
   getInternalServer() {
-    return this.getInternalInstance()._server;
+    return this.getInternalInstance()?._server;
   }
 
   async inject(injectOpts: string | InjectOptions) {
@@ -310,9 +346,15 @@ export class EzBackend extends EzApp {
     await super.start(opts);
   }
 
+  async closeInternals() {
+    EzRepo.unregisterEzRepos()
+  }
+
   async close() {
     const instance = this.getInternalInstance();
-    await instance.orm.close();
-    await instance._server.close();
+    const internalServer = this.getInternalServer();
+    instance?.orm && await instance.orm.close();
+    internalServer && await internalServer.close();
+    await this.closeInternals()
   }
 }

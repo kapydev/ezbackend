@@ -62,7 +62,6 @@ describe('Illegal Entity Creation', () => {
       );
       await app.start(defaultConfig);
     } catch (e) {
-      expect(e).toMatchSnapshot();
       errored = true;
     }
 
