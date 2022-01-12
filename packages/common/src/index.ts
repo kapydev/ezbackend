@@ -10,3 +10,4 @@ export type {
 export * from './model';
 export * from './rules';
 export * from './storage'
+export * from './schema-generation'
