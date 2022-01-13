@@ -339,6 +339,7 @@ export class EzApp extends App {
     return instancePrefix + pluginPrefix;
   }
 
+  // TODO : Throw an error if the prefix is obtained before the app is defined
   getPrefix(): string {
     if (!this.parent) {
       return '';

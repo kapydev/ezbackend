@@ -353,7 +353,7 @@ export class EzBackend extends EzApp {
   async closeInternals() {
     // TODO: Change everything to the same design pattern. Either Functional programming or Singleton
     EzRepo.unregisterEzRepos()
-    createSchemaGenerator.cache.clear?.()
+    createSchemaGenerator.clear?.()
   }
 
   async close() {
