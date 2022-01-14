@@ -5,16 +5,16 @@ import { CtaButton } from '../helper-components/cta-button';
 
 const freeFeatures = [
   <div>API Documentation (Swagger)</div>,
-  <div>OAuth Google Sign In (Passport)</div>,
+  <div>OAuth Sign In (Passport)</div>,
   <div>Database (SQLite, Postgres, etc)</div>,
   <div>CRUD Endpoints Generation</div>,
   <div>Database GUI</div>,
-  <div>File Storage (Multer)</div>,
+  <div>File Storage</div>,
   <div>Realtime Database (SocketIO)</div>,
 ];
 
 const enterpriseFeatures = [
-  <div>Custom-Made Features</div>,
+  <div>Custom-Built Features to meet your needs</div>,
   <div>Technical Consultancy Services</div>,
   <div>Technical Guidance & Code Reviews</div>,
   <div>Long-term Support & Upgrade Assistance</div>,
@@ -87,7 +87,7 @@ function Pricing() {
                 title={
                   <div>
                     <div className="text-4xl">Free</div>
-                    <div className="pt-6 text-xl">Open Source</div>
+                    <div className="pt-6 text-xl">Open Source - Forever</div>
                   </div>
                 }
                 listItems={freeFeatures}
@@ -98,7 +98,12 @@ function Pricing() {
 
             <div className="col-span-1">
               <PricingCard
-                title="Enterprise"
+                title={
+                  <div>
+                    <div className="text-4xl">Enterprise</div>
+                    <div className="pt-6 text-xl">Custom Solutions</div>
+                  </div>
+                }
                 listItems={enterpriseFeatures}
                 button_text="Contact Us"
                 href="https://forms.gle/trr7pgpZy1qjxF8y7"

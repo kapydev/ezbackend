@@ -284,7 +284,7 @@ export default function Home() {
                 </AccordionPanel>
               </Accordion>
             </div>
-
+{/* 
             <div className="col-span-full flex justify-center">
               <div className="max-w-3xl w-full">
                 <ReactCompareImage
@@ -294,7 +294,7 @@ export default function Home() {
                   sliderLineWidth={4}
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* <div className='col-span-full'>
               <div className='text-2xl lg:text-2xl font-mono mb-12 font-bold text-center'>
@@ -338,10 +338,10 @@ export default function Home() {
             <div className="col-span-full flex justify-center align-middle">
               <div className="p-10 rounded-lg grid gap-6 bg-dracula">
                 <div className="font-monts text-2xl text-center font-bold">
-                  Sign Up For Alpha
+                  Subscribe To Our Newsletter
                 </div>
                 <div className="font-monts text-md text-center max-w-lg">
-                  Receive regular updates via email on EzBackend progress
+                  Receive the latest updates on our upcoming features
                 </div>
                 <form>
                   <input
@@ -377,7 +377,7 @@ export default function Home() {
                       <span className="font-semibold text-2xl">
                         {signUpCount}
                       </span>{' '}
-                      Users in Alpha
+                      Developers
                     </div>
                   </FadeIn>
                 ) : null}

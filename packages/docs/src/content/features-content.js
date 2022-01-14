@@ -92,7 +92,7 @@ export const featuresContent = [
   },
   {
     title: 'Database Agnostic',
-    route: '/docs/configuration',
+    route: '/docs/configuration#backendtypeorm',
     icon: <IconDatabase className={ICONCLASSNAME} />,
     info: 'Supports enterprise Databases: Postgres, MySQL, MongoDB, & more',
     description:
@@ -109,7 +109,7 @@ export const featuresContent = [
   },
   {
     title: 'Automated Documentation',
-    route: '/docs/basics/basic-routing#viewing-available-routes',
+    route: '/docs/db-ui/testing-endpoints',
     icon: <IconApiDocs className={ICONCLASSNAME} />,
     info: 'API Documentation automatically generated to OpenAPI Specification',
     description: '',
@@ -189,7 +189,7 @@ export const featuresContent = [
   },
   {
     title: 'One-Line Realtime Functionality',
-    route: "/docs/realtime/socket-io",
+    route: "/docs/realtime/ez-model",
     icon: <IconClock className={ICONCLASSNAME} />,
     info: 'Subscribe to database updates with socket.io',
     description: '',
@@ -216,7 +216,7 @@ export const featuresContent = [
     released: true,
     flip_card: (
       <div>
-        Store files in blob-storage
+        Create custom storage engines to upload files to any file provider including S3, your file system and more
       </div>
     ),
   },
