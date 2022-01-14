@@ -9,3 +9,4 @@ export type {
 } from './ezbackend';
 export * from './model';
 export * from './rules';
+export * from './storage'

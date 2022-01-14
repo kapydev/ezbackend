@@ -18,7 +18,7 @@ import StepFeature from '../helper-components/step-feature';
 function LessCode() {
   return (
     <Layout title="Less Code">
-      <div id="tailwind">
+      <div>
         <div className="grid place-items-center my-24 space-y-4">
           {/* <FeatureDescription
                         title="Write up to 95% Less Code"

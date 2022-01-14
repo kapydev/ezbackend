@@ -5,8 +5,13 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 ├── bound _after 
 ├─┬ childFunc 
 │ ├── ezbErrorPage 
+│ ├─┬ C:\\\\Users\\\\Philip Wee\\\\Documents\\\\easy2dev\\\\ezbackend\\\\node_modules\\\\fastify-multipart\\\\index.js 
+│ │ └── bound _after 
 │ ├─┬ childFunc 
 │ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
@@ -19,11 +24,6 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
-│ │ │ └── bound _after 
-│ │ └── childFunc 
-│ ├─┬ childFunc 
-│ │ ├─┬ childFunc 
-│ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
@@ -34,11 +34,6 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
-│ │ │ ├── bound _after 
-│ │ │ └── bound _after 
-│ │ └── childFunc 
-│ ├─┬ childFunc 
-│ │ ├─┬ childFunc 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
@@ -51,11 +46,6 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
-│ │ │ └── bound _after 
-│ │ └── childFunc 
-│ ├─┬ childFunc 
-│ │ ├─┬ childFunc 
-│ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
@@ -67,10 +57,49 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
 │ │ │ └── bound _after 
 │ │ └── childFunc 
 │ ├─┬ childFunc 
 │ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ └── bound _after 
+│ │ └── childFunc 
+│ ├─┬ childFunc 
+│ │ ├─┬ childFunc 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
+│ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
 │ │ │ ├── bound _after 
@@ -79,6 +108,9 @@ exports[`Test Utils Functionality test Should be able to print all fastify plugi
 │ │ └── childFunc 
 │ └─┬ childFunc 
 │   ├─┬ childFunc 
+│   │ ├── bound _after 
+│   │ ├── bound _after 
+│   │ ├── bound _after 
 │   │ ├── bound _after 
 │   │ ├── bound _after 
 │   │ ├── bound _after 
@@ -100,71 +132,101 @@ exports[`Test Utils Functionality test Should be able to print routes 1`] = `
     │   │   Nullable (GET)
     │   │   └── / (POST)
     │   │       / (GET)
+    │   │       ├── multipart (POST)
     │   │       └── :id (GET)
     │   │           :id (PATCH)
     │   │           :id (DELETE)
+    │   │           ├── /file/:fieldName (GET)
+    │   │           └── /multipart (PATCH)
     │   ├── / (POST)
     │   │   / (GET)
+    │   │   ├── multipart (POST)
     │   │   └── :id (GET)
     │   │       :id (PATCH)
     │   │       :id (DELETE)
+    │   │       ├── /file/:fieldName (GET)
+    │   │       └── /multipart (PATCH)
     │   └── Unique (POST)
     │       Unique (GET)
     │       └── / (POST)
     │           / (GET)
+    │           ├── multipart (POST)
     │           └── :id (GET)
     │               :id (PATCH)
     │               :id (DELETE)
+    │               ├── /file/:fieldName (GET)
+    │               └── /multipart (PATCH)
     ├── User (POST)
     │   User (GET)
     │   ├── 2 (POST)
     │   │   2 (GET)
     │   │   └── / (POST)
     │   │       / (GET)
+    │   │       ├── multipart (POST)
     │   │       └── :id (GET)
     │   │           :id (PATCH)
     │   │           :id (DELETE)
+    │   │           ├── /file/:fieldName (GET)
+    │   │           └── /multipart (PATCH)
     │   └── / (POST)
     │       / (GET)
+    │       ├── multipart (POST)
     │       └── :id (GET)
     │           :id (PATCH)
     │           :id (DELETE)
+    │           ├── /file/:fieldName (GET)
+    │           └── /multipart (PATCH)
     ├── NoCascade
     │   ├── User (POST)
     │   │   User (GET)
     │   │   └── / (POST)
     │   │       / (GET)
+    │   │       ├── multipart (POST)
     │   │       └── :id (GET)
     │   │           :id (PATCH)
     │   │           :id (DELETE)
+    │   │           ├── /file/:fieldName (GET)
+    │   │           └── /multipart (PATCH)
     │   └── Program (POST)
     │       Program (GET)
     │       └── / (POST)
     │           / (GET)
+    │           ├── multipart (POST)
     │           └── :id (GET)
     │               :id (PATCH)
     │               :id (DELETE)
+    │               ├── /file/:fieldName (GET)
+    │               └── /multipart (PATCH)
     ├── Detail (POST)
     │   Detail (GET)
     │   └── / (POST)
     │       / (GET)
+    │       ├── multipart (POST)
     │       └── :id (GET)
     │           :id (PATCH)
     │           :id (DELETE)
+    │           ├── /file/:fieldName (GET)
+    │           └── /multipart (PATCH)
     └── Program (POST)
         Program (GET)
         ├── 2 (POST)
         │   2 (GET)
         │   └── / (POST)
         │       / (GET)
+        │       ├── multipart (POST)
         │       └── :id (GET)
         │           :id (PATCH)
         │           :id (DELETE)
+        │           ├── /file/:fieldName (GET)
+        │           └── /multipart (PATCH)
         └── / (POST)
             / (GET)
+            ├── multipart (POST)
             └── :id (GET)
                 :id (PATCH)
                 :id (DELETE)
+                ├── /file/:fieldName (GET)
+                └── /multipart (PATCH)
 "
 `;
 
@@ -240,7 +302,8 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 ├─┬ _handler 
 │ ├── Create Server Stub 
 │ ├── Run all SocketIO Functions 
-│ ├── Add Fastify Boom 
+│ ├── Add Custom Fastify Boom 
+│ ├── Add Fastify Multipart 
 │ ├── Add Error Schema 
 │ ├─┬ UnnamedApp1 
 │ │ ├── Create Server Stub 
@@ -249,12 +312,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -266,12 +334,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -283,12 +356,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -300,12 +378,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -317,12 +400,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -334,12 +422,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -351,12 +444,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -368,12 +466,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -385,12 +488,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │ │ │ ├── Create Server Stub 
 │ │ │ ├── Run all SocketIO Functions 
 │ │ │ ├── Add Create Schema 
+│ │ │ ├── Add Form Create Schema 
+│ │ │ ├── Add Form Update Schema 
 │ │ │ ├── Add Update Schema 
 │ │ │ ├── Add Full Schema 
 │ │ │ ├── Generate createOne route 
+│ │ │ ├── Generate createOneMultipart route 
 │ │ │ ├── Generate getOne route 
+│ │ │ ├── Generate getOneFileData route 
 │ │ │ ├── Generate getAll route 
 │ │ │ ├── Generate updateOne route 
+│ │ │ ├── Generate updateOneMultipart route 
 │ │ │ └── Generate deleteOne route 
 │ │ └─┬ rules 
 │ │   ├── Create Server Stub 
@@ -402,12 +510,17 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 │   │ ├── Create Server Stub 
 │   │ ├── Run all SocketIO Functions 
 │   │ ├── Add Create Schema 
+│   │ ├── Add Form Create Schema 
+│   │ ├── Add Form Update Schema 
 │   │ ├── Add Update Schema 
 │   │ ├── Add Full Schema 
 │   │ ├── Generate createOne route 
+│   │ ├── Generate createOneMultipart route 
 │   │ ├── Generate getOne route 
+│   │ ├── Generate getOneFileData route 
 │   │ ├── Generate getAll route 
 │   │ ├── Generate updateOne route 
+│   │ ├── Generate updateOneMultipart route 
 │   │ └── Generate deleteOne route 
 │   └─┬ rules 
 │     ├── Create Server Stub 
@@ -415,6 +528,7 @@ exports[`Test Utils Functionality test Should be able to print the plugin tree f
 └─┬ _postHandler 
   ├── Remove Server Stub 
   ├── Create Fastify Server 
+  ├── Attach EzBackend Instance to req 
   ├── Attach Socket IO 
   ├── Register Fastify Plugins 
   ├── Add Request Context Plugin 

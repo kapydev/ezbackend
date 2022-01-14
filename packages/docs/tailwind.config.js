@@ -1,9 +1,9 @@
 module.exports = {
   corePlugins: { preflight: false },
   important: '#tailwind',
-  purge: [
-    // './src/**/*.html',
-    // './src/**/*.js',
+  content: [
+    './src/**/*.html',
+    './src/**/*.js',
   ],
   theme: {
     fontFamily: {

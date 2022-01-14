@@ -1,0 +1,15 @@
+[submodule "examples/ezbackend-app"]
+	path = examples/ezbackend-app
+	url = https://github.com/marcuspang/ezbackend-app
+[submodule "examples/ezmarket"]
+	path = examples/ezmarket
+	url = https://github.com/xinyitay/ezmarket
+[submodule "examples/ezbackend-example-postgres-remix"]
+	path = examples/ezbackend-example-postgres-remix
+	url = https://github.com/immanuelhume/ezbackend-example-postgres-remix
+[submodule "examples/ezbackend-todo-app-backend"]
+	path = examples/ezbackend-todo-app-backend
+	url = https://github.com/StephenAlvin/ezbackend-todo-app-backend
+[submodule "examples/ez-todo-backend"]
+	path = examples/ez-todo-backend
+	url = https://github.com/kapydev/ez-todo-backend

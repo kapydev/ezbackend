@@ -21,9 +21,8 @@ describe('Cors', () => {
 
   it('Should be able to be used as a plugin (Smoke test)', async () => {
     await app.start(defaultConfig);
-    const instance = app.getInternalInstance();
-    await instance.orm.close();
-    await instance._server.close();
+    await app.close()
+
   });
 
   it.todo('Should allow requests from localhost');

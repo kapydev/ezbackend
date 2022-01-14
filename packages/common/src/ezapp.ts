@@ -85,7 +85,7 @@ export class EzApp extends App {
     fullOpts: EzBackendOpts,
   ): EzBackendOpts[LocalOptsKey] {
     if (fullOpts[optsPrefix]) {
-      return merge(this._defaultOpts, fullOpts[optsPrefix]);
+      return merge({},this._defaultOpts, fullOpts[optsPrefix]);
     }
 
     if (this._defaultOpts) {
