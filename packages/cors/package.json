@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/cors",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "> TODO: description",
   "author": "Philip Wee <philip.andrewweedewang@gmail.com>",
   "homepage": "https://github.com/PhilipWee/ezbackend#readme",
@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/PhilipWee/ezbackend/issues"
   },
-  "gitHead": "83198320ccc06a87dd0a66a196086c5553de7389",
+  "gitHead": "c07c57074516186f7654011250792b459a63ce8b",
   "dependencies": {
     "fastify-cors": "^6.0.2"
   }

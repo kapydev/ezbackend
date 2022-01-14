@@ -1,6 +1,6 @@
 {
   "name": "@ezbackend/common",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -47,5 +47,5 @@
     "typeorm": "^0.2.37",
     "virtual-proxy-wrapper": "^1.0.8"
   },
-  "gitHead": "83198320ccc06a87dd0a66a196086c5553de7389"
+  "gitHead": "c07c57074516186f7654011250792b459a63ce8b"
 }
