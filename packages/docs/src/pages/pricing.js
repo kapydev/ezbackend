@@ -9,21 +9,13 @@ const freeFeatures = [
   <div>Database (SQLite, Postgres, etc)</div>,
   <div>CRUD Endpoints Generation</div>,
   <div>Database GUI</div>,
-  <div>File Storage (Multer)</div>, // coming soon
-  <div>Realtime Database (SocketIO)</div>, // coming soon
-];
-
-const oneClickDeployFeatures = [
-  <div>All Free Features</div>,
-  <div>Instant Cloud Deployment</div>,
-  <div>Automatic Scaling</div>,
-  <div>SSL Encryption</div>,
-  <div>Content Caching</div>,
+  <div>File Storage (Multer)</div>,
+  <div>Realtime Database (SocketIO)</div>,
 ];
 
 const enterpriseFeatures = [
-  <div>All Free and One-Click-Deploy Features</div>,
   <div>Custom-Made Features</div>,
+  <div>Technical Consultancy Services</div>,
   <div>Technical Guidance & Code Reviews</div>,
   <div>Long-term Support & Upgrade Assistance</div>,
 ];
@@ -75,15 +67,10 @@ function Pricing() {
           m-8
 
           sm:grid-cols-2 
-          sm:gap-6
-          sm:m-12 
-          sm:mx-16
-
-          lg:grid-cols-3 
-          lg:gap-14
-          lg:m-20 
-          lg:mx-24
-          lg:max-w-7xl      
+          sm:gap-14
+          sm:m-20
+          sm:mx-24
+          sm:max-w-7xl    
           "
           >
             <div className="text-center font-semibold col-span-full">
@@ -91,7 +78,7 @@ function Pricing() {
                 <span className=" tracking-wide font-mono">Flexible Plans</span>
               </div>
               <div className="pt-6 text-xl text-gray-400 font-normal font-monts">
-                Build For Free. Scale with Us.
+                Build For Free | Scale Together
               </div>
             </div>
 
@@ -111,26 +98,10 @@ function Pricing() {
 
             <div className="col-span-1">
               <PricingCard
-                title={
-                  <div>
-                    <div className="text-4xl">
-                      $25<span className="text-xl">/month</span>
-                    </div>
-                    <div className="pt-6 text-xl">One-Click-Deploy</div>
-                  </div>
-                }
-                listItems={oneClickDeployFeatures}
-                button_text="Contact Us"
-                href="https://calendly.com/ezbackend/30min"
-              />
-            </div>
-
-            <div className="col-span-1">
-              <PricingCard
                 title="Enterprise"
                 listItems={enterpriseFeatures}
                 button_text="Contact Us"
-                href="https://calendly.com/ezbackend/30min"
+                href="https://forms.gle/trr7pgpZy1qjxF8y7"
               />
             </div>
           </div>

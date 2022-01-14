@@ -17,6 +17,7 @@ import axios from 'axios';
 // CSS
 import 'tailwindcss/tailwind.css';
 import 'animate.css';
+import '../css/landing.css'
 
 // HELPER COMPONENTS
 import { Delayed } from '../helper-components/delayed';
@@ -85,6 +86,7 @@ export default function Home() {
       clearTimeout(timer);
     };
   }, []);
+
 
   return (
     <Layout>
@@ -220,14 +222,27 @@ export default function Home() {
               <div className="grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
                 {featuresContent.slice(0, 4).map((feature) => {
                   return (
-                    <Feature
-                      icon={feature.icon}
-                      title={feature.title}
-                      info={feature.info}
-                      route={feature.route}
-                      released={feature.released}
-                      description={feature.description}
-                    />
+                    <div className="flip">
+                      <div className="flip-content">
+                        <div className="flip-front">
+                          <Feature
+                            icon={feature.icon}
+                            title={feature.title}
+                            info={feature.info}
+                            route={feature.route}
+                            released={feature.released}
+                            description={feature.description}
+                          />
+                        </div>
+                        <div className='flip-back'>
+                          <a href={feature.route} className='no-underline text-gray-50'>
+                            <div className="flex h-full flex-col justify-center text-sm font-monts">
+                              {feature.flip_card}
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -242,14 +257,27 @@ export default function Home() {
                   <div className="grid place-items-top grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
                     {featuresContent.slice(4).map((feature) => {
                       return (
-                        <Feature
-                          icon={feature.icon}
-                          title={feature.title}
-                          info={feature.info}
-                          route={feature.route}
-                          released={feature.released}
-                          description={feature.description}
-                        />
+                        <div className="flip">
+                          <div className="flip-content">
+                            <div className="flip-front">
+                              <Feature
+                                icon={feature.icon}
+                                title={feature.title}
+                                info={feature.info}
+                                route={feature.route}
+                                released={feature.released}
+                                description={feature.description}
+                              />
+                            </div>
+                            <div className='flip-back'>
+                              <a href={feature.route} className='no-underline text-gray-50'>
+                                <div className="flex h-full flex-col justify-center text-sm font-monts">
+                                  {feature.flip_card}
+                                </div>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
@@ -266,65 +294,6 @@ export default function Home() {
                   sliderLineWidth={4}
                 />
               </div>
-            </div>
-
-            <div className="col-span-full">
-              <Accordion>
-                <AccordionItem
-                  toggle="scale"
-                  beforeText="One-Click-Deploy"
-                  afterText="One-Click-Deploy"
-                />
-                <AccordionPanel id="scale">
-                  <p>
-                    EzBackend allows you to 'build once, scale indefintely' with
-                    EzDeploy. EzDeploys scales using:
-                  </p>
-                  <ol type="1">
-                    <li className="mb-2">
-                      [COMING SOON] Reverse Proxy. All traffic is routed through
-                      EzDeploy's reverse proxy for load balancing. The reverse
-                      proxy also serves as an additional layer of security by
-                      providing SSL encryption and hiding actual servers from
-                      the internet
-                    </li>
-                    <li className="mb-2">
-                      Stateless Servers - EzBackend is designed in principle to
-                      be completely stateless, allowing you to scale across
-                      regions by creating new EzBackend instances
-                    </li>
-                    <li className="mb-2">
-                      [COMING SOON] Read Replicas. By creating read-replicas in
-                      the same Virtual Private Cloud as your EzBackend
-                      instances, the end-user can receive low-latency regardless
-                      of region.
-                    </li>
-                    <li className="mb-2">
-                      [COMING SOON] Adapters. EzBackend comes batteries included
-                      with adapters to manage realtime updates with socket.io
-                      and other operations that require action on all EzBackend
-                      instances
-                    </li>
-                  </ol>
-                  <p className="text-xl">Caveats:</p>
-                  <ol type="1">
-                    <li className="mb-2">
-                      Write operations. There are currently no plans for
-                      EzBackend to scale for write operations, but research is
-                      being done to scale postgres writes with cross-region
-                      database sharding and writeback caching wrappers
-                    </li>
-                    <li className="mb-2">
-                      Replication lag. When reads are performed to a replica at
-                      the same time a write to the main postgres instance
-                      occurs, the information read out may not be fully
-                      accurate. In scenarios where data accuracy is paramount,
-                      EzBackend reads can be configured to read from the main
-                      postgres instance instead.
-                    </li>
-                  </ol>
-                </AccordionPanel>
-              </Accordion>
             </div>
 
             {/* <div className='col-span-full'>
@@ -369,12 +338,10 @@ export default function Home() {
             <div className="col-span-full flex justify-center align-middle">
               <div className="p-10 rounded-lg grid gap-6 bg-dracula">
                 <div className="font-monts text-2xl text-center font-bold">
-                  Be an Early Adopter
+                  Sign Up For Alpha
                 </div>
                 <div className="font-monts text-md text-center max-w-lg">
-                  Claim <span className="font-bold">100USD</span> Hosting
-                  Credits when you sign up for our{' '}
-                  <span className="text-purple">Alpha</span> programme today!
+                  Receive regular updates via email on EzBackend progress
                 </div>
                 <form>
                   <input
