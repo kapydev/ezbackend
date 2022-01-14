@@ -61,9 +61,7 @@ describe('Plugin Registering', () => {
   });
 
   afterEach(async () => {
-    const instance = app.getInternalInstance();
-    await instance.orm.close();
-    await instance._server.close();
+    await app.close()
   });
 
   it('Should be able to create a user object', async () => {

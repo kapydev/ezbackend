@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Illegal Entity Creation Creating Model with more than one primary column is illegal 1`] = `[Error: App has been started already!]`;
-
 exports[`Illegal Entity Creation Creating a relation without the full syntax should be illegal 1`] = `"You currently need to use the full declaration for specifying a relation"`;
 
 exports[`Illegal Entity Creation Creating a relation without the full syntax should be illegal 2`] = `"Relations require additional metadata to generate the Database Tables"`;

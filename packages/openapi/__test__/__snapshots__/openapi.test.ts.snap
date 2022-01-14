@@ -43,10 +43,38 @@ Object {
           "type": "string",
         },
       },
-      "title": "updateSchema-model",
+      "required": Array [
+        "var1",
+        "var2",
+      ],
+      "title": "formCreateSchema-model",
       "type": "object",
     },
     "def-3": Object {
+      "properties": Object {
+        "var1": Object {
+          "type": "string",
+        },
+        "var2": Object {
+          "type": "string",
+        },
+      },
+      "title": "formUpdateSchema-model",
+      "type": "object",
+    },
+    "def-4": Object {
+      "properties": Object {
+        "var1": Object {
+          "type": "string",
+        },
+        "var2": Object {
+          "type": "string",
+        },
+      },
+      "title": "updateSchema-model",
+      "type": "object",
+    },
+    "def-5": Object {
       "properties": Object {
         "id": Object {
           "type": "number",

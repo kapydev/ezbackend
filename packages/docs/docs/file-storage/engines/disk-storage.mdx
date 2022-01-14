@@ -1,0 +1,72 @@
+# Disk Storage
+
+import CodeSnippet from "../../CodeSnippet"
+
+## Introduction
+
+The Disk Storage Engine automatically is used by default to store files on your system. By default it stores files in `{rootDir}/tmp/uploads/{hash}-{originalFileName}`
+
+
+## Usage
+
+The Disk Storage Engine is enabled by default, but can be configured to custom needs.
+
+### Customising the Engine
+
+You can add options to the disk storage engine creating a new `diskEngine`
+
+<CodeSnippet
+sample={`const customDiskEngine = diskEngine({
+  // Alternative specification
+  // destination: './tmp/uploads',
+  destination: (req,file,cb) => {
+    return cb(null,'/tmp/uploads')
+  },
+  filename: (req,file,cb) => {
+    const randomHash = crypto.randomBytes(16).toString()
+    return cb(null, randomHash + '-' + file.originalname)
+  }
+})`}
+fullCode={`import { EzBackend, EzModel, Type, diskEngine } from '@ezbackend/common';
+import { EzOpenAPI } from '@ezbackend/openapi';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzCors } from '@ezbackend/cors';
+import crypto from 'crypto'\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+// const socketIOtester = new EzApp()\n
+const customDiskEngine = diskEngine({
+  // Alternative specification
+  // destination: './tmp/uploads',
+  destination: (req,file,cb) => {
+    return cb(null,'/tmp/uploads')
+  },
+  filename: (req,file,cb) => {
+    const randomHash = crypto.randomBytes(16).toString()
+    return cb(null, randomHash + '-' + file.originalname)
+  }
+})\n
+const model = new EzModel('UserDetails', {
+  name: Type.VARCHAR,
+  age: Type.INT,
+  profilePicture: Type.FILE
+});\n
+app.addApp(model, { prefix: 'user-details' });\n
+app.start({
+  backend: {
+    storage: {
+      engine: customDiskEngine
+    }
+  }
+})`}/>
+
+## Caveats
+
+The Disk Storage Engine should not be used in production, because as a principle backend instances should be stateless to allow for easier horizontal scaling.
+
+Hence, to keep the development and testing environments more consistent with the production environment, an `S3 Engine` or another cloud storage engine should be used instead.

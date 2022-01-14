@@ -4,18 +4,20 @@ import { EzBackendOpts } from '../..';
 import { EzApp } from '../../ezapp';
 // TODO: Consider if we should remove the cyclic importing
 import type { EzBackendInstance } from '../../ezbackend';
-import {
-  getCreateSchema,
-  getFullSchema,
-  getUpdateSchema,
-} from '../typeorm-helpers';
+import type { StorageEngine } from '../../storage';
 import { getDefaultGenerators } from './default-generators';
+import type { FastifyMultipartOptions } from 'fastify-multipart';
+import { merge } from 'lodash'
 
 export interface RouterOptions {
   schemaPrefix?: string;
   prefix?: string;
   // eslint-disable-next-line no-use-before-define
   generators?: { [name: string]: IGenerator };
+  storage?: {
+    engine?: StorageEngine
+    multipartOpts?: FastifyMultipartOptions
+  }
 }
 
 type IGenerator = (
@@ -66,34 +68,49 @@ export function middlewareFactory(optName: string, newValue: any): Middleware {
   return newMiddleware;
 }
 
+const defaultOpts = { prefix: '', generators: getDefaultGenerators() }
+
 // TODO: Think about function naming
 // TODO: Figure out what the heck this genOpts done and if its useless remove it
 /**
- * Child of EzApp. Handles route generation for
+ * Child of EzApp. Handles route generation for EzModel
  */
 export class EzRouter extends EzApp {
   _generators: { [key: string]: IGenerator };
   _genOpts: RouterOptions;
 
   constructor(
-    opts: RouterOptions = { prefix: '', generators: getDefaultGenerators() },
+    opts: RouterOptions = defaultOpts,
   ) {
     super();
+
+    opts = merge({},defaultOpts,opts)
+
     this._genOpts = opts;
     this._generators = opts.generators ?? {};
 
     this.setHandler(`Add Create Schema`, async (instance, opts) => {
-      const schema = getCreateSchema(instance.repo.metadata);
+      const schema = instance.ezRepo.getCreateSchema()
+      instance.server.addSchema(schema);
+    });
+
+    this.setHandler(`Add Form Create Schema`, async (instance, opts) => {
+      const schema = instance.ezRepo.getFormCreateSchema()
+      instance.server.addSchema(schema);
+    });
+
+    this.setHandler(`Add Form Update Schema`, async (instance, opts) => {
+      const schema = instance.ezRepo.getFormUpdateSchema()
       instance.server.addSchema(schema);
     });
 
     this.setHandler(`Add Update Schema`, async (instance, opts) => {
-      const schema = getUpdateSchema(instance.repo.metadata);
+      const schema = instance.ezRepo.getUpdateSchema()
       instance.server.addSchema(schema);
     });
 
     this.setHandler(`Add Full Schema`, async (instance, opts) => {
-      const schema = getFullSchema(instance.repo.metadata);
+      const schema = instance.ezRepo.getFullSchema()
       instance.server.addSchema(schema);
     });
 
@@ -103,7 +120,6 @@ export class EzRouter extends EzApp {
     });
   }
 
-  // TODO: Refactor so that its not such a nested affair of functions
   addRouteFromGenerator(
     generatorName: string,
     generator: IGenerator,
@@ -121,7 +137,7 @@ export class EzRouter extends EzApp {
     );
   }
 
-  // URGENT TODO: Make it such that invalid routeNames throw error which informs of possible route names
+  // TODO: Make it such that invalid routeNames throw error which informs of possible route names
 
   _forFactory<KeyType>(overrideName: string, routeNames: Array<string>) {
     return (newVal: KeyType) => {

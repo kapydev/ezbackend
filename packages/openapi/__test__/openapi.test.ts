@@ -30,9 +30,8 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
-  const instance = getInternalInstance(app);
-  await instance.orm.close();
-  await instance._server.close();
+  await app.close()
+
 });
 
 describe('Basic Usage', () => {

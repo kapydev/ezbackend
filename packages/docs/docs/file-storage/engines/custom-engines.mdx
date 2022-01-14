@@ -1,0 +1,113 @@
+---
+sidebar_position: 1
+---
+# Custom Engines
+
+import CodeSnippet from '../../CodeSnippet';
+
+## Introduction
+
+Custom engines are extensions of [multer compatible `storage engines`](https://github.com/expressjs/multer/blob/master/StorageEngine.md)
+
+However, EzBackend requires a third exposed function, `_readFile` that returns a `Readable` stream in the callback in order to allow users to download files.
+
+## Creating a Custom Engine
+
+### From Scratch
+
+To create a Custom Storage Engine, you should extend the abstract class `StorageEngine` and implement the functions according to the `typescript` requirements as well as the function specifications below.
+
+<!-- TODO: Provide link to actual storage engine implementation after merged into next/master -->
+
+You can view an implementation of the disk storage engine to get better idea of how to implement your custom storage engine
+
+<CodeSnippet
+  sample={`class CustomDiskEngine extends StorageEngine {
+  _handleFile(req: FastifyRequest, file: File, callback: (error?: Error, info?: Partial<File>) => void): void {\n
+  }
+  _readFile(req: FastifyRequest, file: File, callback: (error: Error, readStrean?: Readable) => void): void {\n
+  }
+  _removeFile(req: FastifyRequest, file: File, callback: (error?: Error) => void): void {\n
+  }
+}`}
+  fullCode={`import { EzBackend, EzModel, File, StorageEngine, Type } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';
+import { FastifyRequest } from 'fastify';
+import { RouteGenericInterface } from 'fastify/types/route';
+import { IncomingMessage, Server } from 'http';
+import { Readable } from 'stream';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+class CustomDiskEngine extends StorageEngine {
+  _handleFile(req: FastifyRequest<RouteGenericInterface, Server, IncomingMessage, unknown>, file: File, callback: (error?: Error, info?: Partial<File>) => void): void {\n
+  }
+  _readFile(req: FastifyRequest<RouteGenericInterface, Server, IncomingMessage, unknown>, file: File, callback: (error: Error, readStrean?: Readable) => void): void {\n
+  }
+  _removeFile(req: FastifyRequest<RouteGenericInterface, Server, IncomingMessage, unknown>, file: File, callback: (error?: Error) => void): void {\n
+  }
+}\n
+const model = new EzModel('UserDetails', {
+  name: Type.VARCHAR,
+  age: Type.INT,
+  profilePicture: Type.FILE
+});\n
+app.addApp(model, { prefix: 'user-details' });\n
+app.start({
+  backend: {
+    storage: {
+      engine: new CustomDiskEngine()
+    }
+  }
+})`}
+/>
+
+### From existing Multer Storage Engines
+
+As far as possible, EzBackend avoids reinventing the wheel. However, 
+
+## Function Specification
+
+To create a custom storage engine, you need to expose the following functions:
+
+`_readFile` - To provide file download capabilities
+
+`_removeFile` - To provide file removal capabilities
+
+`_handleFile` - To provide file uplaod capabilities
+
+All three functions are of the same function signature
+
+```ts
+class CustomStorage extends StorageEngine {
+  _handleFile(
+    req: FastifyRequest,
+    file: File,
+    callback: (error: Error | null, info?: Partial<File>) => void,
+  ): void;
+}
+```
+
+`req` - A request of type `FastifyRequest`. Most express-multer storage engines should have enough type overlap with `FastifyRequest` for this to work out of the box, but be sure to check this before implementation.
+
+`file` - The metadata of the file being removed/downloaded/uploaded.
+
+`callback` - A function that returns either an error or `null` for the error and `info` for the file's metadata.
+
+The second variable of the callback depends on which function is running
+
+| function     | callback var 1   | callback var 2                                                          |
+| ------------ | ---------------- | ----------------------------------------------------------------------- |
+| \_handleFile | `Error` (if Any) | File info of type `Partial<File>`                                       |
+| \_readFile   | `Error` (if Any) | Readable stream of type `Readable` (From the built in library `stream`) |
+| \_removeFile | `Error` (if Any) | `undefined`                                                             |
+
+:::info
+The metadata provided in `_handleFile` is saved as json data in `EzModel` whenever a file is uploaded, so any metadata used in `_removeFile` and `_readFile` must be provided in the `callback`
+:::

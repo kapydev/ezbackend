@@ -1,0 +1,341 @@
+# File Storage
+
+import CodeSnippet from '../CodeSnippet';
+
+## Implementing File Upload
+
+You can create a field for file uploads in any EzModel using the type `Type.FILE`.
+
+For example, if we want to store a user's profile picture in an `EzModel` called `UserDetails`:
+
+<CodeSnippet
+  sample={`const model = new EzModel('UserDetails', {
+  .
+  .
+  profilePicture: Type.FILE
+});`}
+  fullCode={`import { EzBackend, EzModel, Type, EzApp } from '@ezbackend/common';
+import { EzOpenAPI } from '@ezbackend/openapi';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzCors } from '@ezbackend/cors';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+// Models are also ezapps in ezbackend
+const model = new EzModel('UserDetails', {
+  name: Type.VARCHAR,
+  age: Type.INT,
+  profilePicture: Type.FILE
+});\n
+app.addApp(model, { prefix: 'user-details' });\n
+app.start();`}
+/>
+
+## Uploading/Updating a File
+
+### Data Specification
+
+You can upload files using the `multipart/form-data` `content-type` using the automatically generated `CREATE` and `UPDATE` endpoints.
+
+The data must be sent to EzBackend in the following format
+
+| Property     | Format (CREATE)                                | Format (UPDATE)                                          |
+| ------------ | ---------------------------------------------- | -------------------------------------------------------- |
+| URL          | `{backend-url}/{ez-model-prefix}/multipart`    | `{backend-url}/{ez-model-prefix}/{model-id}/multipart`   |
+| URL Example  | `http://localhost:8000/user-details/multipart` | `http://localhost:8000/user-details/123456789/multipart` |
+| Method       | `POST`                                         | `PATCH`                                                  |
+| Content Type | `multipart/form-data`                          | `multipart/form-data`                                    |
+| Data         | `FormData`                                     | `FormData`                                               |
+
+:::info
+Note that the `mimetype` that your data is uploaded with will be reflected when the file is downloaded
+:::
+
+Currently there is no configurable method to ensure the `mimetype` of the file uploaded. For example a malicious user can upload a video instead of an image. However, you can view [protecting routes](../auth/protecting-routes) to implement your own custom `mimetype` checking functionality
+
+### Required Properties
+
+All properties in the `EzModel` are required by default, which means that the `CREATE` `application/json` will not work if there is a `Type.FILE`.
+
+By making the `Type.FILE` optional, we can allow initial data upload using `application/json` and remaining file with `multipart/form-data`
+
+<CodeSnippet
+  sample={`const model = new EzModel('UserDetails', {
+  .
+  .
+  profilePicture: {
+    type: Type.FILE,
+    nullable: true
+  }
+});`}
+  fullCode={`import { EzBackend, EzModel, Type, EzApp } from '@ezbackend/common';
+import { EzOpenAPI } from '@ezbackend/openapi';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzCors } from '@ezbackend/cors';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+// Models are also ezapps in ezbackend
+const model = new EzModel('UserDetails', {
+  name: Type.VARCHAR,
+  age: Type.INT,
+  profilePicture: {
+    type: Type.FILE,
+    nullable: true
+  }
+});\n
+app.addApp(model, { prefix: 'user-details' });\n
+app.start();`}
+/>
+
+:::caution
+Support for `Base64` encoding to support `application/json` may be included in the future, but is not recommended because of the [additional overhead due to CPU and memory usage on both the server and client](https://tyk.io/blog/api-design-guidance-file-upload/#:~:text=avoid%20base64%20encoding%20whenever%20possible).
+:::
+
+## Upload Examples
+
+### Testing in OpenAPI
+
+### React.ts / React.js
+
+If you have a form with fields for the user's name, age and profile picture
+
+```html
+<form onSubmit="{handleSubmit}">
+  <input name="name" type="text" placeholder="Name" /><br />
+  <input name="age" type="text" placeholder="Age" /><br />
+  <input name="profilePicture" type="file" /><br />
+  <input type="submit" value="Submit" />
+</form>
+```
+
+You can directly obtain the data in the element and use it in a `fetch` request for uploading your file.
+
+<CodeSnippet
+  sample={`const formElement = e.target as HTMLFormElement\n
+const formData = new FormData(formElement)
+const result = await fetch('http://localhost:8000/user-details/multipart',{
+  method: 'POST',
+  body: formData
+})`}
+  fullCode={`function App() {\n
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();\n
+    const formElement = e.target as HTMLFormElement\n
+    const formData = new FormData(formElement)
+    const result = await fetch('http://localhost:8000/user-details/multipart',{
+      method: 'POST',
+      body: formData
+    })\n
+    const resultJSON = await result.json()\n
+    alert(JSON.stringify(resultJSON))
+    console.log(resultJSON)
+  }
+  return (
+    <form onSubmit={handleSubmit}>\n
+      <label>Name</label><br/>
+      <input type='text' name="name" placeholder='Name' /><br />\n
+      <label>Age</label><br/>
+      <input type='text' name="age" placeholder='Age' /><br />\n
+      <label>Profile Picture</label><br/>
+      <input type='file' name='profilePicture' placeholder='Profile Picture'  /><br /><br />\n
+      <input type='submit' value='Submit' />\n      
+    </form>
+  );
+}\n
+export default App;`}
+/>
+
+:::caution
+By default submitted values will be type-casted. This is because `multipart/form-data` only supports `text` and `file` types.
+
+See [Type Casting](#type-casting)
+:::
+
+### JavaScript Fetch
+
+You can manually set your own data to submit with a form. Note that the data appended to the form data is of type `string` despite being numerical values, because `multipart/form-data` only supports `text` and `file` types
+
+<CodeSnippet
+  sample={`const formData = new FormData()\n
+formData.append('name','Robert')
+formData.append('age','22')
+formData.append('profilePicture',new Blob(['This is a placeholder for the profile Picture']))\n
+const result = await fetch('http://localhost:8000/user-details/multipart',{
+  method: 'POST',
+  body: formData
+})\n
+const resultJSON = await result.json()`}
+  fullCode={`function App() {\n
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    const formData = new FormData()\n
+    formData.append('name','Robert')
+    formData.append('age','22')
+    formData.append('profilePicture',new Blob(['This is a placeholder for the profile Picture']))\n
+    const result = await fetch('http://localhost:8000/user-details/multipart',{
+      method: 'POST',
+      body: formData
+    })\n
+    const resultJSON = await result.json()\n
+    alert(JSON.stringify(resultJSON))
+    console.log(resultJSON)
+  }
+  return (
+    <button onClick={handleClick}>Submit Form Data</button>
+  );
+}\n
+export default App;`}
+/>
+
+:::caution
+By default submitted values will be type-casted. This is because `multipart/form-data` only supports `text` and `file` types.
+
+See [Type Casting](#type-casting)
+:::
+
+## Downloading Files
+
+You can download files by specifying the `prefix` of the `EzModel` you wish to download from, as well as the `id` of the `EzModel`
+
+### Data Specification
+
+| Property            | Format (DOWNLOAD)                                          |
+| ------------------- | ---------------------------------------------------------- |
+| URL                 | `{backend-url}/{ez-model-prefix}/{id}/file/{propertyName}` |
+| URL Example         | `http://localhost:8000/user-details/1/file/profilePicture` |
+| Method              | `GET`                                                      |
+| Content Type        | The same as the `mimetype` the file was uploaded with      |
+| Content Disposition | `attachment; filename="{originalFileName}"`                |
+
+It is important to take note that the default content disposition is as an attachment, which means that when the URL is opened manually the browser will attempt to download the file as the default behaviour.
+
+<!-- TODO: Think of best practice in order to allow files to be opened in the browser, for example in the case of pdf files -->
+
+## Download Examples
+
+### As a Rendered File
+
+Since the mimetype is reflected, you can provide the download URL in order to serve any `image` or `video` files.
+
+```html
+<img src="http://localhost:8000/user-details/1/file/profilePicture" />
+```
+
+### As a File Download
+
+You can allow a user to download a file by providing the download URL in a `<a>` tag
+
+```html
+<a href="http://localhost:8000/user-details/1/file/profilePicture">Download</a>
+```
+
+## Type Casting
+
+By default, since `multipart/form-data` can only send `file` data and `text` data, EzBackend will automatically coerce types in the backend depending on what is specified in the `EzModel`
+
+Possible type coercions:
+
+| from&nbsp;type&nbsp;&rarr;<br/>to&nbsp;type&nbsp;&darr; |                                       string                                       |
+| ------------------------------------------------------- | :--------------------------------------------------------------------------------: |
+| string                                                  |                                         -                                          |
+| number /<br/>integer                                    |                   Valid number /<br/>integer: `x`&rarr;`+x`<br/>                   |
+| boolean                                                 | `"false"`&rarr;`false`<br/>`"true"`&rarr;`true`<br/>`"abc"`&#8696;<br/>`""`&#8696; |
+
+### Coercion from string values
+
+#### To number type
+
+Coercion to `number` is possible if the string is a valid number, `+data` is used.
+
+#### To integer type
+
+Coercion to `integer` is possible if the string is a valid number without fractional part (`data % 1 === 0`).
+
+#### To boolean type
+
+Unlike JavaScript, only these strings can be coerced to `boolean`:
+
+- `"true"` -> `true`
+- `"false"` -> `false`
+
+### AJV
+
+Under the hood, type coercion and validation is done with [AJV](https://ajv.js.org/coercion.html). You can view their specification for additional details.
+
+## Configuration
+
+File Storage can be configured globally or at the router level.
+
+There are two components that can be configured, the `engine` and `multipartOpts`
+
+The order of preference in which the configuration is merged is
+
+1. `router setting`
+2. `global setting`
+3. `default setting`
+
+e.g If the configuration is defined both at the global level and router level, the router level configuration will take precedence.
+
+### Global Configuration
+
+The global setting can be set in `app.start()`. See [Configuration](../configuration#backendstorage) for more details
+
+### Router Level Configuration
+
+You can configure the options for the generated routes in `EzModel` by using the `routerOpts`
+
+```ts
+const sampleModel = new EzModel(
+  'SampleModel',
+  {
+    avatar: Type.FILE,
+  },
+  {
+    routerOpts: {
+      storage: {
+        engine: customEngine,
+        multipartOpts: {
+          limits: {
+            fileSize: 1024,
+          },
+        },
+      },
+    },
+  },
+);
+```
+
+### Default Configuration
+
+By default EzBackend uses the [diskEngine](./engines/disk-storage), which can be customised to your needs and pass to the global configuration or the router level configuration.
+
+## How it works
+
+For a property with `Type.FILE` is specified in an EzModel
+
+1. The corresponding field in the EzRepo is a `JSON` field containing metadata on any files uploaded
+2. Custom `CREATE`, `READ` and `UPDATE` `multipart/form-data` endpoints are available for the model to edit the file. (The `application/json` `DELETE` endpoint is reused for deleting the file)
+
+Under the hood, EzBackend uses [fastify-multipart](https://github.com/fastify/fastify-multipart) to handle file uploads.
+
+As for engines, it uses [multer](https://github.com/expressjs/multer) compatible [storage engines](https://github.com/expressjs/multer/blob/master/StorageEngine.md) in order to provide `file upload` and `file deleting` functionality.
+
+However, EzBackend requires an additional custom `file download` functionality in order to serve files to the end user.
+
+## Caveats
+
+Since all file uploads and downloads are streamed through `EzBackend`, this results in additional bandwidth used when using engines such as `AWS S3`.
+
+For example, the data travels through the path
+
+AWS -> EzBackend -> User
+
+If this becomes a concern, you can reduce bandwidth usage by generating presigned URLs with your storage engine in order to allow users to directly download large files from your storage engine.

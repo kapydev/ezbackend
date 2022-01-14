@@ -16,9 +16,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  const instance = ezb.getInternalInstance();
-  await instance.orm.close();
-  await instance._server.close();
+  await ezb.close()
 });
 
 const sampleData = {

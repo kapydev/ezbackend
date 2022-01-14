@@ -2,7 +2,7 @@ import {
   EzApp,
   EzBackendInstance,
   EzBackendOpts,
-  convert,
+  EzRepo,
   getDefaultGenerators,
   ignoreRules,
 } from '@ezbackend/common';
@@ -65,16 +65,22 @@ function getDbUIGenerators() {
 }
 
 async function addDBSchemas(instance: EzBackendInstance, opts: EzBackendOpts) {
-  instance.entities.forEach((entity) => {
-    const repo = instance.orm.getRepository(entity);
-    const { createSchema, updateSchema, fullSchema } = convert(
-      repo.metadata,
-      'db-ui',
-    );
+  const repos = EzRepo.getAllEzRepos()
+  const prefix = 'db-ui'
+  
+  Object.values(repos).forEach(repo => {
+    const createSchema = repo.getCreateSchema(prefix)
+    const updateSchema = repo.getUpdateSchema(prefix)
+    const fullSchema = repo.getFullSchema(prefix)
+    const formCreateSchema = repo.getFormCreateSchema(prefix)
+    const formUpdateSchema = repo.getFormUpdateSchema(prefix)
     instance.server.addSchema(createSchema);
     instance.server.addSchema(updateSchema);
     instance.server.addSchema(fullSchema);
-  });
+    instance.server.addSchema(formCreateSchema);
+    instance.server.addSchema(formUpdateSchema);
+  })
+
 }
 
 // TODO: Make generator more robust? Like add prefix options for example
@@ -155,7 +161,7 @@ export class EzDbUI extends EzApp {
       if (port && process.env.NODE_ENV !== 'test') {
         console.log(
           chalk.greenBright(`Use the database UI at `) +
-            chalk.yellow.underline(`http://localhost:${port}/db-ui/`),
+          chalk.yellow.underline(`http://localhost:${port}/db-ui/`),
         );
       }
     });
