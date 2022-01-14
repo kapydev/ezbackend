@@ -40,11 +40,7 @@ export function Feature(props) {
           <div className="flex justify-start">
             <div className="flex text-center">
               <div className="text-gray-400 hover:text-white">
-                {props.released
-                  ? props.route
-                    ? 'Learn More ➜'
-                    : ''
-                  : 'Coming Soon'}
+                {props.released ? '' : 'Coming Soon'}
               </div>
             </div>
           </div>
@@ -56,7 +52,7 @@ export function Feature(props) {
 
 export function MainFeature(props) {
   return (
-    <div id="tailwind">
+    <div>
       <div className="flex justify-start">
         {/* <div className='grid place-items-center mr-2'>
           {props.icon}

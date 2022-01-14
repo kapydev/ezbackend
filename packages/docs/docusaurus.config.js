@@ -58,6 +58,11 @@ module.exports = {
           label: 'Pricing',
         },
         {
+          to: 'showcase',
+          position: 'left',
+          label: 'Showcase',
+        },
+        {
           type: 'dropdown',
           label: 'Developers',
           position: 'left',
@@ -170,5 +175,7 @@ module.exports = {
       },
     ],
   ],
-  plugins: [path.resolve(__dirname, 'plugins/docusaurus-plugin-hotjar')],
+  plugins: [
+    path.resolve(__dirname, 'plugins/docusaurus-plugin-hotjar'),
+  ],
 };

@@ -92,7 +92,7 @@ export const featuresContent = [
   },
   {
     title: 'Database Agnostic',
-    route: '/docs/basics/configuration',
+    route: '/docs/configuration#backendtypeorm',
     icon: <IconDatabase className={ICONCLASSNAME} />,
     info: 'Supports enterprise Databases: Postgres, MySQL, MongoDB, & more',
     description:
@@ -109,7 +109,7 @@ export const featuresContent = [
   },
   {
     title: 'Automated Documentation',
-    route: '/docs/basics/basic-routing#viewing-available-routes',
+    route: '/docs/db-ui/testing-endpoints',
     icon: <IconApiDocs className={ICONCLASSNAME} />,
     info: 'API Documentation automatically generated to OpenAPI Specification',
     description: '',
@@ -126,7 +126,7 @@ export const featuresContent = [
 
   {
     title: 'TypeScript Support',
-    // route: "/features/benchmarks",
+    // route: "/",
     icon: <IconTypeScript className={ICONCLASSNAME} />,
     info: 'Typescript reflection system with typescript types despite writing plain javascript',
     description: (
@@ -156,7 +156,7 @@ export const featuresContent = [
 
   {
     title: 'Fast Refresh',
-    // route: "/features/benchmarks",
+    // route: "/",
     icon: <IconRefresh className={ICONCLASSNAME} />,
     info: 'Fast, reliable editing experience, with changes being reflected immediately with ctrl-s',
     description: '',
@@ -173,7 +173,7 @@ export const featuresContent = [
 
   {
     title: 'Automated Database Interface',
-    // route: "/features/benchmarks",
+    route: "/docs/db-ui/testing-endpoints",
     icon: <IconDatabase className={ICONCLASSNAME} />,
     info: 'View, edit and update database entries with an excel-like interface',
     description: '',
@@ -188,12 +188,46 @@ export const featuresContent = [
     ),
   },
   {
+    title: 'One-Line Realtime Functionality',
+    route: "/docs/realtime/ez-model",
+    icon: <IconClock className={ICONCLASSNAME} />,
+    info: 'Subscribe to database updates with socket.io',
+    description: '',
+    media: null,
+    released: true,
+    flip_card: (
+      <div>
+        {' '}
+        Listen to database updates in realtime. Comes with{' '}
+        <span className="text-purple">packet level security</span> where
+        read/write permissions for each recepient is verified before socket.io
+        packets are sent.
+      </div>
+    ),
+  },
+
+  {
+    title: 'One-Line Storage Functionality',
+    route: "/docs/file-storage/file-storage",
+    icon: <IconFileStorage className={ICONCLASSNAME} />,
+    info: 'Transition seamlessly between local storage and cloud providers',
+    description: '',
+    media: null,
+    released: true,
+    flip_card: (
+      <div>
+        Create custom storage engines to upload files to any file provider including S3, your file system and more
+      </div>
+    ),
+  },
+
+  {
     title: (
       <div>
         Consistent <br /> Dev & Prod Env
       </div>
     ),
-    // route: "/features/benchmarks",
+    // route: "/",
     icon: <IconEnv className={ICONCLASSNAME} />,
     info: 'Minimal additional configuration for deployment',
     description: (
@@ -216,42 +250,6 @@ export const featuresContent = [
         between a simple app for casual use and a{' '}
         <span className="text-purple">Leviathan-scale</span> app that scales
         horizontally to serve millions
-      </div>
-    ),
-  },
-
-  {
-    title: 'One-Line Realtime Functionality',
-    // route: "/features/benchmarks",
-    icon: <IconClock className={ICONCLASSNAME} />,
-    info: 'Subscribe to database updates with socket.io',
-    description: '',
-    media: null,
-    released: false,
-    flip_card: (
-      <div>
-        {' '}
-        <span className="italic">COMING SOON</span> <br />
-        Listen to database updates in realtime. Comes with{' '}
-        <span className="text-purple">packet level security</span> where
-        read/write permissions for each recepient is verified before socket.io
-        packets are sent.
-      </div>
-    ),
-  },
-
-  {
-    title: 'One-Line Storage Functionality',
-    // route: "/features/benchmarks",
-    icon: <IconFileStorage className={ICONCLASSNAME} />,
-    info: 'Transition seamlessly between local storage and cloud providers',
-    description: '',
-    media: null,
-    released: false,
-    flip_card: (
-      <div>
-        <span className="italic">COMING SOON</span> <br />
-        Store files in blob-storage
       </div>
     ),
   },
