@@ -6,7 +6,7 @@ export function CtaButton(props) {
   const history = useHistory();
 
   const routeChange = () => {
-    history.push(props.link);
+    history.push(props.link); // isLink means its a subpage within ezbackend.io, for URLs put the href directly into an <a/>
   };
 
   return (
