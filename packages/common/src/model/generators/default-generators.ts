@@ -735,7 +735,10 @@ export const getDefaultGenerators: GetDefaultGenerators = () => {
               await removeFile(result[key])
             }
             await repo.remove(result);
-            req.io?.emit('entity_deleted', repo.metadata.name, result);
+            req.io?.emit('entity_deleted', repo.metadata.name, {
+              ...result,
+              id
+            });
           } catch (e) {
             res.status(404).send(e);
           }
