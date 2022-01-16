@@ -142,7 +142,7 @@ function getSchemaStatic(schemaName: string) {
 }
 
 // URGENT TODO: Allow setting NODE_ENV in app.start()
-export function getSchemaOrUndefined(schema: Function) {
+export function getSchemaOrUndefined(schema: Function | undefined) {
   if (typeof schema !== 'function' || schema?.name === undefined) {
     return undefined
   }

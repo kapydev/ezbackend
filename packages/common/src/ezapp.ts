@@ -113,54 +113,69 @@ export interface CustomRouteMethod {
 
 // Convert Custom Route Types to json schema syntax
 
-function convertOptions(originalOpts: any, parentApp: EzApp | undefined) {
-  // Note that original object IS being mutated
-  // Keep as similar to fastify method as possible
+// Warning this mutates original variable
+function convertOptions(opts: CustomRouteShorthandOptions<any, any, any, any, any>) {
+
   const definedTwiceMsg = (schemaType: string, schemaName: string) => {
     return [
       `'${schemaType}' schema is defined twice for '${schemaName}'`,
       `You should either use JsonSchema or the Class Schema, but not both`
     ] as const
   }
+
+  if (!opts.schema) {
+    opts.schema = {}
+  }
+  if (!opts.schema.response) {
+    opts.schema.response = {}
+  }
+
+  // URGENT TODO: Support all response codes
+
+  if (opts.schema.body && opts.body) { throw new EzError(...definedTwiceMsg('body', opts.body.name)) }
+  if (opts.schema.querystring && opts.querystring) { throw new EzError(...definedTwiceMsg('querystring', opts.querystring.name)) }
+  if (opts.schema.params && opts.params) { throw new EzError(...definedTwiceMsg('params', opts.params.name)) }
+  if (opts.schema.headers && opts.headers) { throw new EzError(...definedTwiceMsg('headers', opts.headers.name)) }
+  if ((opts.schema.response as any)['200'] && opts.reply200) { throw new EzError(...definedTwiceMsg('200 OK Response', opts.reply200.name)) }
+
+  const bodySchema = getSchemaOrUndefined(opts.body)
+  const queryStringSchema = getSchemaOrUndefined(opts.querystring)
+  const paramsSchema = getSchemaOrUndefined(opts.params)
+  const headersSchema = getSchemaOrUndefined(opts.headers)
+  const reply200Schema = getSchemaOrUndefined(opts.reply200)
+
+  if (!opts.schema.body && bodySchema) { opts.schema.body = bodySchema }
+  if (!opts.schema.querystring && queryStringSchema) { opts.schema.querystring = queryStringSchema }
+  if (!opts.schema.params && paramsSchema) { opts.schema.params = paramsSchema }
+  if (!opts.schema.headers && headersSchema) { opts.schema.headers = headersSchema }
+  if (!(opts.schema.response as any)['200'] && reply200Schema) { (opts.schema.response as any)['200'] = reply200Schema }
+
+  if (opts.summary) { (opts.schema as any).summary = opts.summary }
+  if (opts.description) { (opts.schema as any).description = opts.description }
+
+  return opts
+}
+
+function convertShorthandOptions(originalOpts: any, parentApp: EzApp | undefined) {
+  // Note that original object IS being mutated
+  // Keep as similar to fastify method as possible
   const [url, opts, handler] = originalOpts
   if (!handler && typeof opts === 'function') {
     ezWarning(`No type specified for prefix '${parentApp?.getPrefix()}',path '${url}' so no auto documentation nor input validation provided`)
   } else {
-
-    if (!opts.schema) {
-      opts.schema = {}
-    }
-    if (!opts.schema.response) {
-      opts.schema.response = {}
-    }
-
-    // URGENT TODO: Support all response codes
-
-    if (opts.schema.body && opts.body) { throw new EzError(...definedTwiceMsg('body', opts.body.name)) }
-    if (opts.schema.querystring && opts.querystring) { throw new EzError(...definedTwiceMsg('querystring', opts.querystring.name)) }
-    if (opts.schema.params && opts.params) { throw new EzError(...definedTwiceMsg('params', opts.params.name)) }
-    if (opts.schema.headers && opts.headers) { throw new EzError(...definedTwiceMsg('headers', opts.headers.name)) }
-    if (opts.schema.response['200'] && opts.reply200) { throw new EzError(...definedTwiceMsg('200 OK Response', opts.reply200.name)) }
-
-    const bodySchema = getSchemaOrUndefined(opts.body)
-    const queryStringSchema = getSchemaOrUndefined(opts.querystring)
-    const paramsSchema = getSchemaOrUndefined(opts.params)
-    const headersSchema = getSchemaOrUndefined(opts.headers)
-    const reply200Schema = getSchemaOrUndefined(opts.reply200)
-
-    if (!opts.schema.body && bodySchema) { opts.schema.body = bodySchema }
-    if (!opts.schema.querystring && queryStringSchema) { opts.schema.querystring = queryStringSchema }
-    if (!opts.schema.params && paramsSchema) { opts.schema.params = paramsSchema }
-    if (!opts.schema.headers && headersSchema) { opts.schema.headers = headersSchema }
-    if (!opts.schema.response['200'] && reply200Schema) { opts.schema.response['200'] = reply200Schema }
-
-    if (opts.summary) { opts.schema.summary = opts.summary }
-    if (opts.description) { opts.schema.description = opts.description }
-
+    convertOptions(opts) // This function mutates opts
   }
 
   return originalOpts
 }
+function convertFullOptions(originalOptsArray: any, parentApp: EzApp | undefined) {
+  // Note that original object IS being mutated
+  // Keep as similar to fastify method as possible
+  const [originalOpts] = originalOptsArray
+  convertOptions(originalOpts) // This function mutates opts
+  return originalOptsArray
+}
+
 
 // TODO: Add types based on fastify instance
 // TODO: Tests for all stubbing performed
@@ -274,15 +289,15 @@ export class EzApp extends App {
 
   // Make routing with apps easy
   // URGENT TODO: Should we do this within the handler to be part of the plugin tree?
-  delete = generateFastifyFuncWrapper(this, 'delete', convertOptions) as CustomRouteShorthandMethod
-  get = generateFastifyFuncWrapper(this, 'get', convertOptions) as CustomRouteShorthandMethod
-  head = generateFastifyFuncWrapper(this, 'head', convertOptions) as CustomRouteShorthandMethod
-  patch = generateFastifyFuncWrapper(this, 'patch', convertOptions) as CustomRouteShorthandMethod
-  post = generateFastifyFuncWrapper(this, 'post', convertOptions) as CustomRouteShorthandMethod
-  put = generateFastifyFuncWrapper(this, 'put', convertOptions) as CustomRouteShorthandMethod
-  options = generateFastifyFuncWrapper(this, 'options', convertOptions) as CustomRouteShorthandMethod
-  all = generateFastifyFuncWrapper(this, 'all', convertOptions) as CustomRouteShorthandMethod
-  route = generateFastifyFuncWrapper(this, 'route', convertOptions) as CustomRouteMethod;
+  delete = generateFastifyFuncWrapper(this, 'delete', convertShorthandOptions) as CustomRouteShorthandMethod
+  get = generateFastifyFuncWrapper(this, 'get', convertShorthandOptions) as CustomRouteShorthandMethod
+  head = generateFastifyFuncWrapper(this, 'head', convertShorthandOptions) as CustomRouteShorthandMethod
+  patch = generateFastifyFuncWrapper(this, 'patch', convertShorthandOptions) as CustomRouteShorthandMethod
+  post = generateFastifyFuncWrapper(this, 'post', convertShorthandOptions) as CustomRouteShorthandMethod
+  put = generateFastifyFuncWrapper(this, 'put', convertShorthandOptions) as CustomRouteShorthandMethod
+  options = generateFastifyFuncWrapper(this, 'options', convertShorthandOptions) as CustomRouteShorthandMethod
+  all = generateFastifyFuncWrapper(this, 'all', convertShorthandOptions) as CustomRouteShorthandMethod
+  route = generateFastifyFuncWrapper(this, 'route', convertFullOptions) as CustomRouteMethod;
 
   addHook = generateFastifyFuncWrapper(this, 'addHook') as FastifyInstance['addHook'];
   addSchema = generateFastifyFuncWrapper(this, 'addSchema') as FastifyInstance['addSchema'];
