@@ -90,7 +90,7 @@ function Showcase() {
             </div>
             <div className="col-span-1">
               <ProjectCard
-                link='http://ezbackend-example-postgres-remix.vercel.app/F'
+                link='http://ezbackend-example-postgres-remix.vercel.app/'
                 image={PastebinMockup}
                 title="PasteBin Mockup"
                 subtitle="By Li Junyi"
