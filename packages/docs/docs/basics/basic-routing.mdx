@@ -87,6 +87,8 @@ You can access the db-ui at [http://localhost:8000/db-ui/](http://localhost:8000
 
 ![db-ui-sample](../assets/sample-db-ui.png)
 
+
+
 ## Creating routes
 
 Creating a route in ezbackend can be done similarly to express or fastify.
@@ -128,6 +130,35 @@ Create an endpoint on the app which returns a json when a `PATCH` request is per
 Create an endpoint on the app which returns a json when a `DELETE` request is performed
 
 <AllEndpointFormats method="delete" contents="" returns={`{data: req.body}`} />
+
+## Documenting Routes
+
+### Summary
+
+You can provide a summary of what your route does under schema, which will be reflected in the `Db-UI`
+
+![summary](../assets/summary.png)
+
+<AllEndpointFormats
+  method="get"
+  contents="const time = new Date().toLocaleTimeString()"
+  options={`summary: "Server Time"`}
+  returns={`{time: time}`}
+/>
+
+### Description
+
+You can provide a detailed description of what your route does under schema, which will be reflected in the `Db-UI`
+
+![description](../assets/description.png)
+
+<AllEndpointFormats
+  method="get"
+  contents="const time = new Date().toLocaleTimeString()"
+  options={`summary: "Server Time",
+  description: "This method returns the current server time"`}
+  returns={`{time: time}`}
+/>
 
 ## Route options
 
@@ -179,10 +210,6 @@ prefixTrailingSlash: string used to determine how to handle passing / as a route
   options={`prefixTrailingSlash:'both' //'both'|'slash'|'no-slash'`}
   returns={`{data: req.body}`}
 />
-
-## Documenting Routes
-
-You can refer to the [DB UI](../db-ui/testing-endpoints#documenting-routes) documentation for specifying how your documentation should look like in the DB-UI or OpenAPI specification
 
 ## Route Prefixing
 

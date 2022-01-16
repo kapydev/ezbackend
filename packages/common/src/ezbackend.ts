@@ -19,14 +19,12 @@ import {
   ObjectLiteral,
   Repository
 } from 'typeorm';
+import type { RouterOptions } from '.';
 import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
-import type { RouterOptions } from '.';
 import { createSchemaGenerator } from './schema-generation';
-import { Config } from 'ts-json-schema-generator';
-import path from 'path/posix';
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;

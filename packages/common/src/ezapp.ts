@@ -11,6 +11,7 @@ import { merge } from 'lodash';
 import type { Namespace } from 'socket.io';
 import { EzBackendInstance, EzBackendOpts } from '.';
 import { getSchemaOrUndefined } from './schema-generation';
+import { HTTPMethods } from 'fastify/types/utils'
 
 type CallableKeysOf<Type> = {
   [Key in keyof Type]: Type[Key] extends Function ? Key : never;
@@ -35,12 +36,16 @@ function generateFastifyFuncWrapper<Params extends Array<unknown> = Array<unknow
   };
 }
 
+
+
 export type CustomRouteShorthandOptions<Body, QueryString, Params, Headers, Reply200> = {
   body?: { new(): Body },
   querystring?: { new(): QueryString },
   params?: { new(): Params },
   headers?: { new(): Headers },
-  reply200?: { new(): Reply200 }
+  reply200?: { new(): Reply200 },
+  summary?: string,
+  description?: string
 } & RouteShorthandOptions
 
 // URGENT TODO: Implement Reply200 type
@@ -51,6 +56,23 @@ export type CustomRouteHandlerMethod<Body, QueryString, Params, Headers, Reply20
   headers?: Headers
 } & FastifyRequest, res: FastifyReply) => any
 
+export interface CustomRouteOptions<
+  Body,
+  QueryString,
+  Params,
+  Headers,
+  Reply200> {
+  method: HTTPMethods | HTTPMethods[]
+  url: string
+  body?: { new(): Body }
+  querystring?: { new(): QueryString }
+  params?: { new(): Params }
+  headers?: { new(): Headers }
+  reply200?: { new(): Reply200 }
+  summary?: string
+  description?: string
+  handler: CustomRouteHandlerMethod<Body, QueryString, Params, Headers, Reply200>
+}
 
 // TODO: Custom Route Typescript Types
 export interface CustomRouteShorthandMethod {
@@ -74,6 +96,18 @@ export interface CustomRouteShorthandMethod {
     >
     (url: string,
     cb: CustomRouteHandlerMethod<Body, QueryString, Params, Headers, Reply200>,
+  ): void
+}
+
+export interface CustomRouteMethod {
+  <
+    Body = any,
+    QueryString = any,
+    Params = any,
+    Headers = any,
+    Reply200 = any,
+    >(
+    opts: CustomRouteOptions<Body, QueryString, Params, Headers, Reply200>
   ): void
 }
 
@@ -119,6 +153,9 @@ function convertOptions(originalOpts: any, parentApp: EzApp | undefined) {
     if (!opts.schema.params && paramsSchema) { opts.schema.params = paramsSchema }
     if (!opts.schema.headers && headersSchema) { opts.schema.headers = headersSchema }
     if (!opts.schema.response['200'] && reply200Schema) { opts.schema.response['200'] = reply200Schema }
+
+    if (opts.summary) { opts.schema.summary = opts.summary }
+    if (opts.description) { opts.schema.description = opts.description }
 
   }
 
@@ -245,7 +282,7 @@ export class EzApp extends App {
   put = generateFastifyFuncWrapper(this, 'put', convertOptions) as CustomRouteShorthandMethod
   options = generateFastifyFuncWrapper(this, 'options', convertOptions) as CustomRouteShorthandMethod
   all = generateFastifyFuncWrapper(this, 'all', convertOptions) as CustomRouteShorthandMethod
-  route = generateFastifyFuncWrapper(this, 'route') as FastifyInstance['route'];
+  route = generateFastifyFuncWrapper(this, 'route', convertOptions) as CustomRouteMethod;
 
   addHook = generateFastifyFuncWrapper(this, 'addHook') as FastifyInstance['addHook'];
   addSchema = generateFastifyFuncWrapper(this, 'addSchema') as FastifyInstance['addSchema'];
