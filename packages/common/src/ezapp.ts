@@ -1,17 +1,17 @@
 import { App, PluginScope } from '@ezbackend/core';
-import { EzBackendInstance, EzBackendOpts } from '.';
 import {
   EzError,
-  OverloadParameters,
-  OverloadParameters1to5,
-  OverloadParameters23,
+  ezWarning
 } from '@ezbackend/utils';
-import { FastifyInstance, FastifyRegister } from 'fastify';
 import { Plugin } from 'avvio';
 import dedent from 'dedent-js';
-import type { Namespace } from 'socket.io';
+import { FastifyInstance, FastifyReply, FastifyRequest, RouteShorthandOptions } from 'fastify';
 import fp from 'fastify-plugin';
 import { merge } from 'lodash';
+import type { Namespace } from 'socket.io';
+import { EzBackendInstance, EzBackendOpts } from '.';
+import { getSchemaOrUndefined } from './schema-generation';
+import { HTTPMethods } from 'fastify/types/utils'
 
 type CallableKeysOf<Type> = {
   [Key in keyof Type]: Type[Key] extends Function ? Key : never;
@@ -20,14 +20,170 @@ type CallableKeysOf<Type> = {
 function generateFastifyFuncWrapper<Params extends Array<unknown> = Array<unknown>>(
   parent: EzApp,
   funcName: CallableKeysOf<FastifyInstance>,
+  optsCallback: (
+    opts: Params,
+    parent?: EzApp,
+    funcName?: CallableKeysOf<FastifyInstance>) => Params = (opts) => opts
 ) {
   return (...opts: Params) => {
     parent.functions.push(
       // any has to be used here because of typescript recursion limit
-      (server: FastifyInstance) => (server[funcName] as any)(...opts),
+      (server: any) => {
+        opts = optsCallback(opts, parent, funcName)
+        server[funcName](...opts)
+      },
     );
   };
 }
+
+
+
+export type CustomRouteShorthandOptions<Body, QueryString, Params, Headers, Reply200, Reply400> = {
+  body?: { new(): Body },
+  querystring?: { new(): QueryString },
+  params?: { new(): Params },
+  headers?: { new(): Headers },
+  reply200?: { new(): Reply200 },
+  reply400?: { new(): Reply400 },
+  summary?: string,
+  description?: string
+} & RouteShorthandOptions
+
+// URGENT TODO: Implement Reply200 type
+export type CustomRouteHandlerMethod<Body, QueryString, Params, Headers> = (req: {
+  body?: Body,
+  querystring?: QueryString,
+  params?: Params,
+  headers?: Headers
+} & FastifyRequest, res: FastifyReply) => any
+
+export interface CustomRouteOptions<
+  Body,
+  QueryString,
+  Params,
+  Headers,
+  Reply200,
+  Reply400> {
+  method: HTTPMethods | HTTPMethods[]
+  url: string
+  body?: { new(): Body }
+  querystring?: { new(): QueryString }
+  params?: { new(): Params }
+  headers?: { new(): Headers }
+  reply200?: { new(): Reply200 }
+  reply400?: { new(): Reply400 }
+  summary?: string
+  description?: string
+  handler: CustomRouteHandlerMethod<Body, QueryString, Params, Headers>
+}
+
+// TODO: Custom Route Typescript Types
+export interface CustomRouteShorthandMethod {
+  <
+    Body = any,
+    QueryString = any,
+    Params = any,
+    Headers = any,
+    Reply200 = any,
+    Reply400 = any,
+    >
+    (url: string,
+    opts: CustomRouteShorthandOptions<Body, QueryString, Params, Headers, Reply200, Reply400>,
+    cb: CustomRouteHandlerMethod<Body, QueryString, Params, Headers>
+  ): void
+  <
+    Body = any,
+    QueryString = any,
+    Params = any,
+    Headers = any,
+    Reply200 = any,
+    >
+    (url: string,
+    cb: CustomRouteHandlerMethod<Body, QueryString, Params, Headers>,
+  ): void
+}
+
+export interface CustomRouteMethod {
+  <
+    Body = any,
+    QueryString = any,
+    Params = any,
+    Headers = any,
+    Reply200 = any,
+    Reply400 = any
+    >(
+    opts: CustomRouteOptions<Body, QueryString, Params, Headers, Reply200, Reply400>
+  ): void
+}
+
+// Convert Custom Route Types to json schema syntax
+
+// Warning this mutates original variable
+function convertOptions(opts: CustomRouteShorthandOptions<any, any, any, any, any, any>) {
+
+  const definedTwiceMsg = (schemaType: string, schemaName: string) => {
+    return [
+      `'${schemaType}' schema is defined twice for '${schemaName}'`,
+      `You should either use JsonSchema or the Class Schema, but not both`
+    ] as const
+  }
+
+  if (!opts.schema) {
+    opts.schema = {}
+  }
+  if (!opts.schema.response) {
+    opts.schema.response = {}
+  }
+
+  // URGENT TODO: Support all response codes
+
+  if (opts.schema.body && opts.body) { throw new EzError(...definedTwiceMsg('body', opts.body.name)) }
+  if (opts.schema.querystring && opts.querystring) { throw new EzError(...definedTwiceMsg('querystring', opts.querystring.name)) }
+  if (opts.schema.params && opts.params) { throw new EzError(...definedTwiceMsg('params', opts.params.name)) }
+  if (opts.schema.headers && opts.headers) { throw new EzError(...definedTwiceMsg('headers', opts.headers.name)) }
+  if ((opts.schema.response as any)['200'] && opts.reply200) { throw new EzError(...definedTwiceMsg('200 OK Response', opts.reply200.name)) }
+  if ((opts.schema.response as any)['400'] && opts.reply400) { throw new EzError(...definedTwiceMsg('400 BAD REQUEST Response', opts.reply400.name)) }
+
+  const bodySchema = getSchemaOrUndefined(opts.body)
+  const queryStringSchema = getSchemaOrUndefined(opts.querystring)
+  const paramsSchema = getSchemaOrUndefined(opts.params)
+  const headersSchema = getSchemaOrUndefined(opts.headers)
+  const reply200Schema = getSchemaOrUndefined(opts.reply200)
+  const reply400Schema = getSchemaOrUndefined(opts.reply400)
+
+  if (!opts.schema.body && bodySchema) { opts.schema.body = bodySchema }
+  if (!opts.schema.querystring && queryStringSchema) { opts.schema.querystring = queryStringSchema }
+  if (!opts.schema.params && paramsSchema) { opts.schema.params = paramsSchema }
+  if (!opts.schema.headers && headersSchema) { opts.schema.headers = headersSchema }
+  if (!(opts.schema.response as any)['200'] && reply200Schema) { (opts.schema.response as any)['200'] = reply200Schema }
+  if (!(opts.schema.response as any)['400'] && reply400Schema) { (opts.schema.response as any)['400'] = reply400Schema }
+
+  if (opts.summary) { (opts.schema as any).summary = opts.summary }
+  if (opts.description) { (opts.schema as any).description = opts.description }
+
+  return opts
+}
+
+function convertShorthandOptions(originalOpts: any, parentApp: EzApp | undefined) {
+  // Note that original object IS being mutated
+  // Keep as similar to fastify method as possible
+  const [url, opts, handler] = originalOpts
+  if (!handler && typeof opts === 'function') {
+    ezWarning(`No type specified for prefix '${parentApp?.getPrefix()}',path '${url}' so no auto documentation nor input validation provided`)
+  } else {
+    convertOptions(opts) // This function mutates opts
+  }
+
+  return originalOpts
+}
+function convertFullOptions(originalOptsArray: any, parentApp: EzApp | undefined) {
+  // Note that original object IS being mutated
+  // Keep as similar to fastify method as possible
+  const [originalOpts] = originalOptsArray
+  convertOptions(originalOpts) // This function mutates opts
+  return originalOptsArray
+}
+
 
 // TODO: Add types based on fastify instance
 // TODO: Tests for all stubbing performed
@@ -35,26 +191,26 @@ function createServer(parent: EzApp) {
   return {
     // TODO: Figure out how to get types with overrides
     // Routes
-    delete: generateFastifyFuncWrapper(parent, 'delete') as FastifyInstance['delete'],
-    get: generateFastifyFuncWrapper(parent, 'get') as FastifyInstance['get'],
-    head: generateFastifyFuncWrapper(parent, 'head') as FastifyInstance['head'],
-    patch: generateFastifyFuncWrapper(parent, 'patch') as FastifyInstance['patch'],
-    post: generateFastifyFuncWrapper(parent, 'post') as FastifyInstance['post'],
-    put: generateFastifyFuncWrapper(parent, 'put') as FastifyInstance['put'],
-    options: generateFastifyFuncWrapper(parent, 'options') as FastifyInstance['options'],
-    all: generateFastifyFuncWrapper(parent, 'all') as FastifyInstance['all'],
-    route: generateFastifyFuncWrapper(parent, 'route') as FastifyInstance['route'],
-    addHook: generateFastifyFuncWrapper(parent, 'addHook') as FastifyInstance['addHook'],
-    addSchema: generateFastifyFuncWrapper(parent, 'addSchema') as FastifyInstance['addSchema'],
-    setSerializerCompiler: generateFastifyFuncWrapper(parent, 'setSerializerCompiler') as FastifyInstance['setSerializerCompiler'],
-    addContentTypeParser: generateFastifyFuncWrapper(parent, 'addContentTypeParser') as FastifyInstance['addContentTypeParser'],
-    decorate: generateFastifyFuncWrapper(parent, 'decorate') as FastifyInstance['decorate'],
-    decorateReply: generateFastifyFuncWrapper(parent, 'decorateReply') as FastifyInstance['decorateReply'],
-    decorateRequest: generateFastifyFuncWrapper(parent, 'decorateRequest') as FastifyInstance['decorateRequest'],
+    delete: parent.delete,
+    get: parent.get,
+    head: parent.head,
+    patch: parent.patch,
+    post: parent.post,
+    put: parent.put,
+    options: parent.options,
+    all: parent.all,
+    route: parent.route,
+    addHook: parent.addHook,
+    addSchema: parent.addSchema,
+    setSerializerCompiler: parent.setSerializerCompiler,
+    addContentTypeParser: parent.addContentTypeParser,
+    decorate: parent.decorate,
+    decorateReply: parent.decorateReply,
+    decorateRequest: parent.decorateRequest,
     inject: generateFastifyFuncWrapper(parent, 'inject') as FastifyInstance['inject'],
-    register: generateFastifyFuncWrapper(parent, 'register') as FastifyRegister,
-    setNotFoundHandler: generateFastifyFuncWrapper(parent, 'setNotFoundHandler') as FastifyInstance['setNotFoundHandler'],
-    setErrorHandler: generateFastifyFuncWrapper(parent, 'setErrorHandler') as FastifyInstance['setErrorHandler'],
+    register: parent.register,
+    setNotFoundHandler: parent.setNotFoundHandler,
+    setErrorHandler: parent.setErrorHandler,
   };
 }
 
@@ -85,7 +241,7 @@ export class EzApp extends App {
     fullOpts: EzBackendOpts,
   ): EzBackendOpts[LocalOptsKey] {
     if (fullOpts[optsPrefix]) {
-      return merge({},this._defaultOpts, fullOpts[optsPrefix]);
+      return merge({}, this._defaultOpts, fullOpts[optsPrefix]);
     }
 
     if (this._defaultOpts) {
@@ -141,15 +297,16 @@ export class EzApp extends App {
 
   // Make routing with apps easy
   // URGENT TODO: Should we do this within the handler to be part of the plugin tree?
-  delete = generateFastifyFuncWrapper(this, 'delete') as FastifyInstance['delete'];
-  get = generateFastifyFuncWrapper(this, 'get') as FastifyInstance['get'];
-  head = generateFastifyFuncWrapper(this, 'head') as FastifyInstance['head'];
-  patch = generateFastifyFuncWrapper(this, 'patch') as FastifyInstance['patch'];
-  post = generateFastifyFuncWrapper(this, 'post') as FastifyInstance['post'];
-  put = generateFastifyFuncWrapper(this, 'put') as FastifyInstance['put'];
-  options = generateFastifyFuncWrapper(this, 'options') as FastifyInstance['options'];
-  all = generateFastifyFuncWrapper(this, 'all') as FastifyInstance['all'];
-  route = generateFastifyFuncWrapper(this, 'route') as FastifyInstance['route'];
+  delete = generateFastifyFuncWrapper(this, 'delete', convertShorthandOptions) as CustomRouteShorthandMethod
+  get = generateFastifyFuncWrapper(this, 'get', convertShorthandOptions) as CustomRouteShorthandMethod
+  head = generateFastifyFuncWrapper(this, 'head', convertShorthandOptions) as CustomRouteShorthandMethod
+  patch = generateFastifyFuncWrapper(this, 'patch', convertShorthandOptions) as CustomRouteShorthandMethod
+  post = generateFastifyFuncWrapper(this, 'post', convertShorthandOptions) as CustomRouteShorthandMethod
+  put = generateFastifyFuncWrapper(this, 'put', convertShorthandOptions) as CustomRouteShorthandMethod
+  options = generateFastifyFuncWrapper(this, 'options', convertShorthandOptions) as CustomRouteShorthandMethod
+  all = generateFastifyFuncWrapper(this, 'all', convertShorthandOptions) as CustomRouteShorthandMethod
+  route = generateFastifyFuncWrapper(this, 'route', convertFullOptions) as CustomRouteMethod;
+
   addHook = generateFastifyFuncWrapper(this, 'addHook') as FastifyInstance['addHook'];
   addSchema = generateFastifyFuncWrapper(this, 'addSchema') as FastifyInstance['addSchema'];
   setSerializerCompiler = generateFastifyFuncWrapper(this, 'setSerializerCompiler') as FastifyInstance['setSerializerCompiler'];
@@ -242,6 +399,7 @@ export class EzApp extends App {
     return instancePrefix + pluginPrefix;
   }
 
+  // TODO : Throw an error if the prefix is obtained before the app is defined
   getPrefix(): string {
     if (!this.parent) {
       return '';
