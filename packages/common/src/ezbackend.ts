@@ -19,11 +19,12 @@ import {
   ObjectLiteral,
   Repository
 } from 'typeorm';
+import type { RouterOptions } from '.';
 import { EzRepo, REALTIME } from '.';
 import { EzApp, EzBackendServer } from './ezapp';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
-import type { RouterOptions } from '.';
+import { createSchemaGenerator } from './schema-generation';
 
 export interface EzBackendInstance {
   entities: Array<EntitySchema>;
@@ -153,7 +154,8 @@ const defaultConfig: EzBackendOpts['backend'] = {
       methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     },
   },
-  storage: {}
+  storage: {},
+
 };
 
 // Derived from https://github.com/jeromemacias/fastify-boom/blob/master/index.js
@@ -347,7 +349,9 @@ export class EzBackend extends EzApp {
   }
 
   async closeInternals() {
+    // TODO: Change everything to the same design pattern. Either Functional programming or Singleton
     EzRepo.unregisterEzRepos()
+    createSchemaGenerator.clear?.()
   }
 
   async close() {

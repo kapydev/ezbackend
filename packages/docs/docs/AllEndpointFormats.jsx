@@ -4,7 +4,7 @@ import TabItem from "@theme/TabItem";
 import CodeBlock from "@theme/CodeBlock";
 
 // TODO: Make this code less disgusting
-export const AllEndpointFormats = ({ method, options, contents, returns, url }) => (
+export const AllEndpointFormats = ({ method, options, contents, returns, url, additionalPreCode }) => (
   <Tabs
     defaultValue="async"
     values={[
@@ -15,13 +15,13 @@ export const AllEndpointFormats = ({ method, options, contents, returns, url }) 
   >
     <TabItem value="async">
       <CodeBlock className="language-ts">
-        {`app.${method.toLowerCase()}("${url ?? "/"}",${
-          options
-            ? `{
-${options.replace(/^/gm, "    ")}
-  },`
-            : ""
-        } async (req,res) => {\n`}
+        {additionalPreCode ? (additionalPreCode + "\n\n") : ""}
+        {`app.${method.toLowerCase()}("${url ?? "/"}",${options
+          ? `{
+${options.replace(/^/gm, "  ")}
+},`
+          : ""
+          } async (req,res) => {\n`}
         {contents.replace(/^/gm, "  ")}
         {contents !== "" ? "\n  " : ""}
         {`return ${returns}`}
@@ -30,13 +30,13 @@ ${options.replace(/^/gm, "    ")}
     </TabItem>
     <TabItem value="sync">
       <CodeBlock className="language-ts">
-        {`app.${method.toLowerCase()}("${url ?? "/"}",${
-          options
-            ? `{
-${options.replace(/^/gm, "    ")}
-  },`
-            : ""
-        } function (req,res) {\n`}
+        {additionalPreCode ? (additionalPreCode + "\n\n") : ""}
+        {`app.${method.toLowerCase()}("${url ?? "/"}",${options
+          ? `{
+${options.replace(/^/gm, "  ")}
+},`
+          : ""
+          } function (req,res) {\n`}
         {contents.replace(/^/gm, "  ")}
         {contents !== "" ? "\n  " : ""}
         {`res.send(${returns})`}
@@ -45,13 +45,14 @@ ${options.replace(/^/gm, "    ")}
     </TabItem>
     <TabItem value="full">
       <CodeBlock className="language-ts">
+        {additionalPreCode + "\n\n"}
+
         {`app.route({
   method: ${method.toUpperCase()}, //Can be array of methods
   url: '${url ?? "/"}',
   handler: async => (req, res) { //sync version works too
-    ${
-      contents.replace(/^/gm, "") + (contents !== "" ? "\n    " : "")
-    }return ${returns}
+    ${contents.replace(/^/gm, "") + (contents !== "" ? "\n    " : "")
+          }return ${returns}
   }${options ? `,\n${options.replace(/^/gm, "  ")}` : ""}
 })`}
       </CodeBlock>
