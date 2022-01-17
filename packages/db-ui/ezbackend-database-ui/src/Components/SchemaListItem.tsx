@@ -9,7 +9,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     listItem: {
       '&$selected, &$selected:hover': {
-        backgroundColor: '#3B3228',
+        backgroundColor: '#1C2023',
       },
       borderRadius: 6,
     },
@@ -42,9 +42,9 @@ export default function SchemaListItem(props: ISchemaListItem) {
         <Typography variant="body2" noWrap>
           <Box
             component="div"
-            fontFamily={match ? 'monospace' : 'Inter'}
+            fontFamily="monospace"
             fontWeight="normal"
-            fontSize={match ? 16 : 14}
+            fontSize={match ? 16 : 15}
             color={match ? '#F5EEEB' : '#404040'}
             overflow="hidden"
             textOverflow="ellipsis"

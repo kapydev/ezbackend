@@ -49,7 +49,7 @@ function Layout(props: ILayout) {
             <AppBar
               position="relative"
               elevation={0}
-              style={{ backgroundColor: '#3B3228' }}
+              style={{ backgroundColor: '#1C2023' }}
             >
               <Toolbar>
                 {/* For Mobile Only */}
