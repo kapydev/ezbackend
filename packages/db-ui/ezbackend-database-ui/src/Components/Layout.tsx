@@ -63,19 +63,6 @@ function Layout(props: ILayout) {
                   </IconButton>
                 </Hidden>
 
-                <Button
-                  style={{ textTransform: 'none' }}
-                  onClick={() => {
-                    openInNewTab('https://www.ezbackend.io/');
-                  }}
-                >
-                  <Typography variant="h5" align="center">
-                    <Box fontFamily="monospace" padding={2} color="#F5EEEB">
-                      EzBackend
-                    </Box>
-                  </Typography>
-                </Button>
-
                 {/* For Mobile Only */}
                 <Hidden smUp>
                   <IconButton
