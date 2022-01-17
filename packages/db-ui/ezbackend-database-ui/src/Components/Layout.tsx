@@ -14,21 +14,45 @@ import Database from '../Pages/Database';
 import Docs from '../Pages/Docs';
 import SocketIODocs from '../Pages/SocketIODocs';
 import openInNewTab from '../Utils/openInNewTab';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useLocation,
+} from 'react-router-dom';
 
-const drawerItems = (
-  <>
-    <Link to="/" style={{ textDecoration: 'none' }}>
-      <DrawerItem name="Database" />
+interface ILinkItem {
+  route: string;
+  name: string;
+}
+
+function LinkItem(props: ILinkItem) {
+  return (
+    <Link to={props.route} style={{ textDecoration: 'none' }}>
+      <DrawerItem name={props.name} route={props.route} />
     </Link>
-    <Link to="/api-documentation" style={{ textDecoration: 'none' }}>
-      <DrawerItem name="API Docs" />
-    </Link>
-    <Link to="/socket-io-documentation" style={{ textDecoration: 'none' }}>
-      <DrawerItem name="Socket IO Docs" />
-    </Link>
-  </>
-);
+  );
+}
+
+const drawerItemContents = [
+  {
+    route: '/',
+    name: 'Database',
+  },
+  {
+    route: '/api-documentation',
+    name: 'API Docs',
+  },
+  {
+    route: '/socket-io-documentation',
+    name: 'Socket IO Docs',
+  },
+];
+
+const drawerItems = drawerItemContents.map((drawerItemContent) => (
+  <LinkItem route={drawerItemContent.route} name={drawerItemContent.name} />
+));
 
 interface ILayout {
   open: boolean;
@@ -52,27 +76,6 @@ function Layout(props: ILayout) {
               style={{ backgroundColor: '#1C2023' }}
             >
               <Toolbar>
-                {/* For Mobile Only */}
-                <Hidden smUp>
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={props.handleOpen}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                </Hidden>
-
-                {/* For Mobile Only */}
-                <Hidden smUp>
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={props.handleOpen}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                </Hidden>
 
                 <Button
                   style={{ textTransform: 'none' }}
