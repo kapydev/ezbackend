@@ -271,6 +271,30 @@ export class Person {
 }
 ```
 
+After creating a class you can use it in your routes for validation and automatic documentation
+
+```ts
+export class QueryString {data:any}
+export class Headers {data:any}
+export class Body {data:any}
+export class Params {data:any}
+export class Reply200 {data:any}
+export class Reply400 {data:any}
+
+app.post('/', {
+  body: Body,
+  params: Params,
+  querystring: QueryString,
+  headers: Headers,
+  reply200: Reply200,
+  reply400: Reply400,
+  summary: 'summary',
+  description: 'description'
+}, async (req,res) => {
+  return {}
+})
+```
+
 EzBackend uses [ts-json-schema-generator](https://github.com/vega/ts-json-schema-generator) to convert Typescript classes to the appropriate types.
 
 ### Summary

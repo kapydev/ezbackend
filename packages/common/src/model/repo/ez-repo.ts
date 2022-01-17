@@ -367,6 +367,7 @@ myRelation: {
       };
     }
   });
+
   return { columns, relations };
 }
 

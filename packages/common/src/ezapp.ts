@@ -38,18 +38,19 @@ function generateFastifyFuncWrapper<Params extends Array<unknown> = Array<unknow
 
 
 
-export type CustomRouteShorthandOptions<Body, QueryString, Params, Headers, Reply200> = {
+export type CustomRouteShorthandOptions<Body, QueryString, Params, Headers, Reply200, Reply400> = {
   body?: { new(): Body },
   querystring?: { new(): QueryString },
   params?: { new(): Params },
   headers?: { new(): Headers },
   reply200?: { new(): Reply200 },
+  reply400?: { new(): Reply400 },
   summary?: string,
   description?: string
 } & RouteShorthandOptions
 
 // URGENT TODO: Implement Reply200 type
-export type CustomRouteHandlerMethod<Body, QueryString, Params, Headers, Reply200> = (req: {
+export type CustomRouteHandlerMethod<Body, QueryString, Params, Headers> = (req: {
   body?: Body,
   querystring?: QueryString,
   params?: Params,
@@ -61,7 +62,8 @@ export interface CustomRouteOptions<
   QueryString,
   Params,
   Headers,
-  Reply200> {
+  Reply200,
+  Reply400> {
   method: HTTPMethods | HTTPMethods[]
   url: string
   body?: { new(): Body }
@@ -69,9 +71,10 @@ export interface CustomRouteOptions<
   params?: { new(): Params }
   headers?: { new(): Headers }
   reply200?: { new(): Reply200 }
+  reply400?: { new(): Reply400 }
   summary?: string
   description?: string
-  handler: CustomRouteHandlerMethod<Body, QueryString, Params, Headers, Reply200>
+  handler: CustomRouteHandlerMethod<Body, QueryString, Params, Headers>
 }
 
 // TODO: Custom Route Typescript Types
@@ -82,10 +85,11 @@ export interface CustomRouteShorthandMethod {
     Params = any,
     Headers = any,
     Reply200 = any,
+    Reply400 = any,
     >
     (url: string,
-    opts: CustomRouteShorthandOptions<Body, QueryString, Params, Headers, Reply200>,
-    cb: CustomRouteHandlerMethod<Body, QueryString, Params, Headers, Reply200>
+    opts: CustomRouteShorthandOptions<Body, QueryString, Params, Headers, Reply200, Reply400>,
+    cb: CustomRouteHandlerMethod<Body, QueryString, Params, Headers>
   ): void
   <
     Body = any,
@@ -95,7 +99,7 @@ export interface CustomRouteShorthandMethod {
     Reply200 = any,
     >
     (url: string,
-    cb: CustomRouteHandlerMethod<Body, QueryString, Params, Headers, Reply200>,
+    cb: CustomRouteHandlerMethod<Body, QueryString, Params, Headers>,
   ): void
 }
 
@@ -106,15 +110,16 @@ export interface CustomRouteMethod {
     Params = any,
     Headers = any,
     Reply200 = any,
+    Reply400 = any
     >(
-    opts: CustomRouteOptions<Body, QueryString, Params, Headers, Reply200>
+    opts: CustomRouteOptions<Body, QueryString, Params, Headers, Reply200, Reply400>
   ): void
 }
 
 // Convert Custom Route Types to json schema syntax
 
 // Warning this mutates original variable
-function convertOptions(opts: CustomRouteShorthandOptions<any, any, any, any, any>) {
+function convertOptions(opts: CustomRouteShorthandOptions<any, any, any, any, any, any>) {
 
   const definedTwiceMsg = (schemaType: string, schemaName: string) => {
     return [
@@ -137,18 +142,21 @@ function convertOptions(opts: CustomRouteShorthandOptions<any, any, any, any, an
   if (opts.schema.params && opts.params) { throw new EzError(...definedTwiceMsg('params', opts.params.name)) }
   if (opts.schema.headers && opts.headers) { throw new EzError(...definedTwiceMsg('headers', opts.headers.name)) }
   if ((opts.schema.response as any)['200'] && opts.reply200) { throw new EzError(...definedTwiceMsg('200 OK Response', opts.reply200.name)) }
+  if ((opts.schema.response as any)['400'] && opts.reply400) { throw new EzError(...definedTwiceMsg('400 BAD REQUEST Response', opts.reply400.name)) }
 
   const bodySchema = getSchemaOrUndefined(opts.body)
   const queryStringSchema = getSchemaOrUndefined(opts.querystring)
   const paramsSchema = getSchemaOrUndefined(opts.params)
   const headersSchema = getSchemaOrUndefined(opts.headers)
   const reply200Schema = getSchemaOrUndefined(opts.reply200)
+  const reply400Schema = getSchemaOrUndefined(opts.reply400)
 
   if (!opts.schema.body && bodySchema) { opts.schema.body = bodySchema }
   if (!opts.schema.querystring && queryStringSchema) { opts.schema.querystring = queryStringSchema }
   if (!opts.schema.params && paramsSchema) { opts.schema.params = paramsSchema }
   if (!opts.schema.headers && headersSchema) { opts.schema.headers = headersSchema }
   if (!(opts.schema.response as any)['200'] && reply200Schema) { (opts.schema.response as any)['200'] = reply200Schema }
+  if (!(opts.schema.response as any)['400'] && reply400Schema) { (opts.schema.response as any)['400'] = reply400Schema }
 
   if (opts.summary) { (opts.schema as any).summary = opts.summary }
   if (opts.description) { (opts.schema as any).description = opts.description }
