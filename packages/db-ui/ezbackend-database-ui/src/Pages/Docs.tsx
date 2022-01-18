@@ -13,7 +13,11 @@ export default function Docs() {
   return (
     <Fade in={true} timeout={600}>
       <div>
-        <SwaggerUI url={`${URL}/docs/json`} />
+        <SwaggerUI
+          url={`${URL}/docs/json`}
+          filter={true}
+          tryItOutEnabled={true}
+        />
       </div>
     </Fade>
   );

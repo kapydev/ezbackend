@@ -38,11 +38,11 @@ function LinkItem(props: ILinkItem) {
 const drawerItemContents = [
   {
     route: '/',
-    name: 'Database',
+    name: 'API Docs',
   },
   {
-    route: '/api-documentation',
-    name: 'API Docs',
+    route: '/database',
+    name: 'Database',
   },
   {
     route: '/socket-io-documentation',
@@ -76,7 +76,6 @@ function Layout(props: ILayout) {
               style={{ backgroundColor: '#1C2023' }}
             >
               <Toolbar>
-
                 <Button
                   style={{ textTransform: 'none' }}
                   onClick={() => {
@@ -96,14 +95,14 @@ function Layout(props: ILayout) {
           </Grid>
           <Grid item>
             <Switch>
-              <Route path="/api-documentation">
-                <Docs />
-              </Route>
               <Route path="/socket-io-documentation">
                 <SocketIODocs />
               </Route>
-              <Route path="/">
+              <Route path="/database">
                 <Database />
+              </Route>
+              <Route path="/">
+                <Docs />
               </Route>
             </Switch>
           </Grid>
