@@ -265,7 +265,7 @@ function Database() {
                     <ReactJson // @ts-ignore
                       src={cellDataValue}
                       style={{ padding: 18, borderRadius: 10 }}
-                      theme="mocha"
+                      theme="ashes"
                     />
                   </Scrollbars>
                 </Grid>
