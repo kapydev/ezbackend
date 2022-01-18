@@ -1,4 +1,3 @@
-import 'rapidoc'; // <-- import rapidoc
 import Fade from '@material-ui/core/Fade';
 import { getBaseURL } from '../Helpers';
 import SwaggerUI from 'swagger-ui-react';
