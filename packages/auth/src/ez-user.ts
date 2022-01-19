@@ -65,7 +65,8 @@ function checkGeneratable(modelSchema: ModelSchema) {
   });
 }
 
-export class EzUser extends EzModel {
+// URGENT TODO: Remove 'any' type and do proper type inference
+export class EzUser extends EzModel<any> {
   constructor(
     modelName: string,
     providers: Providers,
