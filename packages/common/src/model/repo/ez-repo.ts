@@ -612,10 +612,13 @@ model.setHandler("Handle Repo", async (instance, opts) => {
   findOneOrFail = this.getRepo().findOneOrFail
   query = this.getRepo().query
   clear = this.getRepo().clear
-  increment = this.getRepo().increment
-  decrement = this.getRepo().decrement
+  increment = this.getRepo().increment;
+  decrement = this.getRepo().decrement;
 
 
+  /**
+   * @deprecated This function is only meant to be used internally, external reliance will be removed in next breaking change.
+   */
   generateNonNestedSchema(
     schemaType: 'updateSchema' | 'createSchema' | 'fullSchema',
     columns: [string, EntitySchemaColumnOptions][],
