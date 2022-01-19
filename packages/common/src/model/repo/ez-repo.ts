@@ -504,17 +504,17 @@ function entityGeneratorFactory(
   return entityGenerator;
 }
 
-export class EzRepo extends EzApp {
+export class EzRepo<Schema extends ModelSchema> extends EzApp {
 
   // NOTE: We are creating global application state in terms of repos. Happy to debate if you can think of a better way for the same use case
-  private static ezRepos: { [key: string]: EzRepo } = {}
+  private static ezRepos: { [key: string]: EzRepo<any> } = {}
 
   // URGENT TODO : Think if there is a better way of unregistering the repos
   static unregisterEzRepos() {
     EzRepo.ezRepos = {}
   }
 
-  private static registerEzRepo(repo: EzRepo, name?: string) {
+  private static registerEzRepo(repo: EzRepo<any>, name?: string) {
     const repoName = name ?? repo._modelName
     if (Object.keys(EzRepo.ezRepos).includes(repoName)) {
       throw new EzError("EzRepo Name has already been used",
@@ -536,13 +536,13 @@ export class EzRepo extends EzApp {
   }
 
   protected _modelName: string
-  protected _modelSchema: ModelSchema
+  protected _modelSchema: Schema
   protected _repoOpts: RepoOptions
-  protected _repo: Repository<ObjectLiteral> | undefined;
+  protected _repo: Repository<Convert<Schema>> | undefined;
 
   constructor(
     modelName: string,
-    modelSchema: ModelSchema,
+    modelSchema: Schema,
     repoOpts: RepoOptions = {},
   ) {
     super();
@@ -563,6 +563,8 @@ export class EzRepo extends EzApp {
         this._repo = instance.repo;
       },
     );
+
+    return this as EzRepo<Schema>
   }
 
   generateNonNestedSchema(
@@ -593,7 +595,7 @@ export class EzRepo extends EzApp {
       isMany: boolean;
       propertyName: string;
     }[],
-    recursiveFunctionName: keyof EzRepo) {
+    recursiveFunctionName: keyof EzRepo<Schema>) {
 
     const schemaWithNestedRelations = relevantRelationColumns.reduce((jsonSchema, relationData) => {
       if (typeof relationData.data.target !== 'string') {
@@ -720,7 +722,7 @@ export class EzRepo extends EzApp {
     return newSchema
   }
 
-  getRepo(): Repository<ObjectLiteral> {
+  getRepo(): Repository<Convert<Schema>> {
     if (this._repo === undefined) {
       throw new EzError(
         'Can only call getRepo() in lifecyle preHandler to postRun',

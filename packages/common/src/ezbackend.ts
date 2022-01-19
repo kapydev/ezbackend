@@ -31,7 +31,7 @@ export interface EzBackendInstance {
   server: EzBackendServer;
   _server: FastifyInstance;
   repo: Repository<ObjectLiteral>;
-  ezRepo: EzRepo;
+  ezRepo: EzRepo<any>;
   orm: Connection;
   // TODO: Find correct type for subscriber
   subscribers: Array<Function>;
