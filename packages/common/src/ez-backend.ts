@@ -21,7 +21,7 @@ import {
 } from 'typeorm';
 import type { RouterOptions } from '.';
 import { EzRepo, REALTIME } from '.';
-import { EzApp, EzBackendServer } from './ezapp';
+import { EzApp, EzBackendServer } from './ez-app';
 import { attachSocketIO, createSocketIO } from './realtime';
 import { outgoingPacketMiddleware } from './realtime/socket-io-outgoing-packet-middleware';
 import { createSchemaGenerator } from './schema-generation';

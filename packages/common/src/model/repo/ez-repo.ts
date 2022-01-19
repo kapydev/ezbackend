@@ -1,4 +1,4 @@
-import { EzApp } from '../../ezapp';
+import { EzApp } from '../../ez-app';
 import {
   ObjectLiteral,
   Repository,

@@ -10,7 +10,7 @@ import {
   RemoveEvent,
   UpdateEvent,
 } from 'typeorm';
-import { EzApp } from '../ezapp';
+import { EzApp } from '../ez-app';
 import { DecorateClass } from '../model';
 import { getContext, REALTIME, setContext } from './context';
 
