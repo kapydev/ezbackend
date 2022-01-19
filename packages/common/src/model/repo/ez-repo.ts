@@ -616,7 +616,7 @@ model.setHandler("Handle Repo", async (instance, opts) => {
   decrement = this.getRepo().decrement
 
 
-  protected generateNonNestedSchema(
+  generateNonNestedSchema(
     schemaType: 'updateSchema' | 'createSchema' | 'fullSchema',
     columns: [string, EntitySchemaColumnOptions][],
     prefix?: string,
