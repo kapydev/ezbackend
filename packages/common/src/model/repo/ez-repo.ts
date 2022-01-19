@@ -14,41 +14,48 @@ import { EzError } from '@ezbackend/utils';
 import { generateSchemaName, colTypeToJsonSchemaType } from '..';
 import { JSONSchema6, JSONSchema6Definition } from 'json-schema';
 
-enum NormalType {
-  VARCHAR = 'VARCHAR',
-  INT = 'INT',
-  FLOAT = 'FLOAT',
-  DOUBLE = 'DOUBLE',
-  REAL = 'REAL',
-  DATE = 'DATE',
-  JSON = 'JSON',
-  BOOL = 'BOOL',
-  ENUM = 'ENUM',
-  FILE = 'FILE'
+// Quite frankly, the things I do for typescript are crazy
+const NormalType = {
+  VARCHAR: 'VARCHAR' as const,
+  INT: 'INT' as const,
+  FLOAT: 'FLOAT' as const,
+  DOUBLE: 'DOUBLE' as const,
+  REAL: 'REAL' as const,
+  DATE: 'DATE' as const,
+  JSON: 'JSON' as const,
+  BOOL: 'BOOL' as const,
+  ENUM: 'ENUM' as const,
+  FILE: 'FILE' as const
 }
 
-enum RelationType {
-  ONE_TO_ONE = 'ONE_TO_ONE',
-  ONE_TO_MANY = 'ONE_TO_MANY',
-  MANY_TO_ONE = 'MANY_TO_ONE',
-  MANY_TO_MANY = 'MANY_TO_MANY',
+const RelationType = {
+  ONE_TO_ONE: 'ONE_TO_ONE' as const,
+  ONE_TO_MANY: 'ONE_TO_MANY' as const,
+  MANY_TO_ONE: 'MANY_TO_ONE' as const,
+  MANY_TO_MANY: 'MANY_TO_MANY' as const,
 }
 
-export type Type = RelationType | NormalType;
+type ValuesOf<T> = T[keyof T]
+
+type RelationInterface = ValuesOf<typeof RelationType>
+type NormalInterface = ValuesOf<typeof NormalType>
+
+export type Type = RelationInterface | NormalInterface;
 export const Type = { ...RelationType, ...NormalType };
 
-type NestedRelationType = { type: RelationType } & Omit<
+type NestedRelationType = { type: RelationInterface } & Omit<
   EntitySchemaRelationOptions,
   'type'
 >;
-type NestedNormalType = { type: NormalType | ColumnType } & Omit<
+type NestedNormalType = { type: NormalInterface | ColumnType } & Omit<
   EntitySchemaColumnOptions,
   'type'
 >;
 
+
 export type FullType =
-  | NormalType
-  | RelationType
+  | NormalInterface
+  | RelationInterface
   | NestedNormalType
   | NestedRelationType;
 
@@ -59,7 +66,7 @@ export type ModelSchema = {
 // URGENT TODO: Allow array?
 // URGENT TODO: Allow normal typeorm types?
 
-function normalTypeToTypeORMtype(type: NormalType | ColumnType): ColumnType {
+function normalTypeToTypeORMtype(type: NormalInterface | ColumnType): ColumnType {
   switch (type) {
     case NormalType.FILE:
       // URGENT TODO: Make this a virtual column instead?
@@ -94,7 +101,7 @@ function normalTypeToTypeORMtype(type: NormalType | ColumnType): ColumnType {
 }
 
 function relationTypeToTypeORMrelation(
-  type: RelationType,
+  type: RelationInterface,
 ): TypeORMRelationType {
   switch (type) {
     case RelationType.ONE_TO_MANY:
@@ -108,8 +115,110 @@ function relationTypeToTypeORMrelation(
   }
 }
 
-export function isRelation(type: FullType): type is RelationType {
-  return Object.values(RelationType).includes(type as RelationType);
+type NormalTypeDict = {
+  [Type.VARCHAR]: string
+  [Type.INT]: number
+  [Type.FLOAT]: number
+  [Type.REAL]: number
+  [Type.DATE]: Date
+  [Type.JSON]: any
+  [Type.ENUM]: any
+  [Type.FILE]: any
+  [Type.BOOL]: boolean
+}
+
+type NestedEnumType = {
+  type: typeof Type.ENUM,
+  enum: Readonly<Array<any>>
+}
+
+type NestedNormalTypeDict = {
+  type: keyof NormalTypeDict
+}
+
+type NestedNormalNullableType =
+  { nullable: boolean } | { default: any }
+
+type NormalTypeToTypescriptType<T extends keyof NormalTypeDict> = ValuesOf<Pick<NormalTypeDict, T>>
+
+type NestedEnumToTypescriptType<T extends NestedEnumType> = T['enum'][number]
+
+
+type ConvertFull<T> = {
+  [K in keyof T]:
+  T[K] extends NestedEnumType ? NestedEnumToTypescriptType<T[K]> :
+  T[K] extends keyof NormalTypeDict ? NormalTypeToTypescriptType<T[K]> :
+  T[K] extends NestedNormalTypeDict ? NormalTypeToTypescriptType<T[K]['type']> :
+  any
+}
+
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+// TODO: Put caveat of type inference of nullable = false in docs
+type OptionalKeysOf<T> = {
+  [Key in keyof T]:
+  T[Key] extends NestedNormalNullableType ? Key : never
+}[keyof T]
+
+type Convert<T> = PartialBy<ConvertFull<T>, OptionalKeysOf<T>>
+
+// Sample Conversion
+// TODO: Allow enum to not require 'as const' identifier by making the original type generic readonly
+// URGENT TODO: Test for types
+
+// const x = {
+//   VARCHAR: Type.VARCHAR,
+//   INT: Type.INT,
+//   FLOAT: Type.FLOAT,
+//   DOUBLE: Type.DOUBLE,
+//   REAL: Type.REAL,
+//   DATE: Type.DATE,
+//   JSON: Type.JSON,
+//   BOOL: Type.BOOL,
+//   ENUM: {
+//     type: Type.ENUM,
+//     enum: ['type1', 'type2'] as const
+//   },
+//   FILE: Type.FILE,
+//   NESTED_VARCHAR: {
+//     type: Type.VARCHAR
+//   },
+//   OPTIONAL: {
+//     type: Type.VARCHAR,
+//     nullable: true
+//   },
+//   WITH_DEFAULT: {
+//     type: Type.VARCHAR,
+//     default: "Hello World"
+//   },
+//   UNKNOWN: "Hello"
+// }
+
+// const y: Convert<typeof x> = {
+//   VARCHAR: "thomas",
+//   INT: 23,
+//   FLOAT: 29,
+//   DOUBLE: 22,
+//   REAL: 24,
+//   DATE: new Date(),
+//   JSON: { hello: 'world' },
+//   BOOL: false,
+//   ENUM: 'type1',
+//   FILE: { he: 'bee' },
+//   NESTED_VARCHAR: 'string',
+//   OPTIONAL: 'string',
+//   WITH_DEFAULT: "hee",
+//   UNKNOWN: 'bew'
+// }
+
+
+
+
+
+export function isRelation(type: FullType): type is RelationInterface {
+  return Object.values(RelationType).includes(type as RelationInterface);
 }
 
 export function isNestedRelation(type: FullType): type is NestedRelationType {
@@ -118,8 +227,8 @@ export function isNestedRelation(type: FullType): type is NestedRelationType {
   );
 }
 
-export function isNormalType(type: FullType): type is NormalType {
-  return Object.values(NormalType).includes(type as NormalType);
+export function isNormalType(type: FullType): type is NormalInterface {
+  return Object.values(NormalType).includes(type as NormalInterface);
 }
 
 export function isNestedNormalType(type: FullType): type is NestedNormalType {
@@ -282,7 +391,7 @@ export function isNestedNormalType(type: FullType): type is NestedNormalType {
     'cube',
     'ltree',
   ];
-  return (Object.values(NormalType) as Array<NormalType | ColumnType>)
+  return (Object.values(NormalType) as Array<NormalInterface | ColumnType>)
     .concat(ColumnType)
     .includes((type as NestedNormalType).type);
 }
