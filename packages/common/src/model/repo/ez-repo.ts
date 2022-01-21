@@ -588,32 +588,31 @@ model.setHandler("Handle Repo", async (instance, opts) => {
     return this._repo;
   }
 
-  createQueryBuilder = this.getRepo().createQueryBuilder
-  target = this.getRepo().target
-  hasId = this.getRepo().hasId
-  getId = this.getRepo().getId
-  create = this.getRepo().create
-  merge = this.getRepo().merge
-  preload = this.getRepo().preload
-  save = this.getRepo().save
-  remove = this.getRepo().remove
-  softRemove = this.getRepo().softRemove
-  recover = this.getRepo().recover
-  insert = this.getRepo().insert
-  update = this.getRepo().update
-  delete = this.getRepo().delete
-  softDelete = this.getRepo().softDelete
-  restore = this.getRepo().restore
-  count = this.getRepo().count
-  find = this.getRepo().find
-  findAndCount = this.getRepo().findAndCount
-  findByIds = this.getRepo().findByIds
-  findOne = this.getRepo().findOne
-  findOneOrFail = this.getRepo().findOneOrFail
-  query = this.getRepo().query
-  clear = this.getRepo().clear
-  increment = this.getRepo().increment;
-  decrement = this.getRepo().decrement;
+  createQueryBuilder = (...args: Parameters<Repository<Convert<Schema>>['createQueryBuilder']>) => this.getRepo().createQueryBuilder(...args)
+  hasId = (...args: Parameters<Repository<Convert<Schema>>['hasId']>) => this.getRepo().hasId(...args)
+  getId = (...args: Parameters<Repository<Convert<Schema>>['getId']>) => this.getRepo().getId(...args)
+  create = (...args: Parameters<Repository<Convert<Schema>>['create']>) => this.getRepo().create(...args)
+  merge = (...args: Parameters<Repository<Convert<Schema>>['merge']>) => this.getRepo().merge(...args)
+  preload = (...args: Parameters<Repository<Convert<Schema>>['preload']>) => this.getRepo().preload(...args)
+  save = (...args: Parameters<Repository<Convert<Schema>>['save']>) => this.getRepo().save(...args)
+  remove = (...args: Parameters<Repository<Convert<Schema>>['remove']>) => this.getRepo().remove(...args)
+  softRemove = (...args: Parameters<Repository<Convert<Schema>>['softRemove']>) => this.getRepo().softRemove(...args)
+  recover = (...args: Parameters<Repository<Convert<Schema>>['recover']>) => this.getRepo().recover(...args)
+  insert = (...args: Parameters<Repository<Convert<Schema>>['insert']>) => this.getRepo().insert(...args)
+  update = (...args: Parameters<Repository<Convert<Schema>>['update']>) => this.getRepo().update(...args)
+  delete = (...args: Parameters<Repository<Convert<Schema>>['delete']>) => this.getRepo().delete(...args)
+  softDelete = (...args: Parameters<Repository<Convert<Schema>>['softDelete']>) => this.getRepo().softDelete(...args)
+  restore = (...args: Parameters<Repository<Convert<Schema>>['restore']>) => this.getRepo().restore(...args)
+  count = (...args: Parameters<Repository<Convert<Schema>>['count']>) => this.getRepo().count(...args)
+  find = (...args: Parameters<Repository<Convert<Schema>>['find']>) => this.getRepo().find(...args)
+  findAndCount = (...args: Parameters<Repository<Convert<Schema>>['findAndCount']>) => this.getRepo().findAndCount(...args)
+  findByIds = (...args: Parameters<Repository<Convert<Schema>>['findByIds']>) => this.getRepo().findByIds(...args)
+  findOne = (...args: Parameters<Repository<Convert<Schema>>['findOne']>) => this.getRepo().findOne(...args)
+  findOneOrFail = (...args: Parameters<Repository<Convert<Schema>>['findOneOrFail']>) => this.getRepo().findOneOrFail(...args)
+  query = (...args: Parameters<Repository<Convert<Schema>>['query']>) => this.getRepo().query(...args)
+  clear = (...args: Parameters<Repository<Convert<Schema>>['clear']>) => this.getRepo().clear(...args)
+  increment = (...args: Parameters<Repository<Convert<Schema>>['increment']>) => this.getRepo().increment(...args)
+  decrement = (...args: Parameters<Repository<Convert<Schema>>['decrement']>) => this.getRepo().decrement(...args)
 
 
   /**
