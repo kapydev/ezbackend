@@ -9,7 +9,7 @@ export type ModelOpts = {
 /**
  * Child of EzApp. This is your data model.
  */
-export class EzModel<Schema extends ModelSchema> extends EzRepo<Schema> {
+export class EzModel<Schema extends ModelSchema = any> extends EzRepo<Schema> {
   // TODO: Figure out automatic typings
   get router(): EzRouter {
     return this.getApp('router') as EzRouter;

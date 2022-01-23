@@ -510,7 +510,7 @@ function entityGeneratorFactory(
   return entityGenerator;
 }
 
-export class EzRepo<Schema extends ModelSchema> extends EzApp {
+export class EzRepo<Schema extends ModelSchema = any> extends EzApp {
 
   // NOTE: We are creating global application state in terms of repos. Happy to debate if you can think of a better way for the same use case
   private static ezRepos: { [key: string]: EzRepo<any> } = {}
