@@ -67,7 +67,7 @@ function getDbUIGenerators() {
 async function addDBSchemas(instance: EzBackendInstance, opts: EzBackendOpts) {
   const repos = EzRepo.getAllEzRepos()
   const prefix = 'db-ui'
-  
+
   Object.values(repos).forEach(repo => {
     const createSchema = repo.getCreateSchema(prefix)
     const updateSchema = repo.getUpdateSchema(prefix)
@@ -139,18 +139,21 @@ async function dbUIFastifyPlugin(
 export class EzDbUI extends EzApp {
   constructor() {
     super();
+
+    if (process.env.NODE_ENV === 'production') {
+      ezWarning(
+        'You should not run EzDBUI in production, since it allows arbitrary database editing',
+      );
+      return
+    }
+
+
     this.setHandler('Add DB-UI endpoint schemas', addDBSchemas);
 
     this.addApp('DB-UI Endpoint Router', new DBEndpointRouter());
 
     this.setHandler('Serve UI Interface', async (instance) => {
-      if (process.env.NODE_ENV !== 'production') {
-        instance.server.register(dbUIFastifyPlugin, { prefix: 'db-ui' });
-      } else {
-        ezWarning(
-          'You should not run EzDBUI in production, since it allows arbitrary database editing',
-        );
-      }
+      instance.server.register(dbUIFastifyPlugin, { prefix: 'db-ui' });
     });
 
     this.setPostRun('Display DB UI URL', async (instance, opts) => {
