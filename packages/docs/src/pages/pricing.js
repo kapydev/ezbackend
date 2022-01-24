@@ -92,7 +92,7 @@ function Pricing() {
                 }
                 listItems={freeFeatures}
                 button_text="Get Started"
-                href="/docs/intro"
+                href="/docs/getting-started"
               />
             </div>
 

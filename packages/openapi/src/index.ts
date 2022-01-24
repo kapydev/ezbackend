@@ -1,2 +1,2 @@
 import 'fastify-swagger';
-export * from './openapi';
+export * from './ez-open-api';

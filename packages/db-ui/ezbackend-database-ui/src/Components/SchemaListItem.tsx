@@ -2,14 +2,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import removeDbui from '../Utils/removeDbui';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() =>
   createStyles({
     listItem: {
       '&$selected, &$selected:hover': {
-        backgroundColor: '#3B3228',
+        backgroundColor: '#1C2023',
       },
       borderRadius: 6,
     },
@@ -24,9 +23,14 @@ interface ISchemaListItem {
 }
 
 export default function SchemaListItem(props: ISchemaListItem) {
-  const classes = useStyles();
+  
+  const classes = useStyles()
 
-  const match = removeDbui(props.selectedItem) === removeDbui(props.text);
+  function checkSelected(text: string, match: string) {
+    return text.replace(/^(db-ui\/)/, '') === match.replace(/^(db-ui\/)/, '');
+  }
+
+  const match = checkSelected(props.text, props.selectedItem);
 
   return (
     <ListItem
@@ -42,14 +46,14 @@ export default function SchemaListItem(props: ISchemaListItem) {
         <Typography variant="body2" noWrap>
           <Box
             component="div"
-            fontFamily={match ? 'monospace' : 'Inter'}
+            fontFamily="monospace"
             fontWeight="normal"
-            fontSize={match ? 16 : 14}
+            fontSize={match ? 16 : 15}
             color={match ? '#F5EEEB' : '#404040'}
             overflow="hidden"
             textOverflow="ellipsis"
           >
-            {removeDbui(props.text)}
+            {props.text.replace(/^(db-ui\/)/, '')}
           </Box>
         </Typography>
       </ListItemText>

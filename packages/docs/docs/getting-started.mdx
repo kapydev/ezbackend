@@ -1,13 +1,24 @@
 ---
-sidebar_label: "Getting Started"
+sidebar_label: 'Getting Started'
 sidebar_position: 2
 ---
 
 # Getting Started
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-import CodeBlock from "@theme/CodeBlock";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+import CodeSnippet from './CodeSnippet';
+
+## Overview
+
+This 10 minute read will cover:
+
+1. Installation
+2. Creating custom endpoints
+3. Generating Create, Read, Update, Delete endpoints
+4. Realtime Functionality with Socket.io
+5. File Uploads
 
 ## Installation
 
@@ -16,27 +27,35 @@ Make sure you have [Node](https://nodejs.org/en/download/) installed.
 <Tabs
   defaultValue="npm"
   values={[
-    { label: "npm", value: "npm" },
-    { label: "yarn", value: "yarn" },
+    { label: 'npm', value: 'npm' },
+    { label: 'yarn', value: 'yarn' },
   ]}
 >
   <TabItem value="npm">
-    <CodeBlock className="language-bash">npx ezbackend init my-ezbackend</CodeBlock>
+    <CodeBlock className="language-bash">
+      npx ezbackend init my-ezbackend
+    </CodeBlock>
   </TabItem>
   <TabItem value="yarn">
-    <CodeBlock className="language-bash">npx ezbackend init my-ezbackend --yarn</CodeBlock>
+    <CodeBlock className="language-bash">
+      npx ezbackend init my-ezbackend --yarn
+    </CodeBlock>
   </TabItem>
 </Tabs>
 
-Replace `my-ezbackend` with `your-folder-name` or `.` for current dir
+Replace `my-ezbackend` with `your-folder-name` or `.` for current dir.
+
+This creates a basic boilerplate for you to develop your app from, which can be found in `src/index.ts`.
 
 ## Running your backend
+
+You can run the boilerplate code with:
 
 <Tabs
   defaultValue="npm"
   values={[
-    { label: "npm", value: "npm" },
-    { label: "yarn", value: "yarn" },
+    { label: 'npm', value: 'npm' },
+    { label: 'yarn', value: 'yarn' },
   ]}
 >
   <TabItem value="npm">
@@ -47,8 +66,6 @@ Replace `my-ezbackend` with `your-folder-name` or `.` for current dir
   </TabItem>
 </Tabs>
 
-You're done! The [following routes](basics/auto-generated-routes) for your schemas will be generated
-
 You'll have a working backend running on:
 
 **[localhost:8000](http://localhost:8000)**.
@@ -56,3 +73,327 @@ You'll have a working backend running on:
 **A User Interface** will also be generated at:
 
 **[localhost:8000/db-ui](http://localhost:8000/db-ui)**
+
+The user interface provides:
+
+1. Automated API Documentation (Which can also be used to test Endpoints)
+2. Database Editing Interface
+
+## Creating HTTP Endpoints
+
+You can create an HTTP endpoints with EzApps, which are the building blocks of ezbackend.
+
+The syntax is similar to `express.js`.
+
+The below code creates a `POST` endpoint at `/echo` accepts a JSON input of `{'input':message}` and echos an output of `{'output':message}`.
+
+<CodeSnippet
+  sample={`const app = new EzBackend()\n
+const echo = new EzApp()\n
+echo.post('/', async (req,res) => {
+    return {output: req.body.input}
+})\n
+app.addApp(echo, {prefix:'echo'}) // Prefix the all the EzApp routes with '/echo'\n
+app.start() // Start the backend`}
+  fullCode={`import { EzBackend, EzApp } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+const echo = new EzApp()\n
+echo.post('/', async (req, res) => {
+  return { output: req.body.input }
+})\n
+app.addApp(echo, {prefix:'echo'})\n
+app.start()`}
+/>
+
+:::info
+Throughout the tutorial, if you need a fully working, copy-pastable example, you can click on `Full Sample`.
+:::
+
+To test the endpoint, we need to specify the input schema. We can do this using Typescript classes. (Or JSON Schema if you are using vanilla js)
+
+<CodeSnippet
+  sample={`// Use class for automated documentation
+export class EchoInput {
+  input: string
+}\n
+const echo = new EzApp()\n
+echo.post('/', {
+  body: EchoInput // Tell EzBackend to expect EchoInput as the request body
+}, async (req, res) => {
+  return { output: req.body.input }
+})\n
+app.addApp(echo)\n
+app.start()`}
+  fullCode={`import { EzBackend, EzApp } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+export class EchoInput {
+  input: string
+}\n
+const echo = new EzApp()\n
+echo.post('/', {
+  body: EchoInput
+}, async (req, res) => {
+  return { output: req.body.input }
+})\n
+app.addApp(echo)\n
+app.start()`}
+/>
+
+You can test your echo endpoint from the **[DB UI](http://localhost:8000/db-ui)**.
+
+Defining your input and output explicitly provides:
+
+1. Input/Ouput Validation
+2. Automated Documentation for Frontend Engineers
+3. Faster Endpoints
+4. Typescript support within endpoint handlers
+
+You can provide additional metadata for routes to provide better documentation for your frontend developers.
+
+<CodeSnippet
+sample={`echo.post('/', {
+  body: EchoInput,
+  reply200: EchoOutput,
+  summary: "Echo Route", 
+  description: "Accepts a JSON input of {'input':message} and echos an output of {'output':message}"
+}, async (req, res) => {
+  return { output: req.body.input }
+})`}
+fullCode={`import { EzBackend, EzApp } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+export class EchoInput {
+  input: string
+}\n
+export class EchoOutput {
+  output: string
+}\n
+const echo = new EzApp()\n
+echo.post('/', {
+  body: EchoInput,
+  reply200: EchoOutput,
+  summary: "Echo Route", 
+  description: "Accepts a JSON input of {'input':message} and echos an output of {'output':message}"
+}, async (req, res) => {
+  return { output: req.body.input }
+})\n
+app.addApp(echo)\n
+app.start()`}/>
+
+## Connecting to the Database
+
+EzBackend's built models have multiple purposes:
+
+1. As an ORM (Object Relational Mapping) library
+2. To generate CRUD (Create Read Update Delete) Routes
+
+<CodeSnippet
+sample={`const pets = new EzModel(
+  "Pet", // Table Name
+  {
+    name: Type.VARCHAR,
+    age: Type.FLOAT,
+    species: {
+      type: Type.ENUM,
+      enum: ['cat','dog','rabbit']
+    },
+  }
+)\n
+app.addApp(pets, {prefix: 'pets'})`}
+fullCode={`import { EzBackend, EzModel, Type } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+const pets = new EzModel(
+  "Pet", // Table Name
+  {
+    name: Type.VARCHAR,
+    age: Type.FLOAT,
+    species: {
+      type: Type.ENUM,
+      enum: ['cat','dog','rabbit']
+    },
+  }
+)\n
+app.addApp(pets, {prefix: 'pets'})\n
+app.start()`}/>
+
+What the above code does is:
+
+1. Create a table in your database called `Pet`
+2. Create the columns in your database `name`,`age` and `species`
+3. Create `CRUD` (Create, Read, Update, Delete) endpoints under the route prefix `pets`
+
+You can test the CRUD endpoints from the **[DB UI](http://localhost:8000/db-ui)**.
+
+If you wish to create a table but not the `CRUD` endpoints you can use `EzRepo` instead.
+
+<CodeSnippet
+sample={`const pets = new EzRepo("Pet", {...})`}
+fullCode={`import { EzBackend, EzRepo, Type } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+const pets = new EzRepo("Pet", {
+  name: Type.VARCHAR,
+  age: Type.FLOAT,
+  species: {
+    type: Type.ENUM,
+    enum: ['cat', 'dog', 'rabbit']
+  },
+})\n
+app.addApp(pets, { prefix: 'pets' })\n
+app.start()`}/>
+
+You can create your own endpoints on an `EzRepo`/`EzModel` because they are childs of EzApp.
+
+<CodeSnippet
+sample={`pets.get('/count',{
+  reply200: PetCount,
+  summary: "Get total pet count",
+  description: "Get the total number of pets"
+},async (req, res) => {
+  const totalPets = await pets.count()
+  return { 'totalPets': totalPets }
+})`}
+fullCode={`import { EzBackend, EzRepo, Type } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';\n
+export class PetCount {
+  totalPets: number
+}\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+const pets = new EzRepo("Pet", {
+  name: Type.VARCHAR,
+  age: Type.FLOAT,
+  species: {
+    type: Type.ENUM,
+    enum: ['cat', 'dog', 'rabbit']
+  },
+})\n
+pets.get('/count',{
+  reply200: PetCount,
+  summary: "Get total pet count",
+  description: "Get the total number of pets"
+},async (req, res) => {
+  const totalPets = await pets.count()
+  return { 'totalPets': totalPets }
+})\n
+app.addApp(pets, { prefix: 'pets' })\n
+app.start()`}/>
+
+In the above example, we used `pets.count()` to get the total number of `pets`. `EzRepo` and `EzModel` expose underlying typeorm `Repository` methods in order to help you access data in the database.
+
+Some other common functions you can use are `create`, `find`, `delete`, `createQueryBuilder`.
+
+## Realtime Connection
+
+By default, the CRUD routes generated by `EzModel` emit `socket.io` signals whenever entities are created, updated or deleted through those endpoints.
+
+The emitted events follow the following format:
+
+| Socket.io Namespace | Event Name       | Arg 1       | Arg 2       | Caveats                                          |
+| :-----------------: | ---------------- | ----------- | ----------- | ------------------------------------------------ |
+|         `/`         | `entity_created` | Entity Name | Full Entity | Only works when using EzBackend generated Routes |
+|         `/`         | `entity_updated` | Entity Name | Full Entity | Only works when using EzBackend generated Routes |
+|         `/`         | `entity_deleted` | Entity Name | Full Entity | Only works when using EzBackend generated Routes |
+
+## File Storage
+
+You can add file storage with one line of code
+
+<CodeSnippet
+sample={`const person = new EzModel("Person", {
+  name: Type.VARCHAR,
+  age: Type.FLOAT,
+  avatar: Type.FILE // Store file metadata and accept file uploads
+})`}
+fullCode={`import { EzBackend, EzModel, Type } from '@ezbackend/common';
+import { EzCors } from '@ezbackend/cors';
+import { EzDbUI } from '@ezbackend/db-ui';
+import { EzOpenAPI } from '@ezbackend/openapi';\n
+export class PetCount {
+  totalPets: number
+}\n
+const app = new EzBackend();\n
+// ---Plugins---
+// Everything is an ezapp in ezbackend
+app.addApp(new EzOpenAPI());
+app.addApp(new EzDbUI());
+app.addApp(new EzCors());
+// ---Plugins---\n
+const person = new EzModel("Person", {
+  name: Type.VARCHAR,
+  age: Type.FLOAT,
+  avatar: Type.FILE // Store file metadata and accept file uploads
+})\n
+app.addApp(person, { prefix: 'persons' })\n
+app.start()`}
+/>
+
+This stores the file metadata in your database, and files in your filesystem under `tmp/uploads` by default.
+
+In addition, multipart/formdata endpoints are automatically generated for you to be able to upload your files, and endpoints for downloading your files or displaying them are also available.
+
+All data in the backend is handled with streams, meaning that any file storage functionality does not utilise an excessive amount of additional RAM.
+
+## Additional Configuration
+
+By default, EzBackend uses SQLite as the database and the filesystem for handling uploads. However, EzBackend is fully customisable such that you can manage anything from the size of files being uploaded to the database being used, etc.
+
+You can read more about configuration [here](./configuration)
+
+## Shoulders of Giants
+
+EzBackend is built on two well-known, battle tested packages, namely [fastify](https://www.fastify.io/) and [typeorm](https://typeorm.io/). 
+
+Hence, anything that is possible with fastify and typeorm is also possible within EzBackend.
+
+However the value that EzBackend provides is the improved developer experience by providing a `DRY interface` and `additional functionality` on top of the two existing libraries.

@@ -23,7 +23,11 @@ function SocketIODocs() {
     });
   }, []);
 
-  return <div style={{textAlign:'center'}}>Development in Progress, Coming Soon</div>;
+  return (
+    <div style={{ textAlign: 'center', marginTop: 48, fontSize: 20 }}>
+      Development in Progress, Coming Soon
+    </div>
+  );
 }
 
 export default SocketIODocs;
