@@ -9,7 +9,7 @@ sidebar_position: 8
 2. One line file storage
 3. One line custom functions
 4. Database Editor
-5. Benchmarks (Firebase, AWS Amplify, etc)
+5. Benchmarks
 
 ## Upcoming Features
 
