@@ -35,10 +35,6 @@ module.exports = {
       defaultMode: 'dark',
       disableSwitch: true,
     },
-    gtag: {
-      trackingID: 'G-NYKC5QB870',
-      anonymizeIP: true,
-    },
     navbar: {
       title: 'EzBackend',
       logo: {
@@ -157,6 +153,14 @@ module.exports = {
     [
       '@docusaurus/preset-classic',
       {
+        googleAnalytics: {
+          trackingID: 'G-NYKC5QB870',
+          anonymizeIP: true,
+        },
+        gtag: {
+          trackingID: 'G-NYKC5QB870',
+          anonymizeIP: true,
+        },
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
