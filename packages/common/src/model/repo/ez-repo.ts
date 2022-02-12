@@ -395,6 +395,10 @@ function entityGeneratorFactory(
   return entityGenerator;
 }
 
+function hasWhiteSpace(s:string) {
+  return /\s/g.test(s);
+}
+
 export class EzRepo extends EzApp {
 
   // NOTE: We are creating global application state in terms of repos. Happy to debate if you can think of a better way for the same use case
@@ -437,6 +441,13 @@ export class EzRepo extends EzApp {
     repoOpts: RepoOptions = {},
   ) {
     super();
+    if (hasWhiteSpace(modelName)) {
+      throw new EzError(
+        "No whitespace allowed in Repo/Model name",
+        "Model names cannot contain spaces, tabs and newlines",
+        "Change from EzModel('User Profiles',{...}) to EzModel('UserProfiles',{...})"
+      )
+    }
     EzRepo.registerEzRepo(this, modelName)
     this._modelName = modelName
     this._modelSchema = modelSchema
