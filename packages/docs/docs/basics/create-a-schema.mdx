@@ -64,6 +64,10 @@ const pets = new EzModel('Pets',{...})
 
 We make a new model using the `new EzModel()`. It will be stored with the name `Pets` in the database
 
+:::info
+The Model Name cannot contain spaces in it. For example EzModel('My Lovely Pets',{...}) is not allowed.
+:::
+
 ```ts
 {
     name: Type.VARCHAR, //String
