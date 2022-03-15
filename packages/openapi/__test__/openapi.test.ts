@@ -56,6 +56,8 @@ describe('Basic Usage', () => {
     const dummyModel = new EzModel('model', {
       var1: Type.VARCHAR,
       var2: Type.VARCHAR,
+      createdAt: Type.DOUBLE,
+      updatedAt: Type.DOUBLE
     });
 
     app.addApp('model', dummyModel);

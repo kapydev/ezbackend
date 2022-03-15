@@ -296,11 +296,11 @@ function schemaToEntityOptions(schema: ModelSchema) {
     },
     createdAt: {
       type: 'datetime',
-      createDate: true
+      createDate: true,
     },
     updatedAt: {
       type: 'datetime',
-      updateDate: true
+      updateDate: true,
     }
   };
   const relations: { [key: string]: EntitySchemaRelationOptions } = {};

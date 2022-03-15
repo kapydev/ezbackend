@@ -32,6 +32,8 @@ const sampleData = {
   },
   enum: 'type1',
   smallint: 12,
+  createdAt: Date.now(),
+  updatedAt: Date.now()
 };
 
 // TODO: Test case for creating with ID
@@ -116,6 +118,7 @@ describe('Basic CRUD', () => {
       const instance = ezb.getInternalInstance();
       const updatedData = { ...sampleData };
       updatedData.varchar = 'This is a new string';
+      updatedData.updatedAt = Date.now();
       // @ts-ignore
       const response = await instance._server.inject({
         method: 'PATCH',
@@ -206,6 +209,8 @@ describe('Basic CRUD', () => {
     varchar: '',
     int: 0,
     boolean: false,
+    createdAt: Date.now(),
+    updatedAt: Date.now()
   };
   describe('Creation Edge Case', () => {
     test('Creating an object with nullish values should return the nullish values', async () => {
@@ -230,7 +235,7 @@ describe('Basic CRUD', () => {
 
   describe('Typeorm Error Handling', () => {
     test('TypeORM errors should be returned verbosely when facing them', async () => {
-      const payload = { idNumber: 1 };
+      const payload = { idNumber: 1, createdAt: Date.now(), updatedAt: Date.now() };
       await ezb.inject({
         method: 'POST',
         url: '/SampleUnique',
