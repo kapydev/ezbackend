@@ -45,7 +45,7 @@
     "pino-pretty": "^5.1.2",
     "socket-io-event-context": "^1.0.2",
     "ts-json-schema-generator": "^0.97.0",
-    "typeorm": "^0.2.37",
+    "typeorm": "^0.3.0",
     "virtual-proxy-wrapper": "^1.0.8"
   },
   "gitHead": "83198320ccc06a87dd0a66a196086c5553de7389"
