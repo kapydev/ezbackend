@@ -37,7 +37,7 @@
     "dedent-js": "^1.0.1",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.1.3",
-    "fastify": "^3.20.2",
+    "fastify": "^3.29.4",
     "fastify-passport": "^0.4.3",
     "fastify-secure-session": "^2.3.1",
     "fastify-static": "^4.4.2",
