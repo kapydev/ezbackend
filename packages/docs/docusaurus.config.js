@@ -9,7 +9,7 @@ module.exports = {
   title: 'EzBackend | Simplified Backend Setup',
   tagline: 'Simplified Backend Setup',
   url: 'https://www.ezbackend.io/',
-  baseUrl: '/',
+  baseUrl: '/ezbackend/',
   onBrokenLinks: 'warn', // Not sure if this will break
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
