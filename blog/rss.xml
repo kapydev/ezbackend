@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>EzBackend | Simplified Backend Setup Blog</title>
+        <link>https://www.ezbackend.io/ezbackend/blog</link>
+        <description>EzBackend | Simplified Backend Setup Blog</description>
+        <lastBuildDate>Thu, 30 Sep 2021 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[We're Ready to Use!]]></title>
+            <link>https://www.ezbackend.io/ezbackend/blog/launch</link>
+            <guid>launch</guid>
+            <pubDate>Thu, 30 Sep 2021 00:00:00 GMT</pubDate>
+            <description><![CDATA[Welcome to EzBackend. My name is Philip Wee. My co-founder Stephen and I built this package because we felt that backend setup takes too long. We made ezbackend to solve this problem, and the idea behind it is that devs like you and me should focus on what's important, like planning the data models and relations (which is all you should have to put in effort for when you use our package)]]></description>
+            <content:encoded><![CDATA[<p>Welcome to EzBackend. My name is Philip Wee. My co-founder Stephen and I built this package because we felt that backend setup takes too long. We made ezbackend to solve this problem, and the idea behind it is that devs like you and me should focus on what&#x27;s important, like planning the data models and relations (which is all you should have to put in effort for when you use our package)</p><p>Our mission for you developers is to make backend setup as easy as possible, and we believe that every function should take up more than 1 line of code. We really hope you enjoy using this package!</p><p>You can join our discord community here ------&gt; <span style="color:#5396CE"><a href="https://discord.gg/RwgdruFJHc">https://discord.gg/RwgdruFJHc</a></span></p>]]></content:encoded>
+        </item>
+    </channel>
+</rss>

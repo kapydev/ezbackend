@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://www.ezbackend.io/ezbackend/blog</id>
+    <title>EzBackend | Simplified Backend Setup Blog</title>
+    <updated>2021-09-30T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://www.ezbackend.io/ezbackend/blog"/>
+    <subtitle>EzBackend | Simplified Backend Setup Blog</subtitle>
+    <icon>https://www.ezbackend.io/ezbackend/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[We're Ready to Use!]]></title>
+        <id>launch</id>
+        <link href="https://www.ezbackend.io/ezbackend/blog/launch"/>
+        <updated>2021-09-30T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Welcome to EzBackend. My name is Philip Wee. My co-founder Stephen and I built this package because we felt that backend setup takes too long. We made ezbackend to solve this problem, and the idea behind it is that devs like you and me should focus on what's important, like planning the data models and relations (which is all you should have to put in effort for when you use our package)]]></summary>
+        <content type="html"><![CDATA[<p>Welcome to EzBackend. My name is Philip Wee. My co-founder Stephen and I built this package because we felt that backend setup takes too long. We made ezbackend to solve this problem, and the idea behind it is that devs like you and me should focus on what&#x27;s important, like planning the data models and relations (which is all you should have to put in effort for when you use our package)</p><p>Our mission for you developers is to make backend setup as easy as possible, and we believe that every function should take up more than 1 line of code. We really hope you enjoy using this package!</p><p>You can join our discord community here ------&gt; <span style="color:#5396CE"><a href="https://discord.gg/RwgdruFJHc">https://discord.gg/RwgdruFJHc</a></span></p>]]></content>
+        <author>
+            <name>Philip Wee</name>
+            <uri>https://github.com/PhilipWee?tab=repositories</uri>
+        </author>
+    </entry>
+</feed>
