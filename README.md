@@ -55,7 +55,7 @@
 
 ## Learn More
 
-You can learn more from our [official website](https://www.ezbackend.io)
+You can learn more from our [official website](https://kapydev.github.io/ezbackend)
 
 ## Installation
 
@@ -73,7 +73,7 @@ npm start
 
 ## Read the Docs
 
-Get started with the [official documentation](https://www.ezbackend.io/docs/getting-started)
+Get started with the [official documentation](https://kapydev.github.io/ezbackend/docs/getting-started)
 
 ## Contributing
 

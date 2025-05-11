@@ -20,7 +20,7 @@ npm start
 
 ## Read the Docs
 
-Get the full details from the [official documentation](https://www.ezbackend.io/docs/getting-started)
+Get the full details from the [official documentation](https://kapydev.github.io/ezbackend/docs/getting-started)
 
 ---
 

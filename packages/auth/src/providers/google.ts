@@ -42,7 +42,7 @@ export class GoogleProvider extends BaseProvider {
         'Google Client ID and Client Secret not found',
         'The Google Client ID and Client Secret are used to authenticate EzBackend to provide the google login',
         'Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your .env file in the root (Same folder as package.json), or specify the option in app.start({...})',
-        'https://www.ezbackend.io/docs/auth/user-auth#creating-the-user',
+        'https://kapydev.github.io/ezbackend/docs/auth/user-auth#creating-the-user',
       );
     }
 
