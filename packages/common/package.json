@@ -37,7 +37,7 @@
     "dedent-js": "^1.0.1",
     "fastify": "^3.20.2",
     "fastify-boom": "^1.0.0",
-    "fastify-multipart": "^5.2.1",
+    "fastify-multipart": "^5.3.1",
     "fastify-request-context": "^2.2.0",
     "fastify-socket.io": "^2.0.1",
     "fastify-static": "^4.5.0",
