@@ -20,6 +20,12 @@ Object {
     },
     "def-1": Object {
       "properties": Object {
+        "createdAt": Object {
+          "type": "number",
+        },
+        "updatedAt": Object {
+          "type": "number",
+        },
         "var1": Object {
           "type": "string",
         },
@@ -28,6 +34,8 @@ Object {
         },
       },
       "required": Array [
+        "createdAt",
+        "updatedAt",
         "var1",
         "var2",
       ],
@@ -36,6 +44,12 @@ Object {
     },
     "def-2": Object {
       "properties": Object {
+        "createdAt": Object {
+          "type": "number",
+        },
+        "updatedAt": Object {
+          "type": "number",
+        },
         "var1": Object {
           "type": "string",
         },
@@ -44,6 +58,8 @@ Object {
         },
       },
       "required": Array [
+        "createdAt",
+        "updatedAt",
         "var1",
         "var2",
       ],
@@ -52,6 +68,12 @@ Object {
     },
     "def-3": Object {
       "properties": Object {
+        "createdAt": Object {
+          "type": "number",
+        },
+        "updatedAt": Object {
+          "type": "number",
+        },
         "var1": Object {
           "type": "string",
         },
@@ -64,6 +86,12 @@ Object {
     },
     "def-4": Object {
       "properties": Object {
+        "createdAt": Object {
+          "type": "number",
+        },
+        "updatedAt": Object {
+          "type": "number",
+        },
         "var1": Object {
           "type": "string",
         },
@@ -76,7 +104,13 @@ Object {
     },
     "def-5": Object {
       "properties": Object {
+        "createdAt": Object {
+          "type": "number",
+        },
         "id": Object {
+          "type": "number",
+        },
+        "updatedAt": Object {
           "type": "number",
         },
         "var1": Object {
