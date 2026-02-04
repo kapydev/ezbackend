@@ -33,9 +33,9 @@
   },
   "dependencies": {
     "@hapi/boom": "^9.1.4",
-    "better-sqlite3": "^7.4.5",
+    "better-sqlite3": "^7.5.3",
     "dedent-js": "^1.0.1",
-    "fastify": "^3.20.2",
+    "fastify": "^5.7.3",
     "fastify-boom": "^1.0.0",
     "fastify-multipart": "^5.2.1",
     "fastify-request-context": "^2.2.0",
